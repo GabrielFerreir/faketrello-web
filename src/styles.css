@@ -20,6 +20,10 @@
   transition: all 280ms cubic-bezier(0.4, 0.0, 0.2, 1);
   z-index: 2;
 }
+.invalido {
+  background-color: #F44336;
+  color: #F44336;
+}
 
 .textFields ~ .labelText {
   color: rgba(0,0,0, .54);
@@ -36,57 +40,25 @@
   color: rgba(0, 0, 0, .54);
   padding-top: 8px;
   position: absolute;
+  top: 30px;
   transition: all 280ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  /*color: #F44336;*/
 }
-.border {
-  position: absolute;
-  z-index: 2;
-  height: 2px;
-  width: 100%;
-  top: 33px;
-}
+.border {position: absolute;z-index: 2;height: 2px;width: 100%;top: 33px;}
 
 /*HOVER*/
-.textFields:hover ~ .border  {
-
-  background-color: rgba(0,0,0, .42);
-}
+.textFields:hover ~ .border  { background-color: rgba(0,0,0, .42);}
 
 /*FOCUS*/
-.textFields:focus ~ .border {
-  background-color: #304ffe;
-}
-.textFields:focus ~ .labelText {
-  font-size: 12px;
-  top: -8px;
-  color: #304ffe;
-}
-.textFieldsPreenchido ~ .labelText {
-  /*color: #304ffe;*/
-  font-size: 12px;
-  top: -8px;
-}
+.textFields:focus ~ .border {background-color: #304ffe;}
+.textFields:focus ~ .labelText {font-size: 12px;top: -8px;color: #304ffe;}
+.textFieldsPreenchido ~ .labelText {  /*color: #304ffe;*/font-size: 12px;  top: -8px;}
 
-.defaultButton {
-  height: 36px;
-  padding-left: 16px;
-  padding-right: 16px;
-  border-radius: 2px;
-  font-family: 'Roboto';
-  font-size: 16px;
-  background-color: #2196F3;
-  border: 0;
-  color: #FFF;
-  cursor: pointer;
-  transition: all 375ms cubic-bezier(0.4, 0.0, 0.2, 1);
-
-
+.defaultButton {height: 36px;padding-left: 16px;padding-right: 16px;border-radius: 2px;font-family: 'Roboto';font-size: 16px;background-color: #2196F3;border: 0;color: #FFF;cursor: pointer;transition: all 375ms cubic-bezier(0.4, 0.0, 0.2, 1);
 }
-.defaultButton:hover {
-  box-shadow: 0 0 4px   rgba(0,0,0,0.14),
-              0 3px 4px rgba(0,0,0,0.12),
-              4px 4px 5px   rgba(0,0,0,0.20)
-
+.defaultButton:hover {box-shadow: 0 0 4px   rgba(0,0,0,0.14),
+                                  0 3px 4px rgba(0,0,0,0.12),
+                                  4px 4px 5px   rgba(0,0,0,0.20)
 }
 
 

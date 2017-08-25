@@ -1,14 +1,13 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AutenticacaoComponent } from './autenticacao/autenticacao.component';
 
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const APP_ROUTES: Routes = [
-  {path: '', redirectTo: '/login', pathMatch: 'full' },
-   {path: 'login', component: LoginComponent},
-   {path: 'home', component: HomeComponent},
+  {path: '', redirectTo: '/autenticacao', pathMatch: 'full' },
+   {path: 'autenticacao', component: AutenticacaoComponent},
+  //  {path: 'home', component: HomeComponent},
    {path: '**', component: PageNotFoundComponent}
 ];
 
