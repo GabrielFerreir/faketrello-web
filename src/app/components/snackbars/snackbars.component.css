@@ -1,0 +1,28 @@
+.containerSnackbars {
+  position: fixed;
+  bottom: -48px;
+  left: 0;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  transition: all 1s ease;
+}
+
+
+.snackbars {
+  height: 48px;
+  min-width: 264px;
+  max-width: 544px;
+  border-radius: 2px;
+  font-family: 'Roboto';
+  font-size: 14px;
+  background-color: #323232;
+  padding-left: 24px;
+  line-height: 48px;
+  color: #f4f4f4;
+  float: right;
+  user-select: none;
+
+}

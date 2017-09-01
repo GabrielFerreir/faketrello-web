@@ -1,0 +1,61 @@
+<div class="login">
+
+  <div style="width:300px; height: 100%; padding-top:10px;">
+
+    <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-right: 50px;">
+      <input #HTMLNovaSenha [(ngModel)]="novaSenha" (blur)="chama()" type="password" name="novaSenha" class="textFields"/>
+      <label class="labelText" for="novaSenha">Nova Senha</label>
+      <div class="border"></div>
+
+      <label
+        [style.color]="msgNovaSenha != '' ? '#F44336' : ''"
+        [style.display]="msgNovaSenha != '' ? 'block' : 'none'"
+        class="helperText">{{ msgNovaSenha }}
+      </label>
+    </div>
+
+    <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
+      <input #HTMLConfirmaNovaSenha [(ngModel)]="confirmaNovaSenha" (blur)="chama()" type="password" name="confirmaNovaSenha" class="textFields"/>
+      <label class="labelText" for="confirmaNovaSenha">Confirme a Nova Senha</label>
+      <div class="border"></div>
+
+      <label
+        [style.color]="msgConfirmaNovaSenha != '' ? '#F44336' : ''"
+        [style.display]="msgConfirmaNovaSenha != '' ? 'block' : 'none'"
+        class="helperText">{{ msgConfirmaNovaSenha }}
+      </label>
+    </div>
+
+    <hr style="position: relative; width: 300px; float: left; margin-left: 0px; margin-top: 70px;">
+
+
+    <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:20px;">
+      <input #HTMLSenhaAtual autocomplete="off" [(ngModel)]="senhaAtual" (blur)="chama()" type="password" name="senhaAtual" class="textFields"/>
+      <label class="labelText" for="senhaAtual">Digite a Senha Atual</label>
+      <div class="border"></div>
+
+      <label
+        [style.color]="msgSenhaAtual != '' ? '#F44336' : ''"
+        [style.display]="msgSenhaAtual != '' ? 'block' : 'none'"
+        class="helperText">{{ msgSenhaAtual }}
+      </label>
+    </div>
+
+
+    <button
+      (click)="valida()"
+      class="denseButton"
+      style="float:left; width:200px; margin-top:60px; margin-left:50px;"
+      #HTMLCadastrar>
+      ALTERAR
+    </button>
+
+  </div>
+
+</div>
+
+<app-snackbars>
+
+</app-snackbars>
+
+

@@ -1,0 +1,84 @@
+<header>
+  <label for="check">
+    <div class="hamburger">
+      <img src="../../assets/hamburger.svg"/>
+    </div>
+  </label>
+  <input class="checkNav" type="checkbox" id="check" style="display:none"/>
+  <nav>
+    <label for="check">
+      <div class="inverseHamburger">
+        <img src="../../assets/hamburger_black.svg"/>
+      </div>
+    </label>
+
+    <ul>
+      <li class="titulo">Configurações de Usuario</li>
+        <li><div class="img">
+              PT
+            </div>
+          <span>Projeto Trello</span>
+        </li>
+        <li><div class="img">
+              AN
+            </div>
+          <span>ANKI</span>
+        </li>
+        <li><div class="img">
+              GO
+            </div>
+          <span>GO</span>
+        </li>
+
+        <li><div class="img">
+              <img src="../../assets/account_circle.svg"/>
+            </div>
+          <span>Perfil</span>
+        </li>
+
+    </ul>
+
+  </nav>
+
+  <div style="position: relative">
+    <input class="campoDePesquisa" type="text" id="campoDePesquisa" value="{{ campoDePesquisa }}"  [(ngModel)]="campoDePesquisa" (keyup)="chama()">
+    <label for="campoDePesquisa" #HTMLCampoDePesquisa>Pesquisar...</label>
+  </div>
+
+<div style="position: relative">
+  <label for="perfil">
+    <div class="perfil">
+      <div class="img">{{dadosDeUsuario?.name.charAt(0)}}</div>
+      <span>{{dadosDeUsuario?.name}}</span>
+    </div>
+  </label>
+  <input class="checkPerfil" type="checkbox" id="perfil" style="display: none"/>
+  <div class="opPerfil">
+    <ul>
+      <li><img src="../../assets/home_black.svg"/>
+        <span routerLink="/home">Home</span>
+      </li>
+      <li><img src="../../assets/account_circle_black.svg"/>
+        <span routerLink="/alterarDados">Alterar Dados</span>
+      </li>
+      <li><img src="../../assets/key.svg"/>
+        <span routerLink="/alterarSenha">Alterar Senha</span>
+      </li>
+      <li><img src="../../assets/logout.svg"/>
+        <span (click)="logout()">Logout</span>
+      </li>
+    </ul>
+
+  </div>
+</div>
+
+  <div class="notificacoes">
+    <img src="../../assets/notificacoes.svg">
+    <div class="qtdNotificacoes"></div>
+  </div>
+
+</header>
+
+<div class="container">
+    <router-outlet></router-outlet>
+</div>

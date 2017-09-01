@@ -4,6 +4,13 @@
   margin: 0;
   padding: 0;
 }
+body {
+  font-family: 'Roboto';
+}
+a {
+  color: #f4f4f4;
+  text-decoration: none;
+}
 
 .textFields {
   width: 100%;
@@ -54,6 +61,8 @@
 .textFields:focus ~ .labelText {font-size: 12px;top: -8px;color: #304ffe;}
 .textFieldsPreenchido ~ .labelText {  /*color: #304ffe;*/font-size: 12px;  top: -8px;}
 
+
+
 .defaultButton {height: 36px;padding-left: 16px;padding-right: 16px;border-radius: 2px;font-family: 'Roboto';font-size: 16px;background-color: #2196F3;border: 0;color: #FFF;cursor: pointer;transition: all 375ms cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 .defaultButton:hover {box-shadow: 0 0 4px   rgba(0,0,0,0.14),
@@ -82,5 +91,9 @@
   box-shadow: 0 0 4px   rgba(0,0,0,0.14),
               0 3px 4px rgba(0,0,0,0.12),
               4px 4px 5px   rgba(0,0,0,0.20)
-
 }
+.disabledButton { background-color: transparent; color: rgba(0,0,0,.26); outline: none;}
+.disabledButton:hover {background-color: transparent; color: rgba(0,0,0,.46)}
+
+
+

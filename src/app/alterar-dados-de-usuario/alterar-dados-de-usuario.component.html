@@ -1,0 +1,56 @@
+<div class="login">
+
+  <div style="width:300px; height: 100%; padding-top:10px;">
+    <div class="imageUser"></div>
+    <div class="addImageUser">+</div>
+
+    <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-right: 50px;">
+      <input #HTMLNome [(ngModel)]="alterar.name" (blur)="chama()" type="text" name="nome" class="textFields"/>
+      <label class="labelText" for="nome">Nome</label>
+      <div class="border"></div>
+    </div>
+
+    <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
+      <input #HTMLUsername [(ngModel)]="alterar.username" (blur)="chama()" type="text" name="username" class="textFields"/>
+      <label class="labelText" for="username">Username</label>
+      <div class="border"></div>
+    </div>
+
+
+    <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
+      <input #HTMLEmail autocomplete="off" [(ngModel)]="alterar.email" (blur)="chama()" type="text" name="email" class="textFields"/>
+      <label class="labelText" for="email">Email</label>
+      <div class="border"></div>
+    </div>
+
+
+    <button
+      (click)="altera()"
+      class="denseButton"
+      style="float:left; width:200px; margin-top:60px; margin-left:50px;"
+      #HTMLCadastrar>
+      ALTERAR
+    </button>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+        <!--</div>-->
+
+  <!--<div style="width:300px; height: 350px; padding-top:10px; overflow-x: hidden; float: left">-->
+
+
+
+  <!--</div>-->
+
+
