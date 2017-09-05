@@ -1,8 +1,13 @@
 <div class="login">
 
   <div style="width:300px; height: 100%; padding-top:10px;">
-    <div class="imageUser"></div>
-    <div class="addImageUser">+</div>
+    <input type="file" (change)="previewFile($event.target)" id="file" style="display: none;">
+
+    <!--<img *ngIf="alterar.img == '/default.png'" src="{{ img }}" class="imageUser" id="preview">-->
+    <img *ngIf="img64" src="{{img64}}" class="imageUser" id="preview"/>
+    <div *ngIf="alterar.img == '/imgs/default.png' && img64 == ''" class="imageUser">{{ alterar.name.charAt(0) }}</div>
+    <img *ngIf="alterar.img != '/imgs/default.png' && img64 == ''" src="{{'http://192.168.52.105:8080' + alterar.img}}" class="imageUser" id="preview">
+    <div class="addImageUser" (click)="chamaFile()">+</div>
 
     <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-right: 50px;">
       <input #HTMLNome [(ngModel)]="alterar.name" (blur)="chama()" type="text" name="nome" class="textFields"/>
@@ -35,7 +40,9 @@
   </div>
 
 </div>
+<app-snackbars>
 
+</app-snackbars>
 
 
 

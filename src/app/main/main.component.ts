@@ -13,7 +13,7 @@ import { DadosDeUsuarioService } from '../dados-de-usuario.service';
 export class MainComponent implements OnInit {
 
   campoDePesquisa = '';
-  dadosDeUsuario;
+  dados;
 
   @ViewChild('HTMLCampoDePesquisa') HTMLCampoDePesquisa: ElementRef;
 
@@ -27,8 +27,20 @@ export class MainComponent implements OnInit {
     this.logar();
 
     this.dadosDoUsuario.recuperarDadosDeUsuario()
-      .then(res => this.dadosDeUsuario = res.json())
+      .then(res => {
+        this.dados = res.json()
+        if(!this.dados.statusauth) {
+          this.router.navigate(['/emailNaoAutenticado']);
+        }
+
+
+      })
       .catch()
+
+
+
+
+
   }
 
   chama() {
@@ -47,6 +59,7 @@ export class MainComponent implements OnInit {
       return this.http.get(url, {headers: headers})
         .map(res => res.json())
         .subscribe((res) => {
+          // console.log(res)
           }, error => {
             // console.log(error),
             // console.log('Tokken incorreto!')

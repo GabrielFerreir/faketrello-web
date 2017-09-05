@@ -6,10 +6,10 @@ import { CadastroComponent } from './cadastro/cadastro.component';
 import { MainComponent } from './main/main.component';
 import { AlterarDadosDeUsuarioComponent } from './alterar-dados-de-usuario/alterar-dados-de-usuario.component';
 import { HomeComponent } from './home/home.component';
+import { DoneComponent} from "./autentication/done/done.component";
 
 import { DadosDeUsuarioResolve } from "./dadosDeUsuario.resolve";
-import  { AutenticationComponent} from "./autentication/autentication.component";
-
+import { PendentComponent } from "./autentication/pendent/pendent.component";
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AlterarSenhaDeUsuarioComponent} from "./alterar-senha-de-usuario/alterar-senha-de-usuario.component";
 
@@ -18,7 +18,8 @@ const APP_ROUTES: Routes = [
   {path: '', redirectTo: '/login', pathMatch: 'full' },
   {path: 'login', component: LoginComponent },
   {path: 'cadastro', component: CadastroComponent},
-  {path: 'autentication', component: AutenticationComponent },
+  {path: 'authentication/:id', component: PendentComponent },
+  {path: 'emailNaoAutenticado', component: DoneComponent},
   {path: '', component: MainComponent, children:[
       {path: 'home', component: HomeComponent},
 

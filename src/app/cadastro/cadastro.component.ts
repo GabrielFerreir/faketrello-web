@@ -16,6 +16,7 @@ export class CadastroComponent implements OnInit {
   senha = '';
   confirmaSenha = '';
   tokken = '';
+  img64 = '';
 
 
   @ViewChild('HTMLNome') HTMLNome:ElementRef;
@@ -28,6 +29,12 @@ export class CadastroComponent implements OnInit {
               private router : Router) { }
 
   ngOnInit() {
+  }
+
+  chamaFile() {
+    console.log('TESTE');
+    let el = document.getElementById('file');
+    el.click();
   }
 
 chama(){
@@ -111,7 +118,8 @@ habilitaBotao() {
           name : this.nome,
           username: this.userName,
           email : this.email,
-          password : this.senha
+          password : this.senha,
+          imgBase64: this.img64
         }
       );
       var params =  json;
@@ -207,5 +215,24 @@ logar() {
   }
 
 }
+
+  previewFile(el) {
+    console.log(el)
+    var reader  = new FileReader();
+
+    reader.onloadend = (e) => {
+      // preview.src = reader.result;
+      console.log(reader.result);
+      this.img64 = reader.result;
+    }
+
+
+    if (el) {
+      reader.readAsDataURL(el.files[0]);
+    } else {
+
+    }
+
+  }
 
 }

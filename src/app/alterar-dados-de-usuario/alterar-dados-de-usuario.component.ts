@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter }
 import { Http, Headers, Response } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/map';
-import { AfterViewInit } from "@angular/core";
-import { DadosDeUsuarioService } from "../dados-de-usuario.service";
+import { AfterViewInit } from '@angular/core';
+import { DadosDeUsuarioService } from '../dados-de-usuario.service';
+import {SnackbarsService} from '../components/snackbars/snackbars.service';
 
 @Component({
   selector: 'app-alterar-dados-de-usuario',
@@ -15,15 +16,29 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private http: Http,
-              private dadosDoUsuario: DadosDeUsuarioService) {
+              private dadosDoUsuario: DadosDeUsuarioService,
+              private snackbarService: SnackbarsService) {
   }
+
+  alterar;
+
+  nome = '';
+  userName;
+  email = '';
+  senha = '';
+  novaSenha = '';
+  confirmaNovaSenha = '';
+  senhaAtual = '';
+  tokken;
+  img64 = '';
 
 
   ngOnInit() {
     this.dadosDoUsuario.logar();
     this.alterar = this.activatedRoute.snapshot.data['alterar'];
+    // console.log(this.alterar)
     this.email = this.alterar.email;
-    this.userName = this.alterar.userName;
+    this.userName = this.alterar.username;
     console.log(this.email)
 
     this.chama();
@@ -45,17 +60,11 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
   // @ViewChild('HTMLSenhaAtual') HTMLSenhaAtual:ElementRef;
   @ViewChild('HTMLCadastrar') HTMLCadastrar: ElementRef;
 
-  alterar;
-
-  nome = '';
-  userName = '';
-  email = '';
-  senha = '';
-  novaSenha = '';
-  confirmaNovaSenha = '';
-  senhaAtual = '';
-  tokken;
-
+  chamaFile() {
+    console.log('TESTE');
+    let el = document.getElementById('file');
+    el.click();
+  }
 
   chama() {
     if (this.alterar.name.length > 0) {
@@ -75,16 +84,22 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
     }
   }
 
+
+
   altera() {
+
     var url = 'http://192.168.52.105:8080/session/change';
-    var json = JSON.stringify(
-      {
-        name: this.alterar.name,
-        username: this.alterar.username,
-        email: this.alterar.email,
-        password: this.alterar.password
-      }
-    );
+
+      var json = JSON.stringify(
+        {
+          name: this.alterar.name,
+          username: this.alterar.username,
+          imgBase64: this.img64,
+          email: this.alterar.email,
+          password: this.alterar.password
+        }
+      );
+
     var params = json;
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -94,9 +109,10 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
       .map(res => res.json())
       .subscribe(
         data => {
-          console.log('Alterou')
+          this.snackbarService.chamaSnackbar('Dados modificados com sucesso!')
           console.log(data);
-          if(this.email != this.alterar.email || this.userName != this.alterar.userName) {
+          console.log(this.email + ' ' + this.alterar.email)
+          if (this.email != this.alterar.email || this.userName != this.alterar.username) {
             this.reLogar();
           }
         },
@@ -111,52 +127,60 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
   }
 
   reLogar() {
-      var url = 'http://192.168.52.105:8080/login';
-      var json = JSON.stringify(
-        {
-          user : this.email,
-          password : this.alterar.password
-        }
-      );
-      var params =  json;
-      var headers = new Headers();
-      headers.append('Content-Type', 'application/json');
+    console.log("Entrou em Relogar")
+    var url = 'http://192.168.52.105:8080/login';
+    var json = JSON.stringify(
+      {
+        user: this.alterar.email,
+        password: this.alterar.password
+      }
+    );
+    var params = json;
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
 
-      return this.http.post(url, params, { headers: headers })
-        .map(res => res.json())
-        .subscribe(
-          data => {this.tokken = JSON.stringify(data),
-                        console.log('Usuario e senha aceitos')},
-          error => {
-            console.log(error);
-            console.log("Dados errados")
-          },
-          () => {
-            this.alterar.criarCookie(this.tokken);
-            //Limpa a variavel tokken
-            this.tokken = '';
-            this.alterar.getCookieTokken();
-            this.alterar.logar();
-          }
-        )
+    return this.http.post(url, params, {headers: headers})
+      .map(res => res.json())
+      .subscribe(
+        data => {
+          this.tokken = JSON.stringify(data),
+            this.dadosDoUsuario.criarCookie(this.tokken);
+          //Limpa a variavel tokken
+          this.tokken = '';
+          this.dadosDoUsuario.getCookieTokken();
+          this.dadosDoUsuario.logar();
+        },
+        error => {
+          console.log(error);
+        },
+        () => {
+
+        }
+      )
   }
 
+  previewFile(el) {
+    console.log(el)
+    var reader  = new FileReader();
+
+    reader.onloadend = (e) => {
+      // preview.src = reader.result;
+      console.log(reader.result);
+      this.img64 = reader.result;
+    }
+
+
+    if (el) {
+      reader.readAsDataURL(el.files[0]);
+    } else {
+
+    }
+
+  }
 }
 
 
-
-  // pedirSenha() {
-  //   this.login.nativeElement.style = "transition: all 480ms ease-out; height:150px; margin-top: calc(50vh - 150px);"
-  //   this.tela1.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(-300px)"
-  //   this.tela2.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(-300px)"
-  //   console.log('Teste');
-  // }
-
-
-      /* this.tela1.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(-300px)"
-      this.tela2.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(-250px)"
-      this.arrowBack.nativeElement.style = 'visibility: visible; cursor: pointer; width: 25px; position: absolute; top:70px; left:-50px;'
-
+      /*
      alteracaoPermitida() {
       if() {
 

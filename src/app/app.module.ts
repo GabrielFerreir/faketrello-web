@@ -23,9 +23,10 @@ import {HomeComponent} from './home/home.component';
 
 import {DadosDeUsuarioResolve} from "./dadosDeUsuario.resolve";
 import {DadosDeUsuarioService} from './dados-de-usuario.service';
-import {AutenticationComponent} from './autentication/autentication.component';
 import {AlterarSenhaDeUsuarioComponent} from './alterar-senha-de-usuario/alterar-senha-de-usuario.component';
 import {SnackbarsModule} from './components/snackbars/snackbars.module';
+import { PendentComponent } from './autentication/pendent/pendent.component';
+import { DoneComponent } from './autentication/done/done.component';
 
 @NgModule({
   declarations: [
@@ -37,8 +38,9 @@ import {SnackbarsModule} from './components/snackbars/snackbars.module';
     CadastroComponent,
     AlterarDadosDeUsuarioComponent,
     HomeComponent,
-    AutenticationComponent,
     AlterarSenhaDeUsuarioComponent,
+    PendentComponent,
+    DoneComponent,
   ],
   imports: [
     BrowserModule,

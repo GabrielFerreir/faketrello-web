@@ -5,8 +5,8 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class DadosDeUsuarioService {
 
-  constructor(private router : Router,
-              private http : Http) { }
+  constructor(private router: Router,
+              private http: Http) { }
 
   dadosDeUsuario;
 
@@ -61,6 +61,12 @@ export class DadosDeUsuarioService {
         var headers = new Headers();
         headers.append('Authorization', 'Bearer '+this.getCookieTokken());
         return this.http.get(url, { headers: headers }).toPromise();
+  }
+
+  logout() {
+    // console.log('Entrou')
+    document.cookie = "tokken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    this.router.navigate(['/']);
   }
 
   getDadosDeUsuario() {

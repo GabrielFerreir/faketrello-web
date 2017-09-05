@@ -44,12 +44,12 @@
     <input class="campoDePesquisa" type="text" id="campoDePesquisa" value="{{ campoDePesquisa }}"  [(ngModel)]="campoDePesquisa" (keyup)="chama()">
     <label for="campoDePesquisa" #HTMLCampoDePesquisa>Pesquisar...</label>
   </div>
-
 <div style="position: relative">
   <label for="perfil">
     <div class="perfil">
-      <div class="img">{{dadosDeUsuario?.name.charAt(0)}}</div>
-      <span>{{dadosDeUsuario?.name}}</span>
+      <div class="img">{{dados?.name.charAt(0)}}</div>
+      <span>{{dados?.name}}</span>
+
     </div>
   </label>
   <input class="checkPerfil" type="checkbox" id="perfil" style="display: none"/>

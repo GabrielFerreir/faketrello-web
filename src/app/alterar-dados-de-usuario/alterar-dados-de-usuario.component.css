@@ -14,8 +14,15 @@
   margin-left: 25%;
   margin-top: -70px;
   border: 5px solid #f4f4f4;
-  background-color: rgba(255,255,255, 0.6);
+  /*background-color: rgba(255,255,255, 0.6);*/
+  background-color: #006064;
+  color: #FFF;
   border-radius: 50%;
+  line-height: 140px;
+  text-align: center;
+  font-family: 'Roboto';
+  font-size: 72px;
+  user-select: none;
 }
 .addImageUser {
   width: 45px;
@@ -30,4 +37,6 @@
   text-align: center;
   font-size: 30px;
   cursor: pointer;
+  user-select: none;
+
 }
