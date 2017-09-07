@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="fakeTrello@localhost">
+  <database-model serializer="dbm" rdbms="POSTGRES" format-version="4.4">
+    <root id="1"/>
+    <database id="2" parent="1" name="postgres">
+      <ObjectId>12401</ObjectId>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </database>
+    <database id="3" parent="1" name="fakeTrello">
+      <ObjectId>16393</ObjectId>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </database>
+    <schema id="4" parent="2" name="public">
+      <ObjectId>2200</ObjectId>
+      <IntrospectionTimestamp>2017-09-07.10:29:36.384</IntrospectionTimestamp>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="5" parent="2" name="pg_catalog">
+      <ObjectId>11</ObjectId>
+    </schema>
+    <schema id="6" parent="2" name="pg_toast">
+      <ObjectId>99</ObjectId>
+    </schema>
+    <schema id="7" parent="2" name="pg_temp_1">
+      <ObjectId>11848</ObjectId>
+    </schema>
+    <schema id="8" parent="2" name="pg_toast_temp_1">
+      <ObjectId>11849</ObjectId>
+    </schema>
+    <schema id="9" parent="2" name="information_schema">
+      <ObjectId>12113</ObjectId>
+    </schema>
+    <schema id="10" parent="3" name="public">
+      <ObjectId>2200</ObjectId>
+      <IntrospectionTimestamp>2017-09-07.10:29:36.111</IntrospectionTimestamp>
+      <IntrospectionStateNumber>1494</IntrospectionStateNumber>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="11" parent="3" name="pg_catalog">
+      <ObjectId>11</ObjectId>
+      <IntrospectionTimestamp>2017-08-30.09:13:16.413</IntrospectionTimestamp>
+      <IntrospectionStateNumber>494</IntrospectionStateNumber>
+    </schema>
+    <schema id="12" parent="3" name="pg_toast">
+      <ObjectId>99</ObjectId>
+      <IntrospectionTimestamp>2017-08-30.09:13:16.413</IntrospectionTimestamp>
+      <IntrospectionStateNumber>433</IntrospectionStateNumber>
+    </schema>
+    <schema id="13" parent="3" name="pg_temp_1">
+      <ObjectId>11848</ObjectId>
+      <IntrospectionTimestamp>2017-08-30.09:13:16.413</IntrospectionTimestamp>
+    </schema>
+    <schema id="14" parent="3" name="pg_toast_temp_1">
+      <ObjectId>11849</ObjectId>
+      <IntrospectionTimestamp>2017-08-30.09:13:16.413</IntrospectionTimestamp>
+    </schema>
+    <schema id="15" parent="3" name="information_schema">
+      <ObjectId>12113</ObjectId>
+      <IntrospectionTimestamp>2017-08-30.09:13:16.413</IntrospectionTimestamp>
+      <IntrospectionStateNumber>492</IntrospectionStateNumber>
+    </schema>
+    <sequence id="16" parent="10" name="tb_blocks_id_blocks_seq">
+      <ObjectId>16498</ObjectId>
+      <StateNumber>1485</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+      <BelongsToColumn>1</BelongsToColumn>
+    </sequence>
+    <sequence id="17" parent="10" name="tb_login_id_user_seq">
+      <ObjectId>16483</ObjectId>
+      <StateNumber>1483</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+      <BelongsToColumn>1</BelongsToColumn>
+    </sequence>
+    <sequence id="18" parent="10" name="tb_projects_id_project_seq">
+      <ObjectId>16490</ObjectId>
+      <StateNumber>1484</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+      <BelongsToColumn>1</BelongsToColumn>
+    </sequence>
+    <table id="19" parent="10" name="tb_blocks">
+      <ObjectId>16500</ObjectId>
+      <StateNumber>1487</StateNumber>
+    </table>
+    <table id="20" parent="10" name="tb_login">
+      <ObjectId>16437</ObjectId>
+      <StateNumber>1489</StateNumber>
+    </table>
+    <table id="21" parent="10" name="tb_projects">
+      <ObjectId>16492</ObjectId>
+      <StateNumber>1489</StateNumber>
+    </table>
+    <routine id="22" parent="10" name="changeuser">
+      <ObjectId>16471</ObjectId>
+      <StateNumber>805</StateNumber>
+      <VolatilityKind>volatile</VolatilityKind>
+      <ArgumentsDefinition>pass character varying, usern character varying, usertoken character varying, emailp character varying, nomep character varying</ArgumentsDefinition>
+      <ResultsDefinition>TABLE(emaild character varying, namep character varying, usernamer character varying, passwordr character varying, imageuser character varying)</ResultsDefinition>
+      <LanguageName>plpgsql</LanguageName>
+      <RoutineKind>function</RoutineKind>
+      <ReturnsSet>1</ReturnsSet>
+    </routine>
+    <routine id="23" parent="10" name="consult">
+      <ObjectId>16463</ObjectId>
+      <StateNumber>740</StateNumber>
+      <VolatilityKind>volatile</VolatilityKind>
+      <ResultsDefinition>TABLE(email character varying, username character varying, password character varying, img character varying, name character varying, emailauth boolean)</ResultsDefinition>
+      <LanguageName>plpgsql</LanguageName>
+      <RoutineKind>function</RoutineKind>
+      <ReturnsSet>1</ReturnsSet>
+    </routine>
+    <routine id="24" parent="10" name="consultuser">
+      <ObjectId>16519</ObjectId>
+      <StateNumber>1493</StateNumber>
+      <VolatilityKind>volatile</VolatilityKind>
+      <ArgumentsDefinition>usern character varying</ArgumentsDefinition>
+      <ResultsDefinition>TABLE(id_usuario integer, email character varying, username character varying, password character varying, img character varying, name character varying, statusauth boolean)</ResultsDefinition>
+      <LanguageName>plpgsql</LanguageName>
+      <RoutineKind>function</RoutineKind>
+      <ReturnsSet>1</ReturnsSet>
+    </routine>
+    <routine id="25" parent="10" name="deleteuser">
+      <ObjectId>16482</ObjectId>
+      <StateNumber>1435</StateNumber>
+      <VolatilityKind>volatile</VolatilityKind>
+      <ArgumentsDefinition>usern character varying</ArgumentsDefinition>
+      <ResultsDefinition>boolean</ResultsDefinition>
+      <LanguageName>plpgsql</LanguageName>
+      <RoutineKind>function</RoutineKind>
+    </routine>
+    <routine id="26" parent="10" name="loginu">
+      <ObjectId>16481</ObjectId>
+      <StateNumber>1324</StateNumber>
+      <VolatilityKind>volatile</VolatilityKind>
+      <ArgumentsDefinition>emaild character varying, passw character varying</ArgumentsDefinition>
+      <ResultsDefinition>TABLE(email character varying, password character varying, username character varying, statusemail boolean, senhacorreta boolean)</ResultsDefinition>
+      <LanguageName>plpgsql</LanguageName>
+      <RoutineKind>function</RoutineKind>
+      <ReturnsSet>1</ReturnsSet>
+    </routine>
+    <routine id="27" parent="10" name="newproject">
+      <ObjectId>16520</ObjectId>
+      <StateNumber>1494</StateNumber>
+      <VolatilityKind>volatile</VolatilityKind>
+      <ArgumentsDefinition>nameproject character varying, iddono integer</ArgumentsDefinition>
+      <ResultsDefinition>boolean</ResultsDefinition>
+      <LanguageName>plpgsql</LanguageName>
+      <RoutineKind>function</RoutineKind>
+    </routine>
+    <routine id="28" parent="10" name="newuser">
+      <ObjectId>16447</ObjectId>
+      <StateNumber>684</StateNumber>
+      <VolatilityKind>volatile</VolatilityKind>
+      <ArgumentsDefinition>emaild character varying, passw character varying, img character varying, namep character varying, usern character varying</ArgumentsDefinition>
+      <ResultsDefinition>boolean</ResultsDefinition>
+      <LanguageName>plpgsql</LanguageName>
+      <RoutineKind>function</RoutineKind>
+    </routine>
+    <routine id="29" parent="10" name="passwordtoemail">
+      <ObjectId>16475</ObjectId>
+      <StateNumber>955</StateNumber>
+      <VolatilityKind>volatile</VolatilityKind>
+      <ArgumentsDefinition>usern character varying</ArgumentsDefinition>
+      <ResultsDefinition>TABLE(passwordr character varying, nameuser character varying)</ResultsDefinition>
+      <LanguageName>plpgsql</LanguageName>
+      <RoutineKind>function</RoutineKind>
+      <ReturnsSet>1</ReturnsSet>
+    </routine>
+    <routine id="30" parent="10" name="verify_email">
+      <ObjectId>16469</ObjectId>
+      <StateNumber>754</StateNumber>
+      <VolatilityKind>volatile</VolatilityKind>
+      <ArgumentsDefinition>usern character varying</ArgumentsDefinition>
+      <ResultsDefinition>TABLE(statusemail boolean)</ResultsDefinition>
+      <LanguageName>plpgsql</LanguageName>
+      <RoutineKind>function</RoutineKind>
+      <ReturnsSet>1</ReturnsSet>
+    </routine>
+    <routine id="31" parent="10" name="verify_img">
+      <ObjectId>16452</ObjectId>
+      <StateNumber>852</StateNumber>
+      <VolatilityKind>volatile</VolatilityKind>
+      <ArgumentsDefinition>img character varying, usern character varying</ArgumentsDefinition>
+      <ResultsDefinition>boolean</ResultsDefinition>
+      <LanguageName>plpgsql</LanguageName>
+      <RoutineKind>function</RoutineKind>
+    </routine>
+    <routine id="32" parent="10" name="verify_token">
+      <ObjectId>16479</ObjectId>
+      <StateNumber>1283</StateNumber>
+      <VolatilityKind>volatile</VolatilityKind>
+      <ArgumentsDefinition>usern character varying</ArgumentsDefinition>
+      <ResultsDefinition>TABLE(usera character varying, status text)</ResultsDefinition>
+      <LanguageName>plpgsql</LanguageName>
+      <RoutineKind>function</RoutineKind>
+      <ReturnsSet>1</ReturnsSet>
+    </routine>
+    <column id="33" parent="19" name="id_blocks">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1485</StateNumber>
+      <SequenceName>tb_blocks_id_blocks_seq</SequenceName>
+      <DefaultExpression>nextval(&apos;tb_blocks_id_blocks_seq&apos;::regclass)</DefaultExpression>
+    </column>
+    <column id="34" parent="19" name="name_blocks">
+      <Position>2</Position>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1485</StateNumber>
+    </column>
+    <column id="35" parent="19" name="project_owner">
+      <Position>3</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1485</StateNumber>
+    </column>
+    <index id="36" parent="19" name="tb_blocks_pkey">
+      <ObjectId>16504</ObjectId>
+      <ColNames>id_blocks</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="37" parent="19" name="tb_blocks_pkey">
+      <ObjectId>16505</ObjectId>
+      <ColNames>id_blocks</ColNames>
+      <UnderlyingIndexName>tb_blocks_pkey</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="38" parent="19" name="project_block">
+      <ObjectId>16507</ObjectId>
+      <ColNames>project_owner</ColNames>
+      <RefTableId>16492</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>tb_projects</RefTableName>
+      <RefKeyName>tb_projects_pkey</RefKeyName>
+      <RefColNames>id_project</RefColNames>
+    </foreign-key>
+    <column id="39" parent="20" name="email">
+      <Position>1</Position>
+      <DataType>varchar(100)|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>657</StateNumber>
+    </column>
+    <column id="40" parent="20" name="name">
+      <Position>2</Position>
+      <DataType>varchar(80)|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>657</StateNumber>
+    </column>
+    <column id="41" parent="20" name="password">
+      <Position>3</Position>
+      <DataType>varchar(20)|0</DataType>
+      <StateNumber>879</StateNumber>
+    </column>
+    <column id="42" parent="20" name="profile_img">
+      <Position>4</Position>
+      <DataType>varchar(50)|0</DataType>
+      <StateNumber>1098</StateNumber>
+      <DefaultExpression>&apos;/imgs/default.png&apos;::character varying</DefaultExpression>
+    </column>
+    <column id="43" parent="20" name="username">
+      <Position>5</Position>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>657</StateNumber>
+    </column>
+    <column id="44" parent="20" name="authEmail">
+      <Position>6</Position>
+      <DataType>boolean|0</DataType>
+      <StateNumber>737</StateNumber>
+      <DefaultExpression>false</DefaultExpression>
+    </column>
+    <column id="45" parent="20" name="id_user">
+      <Position>7</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1483</StateNumber>
+      <SequenceName>tb_login_id_user_seq</SequenceName>
+      <DefaultExpression>nextval(&apos;tb_login_id_user_seq&apos;::regclass)</DefaultExpression>
+    </column>
+    <index id="46" parent="20" name="tb_login_pkey">
+      <ObjectId>16512</ObjectId>
+      <ColNames>id_user</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="47" parent="20" name="tb_login_pkey">
+      <ObjectId>16513</ObjectId>
+      <ColNames>id_user</ColNames>
+      <UnderlyingIndexName>tb_login_pkey</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="48" parent="21" name="id_project">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1484</StateNumber>
+      <SequenceName>tb_projects_id_project_seq</SequenceName>
+      <DefaultExpression>nextval(&apos;tb_projects_id_project_seq&apos;::regclass)</DefaultExpression>
+    </column>
+    <column id="49" parent="21" name="name_project">
+      <Position>2</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1484</StateNumber>
+    </column>
+    <column id="50" parent="21" name="id_user_owner">
+      <Position>3</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1484</StateNumber>
+    </column>
+    <index id="51" parent="21" name="tb_projects_pkey">
+      <ObjectId>16496</ObjectId>
+      <ColNames>id_project</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="52" parent="21" name="tb_projects_pkey">
+      <ObjectId>16497</ObjectId>
+      <ColNames>id_project</ColNames>
+      <UnderlyingIndexName>tb_projects_pkey</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="53" parent="21" name="project_user">
+      <ObjectId>16514</ObjectId>
+      <ColNames>id_user_owner</ColNames>
+      <RefTableId>16437</RefTableId>
+      <RefColPositions>7</RefColPositions>
+      <RefTableName>tb_login</RefTableName>
+      <RefKeyName>tb_login_pkey</RefKeyName>
+      <RefColNames>id_user</RefColNames>
+    </foreign-key>
+    <argument id="54" parent="22" name="pass">
+      <Position>1</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="55" parent="22" name="usern">
+      <Position>2</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="56" parent="22" name="usertoken">
+      <Position>3</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="57" parent="22" name="emailp">
+      <Position>4</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="58" parent="22" name="nomep">
+      <Position>5</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="59" parent="22">
+      <ArgumentDirection>T</ArgumentDirection>
+      <DataType>table(emaild varchar, namep varchar, usernamer varchar, passwordr varchar, imageuser varchar)|0</DataType>
+    </argument>
+    <argument id="60" parent="23">
+      <ArgumentDirection>T</ArgumentDirection>
+      <DataType>table(email varchar, username varchar, password varchar, img varchar, name varchar, emailauth boolean)|0</DataType>
+    </argument>
+    <argument id="61" parent="24" name="usern">
+      <Position>1</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="62" parent="24">
+      <ArgumentDirection>T</ArgumentDirection>
+      <DataType>table(id_usuario integer, email varchar, username varchar, password varchar, img varchar, name varchar, statusauth boolean)|0</DataType>
+    </argument>
+    <argument id="63" parent="25" name="usern">
+      <Position>1</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="64" parent="25">
+      <ArgumentDirection>R</ArgumentDirection>
+      <DataType>boolean|0</DataType>
+    </argument>
+    <argument id="65" parent="26" name="emaild">
+      <Position>1</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="66" parent="26" name="passw">
+      <Position>2</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="67" parent="26">
+      <ArgumentDirection>T</ArgumentDirection>
+      <DataType>table(email varchar, password varchar, username varchar, statusemail boolean, senhacorreta boolean)|0</DataType>
+    </argument>
+    <argument id="68" parent="27" name="nameproject">
+      <Position>1</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="69" parent="27" name="iddono">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+    </argument>
+    <argument id="70" parent="27">
+      <ArgumentDirection>R</ArgumentDirection>
+      <DataType>boolean|0</DataType>
+    </argument>
+    <argument id="71" parent="28" name="emaild">
+      <Position>1</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="72" parent="28" name="passw">
+      <Position>2</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="73" parent="28" name="img">
+      <Position>3</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="74" parent="28" name="namep">
+      <Position>4</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="75" parent="28" name="usern">
+      <Position>5</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="76" parent="28">
+      <ArgumentDirection>R</ArgumentDirection>
+      <DataType>boolean|0</DataType>
+    </argument>
+    <argument id="77" parent="29" name="usern">
+      <Position>1</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="78" parent="29">
+      <ArgumentDirection>T</ArgumentDirection>
+      <DataType>table(passwordr varchar, nameuser varchar)|0</DataType>
+    </argument>
+    <argument id="79" parent="30" name="usern">
+      <Position>1</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="80" parent="30">
+      <ArgumentDirection>T</ArgumentDirection>
+      <DataType>table(statusemail boolean)|0</DataType>
+    </argument>
+    <argument id="81" parent="31" name="img">
+      <Position>1</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="82" parent="31" name="usern">
+      <Position>2</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="83" parent="31">
+      <ArgumentDirection>R</ArgumentDirection>
+      <DataType>boolean|0</DataType>
+    </argument>
+    <argument id="84" parent="32" name="usern">
+      <Position>1</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="85" parent="32">
+      <ArgumentDirection>T</ArgumentDirection>
+      <DataType>table(usera varchar, status text)|0</DataType>
+    </argument>
+  </database-model>
+</dataSource>

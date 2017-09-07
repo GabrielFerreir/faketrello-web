@@ -1,0 +1,298 @@
+--SELECT * FROM tb_projects;
+
+CREATE OR REPLACE FUNCTION loginU(emailD VARCHAR, passw VARCHAR)
+  RETURNS TABLE(
+    email        VARCHAR(50),
+    password     VARCHAR(20),
+    username     VARCHAR(50),
+    statusEmail  BOOLEAN,
+    senhaCorreta BOOLEAN
+  ) AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    tb_login.email,
+    tb_login.username,
+    tb_login.password,
+    tb_login."authEmail",
+    (tb_login.password = $2)
+  FROM tb_login
+  WHERE tb_login.email ILIKE $1 OR tb_login.username ILIKE $1;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION deleteuser(usern CHARACTER VARYING)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT
+              username,
+              email
+            FROM tb_login
+            WHERE username ILIKE $1 OR email ILIKE $1)
+  THEN
+    DELETE FROM tb_login
+    WHERE username ILIKE $1 OR email ILIKE $1;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END
+$$
+LANGUAGE plpgsql;
+
+--SELECT * FROM deleteuser('joao1');
+
+CREATE OR REPLACE FUNCTION changeuser(pass   CHARACTER VARYING, usern CHARACTER VARYING, userToken CHARACTER VARYING,
+                                      emailP CHARACTER VARYING, nomep CHARACTER VARYING)
+  RETURNS TABLE(
+    emailD    VARCHAR(50),
+    nameP     VARCHAR(50),
+    usernameR VARCHAR(50),
+    passwordR VARCHAR(20),
+    imageUser VARCHAR(20)
+  )
+AS $$
+BEGIN
+  IF NOT EXISTS(SELECT
+                  l.username,
+                  l.email
+                FROM tb_login l
+                WHERE l.username = $2 OR l.email = $4
+                EXCEPT (SELECT
+                          l.username,
+                          l.email
+                        FROM tb_login l
+                        WHERE l.username = $3 OR l.email = $3))
+  THEN
+
+    UPDATE tb_login l
+    SET username = $2,
+      password   = $1,
+      email      = $4,
+      name       = $5
+    WHERE l.username = $3 OR l.email = $3;
+
+    RETURN QUERY
+    SELECT
+      $4,
+      $5,
+      $2,
+      $1,
+      tb_login.profile_img
+    FROM tb_login;
+  END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION newuser(emailD CHARACTER VARYING, passw CHARACTER VARYING, img CHARACTER VARYING,
+                                   nameP  CHARACTER VARYING, usern CHARACTER VARYING)
+  RETURNS BOOLEAN
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  IF NOT exists(SELECT *
+                FROM tb_login
+                WHERE emailD = tb_login.email OR usern = tb_login.username)
+  THEN
+    INSERT INTO tb_login (email, password, profile_img, name, username) VALUES ($1, $2, $3, $4, $5);
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END
+$$;
+
+CREATE OR REPLACE FUNCTION consult()
+  RETURNS TABLE(
+    email     VARCHAR(50),
+    username  VARCHAR(50),
+    password  VARCHAR(20),
+    img       VARCHAR(50),
+    name      VARCHAR(50),
+    emailAuth BOOLEAN
+  ) AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    tb_login.email,
+    tb_login.username,
+    tb_login.password,
+    tb_login.profile_img,
+    tb_login.name,
+    tb_login."authEmail"
+  FROM tb_login;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION verify_email(usern CHARACTER VARYING)
+  RETURNS TABLE(
+    statusEmail BOOLEAN
+  )
+AS $$
+BEGIN
+  IF EXISTS(SELECT "authEmail"
+            FROM tb_login l
+            WHERE l.username ILIKE $1)
+  THEN
+    RETURN QUERY
+    SELECT "authEmail"
+    FROM tb_login l
+    WHERE l.username ILIKE $1;
+  END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION verify_img(imgPath CHARACTER VARYING, usern CHARACTER VARYING)
+  RETURNS BOOLEAN
+AS $$
+BEGIN
+  IF EXISTS(SELECT
+              profile_img,
+              username,
+              email
+            FROM tb_login l
+            WHERE l.email = usern OR l.username = usern)
+  THEN
+    UPDATE tb_login l
+    SET profile_img = imgPath
+    WHERE l.email = usern OR l.username = usern;
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION imgDb(usern CHARACTER VARYING)
+  RETURNS TABLE(
+    currentImg VARCHAR(50)
+  ) AS $$
+BEGIN
+  IF EXISTS(SELECT
+              l.username,
+              l.profile_img
+            FROM tb_login l
+            WHERE l.username ILIKE $1)
+  THEN
+
+  END IF;
+END;
+$$;
+
+--SELECT * FROM verify_img('/default.png','joaoo');
+
+--UPDATE tb_login SET profile_img = '/default.png'
+
+--SELECT * FROM verify_email('joao1559');
+
+CREATE OR REPLACE FUNCTION consultuser(usern VARCHAR)
+  RETURNS TABLE(
+    id_usuario INTEGER,
+    email      VARCHAR(50),
+    username   VARCHAR(50),
+    password   VARCHAR(20),
+    img        VARCHAR(50),
+    name       VARCHAR(50),
+    statusAuth BOOLEAN
+  ) AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    tb_login.id_user,
+    tb_login.email,
+    tb_login.username,
+    tb_login.password,
+    tb_login.profile_img,
+    tb_login.name,
+    tb_login."authEmail"
+  FROM tb_login
+  WHERE tb_login.username ILIKE $1 OR tb_login.email ILIKE $1;
+END
+$$
+LANGUAGE plpgsql;
+
+--SELECT * FROM consultuser('joao@joao.com')
+
+CREATE OR REPLACE FUNCTION verify_token(usern CHARACTER VARYING)
+  RETURNS TABLE(
+    userA  VARCHAR(50),
+    status TEXT
+  )
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  IF EXISTS(SELECT
+              l.username,
+              l.email
+            FROM tb_login l
+            WHERE l.username ILIKE $1 OR l.email ILIKE $1 AND "authEmail" = FALSE)
+  THEN
+    UPDATE tb_login l
+    SET "authEmail" = TRUE
+    WHERE l.username ILIKE $1 OR l.email ILIKE $1;
+    RETURN QUERY
+    SELECT
+      $1,
+      'Autenticado com sucesso' :: TEXT;
+  END IF;
+  IF EXISTS(SELECT
+              l.username,
+              l.email
+            FROM tb_login l
+            WHERE l.username ILIKE $1 OR l.email ILIKE $1 AND "authEmail" = TRUE)
+  THEN
+    RETURN QUERY
+    SELECT
+      $1,
+      'Já autenticado' :: TEXT;
+  END IF;
+END
+$$;
+
+--SELECT * FROM verify_token('A@A.com');
+
+CREATE OR REPLACE FUNCTION passwordToEmail(usern CHARACTER VARYING)
+  RETURNS TABLE(
+    passwordR VARCHAR(20),
+    nameuser  VARCHAR(50)
+  ) AS $$
+BEGIN
+  IF EXISTS(SELECT
+              l.username,
+              l.email,
+              l.password
+            FROM tb_login l
+            WHERE l.username ILIKE usern OR l.email ILIKE usern)
+  THEN
+    RETURN QUERY
+    SELECT
+      l.password,
+      l.name
+    FROM tb_login l
+    WHERE l.username ILIKE usern OR l.email ILIKE usern;
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+--SELECT * FROM passwordToEmail('joao.vitor@smn.com.br');
+
+CREATE OR REPLACE FUNCTION newproject(nameProject CHARACTER VARYING, idDono INTEGER)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT
+              l.id_user
+            FROM tb_login l
+            WHERE l.id_user = idDono)
+  THEN
+      INSERT INTO tb_projects(name_project,id_user_owner) VALUES($1,$2);
+    RETURN TRUE ;
+  END IF;
+  RETURN FALSE ;
+END;
+$$
+LANGUAGE plpgsql;
