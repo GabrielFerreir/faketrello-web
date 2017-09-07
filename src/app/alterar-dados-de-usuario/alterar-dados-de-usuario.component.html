@@ -5,7 +5,7 @@
 
     <!--<img *ngIf="alterar.img == '/default.png'" src="{{ img }}" class="imageUser" id="preview">-->
     <img *ngIf="img64" src="{{img64}}" class="imageUser" id="preview"/>
-    <div *ngIf="alterar.img == '/imgs/default.png' && img64 == ''" class="imageUser">{{ alterar.name.charAt(0) }}</div>
+    <div *ngIf="alterar.img == '/imgs/default.png' && img64 == ''" class="imageUser">{{ alterar.name.charAt(0) | uppercase }}</div>
     <img *ngIf="alterar.img != '/imgs/default.png' && img64 == ''" src="{{'http://192.168.52.105:8080' + alterar.img}}" class="imageUser" id="preview">
     <div class="addImageUser" (click)="chamaFile()">+</div>
 

@@ -24,14 +24,13 @@ export class DadosDeUsuarioService {
       var cookie = document.cookie.split('tokken=');
       cookie = cookie[1].split(';');
       var tokkenCookie = cookie[0];
-      console.log('Pegou o cookie')
-      console.log(tokkenCookie);
+      // console.log('Pegou o cookie')
+      // console.log(tokkenCookie);
     } catch(e) {
-      console.log('Efetue o login')
-      this.router.navigate(['/login']);
-
+      // console.log('Efetue o login')
+      this.router.navigate(['/home']);
     }
-    return tokkenCookie
+    return tokkenCookie;
   }
 
 
@@ -43,6 +42,9 @@ export class DadosDeUsuarioService {
       return this.http.get(url, { headers: headers })
         .map(res => res.json())
         .subscribe((res) => {
+            this.router.navigate(['/main']);
+            console.log('Entrou AQUI!')
+
           }, error => {
             // console.log(error),
             // console.log('Tokken incorreto!')
@@ -53,6 +55,24 @@ export class DadosDeUsuarioService {
           })
     }
 
+  }
+
+  verificaUsuarioAutenticado() {
+    if(this.getCookieTokken()) {
+      var url = 'http://192.168.52.105:8080/session';
+      var headers = new Headers();
+      headers.append('Authorization', 'Bearer '+this.getCookieTokken());
+      return this.http.get(url, { headers: headers })
+        .map(res => res.json())
+        .subscribe((res) => {
+
+          }, error => {
+            this.logout()
+            this.router.navigate(['/home']);
+          },
+          () => {
+          })
+    }
   }
 
 

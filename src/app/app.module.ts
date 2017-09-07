@@ -19,7 +19,6 @@ import {LoginComponent} from './login/login.component';
 import {MainComponent} from './main/main.component';
 import {CadastroComponent} from './cadastro/cadastro.component';
 import {AlterarDadosDeUsuarioComponent} from './alterar-dados-de-usuario/alterar-dados-de-usuario.component';
-import {HomeComponent} from './home/home.component';
 
 import {DadosDeUsuarioResolve} from "./dadosDeUsuario.resolve";
 import {DadosDeUsuarioService} from './dados-de-usuario.service';
@@ -27,6 +26,9 @@ import {AlterarSenhaDeUsuarioComponent} from './alterar-senha-de-usuario/alterar
 import {SnackbarsModule} from './components/snackbars/snackbars.module';
 import { PendentComponent } from './autentication/pendent/pendent.component';
 import { DoneComponent } from './autentication/done/done.component';
+import { PaginaInicialComponent } from './pagina-inicial/pagina-inicial.component';
+import { HomeComponent } from './home/home.component';
+import { EsqueceuSuaSenhaComponent } from './esqueceu-sua-senha/esqueceu-sua-senha.component';
 
 @NgModule({
   declarations: [
@@ -37,10 +39,12 @@ import { DoneComponent } from './autentication/done/done.component';
     MainComponent,
     CadastroComponent,
     AlterarDadosDeUsuarioComponent,
-    HomeComponent,
     AlterarSenhaDeUsuarioComponent,
     PendentComponent,
     DoneComponent,
+    PaginaInicialComponent,
+    HomeComponent,
+    EsqueceuSuaSenhaComponent,
   ],
   imports: [
     BrowserModule,

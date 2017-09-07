@@ -1,52 +1,57 @@
 <div class="container">
-  <div class="login">
-    <img src="./../../assets/logo.png"/>
+  <div class="login" #login>
+    <!--<img src="./../../assets/logo.png"/>-->
+<div #telas style="width: auto; display: flex">
+  <div #tela1 class="tela1" style="min-width: calc(100% - 100px ); float: left; margin: 15px 50px;">
+    <div style="position: relative; width: 200px; float:left;">
+      <input id="usuario" #HTMLusuario [(ngModel)]="usuario" (blur)="chama()" (keyup.enter)="verificaUsuario()" value="{{ usuario }}" class="textFields" type="text" name="usuario"/>
+      <label [style.color]="codeStatusUsuario == '404' ? '#F44336' : ''" class="labelText" for="usuario">Usuario</label>
+      <div [style.background-color]="codeStatusUsuario == '404' ? '#F44336' : ''" class="border"></div>
 
-      <div style="width:300px; height: 150px; padding-top:10px; overflow-x: hidden; display: flex;">
+      <label
+        [style.color]="codeStatusUsuario == '404' ? '#F44336' : ''"
+        [style.display]="codeStatusUsuario == '404' ? 'block' : 'none'"
+        class="helperText">{{ mensagemUsuario }}
+      </label>
+    </div>
+    <button (click)="verificaUsuario()"
+            style="float:left; width:200px; margin-top:55px;"
+            class="denseButton">
+      PROXIMO
+    </button>
 
-      <div #tela1 class="tela1" style="">
-        <div style="position: relative; width: 200px; float:left; margin-left: 50px;">
-          <input id="usuario" #HTMLusuario [(ngModel)]="usuario" (blur)="chama()" value="{{ usuario }}" class="textFields" type="text" name="usuario"/>
-          <label [style.color]="codeStatusUsuario == '404' ? '#F44336' : ''" class="labelText" for="usuario">Usuario</label>
-          <div [style.background-color]="codeStatusUsuario == '404' ? '#F44336' : ''" class="border"></div>
+    <span style="width:200px; float: left; margin-top: 15px; text-align: right; font-size: 13px; color: #ff0000">
+          <a routerLink="/cadastro">
+            Cadastrar-se
+        </a></span>
 
-          <label
-          [style.color]="codeStatusUsuario == '404' ? '#F44336' : ''"
-          [style.display]="codeStatusUsuario == '404' ? 'block' : 'none'"
-           class="helperText">{{ mensagemUsuario }}</label>
-        </div>
+  </div>
 
-        <button (click)="verificaUsuario()"
-          style="float:left; width:200px; margin-top:80px; margin-left:50px;"
-          class="denseButton">
-            PROXIMO
-        </button>
-      </div>
 
-      <img src="./../../../assets/arrow_back.svg" #arrowBack style="visibility: hidden; width:20px; " (click)="voltaAoEmail()">
-      <span style="position:absolute; margin-top: 120px; width:300px; text-align: center; color: #f4f4f4; font-size: 13px;"><a routerLink="/cadastro">Cadastrar-se</a></span>
-      <div #tela2 class="tela2">
-        <div style="position: relative; width: 200px; float:left; margin-left: 50px;">
+  <div #tela2 class="tela2" style="min-width: calc(100% - 100px ); float: left; margin: 15px 50px;">
+    <img src="./../../../assets/arrow_back.svg" #arrowBack  (click)="voltaAoEmail()">
+    <div style="position: relative; width: 200px; float:left;">
 
-          <input id="senha" #HTMLsenha [(ngModel)]="senha" (blur)="chama()" value="{{ senha }}" class="textFields" type="password" name="senha"/>
-          <label [style.color]="codeStatusSenha == '401' ? '#F44336' : ''" class="labelText" for="senha">Senha</label>
-          <div [style.background-color]="codeStatusSenha == '401' ? '#F44336' : ''" class="border"></div>
+      <input id="senha" #HTMLsenha [(ngModel)]="senha" (blur)="chama()" (keyup.enter)="verificaSenha()" value="{{ senha }}" class="textFields" type="password" name="senha"/>
+      <label [style.color]="codeStatusSenha == '401' ? '#F44336' : ''" class="labelText" for="senha">Senha</label>
+      <div [style.background-color]="codeStatusSenha == '401' ? '#F44336' : ''" class="border"></div>
 
-          <label
-          [style.color]="codeStatusSenha == '401' ? '#F44336' : ''"
-          [style.display]="codeStatusSenha == '401' ? 'block' : 'none'"
-           class="helperText">{{ mensagemSenha }}</label>
+      <label
+        [style.color]="codeStatusSenha == '401' ? '#F44336' : ''"
+        [style.display]="codeStatusSenha == '401' ? 'block' : 'none'"
+        class="helperText">{{ mensagemSenha }}</label>
 
-           <label style="float:left; width:200px; text-align:right; margin-top:45px; font-size:12px; color:#333;">Esqueci minha</label>
-        </div>
+      <label style="float:left; width:200px; text-align:right; margin-top:45px; font-size:12px; color:#333;"><a routerLink="/esqueciMinhaSenha">Esqueci minha</a></label>
+    </div>
 
-        <button (click)="verificaSenha()"
-          style="float:left; width:200px; margin-top:20px; margin-left:50px;"
-          class="denseButton">
-            ENTRAR
-        </button>
-      </div>
+    <button (click)="verificaSenha()"
+            style="float:left; width:200px; margin-top:20px; "
+            class="denseButton">
+      ENTRAR
+    </button>
+  </div>
+</div>
 
-      </div>
+
     </div>
   </div>

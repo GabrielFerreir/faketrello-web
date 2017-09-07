@@ -39,7 +39,7 @@ export class PendentComponent implements OnInit {
         .subscribe((res) => {
             this.resposta = res;
             console.log(res);
-            this.router.navigate(['/home']);
+            this.router.navigate(['/main']);
           }, error => {
         this.resposta = "404"
           try{

@@ -10,13 +10,13 @@ import 'rxjs/add/operator/map';
 })
 export class LoginComponent implements OnInit {
 
-@ViewChild('HTMLusuario') HTMLusuario:ElementRef;
-@ViewChild('HTMLsenha') HTMLsenha:ElementRef;
+  @ViewChild('HTMLusuario') HTMLusuario: ElementRef;
+  @ViewChild('HTMLsenha') HTMLsenha: ElementRef;
 
-@ViewChild('tela1') tela1:ElementRef;
-@ViewChild('tela2') tela2:ElementRef;
-@ViewChild('arrowBack') arrowBack:ElementRef;
-
+  @ViewChild('telas') telas: ElementRef;
+  @ViewChild('tela1') tela1: ElementRef;
+  @ViewChild('tela2') tela2: ElementRef;
+  @ViewChild('arrowBack') arrowBack: ElementRef;
 
 
   usuario: string = '';
@@ -30,48 +30,51 @@ export class LoginComponent implements OnInit {
   mensagemSenha = '';
   codeStatusSenha = '';
 
-  chama(){
-    if(this.usuario.length > 0) {
+  chama() {
+    if (this.usuario.length > 0) {
       this.HTMLusuario.nativeElement.classList.add('textFieldsPreenchido');
     } else {
       this.HTMLusuario.nativeElement.classList.remove('textFieldsPreenchido');
     }
 
-      if(this.senha.length > 0) {
-        this.HTMLsenha.nativeElement.classList.add('textFieldsPreenchido');
-      } else {
-        this.HTMLsenha.nativeElement.classList.remove('textFieldsPreenchido');
-      }
+    if (this.senha.length > 0) {
+      this.HTMLsenha.nativeElement.classList.add('textFieldsPreenchido');
+    } else {
+      this.HTMLsenha.nativeElement.classList.remove('textFieldsPreenchido');
+    }
   }
 
 
-  http : Http;
+  http: Http;
+
   constructor(http: Http, private router: Router) {
-      this.http = http;
-    }
+    this.http = http;
+  }
 
   ngOnInit() {
     this.getCookieTokken();
     this.logar();
+    this.HTMLusuario.nativeElement.focus();
   }
 
-  verificaUsuario(){
-    if(this.usuario) {
+  verificaUsuario() {
+    if (this.usuario) {
       var url = 'http://192.168.52.105:8080/userinfo?user=' + this.usuario;
 
       return this.http.get(url)
-      .map(res => res.json())
-      .subscribe((res) => {
-        this.codeStatusUsuario = '200'
-        // console.log(res)
-         this.mensagemUsuario = res
-       }, error => {
-          this.codeStatusUsuario = error.status,
-          this.emailInvalido();
-       },
-       () => {
-         this.emailValido();
-       })
+        .map(res => res.json())
+        .subscribe((res) => {
+            this.codeStatusUsuario = '200'
+            // console.log(res)
+            this.mensagemUsuario = res
+
+          }, error => {
+            this.codeStatusUsuario = error.status,
+              this.emailInvalido();
+          },
+          () => {
+            this.emailValido();
+          })
     } else {
       this.codeStatusUsuario = '404';
       this.mensagemUsuario = 'Digite um usuario'
@@ -79,22 +82,36 @@ export class LoginComponent implements OnInit {
   }
 
   emailInvalido() {
-      if(this.codeStatusUsuario == '404') {
-          this.mensagemUsuario = 'Usuário inexistente'
-        }
+    if (this.codeStatusUsuario == '404') {
+      this.mensagemUsuario = 'Usuário inexistente'
+    }
   }
 
   emailValido() {
-    this.tela1.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(-300px)"
-    this.tela2.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(-250px)"
-    this.arrowBack.nativeElement.style = 'visibility: visible; cursor: pointer; width: 25px; position: absolute; top:70px; left:-50px;'
+    // this.tela1.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(-100%)"
+    // this.tela2.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(-100%)"
 
+    this.telas.nativeElement.style = "transition: all 480ms ease-out; width:auto; display:flex; transform: translateX(-100%)"
+
+    this.arrowBack.nativeElement.style =  'float: left; margin-left: -45px; margin-top:-10px; width: 28px;'
+
+    setTimeout(() => {
+      this.HTMLsenha.nativeElement.focus();
+    }, 480);
   }
 
   voltaAoEmail() {
-    this.tela1.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(0px)"
-    this.tela2.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(300px)"
-    this.arrowBack.nativeElement.style = 'visibility: hidden;  '
+    // this.tela1.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(0px)"
+    // this.tela2.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(100%)"
+
+    this.telas.nativeElement.style = 'transition: all 480ms ease-out; width:auto; display:flex; transform: translateX(0)';
+
+    // this.arrowBack.nativeElement.style = 'visibility: hidden;';
+
+    setTimeout(() => {
+        this.HTMLusuario.nativeElement.focus();
+      }, 480);
+
   }
 
   criarCookie(tokken) {
@@ -140,7 +157,7 @@ export class LoginComponent implements OnInit {
           console.log('Logado')
           console.log(this.mensagemUsuario)
           this.autenticacao = true;
-          this.router.navigate(['/home']);
+          this.router.navigate(['/main']);
         })
     }
 

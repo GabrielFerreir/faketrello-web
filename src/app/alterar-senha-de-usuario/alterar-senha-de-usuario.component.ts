@@ -22,6 +22,7 @@ export class AlterarSenhaDeUsuarioComponent implements OnInit {
               private snackbarService: SnackbarsService) { }
 
   ngOnInit() {
+    this.dadosDoUsuario.verificaUsuarioAutenticado();
     this.alterar = this.activatedRoute.snapshot.data['alterar'];
   }
 

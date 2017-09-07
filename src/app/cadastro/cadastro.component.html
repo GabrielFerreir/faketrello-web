@@ -10,31 +10,49 @@
 
       <div style="width:300px; height: 100%; padding-top:10px; overflow-x: hidden;">
 
-        <a routerLink="/"><img src="./../../../assets/arrow_back.svg" #arrowBack style="position: absolute; top:25px; left:25px; width:30px; cursor: pointer"></a>
+        <a routerLink="/home"><img src="./../../../assets/arrow_back.svg" #arrowBack style="position: absolute; top:25px; left:25px; width:30px; cursor: pointer"></a>
 
 
         <div style="position: relative; width: 200px; float:left; margin-left: 50px;">
-          <input #HTMLNome [(ngModel)]="nome"  value="{{ nome }}" (blur)="habilitaBotao()" (blur)="geraUserName(nome)" (blur)="chama()" (blur)="verificaNome(nome)" type="text" name="nome" class="textFields"/>
+          <input #HTMLNome [(ngModel)]="nome"  value="{{ nome }}"  (blur)="geraUserName(nome)" (blur)="chama()" (blur)="verificaNome(nome)" (blur)="habilitaBotao()" type="text" name="nome" class="textFields"/>
           <label class="labelText" for="nome">Nome</label>
           <div class="border"></div>
+          <label class="helperText"
+                 [style.color]="codeSatusNome == '400' ? '#F44336' : ''"
+                 [style.display]="codeSatusNome == '400' ? 'block' : 'none'"
+          >{{ errorNome }}</label>
+
+
         </div>
 
        <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
-          <input #HTMLEmail autocomplete="off" [(ngModel)]="email" (blur)="habilitaBotao()" (blur)="verificaEmail(email)" (blur)="chama()" type="text" name="email" class="textFields"/>
+          <input #HTMLEmail autocomplete="off" [(ngModel)]="email"  (blur)="verificaEmail(email)" (blur)="chama()" (blur)="habilitaBotao()" type="text" name="email" class="textFields"/>
           <label class="labelText" for="nome">Email</label>
           <div class="border"></div>
+         <label class="helperText"
+                [style.color]="codeSatusEmail == '400' ? '#F44336' : '409' ? '#F44336' : ''"
+                [style.display]="codeSatusEmail == '400' ? 'block' : '409' ? 'block' : 'none'"
+         >{{ errorEmail }}</label>
         </div>
 
         <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
-          <input #HTMLSenha [(ngModel)]="senha" (blur)="habilitaBotao()" (keyup)="senhasConferem()" (blur)="chama()" type="password" name="senha" class="textFields"/>
+          <input #HTMLSenha [(ngModel)]="senha"  (blur)="verificaSenha()" (blur)="chama()" (blur)="habilitaBotao()" type="password" name="senha" class="textFields"/>
           <label class="labelText" for="nome">Senha</label>
           <div class="border"></div>
+          <label class="helperText"
+                 [style.color]="codeSatusSenha == '400' ? '#F44336' : ''"
+                 [style.display]="codeSatusSenha == '400' ? 'block' : 'none'"
+          >{{ errorSenha }}</label>
         </div>
 
           <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top: 60px;">
-            <input #HTMLConfirmaSenha [(ngModel)]="confirmaSenha" (blur)="habilitaBotao()" (keyup)="senhasConferem()" (blur)="chama()" type="password" name="confirmaSenha" class="textFields"/>
+            <input #HTMLConfirmaSenha [(ngModel)]="confirmaSenha" (keyup.enter)="criaUsuario()" (blur)="senhasConferem()" (blur)="chama()" (blur)="habilitaBotao()" type="password" name="confirmaSenha" class="textFields"/>
             <label class="labelText" for="nome">Confirme sua senha</label>
             <div class="border"></div>
+            <label class="helperText"
+                   [style.color]="codeSatusConfirmaSenha == '400' ? '#F44336' : ''"
+                   [style.display]="codeSatusConfirmaSenha == '400' ? 'block' : 'none'"
+            >{{ errorConfirmaSenha }}</label>
           </div>
 
           <button

@@ -34,7 +34,7 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
-    this.dadosDoUsuario.logar();
+    this.dadosDoUsuario.verificaUsuarioAutenticado();
     this.alterar = this.activatedRoute.snapshot.data['alterar'];
     // console.log(this.alterar)
     this.email = this.alterar.email;

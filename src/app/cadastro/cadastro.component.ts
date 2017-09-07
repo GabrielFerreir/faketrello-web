@@ -19,14 +19,29 @@ export class CadastroComponent implements OnInit {
   img64 = '';
 
 
+  codeSatusNome;
+  errorNome;
+
+  codeSatusEmail;
+  errorEmail;
+
+  codeSatusSenha;
+  errorSenha;
+
+  codeSatusConfirmaSenha;
+  errorConfirmaSenha;
+
+  podeCriarUsuario = false;
+
+
   @ViewChild('HTMLNome') HTMLNome:ElementRef;
   @ViewChild('HTMLEmail') HTMLEmail:ElementRef;
   @ViewChild('HTMLSenha') HTMLSenha:ElementRef;
   @ViewChild('HTMLConfirmaSenha') HTMLConfirmaSenha:ElementRef;
   @ViewChild('HTMLCadastrar') HTMLCadastrar:ElementRef;
 
-  constructor(private http : Http,
-              private router : Router) { }
+  constructor(private http: Http,
+              private router: Router) { }
 
   ngOnInit() {
   }
@@ -69,41 +84,116 @@ geraUserName(nome) {
       this.userName = userName
     }
   }
+
 verificaNome(nome){
-  var filtro = /[A-z]/;
-  if(filtro.test(nome)) {
-    console.log(true)
-    return true;
+  var filtro = /^[A-Za-z ]+$/;
+
+  if(filtro.test(nome) || nome == '') {
+
+      if(nome.length > 2 && nome.length < 20) {
+      // console.log('Nome Valido!')
+      this.codeSatusNome = '200';
+      this.errorNome = '';
+      return true;
+      } else if(this.nome == '') {
+        this.codeSatusNome = '400';
+        this.errorNome = 'Campo necessario';
+        return false;
+      } else {
+        // console.log('O nome deve conter entre 3 á 12 caracteres!')
+        this.codeSatusNome = '400';
+        this.errorNome = 'Deve conter entre 3 á 20 caracteres!';
+        return false;
+      }
+
   } else {
-    console.log(false)
+    // console.log('Nome invalido!')
+    this.codeSatusNome = '400';
+    this.errorNome = 'Nome invalido'
     return false;
   }
 }
+
 verificaEmail(email) {
   var filtro = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-	if(filtro.test(email)) {
-    console.log(true)
-		return true;
-	} else {
-    console.log(false)
-		return false;
+
+  if(this.email == '') {
+    this.codeSatusEmail = '400';
+    this.errorEmail = 'Campo necessario';
+
+  }else if(filtro.test(email)) {
+    this.verificaSeOUsuarioExiste();
+  }else {
+    this.codeSatusEmail = '400';
+    this.errorEmail = 'Email Invalido';
+    // console.log(false)
 	}
 }
-senhasConferem() {
-  if(this.senha && this.confirmaSenha) {
-    if(this.senha == this.confirmaSenha) {
-      console.log(true)
-      return true
 
-    } else {
-      console.log(false)
-      return false
+  verificaSeOUsuarioExiste() {
+    if (this.email) {
+      var url = 'http://192.168.52.105:8080/userinfo?user=' + this.email;
+      return this.http.get(url)
+        .map(res => res.json())
+        .subscribe((res) => {
+            // console.log(res)
+            this.codeSatusEmail = '409';
+            this.errorEmail = 'Esse email já está sendo usado';
+          }, error => {
+            this.codeSatusEmail = '200';
+            this.errorEmail = '';
+
+          },
+          () => {
+          })
     }
   }
+
+  verificaSenha() {
+  if(this.senha == '') {
+    this.codeSatusSenha = '400';
+    this.errorSenha = 'Campo Necessario';
+    return false;
+
+  } else if(this.senha.length >= 6 && this.senha.length <= 16) {
+      console.log('Senha Permitida');
+      this.codeSatusSenha = '200';
+      this.errorSenha = '';
+      return true;
+    } else {
+      console.log('Senha não permitida');
+      this.codeSatusSenha = '400';
+      this.errorSenha = 'Deve conter entre 6 á 16 caracteres';
+      return true;
+    }
+  }
+
+
+senhasConferem() {
+  if(this.confirmaSenha == '') {
+    this.codeSatusConfirmaSenha = '400';
+    this.errorConfirmaSenha = 'Campo necessario';
+    return false;
+  }else if(this.senha && this.confirmaSenha && this.senha == this.confirmaSenha) {
+      this.codeSatusConfirmaSenha = '200';
+      this.errorConfirmaSenha = '';
+      return true;
+
+    } else {
+      this.codeSatusConfirmaSenha = '400';
+      this.errorConfirmaSenha = 'As senhas não conferem';
+      return false;
+    }
 }
 
 habilitaBotao() {
-  if(this.verificaNome(this.nome) && this.verificaEmail(this.email) && this.senhasConferem()) {
+  console.log(this.codeSatusNome)
+  console.log(this.codeSatusEmail)
+  console.log(this.codeSatusSenha)
+  console.log(this.codeSatusConfirmaSenha);
+
+  if(this.codeSatusNome == '200' && this.codeSatusEmail == '200' && this.codeSatusSenha == '200' && this.codeSatusConfirmaSenha == '200') {
+    console.log('Habilita botão')
       this.HTMLCadastrar.nativeElement.classList.remove('disabledButton');
   } else {
     this.HTMLCadastrar.nativeElement.classList.add('disabledButton');
@@ -111,7 +201,7 @@ habilitaBotao() {
 }
 
   criaUsuario() {
-    if(this.nome && this.email && this.senha && this.userName) {
+    if(this.podeCriarUsuario == true) {
       var url = 'http://192.168.52.105:8080/newuser';
       var json = JSON.stringify(
         {
@@ -136,7 +226,7 @@ habilitaBotao() {
           console.log(error)
         },
         () => {
-          this.verificaSenha();
+          this.fazerLogin();
         }
       )
   } else {
@@ -145,7 +235,7 @@ habilitaBotao() {
 }
 
 
-verificaSenha() {
+fazerLogin() {
   if(this.senha) {
     var url = 'http://192.168.52.105:8080/login';
     var json = JSON.stringify(
@@ -210,7 +300,7 @@ logar() {
     }, error => {
     },
       () => {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/main']);
       })
   }
 

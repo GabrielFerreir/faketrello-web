@@ -12,10 +12,14 @@
     </div>
   </div>
 
-  <p>Verifique seu email</p>
+  <p class="p1">Verifique seu email</p>
 
-  <p>{{ dados?.email}}</p>
+  <p class="p2">{{ dados?.email}}</p>
+
+  <p (click)="reEmail()" class="p3">Não recebeu? clique aqui</p>
 </div>
+<app-snackbars>
 
+</app-snackbars>
 
 

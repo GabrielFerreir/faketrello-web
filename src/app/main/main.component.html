@@ -44,19 +44,25 @@
     <input class="campoDePesquisa" type="text" id="campoDePesquisa" value="{{ campoDePesquisa }}"  [(ngModel)]="campoDePesquisa" (keyup)="chama()">
     <label for="campoDePesquisa" #HTMLCampoDePesquisa>Pesquisar...</label>
   </div>
-<div style="position: relative">
+<div style="position: relative; z-index: 5;">
   <label for="perfil">
     <div class="perfil">
-      <div class="img">{{dados?.name.charAt(0)}}</div>
+      <div *ngIf="dados?.img != '/imgs/default.png'">
+
+        <img class="img" src="{{'http://192.168.52.105:8080' + dados?.img}}"/>
+      </div>
+
+      <div *ngIf="dados?.img == '/imgs/default.png'" class="img">{{dados?.name.charAt(0)}}</div>
       <span>{{dados?.name}}</span>
 
     </div>
   </label>
   <input class="checkPerfil" type="checkbox" id="perfil" style="display: none"/>
+
   <div class="opPerfil">
     <ul>
       <li><img src="../../assets/home_black.svg"/>
-        <span routerLink="/home">Home</span>
+        <span routerLink="/main">Home</span>
       </li>
       <li><img src="../../assets/account_circle_black.svg"/>
         <span routerLink="/alterarDados">Alterar Dados</span>
