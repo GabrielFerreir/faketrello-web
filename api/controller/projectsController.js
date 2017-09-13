@@ -1,6 +1,6 @@
 (async () => {
   let db = await require('../db-config.js')
-  const jwt = require('jsonwebtoken')
+  //const jwt = require('jsonwebtoken')
   let userController = require('./userController.js')
 
   //Criando novo projeto
