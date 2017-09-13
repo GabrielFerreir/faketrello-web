@@ -1,6 +1,7 @@
 (async () => {
   let db = await require('../db-config.js')
   const jwt = require('jsonwebtoken')
+  const md5 = require('md5')
   let token
   let PASSWORD
 
@@ -21,8 +22,12 @@
   }
   //Segunda verificação
   exports.login = function (req, res) {
+    let senha = req.body.password
+    if (senha.length < 32) {
+      senha = md5(req.body.password)
+    }
     try {
-      db.any('SELECT * from loginU($1,$2);', [req.body.user, md5(req.body.password)])
+      db.any('SELECT * from loginU($1,$2);', [req.body.user, senha])
         .then(data => {
           if (!data[0] || !data[0].senhacorreta) {
             res.status(401).json('Login ou senha inválidos')
@@ -30,11 +35,11 @@
             token = jwt.sign({
               user: req.body.user,
               authEmail: data[0].statusemail
-            }, req.body.password, {
+            }, md5(req.body.password), {
               //expiresIn: '2 days'
             })
-            res.json(token)
-            PASSWORD = req.body.password
+            res.json({token})
+            PASSWORD = md5(req.body.password)
           }
         })
     } catch (error) {
@@ -52,9 +57,9 @@
     }
     jwt.verify(auth, PASSWORD, function (error, data) {
       if (error) {
-        res.status(401).send({error: 'Sessão invalida'})
+        res.status(401).json({error: 'Sessão invalida'})
       } else {
-        res.status(200).send({
+        res.status(200).json({
           user: data.user,
           statusAcc: data.authEmail
         })
@@ -80,24 +85,65 @@
             db.any('SELECT * from verify_img($2,$1);', [req.body.username, caminho])
               .then(data => {
                 console.log(data[0])
-                if (data[0].verify_img) {
-                  res.json({result: 'Deu certo'})
-                } else {
+                if (!data[0].verify_img) {
                   res.json({error: 'Usuario nao encontrado'})
                 }
               })
           }
-          db.any('SELECT * FROM changeUser($1,$2,$3,$4,$5);', [req.body.password, req.body.username, data.user, req.body.email, req.body.name])
+          db.any('SELECT * FROM changeUser($1,$2,$3,$4,$5);', [null, req.body.username, data.user, req.body.email, req.body.name])
             .then(data => {
               if (!data || !data[0]) {
-                res.status(404).json({Error: 'A alteração falhou'})
+                res.status(409).json({Error: 'A alteração falhou'})
               } else {
-                res.status(200).json({result: 'Sucesso'})
+                db.any('SELECT * FROM relogin($1);', [req.body.username])
+                  .then(data => {
+                    if (!data || !data[0]) {
+                      res.status(404).json({error: 'Usuario nao encontrado'})
+                    } else {
+                      req.body.password = data[0].passw
+                      req.body.user = req.body.username
+                      exports.login(req, res)
+                    }
+                  })
               }
             })
         } catch (error) {
           console.log(error)
         }
+      }
+    })
+  }
+  //Altera senha do usuario
+  exports.changepass = function (req, res) {
+    let auth = req.headers.authorization
+    let whocall = false
+    let oldpass
+
+    if ((!auth) || (!auth.startsWith('Bearer'))) {
+      res.status(401).json({error: 'Token errado'})
+    } else {
+      auth = auth.split('Bearer').pop().trim()
+    }
+    jwt.verify(auth, PASSWORD, async function (error, data) {
+      if (error) {
+        res.status(401).json({error: 'Sessão invalida'})
+      } else {
+        if (req.body.oldpass) {
+          whocall = true
+          oldpass = md5(req.body.oldpass)
+        } else {
+          whocall = false
+          oldpass = null
+        }
+        db.any('SELECT * FROM changepass($1,$2,$3,$4);', [data.user, oldpass, md5(req.body.newpass), whocall])
+          .then(data => {
+            console.log(data)
+            if (!data[0].changepass) {
+              res.status(401).json({error: 'Senha atual não confere'})
+            } else {
+              res.status(200).json({result: 'Senha Alterada com sucesso'})
+            }
+          })
       }
     })
   }
@@ -199,8 +245,8 @@
               if (!data[0]) {
                 res.status(404).json({result: 'Nao encontrado'})
               } else {
-                if(req.called === 1) {
-                 return resolve(data[0])
+                if (req.called === 1) {
+                  return resolve(data[0])
                 }
                 res.status(200).json(data[0])
               }
@@ -214,10 +260,10 @@
     let nodemailer = require('nodemailer')
 
     let transporter = nodemailer.createTransport({
-      service: 'Gmail', // Como mencionei, vamos usar o Gmail
+      service: 'Gmail',
       auth: {
-        user: 'faketrello2017@gmail.com', // Basta dizer qual o nosso usuário
-        pass: 'fakeTrello!'             // e a senha da nossa conta
+        user: 'faketrello2017@gmail.com',
+        pass: 'fakeTrello!'
       }
     })
     let tokenEmail = await exports.generatorTokken(req, res)
@@ -264,6 +310,7 @@
   exports.emailPassword = async function (req, res) {
     let nodemailer = require('nodemailer')
 
+    let token = await exports.generatorTokken(req, res)
     let transporter = nodemailer.createTransport({
       service: 'Gmail',
       auth: {
@@ -271,19 +318,41 @@
         pass: 'fakeTrello!'
       }
     })
-    let obj = await exports.resendPassword(req, res)
     let mailOptions = {
       from: 'Fake Trello',
       to: req.body.email,
-      subject: 'Reenvio de senha!',
-      text: `Olá ${obj.nomeuser}!\n
-              Sua senha é: ${obj.passuser}!`
+      subject: 'Redefinição de senha!',
+      html: `<table align="center" border="0" cellspacing="0" style='width:600px'>
+  <tr>
+    <td align="center" valign="top">
+      <img src='http://192.168.52.105:8080/assets/asset1.png'/>
+    </td>
+  </tr>
+
+  <tr height="150">
+    <td align="center" valign="middle" style='font-size: 36px; color:#333333; font-family: Roboto, Arial '>
+      Para confirmar seu email <br/>
+      clique no botão abaixo:</td>
+  </tr>
+
+  <tr height="150">
+    <td align="center" valign="middle">
+      <a href="http://192.168.52.3:4200/newpass/${token}"><img id="buttonClick" src='http://192.168.52.105:8080/assets/Asset3.png' style='cursor: pointer;'/></a>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="top">
+      <img src='http://192.168.52.105:8080/assets/Asset4.png'/>
+    </td>
+  </tr>
+</table>`
     }
     transporter.sendMail(mailOptions, function (error, result) {
       if (error) {
         res.json({error: error})
       } else {
-        res.status(200).json({result: 'Senha enviada para o email!'})
+        res.status(200).json({result: 'Link de redefinição de senha enviado para o email!'})
       }
     })
   }
@@ -299,9 +368,10 @@
             let tokenEmail = jwt.sign({
               user: req.body.username,
               authEmail: data[0].statusemail
-            }, req.body.password, {
-              expiresIn: '10 days'
+            }, md5(req.body.password), {
+              expiresIn: '2 days'
             })
+            PASSWORD = md5(req.body.password)
             resolve(tokenEmail)
           }
         })
@@ -323,23 +393,25 @@
       throw error
     }
   }
-  //Pega a senha no banco
-  exports.resendPassword = async function (req, res) {
-    return new Promise(function (resolve, reject) {
 
-      db.any('SELECT * FROM passwordToEmail($1);', [req.body.email])
-        .then(data => {
-          if (!data || !data[0]) {
-            reject('Usuario nao encontrado no banco')
-          } else {
-            resolve({
-              nomeuser: data[0].nameuser,
-              passuser: data[0].passwordr
-            })
-          }
-        })
-    })
-  }
+  //Pega a senha no banco
+  // exports.resendPassword = async function (req, res) {
+  //   return new Promise(function (resolve, reject) {
+  //
+  //     db.any('SELECT * FROM passwordToEmail($1);', [req.body.email])
+  //       .then(data => {
+  //         if (!data || !data[0]) {
+  //           reject('Usuario nao encontrado no banco')
+  //         } else {
+  //           resolve({
+  //             nomeuser: data[0].nameuser,
+  //             passuser: data[0].passwordr
+  //           })
+  //         }
+  //       })
+  //   })
+  // }
+
   //Valida token e muda variavel booleana no banco
   exports.validaToken = function (req, res) {
     let auth = req.headers.authorization
@@ -355,7 +427,7 @@
       } else {
         db.any('SELECT * FROM verify_token($1);', [data.user])
           .then(data => {
-            console.log(data[0])
+            console.log(data)
             if (!data[0]) {
               res.status(208).json(data[0])
             } else {
@@ -400,4 +472,21 @@
       }
     })
   }*/
+
+  exports.verifyEmail = function (req, res) {
+    db.any('SELECT * FROM emailexists($1);', [req.body.email])
+      .then(data => {
+        if (!data || !data[0]) {
+          res.json({error: 'Email invalido'})
+        } else {
+          req.body.username = data[0].usern
+          req.body.password = data[0].passw
+          if (req.body.who) {
+            exports.emailPassword(req, res)
+          } else {
+            exports.email(req, res)
+          }
+        }
+      })
+  }
 })()

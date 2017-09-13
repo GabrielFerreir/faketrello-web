@@ -10,18 +10,18 @@
   app.post('/login', userController.login)
   app.get('/session', userController.authSession)
   app.put('/session/change', userController.change)
+  app.put('/session/changepassword', userController.changepass)
   app.post('/newuser', userController.newUser)
   app.get('/users', userController.db)
   app.post('/uploadImg', userController.imgs)
   app.get('/user', userController.infoUser)
   app.put('/authEmail', userController.authEmail)
-  app.post('/lostPass', userController.emailPassword)
+  //app.post('/lostPass', userController.emailPassword)
   app.get('/authentication', userController.validaToken)
-  app.post('/resendEmail', userController.email)
+  app.post('/newpass', userController.verifyEmail)
+  app.post('/resendEmail', userController.verifyEmail)
   app.delete('/deleteUser', userController.deleteUser)
-  app.post('/newProject', projectsController.newProject)
-  //app.get('/email', userController.email)
-  //app.post('/verifyEmail', userController.generatorTokken)
+  //app.post('/newProject', projectsController.newProject)
 
   let filesPath
 
