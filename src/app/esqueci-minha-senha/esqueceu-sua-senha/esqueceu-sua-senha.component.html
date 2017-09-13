@@ -1,14 +1,12 @@
-<div class="container">
-  <div class="login" #login>
-    <!--<img src="./../../assets/logo.png"/>-->
-    <div #telas style="width: auto; display: flex">
+
+    <div style="width: auto; display: flex">
 
 
-      <div #tela class="tela" style="min-width: calc(100% - 100px ); float: left; margin: 15px 50px;">
+      <div class="tela" style="min-width: calc(100% - 100px ); float: left; margin: 15px 50px;">
         <div style="color: rgba(0,0,0, .54); cursor: default; user-select: none; font-family: 'Roboto'; font-size: 15px; text-align: center; width: 100%; margin-bottom: 15px;">Digite seu Usuario ou Email</div>
         <div style="position: relative; width: 200px; float:left;">
 
-          <input id="usuario" #HTMLusuario [(ngModel)]="usuario" (blur)="chama()" (keyup.enter)="verificaUsuario()" value="{{ usuario }}" class="textFields" type="text" name="usuario"/>
+          <input id="usuario" #HTMLusuario [(ngModel)]="usuario" value="{{ usuario }}" (blur)="chama()" class="textFields" type="text" name="usuario"/>
           <label [style.color]="codeStatusUsuario == '404' ? '#F44336' : ''" class="labelText" for="usuario">Usuario</label>
           <div [style.background-color]="codeStatusUsuario == '404' ? '#F44336' : ''" class="border"></div>
 
@@ -28,9 +26,6 @@
       </div>
     </div>
 
+<!--<app-snackbars>-->
 
-  </div>
-</div>
-<app-snackbars>
-
-</app-snackbars>
+<!--</app-snackbars>-->

@@ -162,12 +162,11 @@ nav ul .titulo {
   float: right;
 }
 .perfil span {
-  max-width: 150px;
-  height: 36px;
+  float: left;
+  /*min-width: 100px;*/
   line-height: 36px;
   margin-right: 10px;
   margin-top: 5px;
-  float: right;
   color: #FFF;
 }
 .opPerfil {
@@ -209,7 +208,6 @@ header .checkPerfil:checked ~ .opPerfil {
     transform: scale(1);
     transition: All 480ms ease-out;
 }
-
 header .checkNav:checked ~ nav {
   display: block;
   position: absolute;

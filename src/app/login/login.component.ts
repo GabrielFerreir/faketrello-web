@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter }
 import { Http, Headers, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/map';
+import { CoreService } from '../Services/core.service';
+import { DadosDeUsuarioService } from '../Services/dados-de-usuario.service';
 
 @Component({
   selector: 'app-login',
@@ -22,8 +24,7 @@ export class LoginComponent implements OnInit {
   usuario: string = '';
   senha: string = '';
 
-  tokken: string = '';
-  autenticacao: boolean;
+  tokken: any = '';
   mensagemUsuario = '';
   codeStatusUsuario = '';
 
@@ -31,69 +32,55 @@ export class LoginComponent implements OnInit {
   codeStatusSenha = '';
 
   chama() {
-    if (this.usuario.length > 0) {
-      this.HTMLusuario.nativeElement.classList.add('textFieldsPreenchido');
-    } else {
-      this.HTMLusuario.nativeElement.classList.remove('textFieldsPreenchido');
-    }
-
-    if (this.senha.length > 0) {
-      this.HTMLsenha.nativeElement.classList.add('textFieldsPreenchido');
-    } else {
-      this.HTMLsenha.nativeElement.classList.remove('textFieldsPreenchido');
-    }
+    this.usuario.length > 0 ? this.HTMLusuario.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLusuario.nativeElement.classList.remove('textFieldsPreenchido');
+    this.senha.length > 0 ? this.HTMLsenha.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLsenha.nativeElement.classList.remove('textFieldsPreenchido');
   }
 
 
-  http: Http;
-
-  constructor(http: Http, private router: Router) {
-    this.http = http;
+  constructor(private http: Http,
+              private router: Router,
+              private core: CoreService,
+              private dadosService: DadosDeUsuarioService) {
   }
 
   ngOnInit() {
-    this.getCookieTokken();
-    this.logar();
+    //FAZ O LOGIN QUANDO O USUARIO JÁ ESTÁ AUTENTICADO
+    if(this.dadosService.getCookieTokken()) {
+      this.dadosService.logar()
+        .subscribe((res) => {
+            this.router.navigate(['/main']);
+          });
+    }
     this.HTMLusuario.nativeElement.focus();
   }
 
   verificaUsuario() {
     if (this.usuario) {
-      var url = 'http://192.168.52.105:8080/userinfo?user=' + this.usuario;
-
-      return this.http.get(url)
-        .map(res => res.json())
-        .subscribe((res) => {
-            this.codeStatusUsuario = '200'
-            // console.log(res)
-            this.mensagemUsuario = res
-
-          }, error => {
-            this.codeStatusUsuario = error.status,
-              this.emailInvalido();
-          },
-          () => {
-            this.emailValido();
-          })
+        this.dadosService.verificaUsuarioExiste(this.usuario)
+          .subscribe((res) => {
+              this.codeStatusUsuario = '200'
+              this.emailValido();
+            }, error => {
+                this.codeStatusUsuario = error.status,
+                this.emailInvalido();
+            },
+            () => {
+            });
     } else {
       this.codeStatusUsuario = '404';
-      this.mensagemUsuario = 'Digite um usuario'
+      this.mensagemUsuario = 'Digite um usuario';
     }
   }
 
   emailInvalido() {
     if (this.codeStatusUsuario == '404') {
-      this.mensagemUsuario = 'Usuário inexistente'
+      this.mensagemUsuario = 'Usuário inexistente';
     }
   }
 
   emailValido() {
-    // this.tela1.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(-100%)"
-    // this.tela2.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(-100%)"
-
-    this.telas.nativeElement.style = "transition: all 480ms ease-out; width:auto; display:flex; transform: translateX(-100%)"
-
-    this.arrowBack.nativeElement.style =  'float: left; margin-left: -45px; margin-top:-10px; width: 28px;'
+    this.telas.nativeElement.style = "transition: all 480ms ease-out; width:auto; display:flex; transform: translateX(-100%)";
+    this.arrowBack.nativeElement.style =  'float: left; margin-left: -45px; margin-top:-10px; width: 28px;';
 
     setTimeout(() => {
       this.HTMLsenha.nativeElement.focus();
@@ -101,12 +88,7 @@ export class LoginComponent implements OnInit {
   }
 
   voltaAoEmail() {
-    // this.tela1.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(0px)"
-    // this.tela2.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(100%)"
-
     this.telas.nativeElement.style = 'transition: all 480ms ease-out; width:auto; display:flex; transform: translateX(0)';
-
-    // this.arrowBack.nativeElement.style = 'visibility: hidden;';
 
     setTimeout(() => {
         this.HTMLusuario.nativeElement.focus();
@@ -114,92 +96,40 @@ export class LoginComponent implements OnInit {
 
   }
 
-  criarCookie(tokken) {
-    var data = new Date();
-    data.setTime(data.getTime() + (24*60*60*1000))
-    tokken = tokken.substring(1, tokken.length -1);
-    var tokkenCompleto = 'Bearer ' + tokken;
-    document.cookie = "tokken=Bearer "+tokken+"; expires="+data.toUTCString()+"; path=/";
-    console.log('Criou o cookie')
-  }
-
-  getCookieTokken() {
-    try {
-      var cookie = document.cookie.split('tokken=');
-      cookie = cookie[1].split(';');
-      var tokkenCookie = cookie[0];
-      this.autenticacao = true;
-      console.log('Pegou o cookie')
-      console.log(tokkenCookie);
-    } catch(e) {
-      // console.log(e)
-      this.autenticacao = false;
-      tokkenCookie = '';
-      // console.log('Erro ao pegar o cookie')
-    }
-    return tokkenCookie
-  }
-
-  logar() {
-    if(this.getCookieTokken()) {
-      var url = 'http://192.168.52.105:8080/session';
-      var headers = new Headers();
-      headers.append('Authorization', 'Bearer '+this.getCookieTokken());
-      return this.http.get(url, { headers: headers })
-      .map(res => res.json())
-      .subscribe((res) => {
-        this.mensagemUsuario = res
-      }, error => {
-        console.log(error),
-        console.log('Tokken incorreto!')
-      },
-        () => {
-          console.log('Logado')
-          console.log(this.mensagemUsuario)
-          this.autenticacao = true;
-          this.router.navigate(['/main']);
-        })
-    }
-
-  }
-
   verificaSenha() {
     if(this.senha) {
-      var url = 'http://192.168.52.105:8080/login';
-      var json = JSON.stringify(
-        {
-          user : this.usuario,
-          password : this.senha
-        }
-      );
-      var params =  json;
-      var headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-
-      return this.http.post(url, params, { headers: headers })
-      .map(res => res.json())
+      this.dadosService.gerarTokken(this.usuario, this.senha)
       .subscribe(
-        data => this.tokken = JSON.stringify(data),
+        data => {
+          this.tokken = data;
+          // console.log(this.tokken.token);
+
+          this.codeStatusSenha = '200';
+          this.dadosService.criarCookie(this.tokken.token);
+          // Limpa a variavel tokken
+          this.tokken = '';
+          // FAZ O LOGIN
+          this.dadosService.logar()
+            .subscribe((res) => {
+                this.mensagemUsuario = res;
+              }, error => {
+                // console.log(error),
+              },
+              () => {
+                this.router.navigate(['/main']);
+              });
+        },
         error => {
-          // console.log(error),
           this.codeStatusSenha = '401';
           this.mensagemSenha = 'Senha incorreta';
         },
         () => {
-          this.codeStatusSenha = '200'
-
-          console.log('Chamou a funcao logar')
-          this.criarCookie(this.tokken);
-          //Limpa a variavel tokken
-          this.tokken = '';
-          this.getCookieTokken();
-          this.logar()
         }
-      )
+      );
   } else {
     this.codeStatusSenha = '401';
-    this.mensagemSenha = 'Digite sua senha'
+    this.mensagemSenha = 'Digite sua senha';
   }
 }
 
-  }
+}
