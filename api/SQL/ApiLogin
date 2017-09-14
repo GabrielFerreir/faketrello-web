@@ -1,4 +1,4 @@
---SELECT * FROM tb_login;
+--SELECT * FROM tb_projects;
 
 CREATE OR REPLACE FUNCTION loginU(emailD VARCHAR, passw VARCHAR)
   RETURNS TABLE(
@@ -99,7 +99,7 @@ BEGIN
       WHERE username ILIKE $1 OR email ILIKE $1;
       RETURN TRUE;
     END IF;
-    RETURN FALSE ;
+    RETURN FALSE;
   ELSE
     IF EXISTS(SELECT
                 username,
@@ -112,7 +112,7 @@ BEGIN
       WHERE username ILIKE $1 OR email ILIKE $1;
       RETURN TRUE;
     END IF;
-    RETURN FALSE ;
+    RETURN FALSE;
 
   END IF;
 END;
@@ -317,20 +317,6 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM passwordToEmail('joao.vitor@smn.com.br');
 
-CREATE OR REPLACE FUNCTION newproject(nameProject CHARACTER VARYING, idDono INTEGER)
-  RETURNS BOOLEAN AS $$
-BEGIN
-  IF EXISTS(SELECT l.id_user
-            FROM tb_login l
-            WHERE l.id_user = idDono)
-  THEN
-    INSERT INTO tb_projects (name_project, id_user_owner) VALUES ($1, $2);
-    RETURN TRUE;
-  END IF;
-  RETURN FALSE;
-END;
-$$
-LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION emailexists(emailuser CHARACTER VARYING)
   RETURNS TABLE(
@@ -377,3 +363,50 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION newproject(nameProject CHARACTER VARYING, idDono INTEGER, descricao CHARACTER VARYING,
+                                      imgProject  CHARACTER VARYING)
+  RETURNS TABLE(
+    idproject INTEGER
+  ) AS $$
+DECLARE
+  idprojectR INTEGER;
+BEGIN
+  IF EXISTS(SELECT l.id_user
+            FROM tb_login l
+            WHERE l.id_user = idDono)
+  THEN
+    INSERT INTO tb_projects (name_project, id_user_owner, description, img_project) VALUES ($1, $2, $3, $4)
+    RETURNING id_project
+      INTO idprojectR;
+    RETURN QUERY
+    SELECT idprojectR;
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+--SELECT * FROM getproject(25);
+
+CREATE OR REPLACE FUNCTION getproject(usern INTEGER)
+  RETURNS TABLE (
+    namep   VARCHAR(50),
+    descrip TEXT,
+    img     VARCHAR(50)
+  ) AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_projects
+            WHERE id_user_owner = usern)
+  THEN
+    RETURN QUERY
+    SELECT
+      name_project,
+      description,
+      img_project
+    FROM tb_projects
+    WHERE id_user_owner = usern;
+  END IF;
+END;
+$$
+  LANGUAGE plpgsql;

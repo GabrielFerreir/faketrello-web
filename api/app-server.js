@@ -21,7 +21,9 @@
   app.post('/newpass', userController.verifyEmail)
   app.post('/resendEmail', userController.verifyEmail)
   app.delete('/deleteUser', userController.deleteUser)
-  //app.post('/newProject', projectsController.newProject)
+  //Parte de projetos
+  app.post('/project', projectsController.newProject)
+  app.get('/project', projectsController.infoProject)
 
   let filesPath
 
