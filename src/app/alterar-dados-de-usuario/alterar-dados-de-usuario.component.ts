@@ -3,8 +3,9 @@ import { Http, Headers, Response } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/map';
 import { AfterViewInit } from '@angular/core';
-import { DadosDeUsuarioService } from '../dados-de-usuario.service';
+import { DadosDeUsuarioService } from '../Services/dados-de-usuario.service';
 import {SnackbarsService} from '../components/snackbars/snackbars.service';
+import { CoreService } from '../Services/core.service';
 
 @Component({
   selector: 'app-alterar-dados-de-usuario',
@@ -16,6 +17,7 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private http: Http,
+              private core: CoreService,
               private dadosDoUsuario: DadosDeUsuarioService,
               private snackbarService: SnackbarsService) {
   }
@@ -26,27 +28,34 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
   userName;
   email = '';
   senha = '';
-  novaSenha = '';
-  confirmaNovaSenha = '';
-  senhaAtual = '';
   tokken;
   img64 = '';
+
+  codeSatusNome = '';
+  errorNome = '';
+
+  codeSatusUsername = '';
+  errorUsername = '';
+
+  codeSatusEmail = '';
+  errorEmail = '';
+  CondVerificaEmail = false;
+
+
 
 
   ngOnInit() {
     this.dadosDoUsuario.verificaUsuarioAutenticado();
-    this.alterar = this.activatedRoute.snapshot.data['alterar'];
-    // console.log(this.alterar)
-    this.email = this.alterar.email;
-    this.userName = this.alterar.username;
-    console.log(this.email)
-
-    this.chama();
-    console.log(this.alterar)
+    try{
+      this.alterar = this.activatedRoute.snapshot.data['alterar'];
+      this.email = this.alterar.email;
+      this.userName = this.alterar.username;
+      this.chama();
+    } catch (e){
+    }
   }
 
-  ngAfterViewInit() {
-  }
+  ngAfterViewInit() {}
 
   @ViewChild('login') login: ElementRef;
   @ViewChild('tela1') tela1: ElementRef;
@@ -61,142 +70,138 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
   @ViewChild('HTMLCadastrar') HTMLCadastrar: ElementRef;
 
   chamaFile() {
-    console.log('TESTE');
     let el = document.getElementById('file');
     el.click();
   }
 
   chama() {
-    if (this.alterar.name.length > 0) {
-      this.HTMLNome.nativeElement.classList.add('textFieldsPreenchido');
-    } else {
-      this.HTMLNome.nativeElement.classList.remove('textFieldsPreenchido');
-    }
-    if (this.alterar.username.length > 0) {
-      this.HTMLUsername.nativeElement.classList.add('textFieldsPreenchido');
-    } else {
-      this.HTMLUsername.nativeElement.classList.remove('textFieldsPreenchido');
-    }
-    if (this.alterar.email.length > 0) {
-      this.HTMLEmail.nativeElement.classList.add('textFieldsPreenchido');
-    } else {
-      this.HTMLEmail.nativeElement.classList.remove('textFieldsPreenchido');
-    }
+    this.alterar.name.length > 0 ? this.HTMLNome.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLNome.nativeElement.classList.remove('textFieldsPreenchido');
+    this.alterar.username.length > 0 ? this.HTMLUsername.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLUsername.nativeElement.classList.remove('textFieldsPreenchido');
+    this.alterar.email.length > 0 ? this.HTMLEmail.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLEmail.nativeElement.classList.remove('textFieldsPreenchido');
   }
 
+  vericaNome() {
+    const filtro = /^[A-Za-z ]+$/;
 
+    if(filtro.test(this.alterar.name) || this.alterar.name == '') {
+
+      if(this.alterar.name.length > 2 && this.alterar.name.length < 20) {
+        this.codeSatusNome = '200';
+        this.errorNome = '';
+        return true;
+      } else if(this.alterar.name == '') {
+        this.codeSatusNome = '400';
+        this.errorNome = 'Campo necessario';
+        return false;
+      } else {
+        this.codeSatusNome = '400';
+        this.errorNome = 'Deve conter entre 3 á 20 caracteres!';
+        return false;
+      }
+
+    } else {
+      this.codeSatusNome = '400';
+      this.errorNome = 'Nome invalido';
+      return false;
+    }
+  }
+  verificaUsername(){
+    console.log('Tá chamando');
+    if(this.alterar.username != this.userName) {
+      this.dadosDoUsuario.verificaUsuarioExiste(this.alterar.username)
+        .subscribe((res) => {
+          console.log(res);
+          this.codeSatusUsername = '409';
+          this.errorUsername = 'Esse usuario já está sendo usado';
+          return false;
+        }, error => {
+          this.codeSatusUsername = '200';
+          this.errorUsername = '';
+          return true;
+        });
+    } else {
+      this.codeSatusUsername = '200';
+      this.errorUsername = '';
+      return true;
+    }
+
+
+  }
+  verificaEmail() {
+    var filtro = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+
+    if(this.alterar.email == '') {
+      this.codeSatusEmail = '400';
+      this.errorEmail = 'Campo necessario';
+      this.CondVerificaEmail = false;
+
+    }else if(filtro.test(this.alterar.email)) {
+
+        if(this.alterar.email != this.email) {
+          this.dadosDoUsuario.verificaUsuarioExiste(this.alterar.email)
+            .subscribe((res) => {
+              this.codeSatusEmail = '409';
+              this.errorEmail = 'Esse email já está sendo usado';
+              this.CondVerificaEmail = false;
+            }, error => {
+              this.codeSatusEmail = '200';
+              this.errorEmail = '';
+              this.CondVerificaEmail = true;
+            });
+        } else {
+          this.codeSatusEmail = '200';
+          this.errorEmail = '';
+          this.CondVerificaEmail = true;
+        }
+
+
+    }else {
+      this.codeSatusEmail = '400';
+      this.errorEmail = 'Email Invalido';
+      this.CondVerificaEmail = false;
+    }
+  }
 
   altera() {
-
-    var url = 'http://192.168.52.105:8080/session/change';
-
-      var json = JSON.stringify(
-        {
-          name: this.alterar.name,
-          username: this.alterar.username,
-          imgBase64: this.img64,
-          email: this.alterar.email,
-          password: this.alterar.password
-        }
-      );
-
-    var params = json;
-    var headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this.dadosDoUsuario.getCookieTokken());
-
-    return this.http.put(url, params, {headers: headers})
-      .map(res => res.json())
-      .subscribe(
-        data => {
-          this.snackbarService.chamaSnackbar('Dados modificados com sucesso!')
-          console.log(data);
-          console.log(this.email + ' ' + this.alterar.email)
-          if (this.email != this.alterar.email || this.userName != this.alterar.username) {
-            this.reLogar();
+    this.verificaEmail();
+    if(this.CondVerificaEmail && this.vericaNome() && this.verificaUsername()) {
+      this.dadosDoUsuario.alterarDadosDeUsuario(this.alterar.name, this.alterar.username, this.img64, this.alterar.email)
+        .subscribe(
+          data => {
+            this.snackbarService.chamaSnackbar('Dados modificados com sucesso!');
+            console.log('Faça o login novamente');
+            console.log(data.token);
+            this.dadosDoUsuario.criarCookie(data.token);
+            this.dadosDoUsuario.logar();
+          },
+          error => {
+            console.log(error);
           }
-        },
-        error => {
-          console.log(error)
-        },
-        () => {
+        );
+    } else {
 
-        }
-      )
+      console.log(this.CondVerificaEmail);
+      console.log(this.verificaUsername());
+      console.log(this.vericaNome());
+      console.log('Ops, tem algo errado!');
+    }
 
-  }
 
-  reLogar() {
-    console.log("Entrou em Relogar")
-    var url = 'http://192.168.52.105:8080/login';
-    var json = JSON.stringify(
-      {
-        user: this.alterar.email,
-        password: this.alterar.password
-      }
-    );
-    var params = json;
-    var headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    return this.http.post(url, params, {headers: headers})
-      .map(res => res.json())
-      .subscribe(
-        data => {
-          this.tokken = JSON.stringify(data),
-            this.dadosDoUsuario.criarCookie(this.tokken);
-          //Limpa a variavel tokken
-          this.tokken = '';
-          this.dadosDoUsuario.getCookieTokken();
-          this.dadosDoUsuario.logar();
-        },
-        error => {
-          console.log(error);
-        },
-        () => {
-
-        }
-      )
   }
 
   previewFile(el) {
     console.log(el)
-    var reader  = new FileReader();
-
+    const reader  = new FileReader();
     reader.onloadend = (e) => {
       // preview.src = reader.result;
-      console.log(reader.result);
+      // console.log(reader.result);
       this.img64 = reader.result;
     }
-
-
     if (el) {
       reader.readAsDataURL(el.files[0]);
     } else {
-
     }
-
   }
 }
-
-
-      /*
-     alteracaoPermitida() {
-      if() {
-
-        console.log('Alteração permitida')
-        this.HTMLCadastrar.nativeElement.classList.remove('disabledButton');
-          return true;
-      }  else {
-
-          console.log('Alteração mão permitida');
-          this.HTMLCadastrar.nativeElement.classList.add('disabledButton');
-          return false;
-
-      }
-    }
-
-
-    */
 
 

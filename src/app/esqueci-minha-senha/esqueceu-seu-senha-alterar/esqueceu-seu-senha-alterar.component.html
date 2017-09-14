@@ -1,0 +1,32 @@
+<div style="position: relative; width: 200px; float:left; top: 10px; left: 50px;">
+
+  <input id="senha" #HTMLusuario [(ngModel)]="senha" value="{{ senha }}" (blur)="chama()" class="textFields" type="text" name="senha"/>
+  <label [style.color]="codeStatusUsuario == '404' ? '#F44336' : ''" class="labelText" for="senha">Senha</label>
+  <div [style.background-color]="codeStatusUsuario == '404' ? '#F44336' : ''" class="border"></div>
+
+  <label
+    [style.color]="codeStatusUsuario == '404' ? '#F44336' : ''"
+    [style.display]="codeStatusUsuario == '404' ? 'block' : 'none'"
+    class="helperText">{{ mensagemUsuario }}</label>
+
+</div>
+
+<div style="position: relative; width: 200px; float:left; top: 55px; left: 50px;">
+
+  <input id="confirmaSenha" #HTMLusuario [(ngModel)]="confirmaSenha" value="{{ confirmaSenha }}" (blur)="chama()" class="textFields" type="text" name="usuario"/>
+  <label [style.color]="codeStatusUsuario == '404' ? '#F44336' : ''" class="labelText" for="confirmaSenha">Confirme a Senha</label>
+  <div [style.background-color]="codeStatusUsuario == '404' ? '#F44336' : ''" class="border"></div>
+
+  <label
+    [style.color]="codeStatusUsuario == '404' ? '#F44336' : ''"
+    [style.display]="codeStatusUsuario == '404' ? 'block' : 'none'"
+    class="helperText">{{ mensagemUsuario }}</label>
+
+</div>
+
+<button
+  style="float:left; position: relative; width:200px; top:100px; left: 50px; "
+  class="denseButton"
+  (click)="verificaUsuario()">
+  RECUPERAR
+</button>

@@ -1,0 +1,12 @@
+<aside #autenticacao>
+  <Section>
+    <span>Confirme seu endereço de email: {{ dados?.email }}.</span><span (click)="reenvia(dados?.email)"> Reenviar email</span>
+  </Section>
+
+  <div class="fecha" (click)="fecha()">
+    X
+  </div>
+</aside>
+<app-snackbars>
+
+</app-snackbars>

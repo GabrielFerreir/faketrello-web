@@ -1,0 +1,21 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  background-image: url("./../../assets/pexels.png");
+  background-size: 1642px 1088px;
+  background-position: center;
+}
+.meio {
+  float: left;
+  background-color: rgba(255,255,255,0.5);
+  width: 200px;
+  /*height: 130px;*/
+  margin-left: calc(50vw - 100px);
+  margin-top: calc(50vh - 65px);
+  text-align: center;
+  line-height: 40px;
+  padding: 20px 0;
+  color: #006064;
+  font-size: 18px;
+}

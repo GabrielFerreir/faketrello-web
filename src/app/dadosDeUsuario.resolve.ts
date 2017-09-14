@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { DadosDeUsuarioService } from "./dados-de-usuario.service";
+import { DadosDeUsuarioService } from "./Services/dados-de-usuario.service";
 
 
 @Injectable()
@@ -11,6 +11,8 @@ export class DadosDeUsuarioResolve implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot) {
   return this.dadosDeUsuarioService.recuperarDadosDeUsuario()
       .then(res => res = res.json())
-      .catch()
+      .catch(err => {
+        // this.dadosDeUsuarioService.logout();
+      });
   }
 }

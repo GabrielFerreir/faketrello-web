@@ -2,30 +2,41 @@
 
   <div style="width:300px; height: 100%; padding-top:10px;">
     <input type="file" (change)="previewFile($event.target)" id="file" style="display: none;">
-
     <!--<img *ngIf="alterar.img == '/default.png'" src="{{ img }}" class="imageUser" id="preview">-->
-    <img *ngIf="img64" src="{{img64}}" class="imageUser" id="preview"/>
+    <img *ngIf="img64" src="{{ img64 }}" class="imageUser" id="preview"/>
     <div *ngIf="alterar.img == '/imgs/default.png' && img64 == ''" class="imageUser">{{ alterar.name.charAt(0) | uppercase }}</div>
-    <img *ngIf="alterar.img != '/imgs/default.png' && img64 == ''" src="{{'http://192.168.52.105:8080' + alterar.img}}" class="imageUser" id="preview">
+    <img *ngIf="alterar.img != '/imgs/default.png' && img64 == ''" src="{{'http://'+ core.ipDaApi + '/' + alterar.img}}" class="imageUser" id="preview">
     <div class="addImageUser" (click)="chamaFile()">+</div>
 
     <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-right: 50px;">
-      <input #HTMLNome [(ngModel)]="alterar.name" (blur)="chama()" type="text" name="nome" class="textFields"/>
+      <input #HTMLNome [(ngModel)]="alterar.name" (blur)="chama()" (blur)="vericaNome()" type="text" name="nome" class="textFields"/>
       <label class="labelText" for="nome">Nome</label>
       <div class="border"></div>
+      <label class="helperText"
+             [style.color]="codeSatusNome == '400' ? '#F44336' : ''"
+             [style.display]="codeSatusNome == '400' ? 'block' : 'none'"
+      >{{ errorNome }}</label>
     </div>
 
     <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
-      <input #HTMLUsername [(ngModel)]="alterar.username" (blur)="chama()" type="text" name="username" class="textFields"/>
+      <input #HTMLUsername [(ngModel)]="alterar.username" (blur)="chama()" (blur)="verificaUsername()" type="text" name="username" class="textFields"/>
       <label class="labelText" for="username">Username</label>
       <div class="border"></div>
+      <label class="helperText"
+             [style.color]="codeSatusUsername == '409' ? '#F44336' : ''"
+             [style.display]="codeSatusUsername == '409' ? 'block' : 'none'"
+      >{{ errorUsername }}</label>
     </div>
 
 
     <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
-      <input #HTMLEmail autocomplete="off" [(ngModel)]="alterar.email" (blur)="chama()" type="text" name="email" class="textFields"/>
+      <input #HTMLEmail autocomplete="off" [(ngModel)]="alterar.email" (blur)="chama()" (blur)="verificaEmail()" type="text" name="email" class="textFields"/>
       <label class="labelText" for="email">Email</label>
       <div class="border"></div>
+      <label class="helperText"
+             [style.color]="codeSatusEmail == '400' || '409' ? '#F44336' : ''"
+             [style.display]="codeSatusEmail == '400' || '409' ? 'block' : 'none'"
+      > {{ errorEmail }} </label>
     </div>
 
 
@@ -40,24 +51,7 @@
   </div>
 
 </div>
-<app-snackbars>
 
-</app-snackbars>
-
-
-
-
-
-
-
-
-
-        <!--</div>-->
-
-  <!--<div style="width:300px; height: 350px; padding-top:10px; overflow-x: hidden; float: left">-->
-
-
-
-  <!--</div>-->
+<app-snackbars></app-snackbars>
 
 

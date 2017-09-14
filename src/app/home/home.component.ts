@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DadosDeUsuarioService } from '../dados-de-usuario.service';
+import { DadosDeUsuarioService } from '../Services/dados-de-usuario.service';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +11,7 @@ export class HomeComponent implements OnInit {
   constructor(private dadosDeUsuarioService: DadosDeUsuarioService) { }
 
   ngOnInit() {
-    this.dadosDeUsuarioService.getCookieTokken();
+    // this.dadosDeUsuarioService.getCookieTokken();
     this.dadosDeUsuarioService.logar();
   }
 

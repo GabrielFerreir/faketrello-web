@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Router } from '@angular/router';
+import { NgModel } from '@angular/forms';
 import 'rxjs/add/operator/map';
-
-import { SnackbarsService } from "../components/snackbars/snackbars.service";
+import { CoreService } from "../../Services/core.service";
+import { SnackbarsService } from '../../components/snackbars/snackbars.service';
 
 @Component({
   selector: 'app-esqueceu-sua-senha',
@@ -18,11 +19,12 @@ export class EsqueceuSuaSenhaComponent implements OnInit {
   mensagemUsuario = '';
 
   constructor(  private http: Http,
-                private snackbarsService: SnackbarsService
+                private snackbarsService: SnackbarsService,
+                private core: CoreService
                 ) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
+
   chama() {
     if (this.usuario.length > 0) {
       this.HTMLusuario.nativeElement.classList.add('textFieldsPreenchido');
@@ -34,7 +36,7 @@ export class EsqueceuSuaSenhaComponent implements OnInit {
 
   verificaUsuario() {
     if (this.usuario) {
-      let url = 'http://192.168.52.105:8080/userinfo?user=' + this.usuario;
+      let url = 'http://' + this.core.ipDaApi + '/userinfo?user=' + this.usuario;
 
       return this.http.get(url)
         .map(res => res.json())
@@ -67,7 +69,7 @@ export class EsqueceuSuaSenhaComponent implements OnInit {
       console.log('A')
       this.snackbarsService.chamaSnackbar('Aguarde');
 
-    var url = 'http://192.168.52.105:8080/lostPass';
+    var url = 'http://' + this.core.ipDaApi + '/newpass';
     var json = JSON.stringify(
       {
         email: this.usuario,
@@ -83,6 +85,7 @@ export class EsqueceuSuaSenhaComponent implements OnInit {
         data => {
           this.snackbarsService.chamaSnackbar('Email Enviado');
           console.log(JSON.stringify(data));
+          console.log('Sucesso')
         }),
       error => {
         console.log(error);

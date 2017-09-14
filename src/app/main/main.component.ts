@@ -3,7 +3,8 @@ import { Http, Headers, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/map';
 
-import { DadosDeUsuarioService } from '../dados-de-usuario.service';
+import { DadosDeUsuarioService } from '../Services/dados-de-usuario.service';
+import { CoreService } from '../Services/core.service';
 
 @Component({
   selector: 'app-main',
@@ -19,7 +20,8 @@ export class MainComponent implements OnInit {
 
   constructor(private router: Router,
               private http: Http,
-              private dadosDoUsuario: DadosDeUsuarioService) {
+              private dadosDoUsuario: DadosDeUsuarioService,
+              private core: CoreService) {
   }
 
   ngOnInit() {
@@ -28,19 +30,9 @@ export class MainComponent implements OnInit {
 
     this.dadosDoUsuario.recuperarDadosDeUsuario()
       .then(res => {
-        this.dados = res.json()
-        if(!this.dados.statusauth) {
-          this.router.navigate(['/emailNaoAutenticado']);
-        }
-
-
+        this.dados = res.json();
       })
-      .catch()
-
-
-
-
-
+      .catch();
   }
 
   chama() {
@@ -53,7 +45,7 @@ export class MainComponent implements OnInit {
 
   logar() {
     if (this.dadosDoUsuario.getCookieTokken()) {
-      var url = 'http://192.168.52.105:8080/session';
+      var url = 'http://' + this.core.ipDaApi + '/session';
       var headers = new Headers();
       headers.append('Authorization', 'Bearer ' + this.dadosDoUsuario.getCookieTokken());
       return this.http.get(url, {headers: headers})
@@ -75,5 +67,8 @@ export class MainComponent implements OnInit {
     // console.log('Entrou')
     document.cookie = "tokken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     this.router.navigate(['/']);
+  }
+  clicou() {
+    console.log('Clicou');
   }
 }

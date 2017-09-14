@@ -12,4 +12,5 @@ export class PaginaInicialComponent implements OnInit {
   ngOnInit() {
   }
 
+
 }

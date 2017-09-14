@@ -3,47 +3,45 @@
   <div style="width:300px; height: 100%; padding-top:10px;">
 
     <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-right: 50px;">
-      <input #HTMLNovaSenha [(ngModel)]="novaSenha" (blur)="chama()" type="password" name="novaSenha" class="textFields"/>
+      <input #HTMLNovaSenha [(ngModel)]="novaSenha" (blur)="chama()" (blur)="validaNovaSenha()" type="password" name="novaSenha" class="textFields"/>
       <label class="labelText" for="novaSenha">Nova Senha</label>
       <div class="border"></div>
 
-      <label
-        [style.color]="msgNovaSenha != '' ? '#F44336' : ''"
-        [style.display]="msgNovaSenha != '' ? 'block' : 'none'"
-        class="helperText">{{ msgNovaSenha }}
-      </label>
+      <label class="helperText"
+             [style.color]="codeNovaSenha == '400' ? '#F44336' : ''"
+             [style.display]="codeNovaSenha == '400' ? 'block' : 'none'"
+      >{{ errorNovaSenha }}</label>
+
     </div>
 
     <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
-      <input #HTMLConfirmaNovaSenha [(ngModel)]="confirmaNovaSenha" (blur)="chama()" type="password" name="confirmaNovaSenha" class="textFields"/>
+      <input #HTMLConfirmaNovaSenha [(ngModel)]="confirmaNovaSenha" (blur)="chama()" (blur)="validaConfirmaNovaSenha()" type="password" name="confirmaNovaSenha" class="textFields"/>
       <label class="labelText" for="confirmaNovaSenha">Confirme a Nova Senha</label>
       <div class="border"></div>
 
-      <label
-        [style.color]="msgConfirmaNovaSenha != '' ? '#F44336' : ''"
-        [style.display]="msgConfirmaNovaSenha != '' ? 'block' : 'none'"
-        class="helperText">{{ msgConfirmaNovaSenha }}
-      </label>
+      <label class="helperText"
+             [style.color]="codeConfirmNovaSenha == '400' ? '#F44336' : ''"
+             [style.display]="codeConfirmNovaSenha == '400' ? 'block' : 'none'"
+      >{{ errorConfirmaNovaSenha }}</label>
     </div>
 
     <hr style="position: relative; width: 300px; float: left; margin-left: 0px; margin-top: 70px;">
 
 
     <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:20px;">
-      <input #HTMLSenhaAtual autocomplete="off" [(ngModel)]="senhaAtual" (blur)="chama()" type="password" name="senhaAtual" class="textFields"/>
+      <input #HTMLSenhaAtual autocomplete="off" [(ngModel)]="senhaAtual" (blur)="chama()" (blur)="validaSenhaAtual()" type="password" name="senhaAtual" class="textFields"/>
       <label class="labelText" for="senhaAtual">Digite a Senha Atual</label>
       <div class="border"></div>
 
-      <label
-        [style.color]="msgSenhaAtual != '' ? '#F44336' : ''"
-        [style.display]="msgSenhaAtual != '' ? 'block' : 'none'"
-        class="helperText">{{ msgSenhaAtual }}
-      </label>
+      <label class="helperText"
+             [style.color]="codeSenhaAtual == '400' || '401' ? '#F44336' : ''"
+             [style.display]="codeSenhaAtual == '400' || '401' ? 'block' : 'none'"
+      >{{ errorSenhaAtual }}</label>
     </div>
 
 
     <button
-      (click)="valida()"
+      (click)="altera()"
       class="denseButton"
       style="float:left; width:200px; margin-top:60px; margin-left:50px;"
       #HTMLCadastrar>
