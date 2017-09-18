@@ -1,7 +1,8 @@
---SELECT * FROM tb_projects;
+--SELECT * FROM tb_team;
 
 CREATE OR REPLACE FUNCTION loginU(emailD VARCHAR, passw VARCHAR)
   RETURNS TABLE(
+    id           INTEGER,
     email        VARCHAR(50),
     password     VARCHAR(20),
     username     VARCHAR(50),
@@ -11,6 +12,7 @@ CREATE OR REPLACE FUNCTION loginU(emailD VARCHAR, passw VARCHAR)
 BEGIN
   RETURN QUERY
   SELECT
+    tb_login.id_user,
     tb_login.email,
     tb_login.username,
     tb_login.password,
@@ -194,6 +196,27 @@ BEGIN
     UPDATE tb_login l
     SET profile_img = imgPath
     WHERE l.email = usern OR l.username = usern;
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION verify_imgproject(imgPath CHARACTER VARYING, usern INTEGER)
+  RETURNS BOOLEAN
+AS $$
+BEGIN
+  IF EXISTS(SELECT
+              img_project,
+              name_project
+            FROM tb_projects
+            WHERE tb_projects.id_project = usern)
+  THEN
+    UPDATE tb_projects
+    SET img_project = imgPath
+    WHERE tb_projects.id_project = usern;
     RETURN TRUE;
   ELSE
     RETURN FALSE;
@@ -389,10 +412,11 @@ LANGUAGE plpgsql;
 --SELECT * FROM getproject(25);
 
 CREATE OR REPLACE FUNCTION getproject(usern INTEGER)
-  RETURNS TABLE (
-    namep   VARCHAR(50),
-    descrip TEXT,
-    img     VARCHAR(50)
+  RETURNS TABLE(
+    idproject INTEGER,
+    namep     VARCHAR(50),
+    descrip   TEXT,
+    img       VARCHAR(50)
   ) AS $$
 BEGIN
   IF EXISTS(SELECT *
@@ -401,12 +425,144 @@ BEGIN
   THEN
     RETURN QUERY
     SELECT
+      id_project,
       name_project,
       description,
       img_project
     FROM tb_projects
-    WHERE id_user_owner = usern;
+    WHERE id_user_owner = usern
+    ORDER BY id_project ASC;
   END IF;
 END;
 $$
-  LANGUAGE plpgsql;
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION getprojectsearch(idpro INTEGER, iduser INTEGER)
+  RETURNS TABLE(
+    idowner INTEGER,
+    namep   VARCHAR(50),
+    descrip TEXT,
+    img     VARCHAR(50)
+  ) AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_projects
+            WHERE id_project = $1 AND id_user_owner = $2)
+  THEN
+    RETURN QUERY
+    SELECT
+      id_user_owner,
+      name_project,
+      description,
+      img_project
+    FROM tb_projects
+    WHERE id_project = $1;
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION changeproject(idproj INTEGER, namep CHARACTER VARYING, descrip CHARACTER VARYING,
+                                         imgp   CHARACTER VARYING, idowner INTEGER)
+  RETURNS TABLE(
+    idprojectR INTEGER
+  ) AS $$
+DECLARE
+  idproject INTEGER;
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_projects
+            WHERE id_project = idproj AND id_user_owner = idowner)
+  THEN
+    UPDATE tb_projects
+    SET
+      name_project = namep,
+      description  = descrip,
+      img_project  = imgp
+    WHERE id_project = idproj AND id_user_owner = idowner
+    RETURNING id_project
+      INTO idproject;
+    RETURN QUERY
+    SELECT idproject;
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+--SELECT * FROM deleteproject(79);
+
+CREATE OR REPLACE FUNCTION deleteproject(idproject INTEGER)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_projects
+            WHERE id_project = $1)
+  THEN
+    DELETE FROM tb_projects
+    WHERE id_project = $1;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION timeproject(teamJson JSON)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  INSERT INTO tb_team (id_project, id_user, permissions)
+    SELECT
+      idproject,
+      iduser,
+      permission
+    FROM json_to_recordset(teamJson)
+      AS x(
+         idproject INTEGER,
+         iduser INTEGER,
+         permission SMALLINT
+         );
+  RETURN TRUE;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION verify_permission(idproj INTEGER, iduser INTEGER)
+  RETURNS TABLE(
+    idproject  INTEGER,
+    iduserR    INTEGER,
+    permission INTEGER
+  ) AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_team
+            WHERE idproj = id_project AND iduser = id_user)
+  THEN
+    RETURN QUERY
+    SELECT
+      id_project,
+      id_user,
+      permissions
+    FROM tb_team
+    WHERE idproj = id_project AND iduser = id_user;
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION changeteam(idproj INTEGER, idusert INTEGER, permission SMALLINT)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF permission <> 2 AND
+     EXISTS(SELECT *
+            FROM tb_team
+            WHERE idproj = id_project AND id_user = idusert)
+  THEN
+    DELETE FROM tb_team
+    WHERE idproj = id_project AND id_user = idusert;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+

@@ -24,6 +24,11 @@
   //Parte de projetos
   app.post('/project', projectsController.newProject)
   app.get('/project', projectsController.infoProject)
+  app.get('/project/:id', projectsController.infoProjectSearch)
+  app.delete('/project/:id', projectsController.deleteproject)
+  app.put('/project/:id', projectsController.changeProject)
+  app.post('/insertUser', projectsController.insertTeam)
+  app.post('/permission', projectsController.verifyPermission)
 
   let filesPath
 

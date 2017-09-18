@@ -1,5 +1,6 @@
 (async () => {
   let db = await require('../db-config.js')
+  let projectsController = require('./projectsController')
   const jwt = require('jsonwebtoken')
   const md5 = require('md5')
   let token
@@ -34,12 +35,14 @@
           } else {
             token = jwt.sign({
               user: req.body.user,
+              id: data[0].id,
               authEmail: data[0].statusemail
             }, md5(req.body.password), {
               //expiresIn: '2 days'
             })
             res.json({token})
             PASSWORD = md5(req.body.password)
+            exports.senha = PASSWORD
           }
         })
     } catch (error) {
@@ -84,7 +87,6 @@
             let caminho = await exports.imgs(req, res)
             db.any('SELECT * from verify_img($2,$1);', [req.body.username, caminho])
               .then(data => {
-                console.log(data[0])
                 if (!data[0].verify_img) {
                   res.json({error: 'Usuario nao encontrado'})
                 }
@@ -137,7 +139,6 @@
         }
         db.any('SELECT * FROM changepass($1,$2,$3,$4);', [data.user, oldpass, md5(req.body.newpass), whocall])
           .then(data => {
-            console.log(data)
             if (!data[0].changepass) {
               res.status(401).json({error: 'Senha atual não confere'})
             } else {
@@ -189,18 +190,7 @@
   }
   //Base64 to image
   exports.imgs = async function (req, res) {
-    // let auth = req.headers.authorization
-    //
-    // if ((!auth) || (!auth.startsWith('Bearer'))) {
-    //   res.status(401).json({error: 'Sessão Inválida'})
-    // } else {
-    //   auth = auth.split('Bearer').pop().trim()
-    // }
-    // jwt.verify(auth, PASSWORD, function (error, data) {
-    //   if (error) {
-    //     res.status(401).send({error: 'Sessão invalida'})
-    //   } else {
-    return new Promise(function (resolve, reject) {
+    return new Promise(async function (resolve, reject) {
       const fs = require('fs')
       let image = req.body.imgBase64
       let matches = image.match(/^data:([A-Za-z-+/]+);base64,(.+)$/)
@@ -213,7 +203,7 @@
       response.data = new Buffer(matches[2], 'base64')
       let caminhoBd
       if(req.called === 1) {
-        caminhoBd = `./imgs/imgsProjects/picture_${req.body.nameProject}.png`
+        caminhoBd = `./imgs/imgsProjects/picture_${req.idproj}.png`
       }
        else {
         caminhoBd = `./imgs/imgs/picture_${req.body.username}.png`
@@ -433,7 +423,6 @@
       } else {
         db.any('SELECT * FROM verify_token($1);', [data.user])
           .then(data => {
-            console.log(data)
             if (!data[0]) {
               res.status(208).json(data[0])
             } else {
