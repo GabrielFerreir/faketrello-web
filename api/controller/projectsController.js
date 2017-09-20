@@ -31,7 +31,7 @@
                 }
               })
           } else {
-            res.status(200).json({id: req.idproj})
+            //res.status(200).json({id: req.idproj})
           }
 
           //Inserindo owner no team
@@ -41,7 +41,7 @@
             'permission': '0'
           }
           ]
-          exports.insertTime(req, res)
+          exports.insertTeam(req, res)
         }
       })
   }
@@ -73,7 +73,6 @@
       if (error) {
         res.status(401).json({error: 'Sessão invalida'})
       } else {
-        console.log(data)
         db.any('SELECT * FROM getprojectsearch($1,$2)', [id, data.id])
           .then(data => {
             if (!data || !data[0]) {
@@ -114,7 +113,10 @@
       if (error) {
         res.status(401).json({error: 'Sessão invalida'})
       } else {
-        db.any('SELECT * FROM changeproject($1,$2,$3,$4,$5);', [id, req.body.nameproject, req.body.description, caminho, data.id])
+        req.body.iduser = data.id
+        req.body.idproject = id
+        let permission = exports.verifyPermission(req, res)
+        db.any('SELECT * FROM changeproject($1,$2,$3,$4,$5);', [id, req.body.nameproject, req.body.description, caminho, permission])
           .then(async data => {
             if (!data) {
               res.status(400).json({error: 'Projeto nao encontrado ou pertence a outras pessoas'})
@@ -149,7 +151,7 @@
           res.status(200).json({result: 'sucesso'})
       })
   }
-
+  //Verifica se a permissao do usuario no projeto permite alterações
   exports.verifyPermission = function (req, res) {
     return new Promise(function (resolve, reject) {
 
@@ -165,11 +167,18 @@
     })
   }
   //Retira uma pessoa do time
-  exports.changeteam = async function (req, res) {
+  exports.removeUserTeam = async function (req, res) {
     let permission = await exports.verifyPermission(req, res)
-    db.any('SELECT * FROM changeteam($1,$2,$3)', [req.body.idproject, req.body.iduser, permission[0].permission])
+    let idProject = req.params.id
+    db.any('SELECT * FROM changeteam($1,$2,$3,$4,$5)', [idProject, req.body.iduser, permission[0].permission, req.body.idprojecttarget, req.body.idusertarget])
       .then(data => {
-
+        if (data[0].statuscode === 200) {
+          res.status(200).json({result: 'Usuario removido do projeto'})
+        } else if (data[0].statuscode === 401) {
+          res.status(401).json({result: 'Voce nao tem permissao'})
+        } else {
+          res.status(404).json({result: 'Usuario nao encontrado no projeto'})
+        }
       })
   }
 })()

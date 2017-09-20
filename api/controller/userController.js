@@ -389,25 +389,6 @@
       throw error
     }
   }
-
-  //Pega a senha no banco
-  // exports.resendPassword = async function (req, res) {
-  //   return new Promise(function (resolve, reject) {
-  //
-  //     db.any('SELECT * FROM passwordToEmail($1);', [req.body.email])
-  //       .then(data => {
-  //         if (!data || !data[0]) {
-  //           reject('Usuario nao encontrado no banco')
-  //         } else {
-  //           resolve({
-  //             nomeuser: data[0].nameuser,
-  //             passuser: data[0].passwordr
-  //           })
-  //         }
-  //       })
-  //   })
-  // }
-
   //Valida token e muda variavel booleana no banco
   exports.validaToken = function (req, res) {
     let auth = req.headers.authorization
@@ -444,29 +425,6 @@
         }
       })
   }
-  /*exports.authEmailToken = function (req, res) {
-    let auth = req.headers.authorization
-
-    if ((!auth) || (!auth.startsWith('Bearer'))) {
-      res.status(401).json({error: 'Sessão Inválida'})
-    } else {
-      auth = auth.split('Bearer').pop().trim()
-    }
-    jwt.verify(auth, PASSWORD, function (error, data) {
-      if (error) {
-        res.status(401).send({error: 'Sessão invalida'})
-      } else {
-        db.any('SELECT * FROM verify_token($1);', [data.user])
-          .then(data => {
-            if (!data || !data[0]) {
-              res.status(400).json({error: 'Nao foi possivel confirmar o email!'})
-            } else {
-              res.status(200).json({result: 'Email confirmado com sucesso!'})
-            }
-          })
-      }
-    })
-  }*/
 
   exports.verifyEmail = function (req, res) {
     db.any('SELECT * FROM emailexists($1);', [req.body.email])

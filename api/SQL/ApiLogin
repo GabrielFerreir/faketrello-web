@@ -413,73 +413,85 @@ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION getproject(usern INTEGER)
   RETURNS TABLE(
-    idproject INTEGER,
-    namep     VARCHAR(50),
-    descrip   TEXT,
-    img       VARCHAR(50)
+    id_project INTEGER,
+    namep      VARCHAR(50),
+    descrip    TEXT,
+    img        VARCHAR(50)
   ) AS $$
 BEGIN
-  IF EXISTS(SELECT *
-            FROM tb_projects
-            WHERE id_user_owner = usern)
-  THEN
-    RETURN QUERY
-    SELECT
-      id_project,
-      name_project,
-      description,
-      img_project
-    FROM tb_projects
-    WHERE id_user_owner = usern
-    ORDER BY id_project ASC;
-  END IF;
+  RETURN QUERY
+  SELECT
+    tb_projects.id_project,
+    name_project,
+    description,
+    img_project
+  FROM tb_projects
+  WHERE tb_projects.id_project IN (SELECT tb_team.id_project
+                                   FROM tb_team
+                                   WHERE usern = id_user);
 END;
 $$
 LANGUAGE plpgsql;
 
+--SELECT * FROM getprojectsearch(73,25);
+
 CREATE OR REPLACE FUNCTION getprojectsearch(idpro INTEGER, iduser INTEGER)
   RETURNS TABLE(
-    idowner INTEGER,
     namep   VARCHAR(50),
     descrip TEXT,
-    img     VARCHAR(50)
+    img     VARCHAR(50),
+    team    JSON
   ) AS $$
 BEGIN
-  IF EXISTS(SELECT *
-            FROM tb_projects
-            WHERE id_project = $1 AND id_user_owner = $2)
+  IF EXISTS(SELECT id_project
+            FROM tb_team
+            WHERE id_project = $1 AND id_user = $2)
   THEN
     RETURN QUERY
     SELECT
-      id_user_owner,
       name_project,
       description,
-      img_project
+      img_project,
+      (
+        SELECT COALESCE(json_agg(teamJson), '[]')
+        FROM (SELECT
+                tb_team.id_user,
+                name,
+                profile_img,
+                username,
+                permissions
+              FROM tb_team
+                INNER JOIN tb_login ON tb_login.id_user = tb_team.id_user
+              WHERE id_project = idpro
+              ORDER BY permissions ASC) AS teamJson
+      ) teams
     FROM tb_projects
-    WHERE id_project = $1;
+
+    WHERE tb_projects.id_project = idpro;
   END IF;
 END;
 $$
 LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION changeproject(idproj INTEGER, namep CHARACTER VARYING, descrip CHARACTER VARYING,
-                                         imgp   CHARACTER VARYING, idowner INTEGER)
+                                         imgp   CHARACTER VARYING, permission INTEGER)
   RETURNS TABLE(
     idprojectR INTEGER
   ) AS $$
 DECLARE
   idproject INTEGER;
 BEGIN
-  IF EXISTS(SELECT *
+  IF permission <> 2 AND
+     EXISTS(SELECT *
             FROM tb_projects
-            WHERE id_project = idproj AND id_user_owner = idowner)
+            WHERE id_project = idproj)
   THEN
     UPDATE tb_projects
     SET
       name_project = namep,
       description  = descrip,
       img_project  = imgp
-    WHERE id_project = idproj AND id_user_owner = idowner
+    WHERE id_project = idproj
     RETURNING id_project
       INTO idproject;
     RETURN QUERY
@@ -549,16 +561,52 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION changeteam(idproj INTEGER, idusert INTEGER, permission SMALLINT)
+CREATE OR REPLACE FUNCTION changeteam(idproj     INTEGER, idusert INTEGER, permission INTEGER,
+                                      idprojalvo INTEGER, iduseralvo INTEGER)
+  RETURNS TABLE(
+    statusCode INTEGER
+  ) AS $$
+DECLARE
+  vStatus INTEGER;
+BEGIN
+  IF permission <> 2
+  THEN
+    IF EXISTS(SELECT *
+              FROM tb_team
+              WHERE idproj = id_project AND id_user = idusert)
+       AND EXISTS(SELECT *
+                  FROM tb_team
+                  WHERE idprojalvo = id_project AND
+                        iduseralvo = id_user)
+    THEN
+      DELETE FROM tb_team
+      WHERE idprojalvo = id_project AND
+            id_user = iduseralvo
+      RETURNING 200
+        INTO
+          vStatus;
+      RETURN QUERY
+      SELECT vStatus;
+    ELSE
+      RETURN QUERY
+      SELECT 404;
+    END IF;
+  ELSE
+    RETURN QUERY
+    SELECT 401;
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION newblocks(nameq CHARACTER VARYING, idproj INTEGER)
   RETURNS BOOLEAN AS $$
 BEGIN
-  IF permission <> 2 AND
-     EXISTS(SELECT *
-            FROM tb_team
-            WHERE idproj = id_project AND id_user = idusert)
+  IF EXISTS(SELECT *
+            FROM tb_projects
+            WHERE id_project = idproj)
   THEN
-    DELETE FROM tb_team
-    WHERE idproj = id_project AND id_user = idusert;
+    INSERT INTO tb_blocks (name_blocks, project_owner) VALUES (nameq, idproj);
     RETURN TRUE;
   END IF;
   RETURN FALSE;
@@ -566,3 +614,40 @@ END;
 $$
 LANGUAGE plpgsql;
 
+--INSERT INTO tb_team(id_project,id_user,permissions)values(73,31,2),(73,32,2);
+
+CREATE OR REPLACE FUNCTION searchblock(project_owner CHARACTER VARYING)
+  RETURNS TABLE(
+    nameBlock VARCHAR(50)
+  ) AS $$
+BEGIN
+  IF EXISTS(SELECT id_project
+            FROM tb_projects
+            WHERE id_project = project_owner)
+  THEN
+    RETURN QUERY
+    SELECT name_blocks
+    FROM tb_blocks
+    WHERE project_owner = $1;
+  END IF;
+  RETURN QUERY
+  SELECT FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION deleteBlock(nameBlock CHARACTER VARYING)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_blocks
+            WHERE nameBlock ILIKE name_blocks)
+  THEN
+    DELETE FROM tb_blocks
+    WHERE name_blocks ILIKE nameBlock;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
