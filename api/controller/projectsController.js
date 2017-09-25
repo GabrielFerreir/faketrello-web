@@ -86,15 +86,27 @@
   }
   //Apaga projetos
   exports.deleteproject = function (req, res) {
+    let auth = req.headers.authorization
     let id = req.params.id
-    db.any('SELECT * FROM deleteproject($1);', [id])
-      .then(data => {
-        if (!data) {
-          res.status(404).json({error: 'Projeto nao encontrado no banco'})
-        } else {
-          res.status(200).json({result: 'Projeto deletado'})
-        }
-      })
+    if ((!auth) || (!auth.startsWith('Bearer'))) {
+      res.status(401).json({error: 'Sessão Inválida'})
+    } else {
+      auth = auth.split('Bearer').pop().trim()
+    }
+    jwt.verify(auth, userController.senha, function (error, data) {
+      if (error) {
+        res.status(401).json({error: 'Sessão invalida'})
+      } else {
+        db.any('SELECT * FROM deactivateProject($1,$2);', [id, data.id])
+          .then(data => {
+            if (!data) {
+              res.status(404).json({error: 'Projeto nao encontrado no banco'})
+            } else {
+              res.status(200).json({result: 'Projeto deletado'})
+            }
+          })
+      }
+    })
   }
   //Altera dados do projeto
   exports.changeProject = function (req, res) {
@@ -181,4 +193,18 @@
         }
       })
   }
+  //Pesquisa usuarios
+  exports.searchUsers = function (req, res) {
+    let idProject = req.params.id
+
+    db.any('SELECT * FROM searchUsers($1,$2)', [req.headers.search, idProject])
+      .then(data => {
+        if (!data || !data[0]) {
+          res.status(404).json({error: 'Usuario inexistente'})
+        } else {
+          res.status(200).json(data)
+        }
+      })
+  }
+    db.any('SELECT * FROM searchUsers($1,$2);', [req.headers.Search, req.params.id])
 })()

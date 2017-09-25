@@ -503,16 +503,20 @@ END;
 $$
 LANGUAGE plpgsql;
 
---SELECT * FROM deleteproject(79);
+--SELECT * FROM deactivateProject(99,25);
 
-CREATE OR REPLACE FUNCTION deleteproject(idproject INTEGER)
+CREATE OR REPLACE FUNCTION deactivateProject(idproject INTEGER, idUser INTEGER)
   RETURNS BOOLEAN AS $$
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_projects
-            WHERE id_project = $1)
+            WHERE id_project = $1 AND active = TRUE)
+     AND ((SELECT permissions
+           FROM tb_team
+           WHERE id_user = idUser AND id_project = idproject) = TRUE)
   THEN
-    DELETE FROM tb_projects
+    UPDATE tb_projects
+    SET active = FALSE
     WHERE id_project = $1;
     RETURN TRUE;
   END IF;
@@ -729,7 +733,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
---SELECT * FROM searchUsers('Gabriel2029',73);
+--SELECT * FROM searchUsers('gabriel',73);
 
 CREATE OR REPLACE FUNCTION searchUsers(pUser CHARACTER VARYING, idProject INTEGER)
   RETURNS TABLE(
@@ -740,20 +744,22 @@ CREATE OR REPLACE FUNCTION searchUsers(pUser CHARACTER VARYING, idProject INTEGE
     permissions BOOLEAN
   ) AS $$
 DECLARE
-  vIdUser INTEGER;
+  vIdUser INTEGER [];
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_login
-            WHERE tb_login.username ILIKE pUser OR tb_login.email ILIKE pUser OR tb_login.name ILIKE pUser)
+            WHERE tb_login.username ILIKE '%' || pUser || '%' OR
+                  tb_login.email ILIKE '%' || pUser || '%' OR
+                  tb_login.name ILIKE '%' || pUser || '%')
   THEN
-    SELECT id_user
-    INTO vIdUser
-    FROM tb_login
-    WHERE tb_login.username ILIKE pUser OR email ILIKE pUser OR name ILIKE pUser;
-
+    vIdUser :=  ARRAY(SELECT id_user
+                      FROM tb_login
+                      WHERE tb_login.username ILIKE '%' || pUser || '%' OR
+                            email ILIKE '%' || pUser || '%' OR
+                            name ILIKE '%' || pUser || '%');
     IF EXISTS(SELECT *
               FROM tb_team
-              WHERE tb_team.id_user = vIdUser AND id_project = idProject)
+              WHERE tb_team.id_user = ANY (vIdUser) AND id_project = idProject)
     THEN
       RETURN QUERY
       SELECT
@@ -764,18 +770,18 @@ BEGIN
         tb_team.permissions
       FROM tb_login
         INNER JOIN tb_team ON tb_login.id_user = tb_team.id_user
-      WHERE tb_login.id_user = vIdUser AND id_project = idProject;
+      WHERE tb_login.id_user = ANY (vIdUser) AND id_project = idProject;
     ELSE RETURN QUERY
     SELECT
       tb_login.id_user,
       name,
       tb_login.username,
       profile_img,
-     null :: BOOLEAN
+      NULL :: BOOLEAN
     FROM tb_login
-    WHERE tb_login.id_user = vIdUser;
+    WHERE tb_login.id_user = ANY (vIdUser);
     END IF;
   END IF;
 END;
 $$
-  LANGUAGE plpgsql;
+LANGUAGE plpgsql;

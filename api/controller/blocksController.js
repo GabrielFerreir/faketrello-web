@@ -34,7 +34,7 @@ exports.deleteBlock = function (req, res) {
       }
     })
 }
-
+//Cria arquivo do anexo no servidor
 exports.buildAttachment = function (req, res) {
   return new Promise(async function (resolve, reject) {
     const fs = require('fs')
@@ -60,7 +60,7 @@ exports.buildAttachment = function (req, res) {
     })
   })
 }
-
+//Cria uma nova tarefa
 exports.newtask = function (req, res) {
   db.any('SELECT * FROM newtasks($1,$2,$3,$4)', [req.body.nameTask, null, req.body.finalDate, req.body.idBlock])
     .then(data => {
@@ -68,12 +68,12 @@ exports.newtask = function (req, res) {
         res.status(404).json({error: 'Nao foi encontrado esse bloco no projeto'})
       } else {
         req.idtask = data[0].idtask
+        let path = exports.buildAttachment(req, res)
 
-        let caminho = exports.buildAttachment(req, res)
-        db.any('SELECT * FROM buildAttachment($1,$2)', [req.idtask, caminho])
+        db.any('SELECT * FROM buildAttachment($1,$2)', [req.idtask, path])
           .then(data => {
             if (!data) {
-              res.status(404).json({error: 'Tarefa nao encontrada'})
+              res.status(404).json({error: 'Erro ao inserir o anexo porque nao encontrou tarefa criada'})
             } else {
               res.status(200).json({result: 'Tafera criada'})
             }

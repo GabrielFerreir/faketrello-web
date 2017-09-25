@@ -33,6 +33,7 @@
   //Parte de blocos
   app.post('/newblock/:id', blocksController.newblock)
   app.post('/newtask', blocksController.newtask)
+  app.get('/searchMembers/:id', projectsController.searchUsers)
 
   let filesPath
 
