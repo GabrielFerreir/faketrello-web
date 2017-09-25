@@ -1,4 +1,6 @@
---SELECT * FROM tb_team;
+--SELECT * FROM tb_login;
+
+--UPDATE tb_login SET profile_img = '/imgsUser/default.png'
 
 CREATE OR REPLACE FUNCTION loginU(emailD VARCHAR, passw VARCHAR)
   RETURNS TABLE(
@@ -463,7 +465,7 @@ BEGIN
               FROM tb_team
                 INNER JOIN tb_login ON tb_login.id_user = tb_team.id_user
               WHERE id_project = idpro
-              ORDER BY permissions ASC) AS teamJson
+              ORDER BY permissions DESC) AS teamJson
       ) teams
     FROM tb_projects
 
@@ -651,3 +653,129 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql;
+
+--SELECT * FROM newtasks('joao','21/09/2017',2)
+
+CREATE OR REPLACE FUNCTION newtasks(nametask CHARACTER VARYING, attachment CHARACTER VARYING, date TIMESTAMP,
+                                    idblock  INTEGER)
+  RETURNS TABLE(
+    idTask       INTEGER,
+    nameTaskR    VARCHAR(20),
+    dateR        TIMESTAMP,
+    idBlockOwner INTEGER
+  ) AS $$
+DECLARE
+  vIdTask     INTEGER;
+  vNameTask   VARCHAR(20);
+  vDate       TIMESTAMP;
+  vBlockOwner INTEGER;
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_blocks
+            WHERE id_blocks = idblock)
+  THEN
+    INSERT INTO tb_tasks (name_task, final_date, id_block) VALUES (nametask, date, idblock)
+    RETURNING id_task, name_task, final_date, id_block
+      INTO vIdTask, vNameTask, vDate, vBlockOwner;
+    RETURN QUERY
+    SELECT
+      vIdTask,
+      vNameTask,
+      vDate,
+      vBlockOwner;
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION buildAttachment(path CHARACTER VARYING, idtask INTEGER)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_tasks
+            WHERE id_task = idtask)
+  THEN
+    UPDATE tb_tasks
+    SET attachment = path
+    WHERE id_task = idtask;
+    RETURN TRUE;
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION buildChecklist(idtask INTEGER, checklist JSON)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_tasks
+            WHERE id_task = idTask)
+  THEN
+    INSERT INTO tb_checklist_tasks (name_checklist, id_task, checked)
+      SELECT
+        namechecklist,
+        idtask,
+        checked
+      FROM json_to_recordset(checklist)
+        AS x(
+           namechecklist VARCHAR(20),
+           idtask INTEGER,
+           checked BOOLEAN
+           );
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
+--SELECT * FROM searchUsers('Gabriel2029',73);
+
+CREATE OR REPLACE FUNCTION searchUsers(pUser CHARACTER VARYING, idProject INTEGER)
+  RETURNS TABLE(
+    idUser      INTEGER,
+    nameUser    VARCHAR(50),
+    username    VARCHAR(20),
+    imgUser     VARCHAR(50),
+    permissions BOOLEAN
+  ) AS $$
+DECLARE
+  vIdUser INTEGER;
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_login
+            WHERE tb_login.username ILIKE pUser OR tb_login.email ILIKE pUser OR tb_login.name ILIKE pUser)
+  THEN
+    SELECT id_user
+    INTO vIdUser
+    FROM tb_login
+    WHERE tb_login.username ILIKE pUser OR email ILIKE pUser OR name ILIKE pUser;
+
+    IF EXISTS(SELECT *
+              FROM tb_team
+              WHERE tb_team.id_user = vIdUser AND id_project = idProject)
+    THEN
+      RETURN QUERY
+      SELECT
+        tb_login.id_user,
+        name,
+        tb_login.username,
+        profile_img,
+        tb_team.permissions
+      FROM tb_login
+        INNER JOIN tb_team ON tb_login.id_user = tb_team.id_user
+      WHERE tb_login.id_user = vIdUser AND id_project = idProject;
+    ELSE RETURN QUERY
+    SELECT
+      tb_login.id_user,
+      name,
+      tb_login.username,
+      profile_img,
+     null :: BOOLEAN
+    FROM tb_login
+    WHERE tb_login.id_user = vIdUser;
+    END IF;
+  END IF;
+END;
+$$
+  LANGUAGE plpgsql;

@@ -38,7 +38,7 @@
           req.body.team = [{
             'idproject': req.idproj,
             'iduser': newuser.id_usuario,
-            'permission': '0'
+            'permission': 'false'
           }
           ]
           exports.insertTeam(req, res)

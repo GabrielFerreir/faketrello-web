@@ -202,14 +202,14 @@
       response.type = matches[1]
       response.data = new Buffer(matches[2], 'base64')
       let caminhoBd
-      if(req.called === 1) {
-        caminhoBd = `./imgs/imgsProjects/picture_${req.idproj}.png`
+      if (req.called === 1) {
+        caminhoBd = `./files/imgsProjects/picture_${req.idproj}.png`
       }
-       else {
-        caminhoBd = `./imgs/imgs/picture_${req.body.username}.png`
+      else {
+        caminhoBd = `./files/imgsUser/picture_${req.body.username}.png`
       }
 
-      let caminho = caminhoBd.replace('./imgs', '')
+      let caminho = caminhoBd.replace('./files', '')
 
       fs.writeFile(caminhoBd, response.data, function (error) {
         if (error) {

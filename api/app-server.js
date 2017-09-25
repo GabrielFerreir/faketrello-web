@@ -32,10 +32,11 @@
   app.delete('/userteam/:id', projectsController.removeUserTeam)
   //Parte de blocos
   app.post('/newblock/:id', blocksController.newblock)
+  app.post('/newtask', blocksController.newtask)
 
   let filesPath
 
-  filesPath = require('path').join(__dirname, '/imgs')
+  filesPath = require('path').join(__dirname, '/files')
 
   app.use(compression())
   app.use(express.static(filesPath))
