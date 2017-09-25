@@ -5,6 +5,7 @@
   const fs = require('fs')
   const express = require('express')
   const compression = require('compression')
+  let blocksController = require('./controller/blocksController')
 
   app.get('/userInfo', userController.userAuth)
   app.post('/login', userController.login)
@@ -21,11 +22,21 @@
   app.post('/newpass', userController.verifyEmail)
   app.post('/resendEmail', userController.verifyEmail)
   app.delete('/deleteUser', userController.deleteUser)
-  //app.post('/newProject', projectsController.newProject)
+  //Parte de projetos
+  app.post('/project', projectsController.newProject)
+  app.get('/project', projectsController.infoProject)
+  app.get('/project/:id', projectsController.infoProjectSearch)
+  app.delete('/project/:id', projectsController.deleteproject)
+  app.put('/project/:id', projectsController.changeProject)
+  app.post('/insertUser', projectsController.insertTeam)
+  app.delete('/userteam/:id', projectsController.removeUserTeam)
+  //Parte de blocos
+  app.post('/newblock/:id', blocksController.newblock)
+  app.post('/newtask', blocksController.newtask)
 
   let filesPath
 
-  filesPath = require('path').join(__dirname, '/imgs')
+  filesPath = require('path').join(__dirname, '/files')
 
   app.use(compression())
   app.use(express.static(filesPath))

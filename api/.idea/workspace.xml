@@ -1,8 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/SQL/ApiLogin" line="26" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="75b6d389-a43b-4d52-b051-390ab3f653e2" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/controller/config.js" afterPath="$PROJECT_DIR$/controller/projectsController.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/assets/Asset1.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/assets/Asset3.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/assets/Asset4.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/assets/f.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/assets/i.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/assets/p.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/assets/t.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/default.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_G8299.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_Gabriel.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_Gabriel1958.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_Gabriel2029.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_Gabriel2745.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_Gabriel3798.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_Gabriel887.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_Miguel4977.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_SthanleyZani.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_gabriel1.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_joao150.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_joao1559.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_joao15593.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_joao155945.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_joao1577.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_teste844.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgs/picture_undefined.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgsProjects/default.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgsProjects/picture_100.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgsProjects/picture_73.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgsProjects/picture_90.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgsProjects/picture_92.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgsProjects/picture_96.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/imgs/imgsProjects/picture_97.png" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata" afterPath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.keystream" afterPath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.keystream" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.keystream.len" afterPath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.keystream.len" />
@@ -14,9 +48,9 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SQL/ApiLogin" afterPath="$PROJECT_DIR$/SQL/ApiLogin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app-server.js" afterPath="$PROJECT_DIR$/app-server.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controller/blocksController.js" afterPath="$PROJECT_DIR$/controller/blocksController.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controller/projectsController.js" afterPath="$PROJECT_DIR$/controller/projectsController.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controller/userController.js" afterPath="$PROJECT_DIR$/controller/userController.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package-lock.json" afterPath="$PROJECT_DIR$/package-lock.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -49,13 +83,6 @@
         <item name="fakeTrello" type="e3449647:DbNodeDescriptor" />
         <item name="public" type="e3449647:DbNodeDescriptor" />
       </path>
-      <path>
-        <item name="" type="eadb38e5:DatabaseStructure$Root" />
-        <item name="fakeTrello@localhost" type="e3449647:DbNodeDescriptor" />
-        <item name="fakeTrello" type="e3449647:DbNodeDescriptor" />
-        <item name="public" type="e3449647:DbNodeDescriptor" />
-        <item name="" type="fce03ad6:DatabaseStructure$GroupNode" />
-      </path>
     </expand>
     <select />
   </component>
@@ -64,69 +91,24 @@
       <file leaf-file-name="app-server.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app-server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="273">
-              <caret line="19" column="53" lean-forward="true" selection-start-line="19" selection-start-column="53" selection-end-line="19" selection-end-column="53" />
+            <state relative-caret-position="459">
+              <caret line="27" column="56" lean-forward="false" selection-start-line="27" selection-start-column="56" selection-end-line="27" selection-end-column="56" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="userController.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/controller/userController.js">
+      <file leaf-file-name="blocksController.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/controller/blocksController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="372" column="14" lean-forward="true" selection-start-line="372" selection-start-column="14" selection-end-line="372" selection-end-column="14" />
+            <state relative-caret-position="340">
+              <caret line="48" column="52" lean-forward="false" selection-start-line="48" selection-start-column="52" selection-end-line="48" selection-end-column="52" />
               <folding>
-                <element signature="e#220#576#0" expanded="false" />
-                <element signature="e#639#1339#0" expanded="false" />
-                <element signature="e#1417#1903#0" expanded="false" />
-                <element signature="e#1966#3605#0" expanded="false" />
-                <element signature="e#4754#5598#0" expanded="false" />
-                <element signature="e#5656#5977#0" expanded="false" />
-                <element signature="e#6041#7138#0" expanded="false" />
-                <element signature="e#7207#8083#0" expanded="false" />
-                <element signature="e#9649#11087#0" expanded="false" />
-                <element signature="e#11858#12220#0" expanded="false" />
-                <element signature="e#12224#12247#0" expanded="false" />
-                <element signature="e#13586#13858#0" expanded="false" />
-                <element signature="e#13861#14626#0" expanded="false" />
-                <element signature="e#14672#15106#0" expanded="false" />
-                <marker date="1505324222041" expanded="true" signature="8629:8640" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="8641:9365" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="8648:8767" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="8685:8759" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="8788:8976" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="8836:8895" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="8896:8968" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="8997:9229" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="9037:9047" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="9037:9221" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="9189:9205" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="9237:9356" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="9274:9348" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="10111:10122" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="10123:10835" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="10130:10249" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="10167:10241" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="10270:10458" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="10318:10377" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="10378:10450" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="10479:10699" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="10519:10691" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="10659:10675" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="10707:10826" ph="..." />
-                <marker date="1505324222041" expanded="true" signature="10744:10818" ph="..." />
+                <element signature="e#108#411#0" expanded="false" />
+                <element signature="e#483#739#0" expanded="false" />
+                <element signature="e#800#1055#0" expanded="false" />
+                <element signature="e#1793#2473#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="projectsController.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/controller/projectsController.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="12" lean-forward="true" selection-start-line="0" selection-start-column="12" selection-end-line="0" selection-end-column="12" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -134,23 +116,60 @@
       <file leaf-file-name="ApiLogin" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/SQL/ApiLogin">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="42" column="36" lean-forward="true" selection-start-line="42" selection-start-column="36" selection-end-line="42" selection-end-column="36" />
+            <state relative-caret-position="303">
+              <caret line="733" column="0" lean-forward="false" selection-start-line="733" selection-start-column="0" selection-end-line="733" selection-end-column="0" />
               <folding>
-                <element signature="e#27#513#0" expanded="false" />
-                <element signature="e#516#898#0" expanded="false" />
-                <element signature="e#939#1958#0" expanded="false" />
-                <element signature="e#2880#3419#0" expanded="false" />
-                <element signature="e#3422#3849#0" expanded="false" />
-                <element signature="e#3852#4204#0" expanded="false" />
-                <element signature="e#4207#4686#0" expanded="false" />
-                <element signature="e#4689#4972#0" expanded="false" />
-                <element signature="e#5123#5681#0" expanded="false" />
-                <element signature="n#verify_token#0" expanded="false" />
-                <element signature="n#passwordToEmail#0" expanded="false" />
-                <element signature="n#newproject#0" expanded="false" />
-                <element signature="n#emailexists#0" expanded="false" />
-                <element signature="n#relogin#0" expanded="false" />
+                <element signature="e#88#622#0" expanded="false" />
+                <element signature="e#625#1007#0" expanded="false" />
+                <element signature="e#1048#2067#0" expanded="false" />
+                <element signature="e#2070#2984#0" expanded="false" />
+                <element signature="e#2987#3526#0" expanded="false" />
+                <element signature="e#3529#3956#0" expanded="false" />
+                <element signature="e#3959#4311#0" expanded="false" />
+                <element signature="e#4314#4793#0" expanded="false" />
+                <element signature="e#4796#5243#0" expanded="false" />
+                <element signature="e#5246#5529#0" expanded="false" />
+                <element signature="e#5680#6238#0" expanded="false" />
+                <element signature="e#6287#7086#0" expanded="false" />
+                <element signature="e#7131#7666#0" expanded="false" />
+                <element signature="e#7729#8159#0" expanded="false" />
+                <element signature="e#8162#8633#0" expanded="false" />
+                <element signature="e#8636#9236#0" expanded="false" />
+                <element signature="e#9272#9772#0" expanded="false" />
+                <element signature="e#9817#10732#0" expanded="false" />
+                <element signature="e#10735#11402#0" expanded="false" />
+                <element signature="e#11441#11745#0" expanded="false" />
+                <element signature="n#timeproject#0" expanded="false" />
+                <element signature="n#verify_permission#0" expanded="false" />
+                <element signature="n#changeteam#0" expanded="false" />
+                <element signature="n#newblocks#0" expanded="false" />
+                <element signature="n#searchblock#0" expanded="false" />
+                <element signature="n#deleteBlock#0" expanded="false" />
+                <element signature="n#newtasks#0" expanded="false" />
+                <element signature="n#buildAttachment#0" expanded="false" />
+                <element signature="n#buildChecklist#0" expanded="false" />
+                <element signature="n#searchUsers#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="projectsController.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/controller/projectsController.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="168" column="2" lean-forward="false" selection-start-line="168" selection-start-column="2" selection-end-line="168" selection-end-column="2" />
+              <folding>
+                <element signature="e#224#1553#0" expanded="false" />
+                <element signature="e#811#1216#0" expanded="false" />
+                <element signature="e#1651#1998#0" expanded="false" />
+                <element signature="e#2094#2809#0" expanded="false" />
+                <element signature="e#2875#3175#0" expanded="false" />
+                <element signature="e#3250#4768#0" expanded="false" />
+                <element signature="e#4026#4747#0" expanded="false" />
+                <element signature="e#4841#5110#0" expanded="false" />
+                <element signature="e#5229#5600#0" expanded="false" />
+                <element signature="e#5684#6311#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -162,16 +181,18 @@
     <findStrings>
       <find>update</find>
       <find>falhou</find>
-      <find>console</find>
       <find>json</find>
       <find>genera</find>
       <find>verify_email</find>
       <find>verifyemail</find>
       <find>emailpass</find>
+      <find>ex</find>
+      <find>console</find>
+      <find>infoProject</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="GradleLocalSettings">
     <option name="externalProjectsViewState">
@@ -201,13 +222,17 @@
         <option value="$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/server.js" />
         <option value="$PROJECT_DIR$/controller/config.js" />
         <option value="/b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/passwordtoemail.(varchar).sql" />
-        <option value="$PROJECT_DIR$/controller/projectsController.js" />
         <option value="/b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/verify_email.(varchar).sql" />
         <option value="/b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/changeuser.(varchar,varchar,varchar,varchar,varchar).sql" />
         <option value="/b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/emailexists.(varchar).sql" />
-        <option value="$PROJECT_DIR$/SQL/ApiLogin" />
-        <option value="$PROJECT_DIR$/app-server.js" />
+        <option value="/c36c0908/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/verify_img.(varchar,varchar).sql" />
+        <option value="$PROJECT_DIR$/controller/projectsController.js" />
+        <option value="$PROJECT_DIR$/../../../app.js" />
+        <option value="$PROJECT_DIR$/../../../index.html" />
         <option value="$PROJECT_DIR$/controller/userController.js" />
+        <option value="$PROJECT_DIR$/app-server.js" />
+        <option value="$PROJECT_DIR$/controller/blocksController.js" />
+        <option value="$PROJECT_DIR$/SQL/ApiLogin" />
       </list>
     </option>
   </component>
@@ -234,10 +259,12 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="-7" />
+    <option name="x" value="469" />
+    <option name="y" value="-18" />
     <option name="width" value="697" />
     <option name="height" value="735" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
@@ -253,31 +280,31 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="AndroidView" />
-      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="FakeTrello" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FakeTrello" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="FakeTrello" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FakeTrello" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
               <item name="controller" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="FakeTrello" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FakeTrello" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
               <item name="SQL" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="AndroidView" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -291,15 +318,16 @@
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.selected.package.standard" value="C:\Users\João Vitor\Desktop\FakeTrello\node_modules\standard" />
     <property name="standardjs.codestyle.accepted" value="true" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="JavaScriptPreferStrict" value="false" />
     <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../2api" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="PostgreSQL" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -443,41 +471,61 @@
       <workItem from="1505148802869" duration="10243000" />
       <workItem from="1505218244430" duration="13432000" />
       <workItem from="1505301966195" duration="11875000" />
+      <workItem from="1505389568494" duration="9245000" />
+      <workItem from="1505414130378" duration="3355000" />
+      <workItem from="1505474663194" duration="16228000" />
+      <workItem from="1505736190285" duration="23870000" />
+      <workItem from="1505820351640" duration="22019000" />
+      <workItem from="1505906338478" duration="19814000" />
+      <workItem from="1505993245916" duration="1805000" />
+      <workItem from="1505996207292" duration="19246000" />
+      <workItem from="1506079806039" duration="18178000" />
+      <workItem from="1506338842730" duration="707000" />
     </task>
+    <task id="LOCAL-00001" summary="Mostrar projetos finalizado">
+      <created>1505421275097</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1505421275097</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="340517000" />
+    <option name="totallyTimeSpent" value="474984000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30427632" sideWeight="0.29500756" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21546052" sideWeight="0.33585477" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1875" sideWeight="0.6679274" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30427632" sideWeight="0.7065053" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32730263" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.7878289" sideWeight="0.7049924" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21546052" sideWeight="0.66414523" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1603631" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18003026" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22314675" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.49121523" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3651316" sideWeight="0.49121523" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24963397" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" x="92" y="92" width="1182" height="544" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -524,209 +572,47 @@
   <component name="VcsManagerConfiguration">
     <ignored-roots>
       <path value="$USER_HOME$" />
+      <path value="$PROJECT_DIR$" />
     </ignored-roots>
+    <MESSAGE value="Mostrar projetos finalizado" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mostrar projetos finalizado" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="122" />
+      <default-breakpoints>
+        <breakpoint enabled="true" type="javascript-exception">
+          <properties />
+        </breakpoint>
+      </default-breakpoints>
+      <option name="time" value="141" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="dbSrc:///b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/newuser.(varchar,varchar,varchar,varchar,varchar).sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="16" lean-forward="false" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../estoque.js" />
-    <entry file="file://$PROJECT_DIR$/../app.html" />
-    <entry file="file://$PROJECT_DIR$/node_modules/bluebird/js/release/async.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="142" column="9" lean-forward="false" selection-start-line="142" selection-start-column="9" selection-end-line="142" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbSrc:///b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/verify_token.(varchar).sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="7" column="5" lean-forward="false" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbSrc:///b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/loginu.(varchar,varchar).sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="15" lean-forward="false" selection-start-line="17" selection-start-column="15" selection-end-line="17" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/config/environment/settings.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/config/init.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/helpers/token.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/autenticacao/autenticacaoController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/autenticacao/autenticacaoService.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/autenticacao/autenticacaoScope.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/autenticacao/autenticacaoRepository.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="35" lean-forward="true" selection-start-line="0" selection-start-column="35" selection-end-line="0" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="8" lean-forward="true" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/middleware/errors.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/middleware/noc.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="8" lean-forward="true" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/middleware/response.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/middleware/cors.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/autenticacaoRoute.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="23" lean-forward="false" selection-start-line="3" selection-start-column="23" selection-end-line="3" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/grupoUsuarioRoute.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/opcaoUsuarioRoute.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/pingRoute.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/routes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/sistemaRoute.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/usuarioRoute.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="56" lean-forward="false" selection-start-line="4" selection-start-column="56" selection-end-line="4" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/tipoTelefoneRoute.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/tipoEmailRoute.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/config/init.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/helpers/token.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/autenticacao/autenticacaoController.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/autenticacao/autenticacaoService.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/autenticacao/autenticacaoScope.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/autenticacao/autenticacaoRepository.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/server.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/app.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/middleware/errors.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/middleware/noc.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/middleware/response.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/middleware/cors.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/autenticacaoRoute.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/grupoUsuarioRoute.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/opcaoUsuarioRoute.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/pingRoute.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/routes.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/sistemaRoute.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/usuarioRoute.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/tipoTelefoneRoute.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/routes/tipoEmailRoute.js" />
     <entry file="file://$PROJECT_DIR$/app-config.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -734,62 +620,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/helpers/asyncWrap.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/helpers/colorize.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/tipoEmail/tipoEmailController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/tipoEmail/tipoEmailRepository.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/usuario/usuarioService.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1292">
-          <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/usuario/usuarioController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-10966">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/usuario/usuarioScope.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6175">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/usuario/usuarioRepository.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3931">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/helpers/asyncWrap.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/helpers/colorize.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/tipoEmail/tipoEmailController.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/tipoEmail/tipoEmailRepository.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/usuario/usuarioService.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/usuario/usuarioController.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/usuario/usuarioScope.js" />
+    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/usuario/usuarioRepository.js" />
     <entry file="file://$PROJECT_DIR$/db-config.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -797,34 +635,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="dbSrc:///b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/passwordtoemail.(varchar).sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbSrc:///b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/verify_email.(varchar).sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="15" lean-forward="false" selection-start-line="10" selection-start-column="15" selection-end-line="10" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../gits/faketrello/api/app-server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="30" column="36" lean-forward="true" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbSrc:///b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/changeuser.(varchar,varchar,varchar,varchar,varchar).sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="33" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="dbSrc:///b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/passwordtoemail.(varchar).sql" />
+    <entry file="dbSrc:///b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/verify_email.(varchar).sql" />
+    <entry file="file://$PROJECT_DIR$/../gits/faketrello/api/app-server.js" />
+    <entry file="dbSrc:///b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/changeuser.(varchar,varchar,varchar,varchar,varchar).sql" />
     <entry file="file://$PROJECT_DIR$/node_modules/md5/md5.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="125">
@@ -832,111 +646,140 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/fakeTrello.public.tb_login">
+    <entry file="das://table:/b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/fakeTrello.public.tb_login" />
+    <entry file="das://table:/b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/fakeTrello.public.tb_blocks" />
+    <entry file="dbSrc:///b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/emailexists.(varchar).sql" />
+    <entry file="das://table:/c36c0908/d151bc40-835a-4b6f-abac-64434e7b2b9d/fakeTrello.public.tb_projects">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
           <filtering enabled="true" />
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/fakeTrello.public.tb_blocks">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbSrc:///b9c5220b/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/emailexists.(varchar).sql">
+    <entry file="dbSrc:///c36c0908/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/verify_img.(varchar,varchar).sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="17" lean-forward="true" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="17" />
+        <state relative-caret-position="323">
+          <caret line="19" column="3" lean-forward="true" selection-start-line="19" selection-start-column="3" selection-end-line="19" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/c36c0908/d151bc40-835a-4b6f-abac-64434e7b2b9d/fakeTrello.public.tb_testeJson">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/c36c0908/d151bc40-835a-4b6f-abac-64434e7b2b9d/fakeTrello.public.tb_login">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/pg-promise/node_modules/pg/lib/connection.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="566" column="10" lean-forward="false" selection-start-line="566" selection-start-column="10" selection-end-line="566" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="253" column="21" lean-forward="false" selection-start-line="253" selection-start-column="21" selection-end-line="253" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/userController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="121" column="6" lean-forward="false" selection-start-line="121" selection-start-column="6" selection-end-line="121" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app-server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" column="56" lean-forward="false" selection-start-line="27" selection-start-column="56" selection-end-line="27" selection-end-column="56" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/blocksController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="48" column="52" lean-forward="false" selection-start-line="48" selection-start-column="52" selection-end-line="48" selection-end-column="52" />
+          <folding>
+            <element signature="e#108#411#0" expanded="false" />
+            <element signature="e#483#739#0" expanded="false" />
+            <element signature="e#800#1055#0" expanded="false" />
+            <element signature="e#1793#2473#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SQL/ApiLogin">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="42" column="36" lean-forward="true" selection-start-line="42" selection-start-column="36" selection-end-line="42" selection-end-column="36" />
+        <state relative-caret-position="303">
+          <caret line="733" column="0" lean-forward="false" selection-start-line="733" selection-start-column="0" selection-end-line="733" selection-end-column="0" />
           <folding>
-            <element signature="e#27#513#0" expanded="false" />
-            <element signature="e#516#898#0" expanded="false" />
-            <element signature="e#939#1958#0" expanded="false" />
-            <element signature="e#2880#3419#0" expanded="false" />
-            <element signature="e#3422#3849#0" expanded="false" />
-            <element signature="e#3852#4204#0" expanded="false" />
-            <element signature="e#4207#4686#0" expanded="false" />
-            <element signature="e#4689#4972#0" expanded="false" />
-            <element signature="e#5123#5681#0" expanded="false" />
-            <element signature="n#verify_token#0" expanded="false" />
-            <element signature="n#passwordToEmail#0" expanded="false" />
-            <element signature="n#newproject#0" expanded="false" />
-            <element signature="n#emailexists#0" expanded="false" />
-            <element signature="n#relogin#0" expanded="false" />
+            <element signature="e#88#622#0" expanded="false" />
+            <element signature="e#625#1007#0" expanded="false" />
+            <element signature="e#1048#2067#0" expanded="false" />
+            <element signature="e#2070#2984#0" expanded="false" />
+            <element signature="e#2987#3526#0" expanded="false" />
+            <element signature="e#3529#3956#0" expanded="false" />
+            <element signature="e#3959#4311#0" expanded="false" />
+            <element signature="e#4314#4793#0" expanded="false" />
+            <element signature="e#4796#5243#0" expanded="false" />
+            <element signature="e#5246#5529#0" expanded="false" />
+            <element signature="e#5680#6238#0" expanded="false" />
+            <element signature="e#6287#7086#0" expanded="false" />
+            <element signature="e#7131#7666#0" expanded="false" />
+            <element signature="e#7729#8159#0" expanded="false" />
+            <element signature="e#8162#8633#0" expanded="false" />
+            <element signature="e#8636#9236#0" expanded="false" />
+            <element signature="e#9272#9772#0" expanded="false" />
+            <element signature="e#9817#10732#0" expanded="false" />
+            <element signature="e#10735#11402#0" expanded="false" />
+            <element signature="e#11441#11745#0" expanded="false" />
+            <element signature="n#timeproject#0" expanded="false" />
+            <element signature="n#verify_permission#0" expanded="false" />
+            <element signature="n#changeteam#0" expanded="false" />
+            <element signature="n#newblocks#0" expanded="false" />
+            <element signature="n#searchblock#0" expanded="false" />
+            <element signature="n#deleteBlock#0" expanded="false" />
+            <element signature="n#newtasks#0" expanded="false" />
+            <element signature="n#buildAttachment#0" expanded="false" />
+            <element signature="n#buildChecklist#0" expanded="false" />
+            <element signature="n#searchUsers#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/controller/projectsController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="12" lean-forward="true" selection-start-line="0" selection-start-column="12" selection-end-line="0" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app-server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="19" column="53" lean-forward="true" selection-start-line="19" selection-start-column="53" selection-end-line="19" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controller/userController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="372" column="14" lean-forward="true" selection-start-line="372" selection-start-column="14" selection-end-line="372" selection-end-column="14" />
+        <state relative-caret-position="323">
+          <caret line="168" column="2" lean-forward="false" selection-start-line="168" selection-start-column="2" selection-end-line="168" selection-end-column="2" />
           <folding>
-            <element signature="e#220#576#0" expanded="false" />
-            <element signature="e#639#1339#0" expanded="false" />
-            <element signature="e#1417#1903#0" expanded="false" />
-            <element signature="e#1966#3605#0" expanded="false" />
-            <element signature="e#4754#5598#0" expanded="false" />
-            <element signature="e#5656#5977#0" expanded="false" />
-            <element signature="e#6041#7138#0" expanded="false" />
-            <element signature="e#7207#8083#0" expanded="false" />
-            <element signature="e#9649#11087#0" expanded="false" />
-            <element signature="e#11858#12220#0" expanded="false" />
-            <element signature="e#12224#12247#0" expanded="false" />
-            <element signature="e#13586#13858#0" expanded="false" />
-            <element signature="e#13861#14626#0" expanded="false" />
-            <element signature="e#14672#15106#0" expanded="false" />
-            <marker date="1505324222041" expanded="true" signature="8629:8640" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="8641:9365" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="8648:8767" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="8685:8759" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="8788:8976" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="8836:8895" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="8896:8968" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="8997:9229" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="9037:9047" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="9037:9221" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="9189:9205" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="9237:9356" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="9274:9348" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="10111:10122" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="10123:10835" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="10130:10249" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="10167:10241" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="10270:10458" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="10318:10377" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="10378:10450" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="10479:10699" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="10519:10691" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="10659:10675" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="10707:10826" ph="..." />
-            <marker date="1505324222041" expanded="true" signature="10744:10818" ph="..." />
+            <element signature="e#224#1553#0" expanded="false" />
+            <element signature="e#811#1216#0" expanded="false" />
+            <element signature="e#1651#1998#0" expanded="false" />
+            <element signature="e#2094#2809#0" expanded="false" />
+            <element signature="e#2875#3175#0" expanded="false" />
+            <element signature="e#3250#4768#0" expanded="false" />
+            <element signature="e#4026#4747#0" expanded="false" />
+            <element signature="e#4841#5110#0" expanded="false" />
+            <element signature="e#5229#5600#0" expanded="false" />
+            <element signature="e#5684#6311#0" expanded="false" />
           </folding>
         </state>
       </provider>
