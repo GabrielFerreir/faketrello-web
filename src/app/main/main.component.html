@@ -14,26 +14,15 @@
 
     <ul>
       <li class="titulo">Configurações de Usuario</li>
-        <li><div class="img">
-              PT
-            </div>
-          <span>Projeto Trello</span>
-        </li>
-        <li><div class="img">
-              AN
-            </div>
-          <span>ANKI</span>
-        </li>
-        <li><div class="img">
-              GO
-            </div>
-          <span>GO</span>
-        </li>
 
-        <li><div class="img">
-              <img src="../../assets/account_circle.svg"/>
-            </div>
-          <span>Perfil</span>
+        <li *ngFor="let projeto of projects.projects">
+
+          <div class="img" *ngIf="projeto.img != '/imgsProjects/default.png'">
+          <img src="{{'http://' + core.ipDaApi + projeto.img}}" id="preview"/>
+          </div>
+          <div class="img" *ngIf="projeto.img == '/imgsProjects/default.png'">{{projeto.namep.charAt(0)}}</div>
+
+          <span>{{ projeto.namep }}</span>
         </li>
 
     </ul>
@@ -45,15 +34,15 @@
     <label for="campoDePesquisa" #HTMLCampoDePesquisa>Pesquisar...</label>
   </div>
 
-<div style="position: relative; z-index: 5;">
+<div style="position: relative; z-index: 1;">
   <label for="perfil">
     <div class="perfil">
 
-      <div style="float: right" *ngIf="dados?.img != '/imgs/default.png'">
-        <img class="img" src="{{'http://' + core.ipDaApi + '/' + dados?.img}}"/>
+      <div style="float: right" *ngIf="dados?.img != '/imgsUser/default.png'">
+        <img class="img" src="{{'http://' + core.ipDaApi + dados?.img}}"/>
       </div>
 
-      <div *ngIf="dados?.img == '/imgs/default.png'" class="img">{{dados?.name.charAt(0)}}</div>
+      <div *ngIf="dados?.img == '/imgsUser/default.png'" class="img">{{dados?.name.charAt(0)}}</div>
 
       <span>{{dados?.name}}</span>
 
@@ -94,3 +83,4 @@
 <div class="container">
     <router-outlet></router-outlet>
 </div>
+<app-snackbars></app-snackbars>

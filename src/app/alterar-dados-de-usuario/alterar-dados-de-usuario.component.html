@@ -4,8 +4,8 @@
     <input type="file" (change)="previewFile($event.target)" id="file" style="display: none;">
     <!--<img *ngIf="alterar.img == '/default.png'" src="{{ img }}" class="imageUser" id="preview">-->
     <img *ngIf="img64" src="{{ img64 }}" class="imageUser" id="preview"/>
-    <div *ngIf="alterar.img == '/imgs/default.png' && img64 == ''" class="imageUser">{{ alterar.name.charAt(0) | uppercase }}</div>
-    <img *ngIf="alterar.img != '/imgs/default.png' && img64 == ''" src="{{'http://'+ core.ipDaApi + '/' + alterar.img}}" class="imageUser" id="preview">
+    <div *ngIf="alterar.img == '/imgsUser/default.png' && img64 == ''" class="imageUser">{{ alterar.name.charAt(0) | uppercase }}</div>
+    <img *ngIf="alterar.img != '/imgsUser/default.png' && img64 == ''" src="{{'http://'+ core.ipDaApi + '/' + alterar.img}}" class="imageUser" id="preview">
     <div class="addImageUser" (click)="chamaFile()">+</div>
 
     <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-right: 50px;">
@@ -52,6 +52,6 @@
 
 </div>
 
-<app-snackbars></app-snackbars>
+<!--<app-snackbars></app-snackbars>-->
 
 

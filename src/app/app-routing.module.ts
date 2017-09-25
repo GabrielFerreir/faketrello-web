@@ -14,6 +14,8 @@ import { AutenticaComponent } from './autentica/autentica.component';
 import { DadosDeUsuarioResolve } from './dadosDeUsuario.resolve';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AlterarSenhaDeUsuarioComponent} from './alterar-senha-de-usuario/alterar-senha-de-usuario.component';
+import { AlterarProjectsComponent } from './projects/alterar-projects/alterar-projects.component';
+import {DragDropComponent} from './drag-drop/drag-drop.component';
 
 
 const APP_ROUTES: Routes = [
@@ -29,7 +31,21 @@ const APP_ROUTES: Routes = [
 
 
     {path: '', component: MainComponent, children:[
-          {path: 'main', component: PaginaInicialComponent},
+      {path: '', component: PaginaInicialComponent, children: [
+        {
+          path: 'detalheProjeto/:id',
+          component: AlterarProjectsComponent
+        }
+      ]},
+
+          {path: 'main', component: PaginaInicialComponent,
+          children: [
+            {
+              path: 'alterarProject/:id',
+              component: AlterarProjectsComponent
+            }
+          ]
+          },
 
           {path: 'alterarDados',
           component: AlterarDadosDeUsuarioComponent,
@@ -42,7 +58,8 @@ const APP_ROUTES: Routes = [
           resolve: {
             alterar: DadosDeUsuarioResolve
           }
-        }
+        },
+      {path: 'DragDrop', component: DragDropComponent},
 
     ]},
    {path: 'home', component: HomeComponent},

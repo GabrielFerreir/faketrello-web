@@ -1,0 +1,38 @@
+<section>
+
+  <input type="file" (change)="previewFile($event.target)" id="file" style="display: none;">
+
+  <img *ngIf="img64" src="{{img64}}" class="imageUser" id="preview"/>
+  <div *ngIf="!img64" class="imageUser"></div>
+  <div class="addImageUser" (click)="chamaFile()">+</div>
+
+  <div style="position: relative; width: 200px; float:left; margin-left: 50px;">
+    <input class="textFields" [(ngModel)]="nome" value="{{ nome }}" (blur)="inputs()"  type="text" id="nome"  #HTMLNome/>
+    <label class="labelText" for="nome">Nome</label>
+    <div class="border"></div>
+    <label class="helperText"></label>
+  </div>
+
+  <div style="position: relative; width: 200px; float: left; margin-left: 50px; margin-top: 60px;">
+    <textarea [(ngModel)]="descricao" #HTMLDescricao class="textFieldsMult" id="descricao" (blur)="inputs()"></textarea>
+    <label class="labelTextMult" for="descricao">Descrição</label>
+  </div>
+
+  <button
+    class="denseButton"
+    (click)="projects.fechaAddProjets()"
+    style="float:left; width:100px; margin:70px 15px 0px 35px; background-color: transparent; color: #444; font-weight: 600"
+    #HTMLCancelar>
+    CANCELAR
+  </button>
+
+  <button
+    class="denseButton"
+    (click)="criarProject()"
+    style="float:left; width:100px; margin:70px 35px 0px 15px; background-color: transparent; color: #000; font-weight: 600"
+    #HTMLCadastrar>
+    CADASTRAR
+  </button>
+
+</section>
+

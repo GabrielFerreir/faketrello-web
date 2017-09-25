@@ -1,0 +1,214 @@
+
+.projeto {
+  width: 100vw;
+  min-height: 100px;
+  float: left;
+  margin-top: 10px;
+  user-select: none;
+}
+.projeto .img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: #26C6DA;
+  color: #FFF;
+  margin-top: 5px;
+  margin-left: 10%;
+  float: left;
+  line-height: 90px;
+  text-align: center;
+  font-size: 48px;
+  font-family: "Roboto Medium";
+  cursor: pointer;
+
+}
+.projeto h1 {
+  float: left;
+  margin-left: 15px;
+  margin-top: 30px;
+  color: #444444;
+  cursor: pointer;
+  font-family: "Roboto Medium";
+}
+.container{
+  max-width: 100%;
+  height: 70vh;
+  margin-top: 10px;
+  display: flex;
+  float: left;
+  font-family: 'Open Sans';
+  cursor: default;
+  padding: 0 5%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.container div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow-x: scroll;
+  user-select: none;
+
+}
+
+.caixa {
+  min-width: 20vw;
+  /*min-height: 300px;*/
+  overflow-y: auto;
+  overflow-x: hidden;
+  /*border-radius: 3px;*/
+  float: left;
+  /*margin-left: 5px;*/
+  /*margin-right: 5px;*/
+  /*background-color: #f4f4f4;*/
+  /*box-shadow: 0 2px 4px 0 rgba(0,0,0, 0.14),*/
+              /*0 4px 5px 0 rgba(0,0,0,0.12),*/
+              /*0 1px 10px 0 rgba(0, 0, 0, 0.20);*/
+  /*position: relative;*/
+  /*padding: 5px;*/
+}
+.caixa header {
+  width: 100%;
+  height: 35px;
+  color: #444;
+  text-align: center;
+  line-height: 35px;
+  border-left: 1px solid #CCC;
+  border-right: 1px solid #CCC;
+  /*background-color: #E9E9E9;*/
+  position: relative;
+  font-family: 'Roboto Medium';
+}
+.caixa header .more_horiz {
+  cursor: pointer;
+  float: right;
+  width: 34px;
+  height: 100%;
+  background-color: transparent;
+  background-image: url("../../assets/more_vert.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow-x: hidden;
+  text-align: center;
+  transition: All ease 480ms;
+  border-radius: 2px;
+}
+.caixa header .more_horiz:hover {
+  background-color: #CCC;
+}
+
+.caixa .popup {
+  width: 150px;
+  height: 70px;
+  position: absolute;
+  top: 35px;
+  right: 5px;
+  overflow: hidden;
+  display: block;
+  transform-origin: top right;
+  transform: scale(0);
+  z-index: 9999;
+  transition: all ease 180ms;
+}
+.caixa .popup .item {
+  width: 100%;
+  height: 35px;
+  background-color: #9E9E9E;
+  color: #FFF;
+  float: left;
+  overflow: hidden;
+  padding-left: 10px;
+  box-sizing: border-box;
+}
+.caixa .popupOn {
+  width: 150px;
+  height: 70px;
+  position: absolute;
+  top: 35px;
+  right: 5px;
+  overflow: hidden;
+  display: block;
+  transform-origin: top right;
+  transform: scale(1);
+  z-index: 9999;
+  transition: all ease 180ms;
+  background-color: #111;
+}
+
+
+.elemento {
+  width: 95%;
+  margin-left: 2.5%;
+  height: 60px;
+  line-height: 25px;
+  background-color: #FAFAFA;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0, 0.14),
+  0 4px 5px 0 rgba(0,0,0,0.12),
+  0 1px 10px 0 rgba(0, 0, 0, 0.20);
+  /*border: 3px solid #000;*/
+  margin-top: 5px;
+  cursor: move; user-select: none;
+  font-size: 14px;
+  padding:  5px 5px 5px 15px;
+  border-left: 3px solid #03A9F4;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Roboto';
+  font-weight: 600;
+}
+
+.elemento .prazo {
+  float: left;
+  background-image: url("../../assets/ic_date_range_black_24px.svg");
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  background-position: left center;
+  padding-left: 20px;
+  height: 30px;
+  width: auto;
+  line-height: 30px;
+  overflow: hidden;
+  font-weight: 400;
+}
+
+.elemento .editElemento {
+  float: right;
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+  cursor: pointer;
+  /*background-color: transparent;*/
+  border-radius: 2px;
+  background-image: url("../../assets/edit.svg");
+  background-position: center;
+  background-size: 16px;
+  background-repeat: no-repeat;
+  /*display: none;*/
+  opacity: 0;
+  transition: All ease 180ms;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}
+
+.elemento .editElemento img {
+  float: left;
+}
+.elemento:hover > .editElemento {
+  /*display: block;*/
+  opacity: 1;
+}
+.sombra {
+  width: 95%;
+  margin-left: 2.5%;
+  height: 60px;
+  background-color: #CCC;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0, 0.14),
+              0 4px 5px 0 rgba(0,0,0,0.12),
+              0 1px 10px 0 rgba(0, 0, 0, 0.20);
+  margin-top: 5px;
+  cursor: move; user-select: none;
+}

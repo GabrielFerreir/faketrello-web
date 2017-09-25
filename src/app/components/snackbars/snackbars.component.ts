@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter, AfterViewInit} from '@angular/core';
 
 import { SnackbarsService } from "./snackbars.service";
 
@@ -7,16 +7,14 @@ import { SnackbarsService } from "./snackbars.service";
   templateUrl: './snackbars.component.html',
   styleUrls: ['./snackbars.component.css']
 })
-export class SnackbarsComponent implements OnInit {
+export class SnackbarsComponent implements AfterViewInit {
+  @ViewChild('HTMLsnackbar') HTMLsnackbar: ElementRef;
 
   constructor(private snackbarsService: SnackbarsService) { }
 
-  ngOnInit() {
-    console.log(this.HTMLsnackbar)
+  ngAfterViewInit() {
+    // console.log(this.HTMLsnackbar)
     this.snackbarsService.snackbar = this.HTMLsnackbar;
   }
-  @ViewChild('HTMLsnackbar') HTMLsnackbar: ElementRef;
-
-  // this.tela1.nativeElement.style = "transition: all 480ms ease-out; transform: translateX(-300px)"
 
 }

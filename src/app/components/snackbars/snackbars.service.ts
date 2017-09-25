@@ -13,14 +13,16 @@ export class SnackbarsService {
   chamaSnackbar(text) {
     this.texto = text
     this.situacao = false;
-    this.snackbar.nativeElement.style = "transition: all 480ms ease-out; position:fixed; bottom:-48px; transform: translateY(-48px)";
-
+    this.snackbar.nativeElement.style = "transition: all 480ms ease-in; position:fixed; bottom:0px;";
     this.limpaSnackbar();
+
   }
 
   limpaSnackbar() {
-    setTimeout(()=>{this.snackbar.nativeElement.style = "transition: all 480ms ease-out; position:fixed; bottom:0px; transform: translateY(48px)";
+    setTimeout(()=>{this.snackbar.nativeElement.style = "transition: all 480ms ease-in; position:fixed; bottom:-48px;";
     }, 3000);
+    console.log('Escondeu snack');
+
 
   }
 

@@ -7,7 +7,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  transition: all 1s ease;
+  transition: all 480ms ease;
 }
 
 

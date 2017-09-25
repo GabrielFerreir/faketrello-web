@@ -1,56 +1,36 @@
 <div class="container">
-  <section class="project-card">
-    <div class="img"></div>
+
+  <section class="project-card" *ngFor="let projeto of projects.projects">
+    <div class="img">
+      <img *ngIf="projeto.img != '/imgsProjects/default.png'" src="{{'http://' + core.ipDaApi + '/' + projeto.img}}" width="100%" style="min-height: 196px;">
+      <div *ngIf="projeto.img == '/imgsProjects/default.png'">{{projeto.namep.charAt(0)}}</div>
+      <!--{{ projeto.namep }}-->
+      <!--{{projeto.namep.charAt(0)}}-->
+      <!--<span>http://192.168.52.105:8080{{ projeto.img }}</span>-->
+
+    </div>
+
     <div class="acoes">
-      <img class="icon" src="../../assets/settings.svg">
-      <img class="icon" src="../../assets/delete.svg">
-      <img class="icon" src="../../assets/info.svg">
+      {{ projeto.namep }}
+      <img class="icon" (click)="projects.detailProject(projeto.id_project)" src="../../assets/settings.svg">
+      <img class="icon" (click)="popupConfirmacao.ativaPopUpConfirmacao('Alerta', 'Tem certeza que deseja Excluir?', projeto.idproject)" src="../../assets/delete.svg">
+      <!--<img class="icon" (click)="projects.detailProject(projeto.id_project)" src="../../assets/info.svg">-->
     </div>
   </section>
 
-  <section class="project-card">
-    <div class="img"></div>
-    <div class="acoes">
-      <img class="icon" src="../../assets/settings.svg">
-      <img class="icon" src="../../assets/delete.svg">
-      <img class="icon" src="../../assets/info.svg">
+
+  <section class="project-card" style="cursor: pointer" (click)="projects.ativaAddProjets()" >
+    <div class="img" style="background-color: #CCC"></div>
+    <div class="acoes" style="background-color: #DDD">
+      Adicionar Projeto
     </div>
   </section>
 
-  <section class="project-card">
-    <div class="img"></div>
-    <div class="acoes">
-      <img class="icon" src="../../assets/settings.svg">
-      <img class="icon" src="../../assets/delete.svg">
-      <img class="icon" src="../../assets/info.svg">
-    </div>
-  </section>
-
-  <section class="project-card">
-    <div class="img"></div>
-    <div class="acoes">
-      <img class="icon" src="../../assets/settings.svg">
-      <img class="icon" src="../../assets/delete.svg">
-      <img class="icon" src="../../assets/info.svg">
-    </div>
-  </section>
-
-  <section class="project-card">
-    <div class="img"></div>
-    <div class="acoes">
-      <img class="icon" src="../../assets/settings.svg">
-      <img class="icon" src="../../assets/delete.svg">
-      <img class="icon" src="../../assets/info.svg">
-    </div>
-  </section>
-
-  <section class="project-card">
-    <div class="img"></div>
-    <div class="acoes">
-      <img class="icon" src="../../assets/settings.svg">
-      <img class="icon" src="../../assets/delete.svg">
-      <img class="icon" src="../../assets/info.svg">
-    </div>
-  </section>
 </div>
 
+<app-popup-confirmacao *ngIf="popupConfirmacao.situacao"></app-popup-confirmacao>
+
+<app-add-projects *ngIf="projects.situacaoAddProjects"></app-add-projects>
+
+<router-outlet></router-outlet>
+<!--<app-detail-projects *ngIf="projects.situacaoDetailProject"></app-detail-projects>-->

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { PopupConfirmacaoService } from '../components/popup-confirmacao/popup-confirmacao.service';
+import {ProjectsServiceService} from '../projects/projects-service.service';
+import {CoreService} from "../Services/core.service";
+
 
 @Component({
   selector: 'app-pagina-inicial',
@@ -7,9 +11,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PaginaInicialComponent implements OnInit {
 
-  constructor() { }
+    constructor(private popupConfirmacao: PopupConfirmacaoService,
+                private projects: ProjectsServiceService,
+                private core: CoreService) { }
 
   ngOnInit() {
+    console.log('Pesquisa')
+    this.projects.searchProjects();
+
+
   }
 
 

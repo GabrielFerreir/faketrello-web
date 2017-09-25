@@ -26,6 +26,13 @@ import { HomeComponent } from './home/home.component';
 import { EsqueciMinhaSenhaModule } from './esqueci-minha-senha/esqueci-minha-senha.module';
 import { AutenticacaoModule } from './components/autenticacao/autenticacao.module';
 import { AutenticaComponent } from './autentica/autentica.component';
+import { PopupConfirmacaoModule } from './components/popup-confirmacao/popup-confirmacao.module';
+import {ProjectsModule} from './projects/projects.module';
+import {ProjectsServiceService} from './projects/projects-service.service';
+import {DragDropModule} from './drag-drop/drag-drop.module';
+import {MenuComponent} from "./components/menu/menu.component";
+import {MenuModule} from "./components/menu/menu.module";
+
 
 @NgModule({
   declarations: [
@@ -38,7 +45,7 @@ import { AutenticaComponent } from './autentica/autentica.component';
     AlterarSenhaDeUsuarioComponent,
     PaginaInicialComponent,
     HomeComponent,
-    AutenticaComponent
+    AutenticaComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,11 +54,16 @@ import { AutenticaComponent } from './autentica/autentica.component';
     AppRoutingModule,
     EsqueciMinhaSenhaModule,
     SnackbarsModule,
-    AutenticacaoModule
+    AutenticacaoModule,
+    PopupConfirmacaoModule,
+    ProjectsModule,
+    DragDropModule,
+    MenuModule
   ],
   providers: [DadosDeUsuarioService,
               DadosDeUsuarioResolve,
-              CoreService],
+              CoreService,
+              ProjectsServiceService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

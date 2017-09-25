@@ -1,0 +1,12 @@
+<section #popup>
+  <header>
+    {{ service.titulo }}
+  </header>
+  <div class="conteudo">
+    {{ service.mensagem }}
+  </div>
+  <div class="buttons">
+    <button class="denseButton" (click)="project.delProject(service.id)" style="float: right; background-color: transparent; color: #2196F3; font-weight: 600;">EXCLUIR</button>
+    <button class="denseButton" (click)="service.fechaPopUpConfirmacao()" style="float: right; background-color: transparent; color: #2196F3; font-weight: 600;">CANCELAR</button>
+  </div>
+</section>

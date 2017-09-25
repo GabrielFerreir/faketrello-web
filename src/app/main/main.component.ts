@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 
 import { DadosDeUsuarioService } from '../Services/dados-de-usuario.service';
 import { CoreService } from '../Services/core.service';
+import {ProjectsServiceService} from "../projects/projects-service.service";
 
 @Component({
   selector: 'app-main',
@@ -21,7 +22,8 @@ export class MainComponent implements OnInit {
   constructor(private router: Router,
               private http: Http,
               private dadosDoUsuario: DadosDeUsuarioService,
-              private core: CoreService) {
+              private core: CoreService,
+              private projects: ProjectsServiceService) {
   }
 
   ngOnInit() {
