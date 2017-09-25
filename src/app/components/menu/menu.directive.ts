@@ -90,7 +90,7 @@ export class MenuDirective implements ngAfterViewInit {
         }
       });
 
-      setTimeout(() => this.viewContainerRef.remove(this.viewContainerRef.indexOf(viewRef)), 280);
+      setTimeout(() => this.viewContainerRef.remove(this.viewContainerRef.indexOf(viewRef)), 50);
     }
   }
 

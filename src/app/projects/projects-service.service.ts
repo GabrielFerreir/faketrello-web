@@ -100,10 +100,10 @@ export class ProjectsServiceService {
         });
     }
   }
-
   fechaDetailProject() {
     this.situacaoDetailProject = false;
     this.router.navigate(['main']);
   }
+
 
 }

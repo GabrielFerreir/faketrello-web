@@ -1,0 +1,33 @@
+.opPerfil {
+  width: 170px;
+  background-color: #FFF;
+  box-shadow: 0px 9px 12px rgba(0,0,0,.14),
+              0px 3px 16px rgba(0,0,0,.12),
+              0px 5px 6px rgba(0,0,0,.20);
+  /*transform-origin: top right;*/
+  /*transform: scale(1);*/
+  transition: All 280ms ease-in;
+}
+.opPerfil ul {
+  list-style: circle;
+  cursor: pointer;
+}
+/deep/ .opPerfil ul li {
+  width: 100%;
+  height: 35px;
+}
+
+/deep/ .opPerfil ul li img {
+  float: left;
+  margin-left: 5px;
+  /*margin-top: 5.5px;*/
+  width: 24px;
+}
+/deep/ .opPerfil ul li span {
+  float: left;
+  margin-left: 5px;
+  line-height: 35px;
+  font-size: 16px;
+  outline: none;
+}
+

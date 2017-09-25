@@ -5,6 +5,7 @@
     </div>
   </label>
   <input class="checkNav" type="checkbox" id="check" style="display:none"/>
+
   <nav>
     <label for="check">
       <div class="inverseHamburger">
@@ -35,8 +36,8 @@
   </div>
 
 <div style="position: relative; z-index: 1;">
-  <label for="perfil">
-    <div class="perfil">
+  <!--<label for="perfil">-->
+    <div class="perfil" [menuInfoUser]="menuInfoUser">
 
       <div style="float: right" *ngIf="dados?.img != '/imgsUser/default.png'">
         <img class="img" src="{{'http://' + core.ipDaApi + dados?.img}}"/>
@@ -51,26 +52,15 @@
 
 
 
-  </label>
-  <input class="checkPerfil" type="checkbox" id="perfil" style="display: none"/>
+  <!--</label>-->
+  <!--<input class="checkPerfil" type="checkbox" id="perfil" style="display: none"/>-->
 
-  <div class="opPerfil">
-    <ul>
-      <li><img src="../../assets/home_black.svg"/>
-        <span routerLink="/main">Home</span>
-      </li>
-      <li><img src="../../assets/account_circle_black.svg"/>
-        <span routerLink="/alterarDados">Alterar Dados</span>
-      </li>
-      <li><img src="../../assets/key.svg"/>
-        <span routerLink="/alterarSenha">Alterar Senha</span>
-      </li>
-      <li><img src="../../assets/logout.svg"/>
-        <span (click)="logout()">Logout</span>
-      </li>
-    </ul>
+  <!--<div class="opPerfil">-->
+    <!--<ul>-->
 
-  </div>
+    <!--</ul>-->
+
+  <!--</div>-->
 </div>
 
   <div class="notificacoes">
@@ -84,3 +74,17 @@
     <router-outlet></router-outlet>
 </div>
 <app-snackbars></app-snackbars>
+<app-menu-info-user #menuInfoUser>
+  <li><img src="../../assets/home_black.svg"/>
+  <span routerLink="/main">Home</span>
+  </li>
+  <li><img src="../../assets/account_circle_black.svg"/>
+  <span routerLink="/alterarDados">Alterar Dados</span>
+  </li>
+  <li><img src="../../assets/key.svg"/>
+  <span routerLink="/alterarSenha">Alterar Senha</span>
+  </li>
+  <li><img src="../../assets/logout.svg"/>
+  <span (click)="logout()">Logout</span>
+  </li>
+</app-menu-info-user>

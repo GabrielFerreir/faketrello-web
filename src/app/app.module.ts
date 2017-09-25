@@ -30,8 +30,9 @@ import { PopupConfirmacaoModule } from './components/popup-confirmacao/popup-con
 import {ProjectsModule} from './projects/projects.module';
 import {ProjectsServiceService} from './projects/projects-service.service';
 import {DragDropModule} from './drag-drop/drag-drop.module';
-import {MenuComponent} from "./components/menu/menu.component";
-import {MenuModule} from "./components/menu/menu.module";
+import {MenuModule} from './components/menu/menu.module';
+import {MenuInfoUserModule} from './components/menu-info-user/menu-info-user.module';
+import { MenuInfoUserDirective } from './components/menu-info-user/menu-info-user.directive';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import {MenuModule} from "./components/menu/menu.module";
     PopupConfirmacaoModule,
     ProjectsModule,
     DragDropModule,
-    MenuModule
+    MenuModule,
+    MenuInfoUserModule
   ],
   providers: [DadosDeUsuarioService,
               DadosDeUsuarioResolve,
