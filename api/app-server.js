@@ -30,10 +30,10 @@
   app.put('/project/:id', projectsController.changeProject)
   app.post('/insertUser', projectsController.insertTeam)
   app.delete('/userteam/:id', projectsController.removeUserTeam)
+  app.get('/searchMembers/:id', projectsController.searchUsers)
   //Parte de blocos
   app.post('/newblock/:id', blocksController.newblock)
   app.post('/newtask', blocksController.newtask)
-  app.get('/searchMembers/:id', projectsController.searchUsers)
 
   let filesPath
 

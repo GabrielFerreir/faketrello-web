@@ -38,7 +38,7 @@
           req.body.team = [{
             'idproject': req.idproj,
             'iduser': newuser.id_usuario,
-            'permission': 'false'
+            'permission': 'true'
           }
           ]
           exports.insertTeam(req, res)
@@ -160,7 +160,9 @@
         if (!data) {
           res.status(400).json({error: 'Erro'})
         } else
-          res.status(200).json({result: 'sucesso'})
+          if(req.called !== 1) {
+            res.status(200).json({result: 'sucesso'})
+          }
       })
   }
   //Verifica se a permissao do usuario no projeto permite alterações
@@ -206,5 +208,4 @@
         }
       })
   }
-    db.any('SELECT * FROM searchUsers($1,$2);', [req.headers.Search, req.params.id])
 })()

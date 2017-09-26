@@ -342,7 +342,6 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM passwordToEmail('joao.vitor@smn.com.br');
 
-
 CREATE OR REPLACE FUNCTION emailexists(emailuser CHARACTER VARYING)
   RETURNS TABLE(
     usern  VARCHAR(50),
@@ -476,14 +475,14 @@ $$
 LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION changeproject(idproj INTEGER, namep CHARACTER VARYING, descrip CHARACTER VARYING,
-                                         imgp   CHARACTER VARYING, permission INTEGER)
+                                         imgp   CHARACTER VARYING, permission BOOLEAN)
   RETURNS TABLE(
     idprojectR INTEGER
   ) AS $$
 DECLARE
   idproject INTEGER;
 BEGIN
-  IF permission <> 2 AND
+  IF permission <> FALSE AND
      EXISTS(SELECT *
             FROM tb_projects
             WHERE id_project = idproj)
@@ -537,7 +536,7 @@ BEGIN
       AS x(
          idproject INTEGER,
          iduser INTEGER,
-         permission SMALLINT
+         permission BOOLEAN
          );
   RETURN TRUE;
 END;
@@ -548,7 +547,7 @@ CREATE OR REPLACE FUNCTION verify_permission(idproj INTEGER, iduser INTEGER)
   RETURNS TABLE(
     idproject  INTEGER,
     iduserR    INTEGER,
-    permission INTEGER
+    permission BOOLEAN
   ) AS $$
 BEGIN
   IF EXISTS(SELECT *
@@ -622,22 +621,25 @@ LANGUAGE plpgsql;
 
 --INSERT INTO tb_team(id_project,id_user,permissions)values(73,31,2),(73,32,2);
 
-CREATE OR REPLACE FUNCTION searchblock(project_owner CHARACTER VARYING)
+--A fazer...
+CREATE OR REPLACE FUNCTION searchblock(projectOwner CHARACTER VARYING)
   RETURNS TABLE(
     nameBlock VARCHAR(50)
   ) AS $$
+DECLARE
+  vIdBlocks INTEGER [];
+  vIdTasks  INTEGER [];
 BEGIN
-  IF EXISTS(SELECT id_project
-            FROM tb_projects
-            WHERE id_project = project_owner)
+  vIdBlocks := ARRAY(SELECT id_blocks
+                     FROM tb_blocks
+                     WHERE project_owner = projectOwner);
+
+  IF vIdBlocks IS NOT NULL
   THEN
-    RETURN QUERY
-    SELECT name_blocks
-    FROM tb_blocks
-    WHERE project_owner = $1;
+    vIdTasks := ARRAY(SELECT *
+                      FROM tb_tasks
+                      WHERE id_block = ANY (vIdBlocks));
   END IF;
-  RETURN QUERY
-  SELECT FALSE;
 END;
 $$
 LANGUAGE plpgsql;
@@ -733,7 +735,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
---SELECT * FROM searchUsers('gabriel',73);
+--SELECT * FROM searchUsers('gab',73);
 
 CREATE OR REPLACE FUNCTION searchUsers(pUser CHARACTER VARYING, idProject INTEGER)
   RETURNS TABLE(
@@ -785,3 +787,20 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insertUsersTasks(users JSON)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  INSERT INTO tb_team_tasks (id_task, id_user)
+    SELECT
+      idtask,
+      iduser
+    FROM json_to_recordset(users)
+      AS x(
+         idtask INTEGER,
+         iduser INTEGER
+         );
+  RETURN TRUE;
+END;
+$$
+  LANGUAGE plpgsql;

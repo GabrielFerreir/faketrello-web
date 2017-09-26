@@ -17,7 +17,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SQL/ApiLogin" afterPath="$PROJECT_DIR$/SQL/ApiLogin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app-server.js" afterPath="$PROJECT_DIR$/app-server.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controller/blocksController.js" afterPath="$PROJECT_DIR$/controller/blocksController.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controller/projectsController.js" afterPath="$PROJECT_DIR$/controller/projectsController.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -51,13 +50,6 @@
         <item name="fakeTrello" type="e3449647:DbNodeDescriptor" />
         <item name="public" type="e3449647:DbNodeDescriptor" />
       </path>
-      <path>
-        <item name="" type="eadb38e5:DatabaseStructure$Root" />
-        <item name="fakeTrello@localhost" type="e3449647:DbNodeDescriptor" />
-        <item name="fakeTrello" type="e3449647:DbNodeDescriptor" />
-        <item name="public" type="e3449647:DbNodeDescriptor" />
-        <item name="" type="fce03ad6:DatabaseStructure$GroupNode" />
-      </path>
     </expand>
     <select />
   </component>
@@ -66,8 +58,8 @@
       <file leaf-file-name="app-server.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app-server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
-              <caret line="35" column="63" lean-forward="false" selection-start-line="35" selection-start-column="63" selection-end-line="35" selection-end-column="63" />
+            <state relative-caret-position="289">
+              <caret line="32" column="58" lean-forward="false" selection-start-line="32" selection-start-column="58" selection-end-line="32" selection-end-column="58" />
               <folding />
             </state>
           </provider>
@@ -76,8 +68,8 @@
       <file leaf-file-name="blocksController.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controller/blocksController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="35" lean-forward="false" selection-start-line="0" selection-start-column="35" selection-end-line="0" selection-end-column="35" />
+            <state relative-caret-position="204">
+              <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
               <folding>
                 <element signature="e#108#411#0" expanded="false" />
                 <element signature="e#483#739#0" expanded="false" />
@@ -92,8 +84,8 @@
       <file leaf-file-name="ApiLogin" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SQL/ApiLogin">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="773" column="6" lean-forward="false" selection-start-line="773" selection-start-column="6" selection-end-line="773" selection-end-column="6" />
+            <state relative-caret-position="277">
+              <caret line="790" column="0" lean-forward="false" selection-start-line="790" selection-start-column="0" selection-end-line="790" selection-end-column="0" />
               <folding>
                 <element signature="e#88#622#0" expanded="false" />
                 <element signature="e#625#1007#0" expanded="false" />
@@ -108,22 +100,24 @@
                 <element signature="e#5680#6238#0" expanded="false" />
                 <element signature="e#6287#7086#0" expanded="false" />
                 <element signature="e#7131#7666#0" expanded="false" />
-                <element signature="e#7729#8159#0" expanded="false" />
-                <element signature="e#8162#8633#0" expanded="false" />
-                <element signature="e#8636#9236#0" expanded="false" />
-                <element signature="e#9272#9772#0" expanded="false" />
-                <element signature="e#9817#10732#0" expanded="false" />
-                <element signature="e#10735#11402#0" expanded="false" />
-                <element signature="e#11448#11932#0" expanded="false" />
-                <element signature="n#timeproject#0" expanded="false" />
-                <element signature="n#verify_permission#0" expanded="false" />
-                <element signature="n#changeteam#0" expanded="false" />
-                <element signature="n#newblocks#0" expanded="false" />
-                <element signature="n#searchblock#0" expanded="false" />
-                <element signature="n#deleteBlock#0" expanded="false" />
-                <element signature="n#newtasks#0" expanded="false" />
-                <element signature="n#buildAttachment#0" expanded="false" />
-                <element signature="n#buildChecklist#0" expanded="false" />
+                <element signature="e#7728#8158#0" expanded="false" />
+                <element signature="e#8161#8632#0" expanded="false" />
+                <element signature="e#8635#9235#0" expanded="false" />
+                <element signature="e#9271#9771#0" expanded="false" />
+                <element signature="e#9816#10731#0" expanded="false" />
+                <element signature="e#10734#11405#0" expanded="false" />
+                <element signature="e#11451#11935#0" expanded="false" />
+                <element signature="e#11938#12319#0" expanded="false" />
+                <element signature="e#12322#12798#0" expanded="false" />
+                <element signature="e#12801#13687#0" expanded="false" />
+                <element signature="e#13690#14040#0" expanded="false" />
+                <element signature="e#14124#14648#0" expanded="false" />
+                <element signature="e#14651#14983#0" expanded="false" />
+                <element signature="e#15035#15865#0" expanded="false" />
+                <element signature="e#15868#16196#0" expanded="false" />
+                <element signature="e#16199#16758#0" expanded="false" />
+                <element signature="e#16801#18283#0" expanded="false" />
+                <element signature="n#insertUsersTasks#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -132,20 +126,20 @@
       <file leaf-file-name="projectsController.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controller/projectsController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="208" column="84" lean-forward="true" selection-start-line="208" selection-start-column="84" selection-end-line="208" selection-end-column="84" />
+            <state relative-caret-position="323">
+              <caret line="182" column="29" lean-forward="false" selection-start-line="182" selection-start-column="29" selection-end-line="182" selection-end-column="29" />
               <folding>
-                <element signature="e#224#1553#0" expanded="false" />
+                <element signature="e#224#1552#0" expanded="false" />
                 <element signature="e#811#1216#0" expanded="false" />
-                <element signature="e#1651#1998#0" expanded="false" />
-                <element signature="e#2094#2809#0" expanded="false" />
-                <element signature="e#2875#3610#0" expanded="false" />
-                <element signature="e#3685#5203#0" expanded="false" />
-                <element signature="e#4461#5182#0" expanded="false" />
-                <element signature="e#5276#5545#0" expanded="false" />
-                <element signature="e#5664#6035#0" expanded="false" />
-                <element signature="e#6119#6746#0" expanded="false" />
-                <element signature="e#6813#7124#0" expanded="false" />
+                <element signature="e#1650#1997#0" expanded="false" />
+                <element signature="e#2093#2808#0" expanded="false" />
+                <element signature="e#2874#3609#0" expanded="false" />
+                <element signature="e#3684#5202#0" expanded="false" />
+                <element signature="e#4460#5181#0" expanded="false" />
+                <element signature="e#5275#5591#0" expanded="false" />
+                <element signature="e#5710#6081#0" expanded="false" />
+                <element signature="e#6165#6792#0" expanded="false" />
+                <element signature="e#6859#7170#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -207,8 +201,8 @@
         <option value="$PROJECT_DIR$/../../../index.html" />
         <option value="$PROJECT_DIR$/controller/userController.js" />
         <option value="$PROJECT_DIR$/controller/blocksController.js" />
-        <option value="$PROJECT_DIR$/app-server.js" />
         <option value="/c36c0908/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/deleteproject.(integer).sql" />
+        <option value="$PROJECT_DIR$/app-server.js" />
         <option value="$PROJECT_DIR$/controller/projectsController.js" />
         <option value="$PROJECT_DIR$/SQL/ApiLogin" />
       </list>
@@ -236,7 +230,7 @@
   <component name="NodeModulesDirectoryManager">
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="469" />
     <option name="y" value="-18" />
     <option name="width" value="697" />
@@ -258,7 +252,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -280,9 +273,10 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="AndroidView" />
       <pane id="Scratches" />
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -458,7 +452,8 @@
       <workItem from="1505993245916" duration="1805000" />
       <workItem from="1505996207292" duration="19246000" />
       <workItem from="1506079806039" duration="18178000" />
-      <workItem from="1506338842730" duration="20256000" />
+      <workItem from="1506338842730" duration="20694000" />
+      <workItem from="1506428047691" duration="8462000" />
     </task>
     <task id="LOCAL-00001" summary="Mostrar projetos finalizado">
       <created>1505421275097</created>
@@ -471,10 +466,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="494533000" />
+    <option name="totallyTimeSpent" value="503433000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -482,15 +477,15 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24177632" sideWeight="0.33963692" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25822368" sideWeight="0.3419062" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6019737" sideWeight="0.66414523" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25822368" sideWeight="0.6580938" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32730263" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Database Console" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40953946" sideWeight="0.6603631" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40953946" sideWeight="0.6603631" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1603631" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16263238" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22314675" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -570,10 +565,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/autenticacao/autenticacaoController.js" />
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/autenticacao/autenticacaoService.js" />
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/autenticacao/autenticacaoScope.js" />
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/core/autenticacao/autenticacaoRepository.js" />
     <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/server.js" />
     <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/app.js" />
     <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/middleware/errors.js" />
@@ -681,33 +672,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app-server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="35" column="63" lean-forward="false" selection-start-line="35" selection-start-column="63" selection-end-line="35" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="dbSrc:///c36c0908/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/deleteproject.(integer).sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="9" column="17" lean-forward="true" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controller/blocksController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="35" lean-forward="false" selection-start-line="0" selection-start-column="35" selection-end-line="0" selection-end-column="35" />
-          <folding>
-            <element signature="e#108#411#0" expanded="false" />
-            <element signature="e#483#739#0" expanded="false" />
-            <element signature="e#800#1055#0" expanded="false" />
-            <element signature="e#1138#1788#0" expanded="false" />
-            <element signature="e#1850#2561#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -719,30 +687,86 @@
         </state>
       </provider>
     </entry>
+    <entry file="das://table:/c36c0908/d151bc40-835a-4b6f-abac-64434e7b2b9d/fakeTrello.public.tb_blocks">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app-server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="32" column="58" lean-forward="false" selection-start-line="32" selection-start-column="58" selection-end-line="32" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/c36c0908/d151bc40-835a-4b6f-abac-64434e7b2b9d/fakeTrello.public.tb_tasks">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/c36c0908/d151bc40-835a-4b6f-abac-64434e7b2b9d/fakeTrello.public.tb_team">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+          <column-attributes>
+            <column name="ctid" enabled="false" />
+          </column-attributes>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/c36c0908/d151bc40-835a-4b6f-abac-64434e7b2b9d/fakeTrello.public.tb_team_tasks">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+          <column-attributes>
+            <column name="ctid" enabled="false" />
+          </column-attributes>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/blocksController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding>
+            <element signature="e#108#411#0" expanded="false" />
+            <element signature="e#483#739#0" expanded="false" />
+            <element signature="e#800#1055#0" expanded="false" />
+            <element signature="e#1138#1788#0" expanded="false" />
+            <element signature="e#1850#2561#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/controller/projectsController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="208" column="84" lean-forward="true" selection-start-line="208" selection-start-column="84" selection-end-line="208" selection-end-column="84" />
+        <state relative-caret-position="323">
+          <caret line="182" column="29" lean-forward="false" selection-start-line="182" selection-start-column="29" selection-end-line="182" selection-end-column="29" />
           <folding>
-            <element signature="e#224#1553#0" expanded="false" />
+            <element signature="e#224#1552#0" expanded="false" />
             <element signature="e#811#1216#0" expanded="false" />
-            <element signature="e#1651#1998#0" expanded="false" />
-            <element signature="e#2094#2809#0" expanded="false" />
-            <element signature="e#2875#3610#0" expanded="false" />
-            <element signature="e#3685#5203#0" expanded="false" />
-            <element signature="e#4461#5182#0" expanded="false" />
-            <element signature="e#5276#5545#0" expanded="false" />
-            <element signature="e#5664#6035#0" expanded="false" />
-            <element signature="e#6119#6746#0" expanded="false" />
-            <element signature="e#6813#7124#0" expanded="false" />
+            <element signature="e#1650#1997#0" expanded="false" />
+            <element signature="e#2093#2808#0" expanded="false" />
+            <element signature="e#2874#3609#0" expanded="false" />
+            <element signature="e#3684#5202#0" expanded="false" />
+            <element signature="e#4460#5181#0" expanded="false" />
+            <element signature="e#5275#5591#0" expanded="false" />
+            <element signature="e#5710#6081#0" expanded="false" />
+            <element signature="e#6165#6792#0" expanded="false" />
+            <element signature="e#6859#7170#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SQL/ApiLogin">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="773" column="6" lean-forward="false" selection-start-line="773" selection-start-column="6" selection-end-line="773" selection-end-column="6" />
+        <state relative-caret-position="277">
+          <caret line="790" column="0" lean-forward="false" selection-start-line="790" selection-start-column="0" selection-end-line="790" selection-end-column="0" />
           <folding>
             <element signature="e#88#622#0" expanded="false" />
             <element signature="e#625#1007#0" expanded="false" />
@@ -757,22 +781,24 @@
             <element signature="e#5680#6238#0" expanded="false" />
             <element signature="e#6287#7086#0" expanded="false" />
             <element signature="e#7131#7666#0" expanded="false" />
-            <element signature="e#7729#8159#0" expanded="false" />
-            <element signature="e#8162#8633#0" expanded="false" />
-            <element signature="e#8636#9236#0" expanded="false" />
-            <element signature="e#9272#9772#0" expanded="false" />
-            <element signature="e#9817#10732#0" expanded="false" />
-            <element signature="e#10735#11402#0" expanded="false" />
-            <element signature="e#11448#11932#0" expanded="false" />
-            <element signature="n#timeproject#0" expanded="false" />
-            <element signature="n#verify_permission#0" expanded="false" />
-            <element signature="n#changeteam#0" expanded="false" />
-            <element signature="n#newblocks#0" expanded="false" />
-            <element signature="n#searchblock#0" expanded="false" />
-            <element signature="n#deleteBlock#0" expanded="false" />
-            <element signature="n#newtasks#0" expanded="false" />
-            <element signature="n#buildAttachment#0" expanded="false" />
-            <element signature="n#buildChecklist#0" expanded="false" />
+            <element signature="e#7728#8158#0" expanded="false" />
+            <element signature="e#8161#8632#0" expanded="false" />
+            <element signature="e#8635#9235#0" expanded="false" />
+            <element signature="e#9271#9771#0" expanded="false" />
+            <element signature="e#9816#10731#0" expanded="false" />
+            <element signature="e#10734#11405#0" expanded="false" />
+            <element signature="e#11451#11935#0" expanded="false" />
+            <element signature="e#11938#12319#0" expanded="false" />
+            <element signature="e#12322#12798#0" expanded="false" />
+            <element signature="e#12801#13687#0" expanded="false" />
+            <element signature="e#13690#14040#0" expanded="false" />
+            <element signature="e#14124#14648#0" expanded="false" />
+            <element signature="e#14651#14983#0" expanded="false" />
+            <element signature="e#15035#15865#0" expanded="false" />
+            <element signature="e#15868#16196#0" expanded="false" />
+            <element signature="e#16199#16758#0" expanded="false" />
+            <element signature="e#16801#18283#0" expanded="false" />
+            <element signature="n#insertUsersTasks#0" expanded="false" />
           </folding>
         </state>
       </provider>

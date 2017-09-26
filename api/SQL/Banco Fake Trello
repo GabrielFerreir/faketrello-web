@@ -1,0 +1,1850 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.6.4
+-- Dumped by pg_dump version 9.6.3
+
+-- Started on 2017-09-26 09:24:48
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 1 (class 3079 OID 12387)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2263 (class 0 OID 0)
+-- Dependencies: 1
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+--
+-- TOC entry 241 (class 1255 OID 32963)
+-- Name: buildattachment(character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION buildattachment(path character varying, idtask integer) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_tasks
+            WHERE id_task = idtask)
+  THEN
+    UPDATE tb_tasks SET attachment = path WHERE id_task = idtask;
+    RETURN TRUE ;
+  END IF;
+END;
+$$;
+
+
+ALTER FUNCTION public.buildattachment(path character varying, idtask integer) OWNER TO postgres;
+
+--
+-- TOC entry 242 (class 1255 OID 32964)
+-- Name: buildchecklist(json); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION buildchecklist(checklist json) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_tasks
+            WHERE id_task = idTask)
+  THEN
+    INSERT INTO tb_checklist_tasks (name_checklist, id_task, checked)
+      SELECT namechecklist,
+        idtask,
+        checked
+    from json_to_recordset(checklist)
+    as x(
+      nametask VARCHAR(20),
+      idtask INTEGER,
+      checked BOOLEAN
+         );
+    RETURN TRUE ;
+  END IF;
+  RETURN FALSE ;
+END;
+$$;
+
+
+ALTER FUNCTION public.buildchecklist(checklist json) OWNER TO postgres;
+
+--
+-- TOC entry 243 (class 1255 OID 32965)
+-- Name: buildchecklist(integer, json); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION buildchecklist(idtask integer, checklist json) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_tasks
+            WHERE id_task = idTask)
+  THEN
+    INSERT INTO tb_checklist_tasks (name_checklist, id_task, checked)
+      SELECT 
+        namechecklist,
+        idtask,
+        checked
+    from json_to_recordset(checklist)
+    as x(
+      namechecklist VARCHAR(20),
+      idtask INTEGER,
+      checked BOOLEAN
+         );
+    RETURN TRUE ;
+  END IF;
+  RETURN FALSE ;
+END;
+$$;
+
+
+ALTER FUNCTION public.buildchecklist(idtask integer, checklist json) OWNER TO postgres;
+
+--
+-- TOC entry 226 (class 1255 OID 24714)
+-- Name: changepass(character varying, character varying, character varying, boolean); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION changepass(usern character varying, oldpass character varying, newpass character varying, whocall boolean) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  IF whocall = TRUE
+  THEN
+
+    IF EXISTS(SELECT
+                username,
+                password
+              FROM tb_login
+              WHERE (username ILIKE $1 OR email ILIKE $1) AND password = $2)
+    THEN
+      UPDATE tb_login
+      SET password = $3
+      WHERE username ILIKE $1 OR email ILIKE $1;
+      RETURN TRUE;
+    END IF;
+    RETURN FALSE ;
+  ELSE
+    IF EXISTS(SELECT
+                username,
+                password
+              FROM tb_login
+              WHERE username ILIKE $1 OR email ILIKE $1)
+    THEN
+      UPDATE tb_login
+      SET password = $3
+      WHERE username ILIKE $1 OR email ILIKE $1;
+      RETURN TRUE;
+    END IF;
+    RETURN FALSE ;
+
+  END IF;
+END;
+$_$;
+
+
+ALTER FUNCTION public.changepass(usern character varying, oldpass character varying, newpass character varying, whocall boolean) OWNER TO postgres;
+
+--
+-- TOC entry 234 (class 1255 OID 32939)
+-- Name: changeproject(integer, character varying, character varying, character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION changeproject(idproj integer, namep character varying, descrip character varying, imgp character varying, permission integer) RETURNS TABLE(idprojectr integer)
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  idproject INTEGER;
+BEGIN
+  IF permission <> 2 AND
+     EXISTS(SELECT *
+            FROM tb_projects
+            WHERE id_project = idproj)
+  THEN
+    UPDATE tb_projects
+    SET
+      name_project = namep,
+      description  = descrip,
+      img_project  = imgp
+    WHERE id_project = idproj
+    RETURNING id_project
+      INTO idproject;
+    RETURN QUERY
+    SELECT idproject;
+  END IF;
+END;
+$$;
+
+
+ALTER FUNCTION public.changeproject(idproj integer, namep character varying, descrip character varying, imgp character varying, permission integer) OWNER TO postgres;
+
+--
+-- TOC entry 232 (class 1255 OID 32937)
+-- Name: changeteam(integer, integer, integer, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION changeteam(idproj integer, idusert integer, permission integer, idprojalvo integer, iduseralvo integer) RETURNS TABLE(statuscode integer)
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  vStatus INTEGER;
+BEGIN
+  IF permission <> 2
+  THEN
+    IF EXISTS(SELECT *
+              FROM tb_team
+              WHERE idproj = id_project AND id_user = idusert)
+       AND EXISTS(SELECT *
+                  FROM tb_team
+                  WHERE idprojalvo = id_project AND
+                        iduseralvo = id_user)
+                  THEN
+                  DELETE FROM tb_team
+                  WHERE idprojalvo = id_project AND
+                        id_user = iduseralvo RETURNING 200 INTO
+                  vStatus;
+    RETURN QUERY
+    SELECT vStatus;
+  ELSE
+    RETURN QUERY
+    SELECT 404;
+  END IF;
+  ELSE
+  RETURN QUERY
+SELECT 401;
+END IF;
+END;
+$$;
+
+
+ALTER FUNCTION public.changeteam(idproj integer, idusert integer, permission integer, idprojalvo integer, iduseralvo integer) OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1255 OID 24708)
+-- Name: changeuser(character varying, character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION changeuser(pass character varying, usern character varying, usertoken character varying, emailp character varying, nomep character varying) RETURNS TABLE(emaild character varying, namep character varying, usernamer character varying, imageuser character varying)
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  IF NOT EXISTS(SELECT
+                  l.username,
+                  l.email
+                FROM tb_login l
+                WHERE l.username = $2 OR l.email = $4
+                EXCEPT (SELECT
+                          l.username,
+                          l.email
+                        FROM tb_login l
+                        WHERE l.username = $3 OR l.email = $3))
+  THEN
+
+    UPDATE tb_login l
+    SET username = $2,
+      email      = $4,
+      name       = $5
+    WHERE l.username = $3 OR l.email = $3;
+
+    RETURN QUERY
+    SELECT
+      $4,
+      $5,
+      $2,
+      tb_login.profile_img
+    FROM tb_login;
+  END IF;
+END
+$_$;
+
+
+ALTER FUNCTION public.changeuser(pass character varying, usern character varying, usertoken character varying, emailp character varying, nomep character varying) OWNER TO postgres;
+
+--
+-- TOC entry 215 (class 1255 OID 16463)
+-- Name: consult(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION consult() RETURNS TABLE(email character varying, username character varying, password character varying, img character varying, name character varying, emailauth boolean)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    tb_login.email,
+    tb_login.username,
+    tb_login.password,
+    tb_login.profile_img,
+    tb_login.name,
+    tb_login."authEmail"
+  FROM tb_login;
+END
+$$;
+
+
+ALTER FUNCTION public.consult() OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1255 OID 16519)
+-- Name: consultuser(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION consultuser(usern character varying) RETURNS TABLE(id_usuario integer, email character varying, username character varying, password character varying, img character varying, name character varying, statusauth boolean)
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  RETURN QUERY
+  SELECT
+    tb_login.id_user,
+    tb_login.email,
+    tb_login.username,
+    tb_login.password,
+    tb_login.profile_img,
+    tb_login.name,
+    tb_login."authEmail"
+  FROM tb_login
+  WHERE tb_login.username ILIKE $1 OR tb_login.email ILIKE $1;
+END
+$_$;
+
+
+ALTER FUNCTION public.consultuser(usern character varying) OWNER TO postgres;
+
+--
+-- TOC entry 246 (class 1255 OID 32976)
+-- Name: deactivateproject(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION deactivateproject(idproject integer) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_projects
+            WHERE id_project = $1 AND active = TRUE)
+  THEN
+    UPDATE tb_projects
+    SET active = FALSE
+    WHERE id_project = $1;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$_$;
+
+
+ALTER FUNCTION public.deactivateproject(idproject integer) OWNER TO postgres;
+
+--
+-- TOC entry 245 (class 1255 OID 32977)
+-- Name: deactivateproject(integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION deactivateproject(idproject integer, iduser integer) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_projects
+            WHERE id_project = $1 AND active = TRUE)
+     AND ((SELECT permissions
+          FROM tb_team
+          WHERE id_user = idUser AND id_project = idproject) = TRUE)
+  THEN
+    UPDATE tb_projects
+    SET active = FALSE
+    WHERE id_project = $1;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$_$;
+
+
+ALTER FUNCTION public.deactivateproject(idproject integer, iduser integer) OWNER TO postgres;
+
+--
+-- TOC entry 237 (class 1255 OID 32949)
+-- Name: deleteblock(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION deleteblock(nameblock character varying) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_blocks
+            WHERE nameBlock ILIKE name_blocks)
+  THEN
+    DELETE FROM tb_blocks
+    WHERE name_blocks ILIKE nameBlock;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$;
+
+
+ALTER FUNCTION public.deleteblock(nameblock character varying) OWNER TO postgres;
+
+--
+-- TOC entry 229 (class 1255 OID 32913)
+-- Name: deleteproject(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION deleteproject(idproject integer) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_projects
+            WHERE id_project = $1)
+  THEN
+    DELETE FROM tb_projects WHERE id_project = $1;
+    RETURN TRUE ;
+  END IF;
+  RETURN FALSE ;
+END;
+$_$;
+
+
+ALTER FUNCTION public.deleteproject(idproject integer) OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1255 OID 16482)
+-- Name: deleteuser(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION deleteuser(usern character varying) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  IF EXISTS(SELECT
+              username,
+              email
+            FROM tb_login
+            WHERE username ILIKE $1 OR email ILIKE $1)
+  THEN
+    DELETE FROM tb_login WHERE username ILIKE $1 OR email ILIKE $1;
+    RETURN TRUE ;
+  END IF;
+  RETURN FALSE ;
+END
+$_$;
+
+
+ALTER FUNCTION public.deleteuser(usern character varying) OWNER TO postgres;
+
+--
+-- TOC entry 224 (class 1255 OID 24713)
+-- Name: emailexists(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION emailexists(emailuser character varying) RETURNS TABLE(usern character varying, emailu character varying, passw character varying)
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  IF EXISTS(SELECT l.email
+            FROM tb_login l
+            WHERE l.email ILIKE $1)
+  THEN
+    RETURN QUERY
+    SELECT
+      l.username,
+      l.email,
+      l.password
+    FROM tb_login l
+    WHERE l.email ILIKE $1;
+  END IF;
+END;
+$_$;
+
+
+ALTER FUNCTION public.emailexists(emailuser character varying) OWNER TO postgres;
+
+--
+-- TOC entry 235 (class 1255 OID 32946)
+-- Name: getproject(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION getproject(usern integer) RETURNS TABLE(id_project integer, namep character varying, descrip text, img character varying)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    tb_projects.id_project,
+    name_project,
+    description,
+    img_project
+  FROM tb_projects
+  WHERE  tb_projects.id_project IN (SELECT tb_team.id_project
+                       FROM tb_team
+                       WHERE usern = id_user);
+END;
+$$;
+
+
+ALTER FUNCTION public.getproject(usern integer) OWNER TO postgres;
+
+--
+-- TOC entry 244 (class 1255 OID 32945)
+-- Name: getprojectsearch(integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION getprojectsearch(idpro integer, iduser integer) RETURNS TABLE(namep character varying, descrip text, img character varying, team json)
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  IF EXISTS(SELECT id_project
+            FROM tb_team
+            WHERE id_project = $1 AND id_user = $2)
+  THEN
+    RETURN QUERY
+    SELECT
+      name_project,
+      description,
+      img_project,
+      (
+        SELECT COALESCE(json_agg(teamJson), '[]')
+        FROM (SELECT
+                tb_team.id_user,
+                name,
+                profile_img,
+                username,
+                permissions
+              FROM tb_team
+                INNER JOIN tb_login ON tb_login.id_user = tb_team.id_user
+              WHERE id_project = idpro
+              ORDER BY permissions DESC) AS teamJson
+      ) teams
+    FROM tb_projects
+
+    WHERE tb_projects.id_project = idpro;
+  END IF;
+END;
+$_$;
+
+
+ALTER FUNCTION public.getprojectsearch(idpro integer, iduser integer) OWNER TO postgres;
+
+--
+-- TOC entry 231 (class 1255 OID 32914)
+-- Name: loginu(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION loginu(emaild character varying, passw character varying) RETURNS TABLE(id integer, email character varying, password character varying, username character varying, statusemail boolean, senhacorreta boolean)
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  RETURN QUERY
+  SELECT
+    tb_login.id_user,
+    tb_login.email,
+    tb_login.username,
+    tb_login.password,
+    tb_login."authEmail",
+    (tb_login.password = $2)
+  FROM tb_login
+  WHERE tb_login.email ILIKE $1 OR tb_login.username ILIKE $1;
+END
+$_$;
+
+
+ALTER FUNCTION public.loginu(emaild character varying, passw character varying) OWNER TO postgres;
+
+--
+-- TOC entry 233 (class 1255 OID 32938)
+-- Name: newblocks(character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION newblocks(nameq character varying, idproj integer) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF EXISTS(SELECT * FROM tb_projects WHERE id_project = idproj) THEN 
+    INSERT INTO tb_blocks(name_blocks, project_owner) VALUES(nameq, idproj);
+    RETURN TRUE ;
+  END IF;
+  RETURN FALSE ;
+END;
+$$;
+
+
+ALTER FUNCTION public.newblocks(nameq character varying, idproj integer) OWNER TO postgres;
+
+--
+-- TOC entry 228 (class 1255 OID 24718)
+-- Name: newproject(character varying, integer, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION newproject(nameproject character varying, iddono integer, descricao character varying, imgproject character varying) RETURNS TABLE(idproject integer)
+    LANGUAGE plpgsql
+    AS $_$
+DECLARE
+  idprojectR INTEGER;
+BEGIN
+  IF EXISTS(SELECT l.id_user
+            FROM tb_login l
+            WHERE l.id_user = idDono)
+  THEN
+    INSERT INTO tb_projects (name_project, id_user_owner, description, img_project) VALUES ($1, $2, $3, $4)
+    RETURNING id_project INTO idprojectR;
+    RETURN QUERY
+    SELECT idprojectR;
+  END IF;
+END;
+$_$;
+
+
+ALTER FUNCTION public.newproject(nameproject character varying, iddono integer, descricao character varying, imgproject character varying) OWNER TO postgres;
+
+--
+-- TOC entry 238 (class 1255 OID 32952)
+-- Name: newtasks(character varying, date, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION newtasks(nametask character varying, date date, idblock integer) RETURNS TABLE(idtask integer, nametaskr character varying, dater date, idblockowner integer)
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  vIdTask     INTEGER;
+  vNameTask   VARCHAR(20);
+  vDate       DATE;
+  vBlockOwner INTEGER;
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_blocks
+            WHERE id_blocks = idblock)
+  THEN
+    INSERT INTO tb_tasks (name_task, final_date, id_block) VALUES (nametask, to_date(date, 'DD/MM/YYYY'), idblock)
+    RETURNING id_block, name_task, to_char(final_date, 'DD/MM/YYYY'), id_block
+      INTO vIdTask, vNameTask, vDate, vBlockOwner;
+    RETURN QUERY
+    SELECT
+      vIdTask,
+      vNameTask,
+      vDate,
+      vBlockOwner;
+  END IF;
+END;
+$$;
+
+
+ALTER FUNCTION public.newtasks(nametask character varying, date date, idblock integer) OWNER TO postgres;
+
+--
+-- TOC entry 239 (class 1255 OID 32957)
+-- Name: newtasks(character varying, timestamp without time zone, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION newtasks(nametask character varying, date timestamp without time zone, idblock integer) RETURNS TABLE(idtask integer, nametaskr character varying, dater timestamp without time zone, idblockowner integer)
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  vIdTask     INTEGER;
+  vNameTask   VARCHAR(20);
+  vDate       TIMESTAMP;
+  vBlockOwner INTEGER;
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_blocks
+            WHERE id_blocks = idblock)
+  THEN
+    INSERT INTO tb_tasks (name_task, final_date, id_block) VALUES (nametask, date, idblock)
+    RETURNING id_task, name_task, final_date, id_block
+      INTO vIdTask, vNameTask, vDate, vBlockOwner;
+    RETURN QUERY
+    SELECT
+      vIdTask,
+      vNameTask,
+      vDate,
+      vBlockOwner;
+  END IF;
+END;
+$$;
+
+
+ALTER FUNCTION public.newtasks(nametask character varying, date timestamp without time zone, idblock integer) OWNER TO postgres;
+
+--
+-- TOC entry 240 (class 1255 OID 32958)
+-- Name: newtasks(character varying, character varying, timestamp without time zone, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION newtasks(nametask character varying, attachment character varying, date timestamp without time zone, idblock integer) RETURNS TABLE(idtask integer, nametaskr character varying, dater timestamp without time zone, idblockowner integer)
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  vIdTask     INTEGER;
+  vNameTask   VARCHAR(20);
+  vDate       TIMESTAMP;
+  vBlockOwner INTEGER;
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_blocks
+            WHERE id_blocks = idblock)
+  THEN
+    INSERT INTO tb_tasks (name_task, final_date, id_block) VALUES (nametask, date, idblock)
+    RETURNING id_task, name_task, final_date, id_block
+      INTO vIdTask, vNameTask, vDate, vBlockOwner;
+    RETURN QUERY
+    SELECT
+      vIdTask,
+      vNameTask,
+      vDate,
+      vBlockOwner;
+  END IF;
+END;
+$$;
+
+
+ALTER FUNCTION public.newtasks(nametask character varying, attachment character varying, date timestamp without time zone, idblock integer) OWNER TO postgres;
+
+--
+-- TOC entry 214 (class 1255 OID 16447)
+-- Name: newuser(character varying, character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION newuser(emaild character varying, passw character varying, img character varying, namep character varying, usern character varying) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  IF NOT exists(SELECT *
+                FROM tb_login
+                WHERE emailD = tb_login.email OR usern = tb_login.username)
+  THEN
+    INSERT INTO tb_login (email, password, profile_img, name, username) VALUES ($1, $2, $3, $4, $5);
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END
+$_$;
+
+
+ALTER FUNCTION public.newuser(emaild character varying, passw character varying, img character varying, namep character varying, usern character varying) OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1255 OID 16475)
+-- Name: passwordtoemail(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION passwordtoemail(usern character varying) RETURNS TABLE(passwordr character varying, nameuser character varying)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF EXISTS(SELECT
+              l.username,
+              l.email,
+              l.password
+            FROM tb_login l
+            WHERE l.username ILIKE usern OR l.email ILIKE usern)
+  THEN
+    RETURN QUERY
+    SELECT
+      l.password,
+      l.name
+    FROM tb_login l
+    WHERE l.username ILIKE usern OR l.email ILIKE usern;
+  END IF;
+END;
+$$;
+
+
+ALTER FUNCTION public.passwordtoemail(usern character varying) OWNER TO postgres;
+
+--
+-- TOC entry 223 (class 1255 OID 24710)
+-- Name: relogin(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION relogin(usernamed character varying) RETURNS TABLE(usern character varying, passw character varying)
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  IF EXISTS(SELECT
+              l.username,
+              l.email
+            FROM tb_login l
+            WHERE l.username ILIKE $1 OR l.email ILIKE $1)
+  THEN
+    RETURN QUERY
+    SELECT
+      l.username,
+      l.password
+    FROM tb_login l
+    WHERE l.username ILIKE $1 OR l.email ILIKE $1;
+  END IF;
+END;
+$_$;
+
+
+ALTER FUNCTION public.relogin(usernamed character varying) OWNER TO postgres;
+
+--
+-- TOC entry 236 (class 1255 OID 32947)
+-- Name: searchblock(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION searchblock(project_owner character varying) RETURNS TABLE(nameblock character varying)
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  IF EXISTS(SELECT id_project
+            FROM tb_projects
+            WHERE id_project = project_owner)
+  THEN
+    RETURN QUERY
+    SELECT name_blocks
+    FROM tb_blocks
+    WHERE project_owner = $1;
+  END IF;
+  RETURN QUERY
+  SELECT FALSE;
+END;
+$_$;
+
+
+ALTER FUNCTION public.searchblock(project_owner character varying) OWNER TO postgres;
+
+--
+-- TOC entry 247 (class 1255 OID 32966)
+-- Name: searchusers(character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION searchusers(puser character varying, idproject integer) RETURNS TABLE(iduser integer, nameuser character varying, username character varying, imguser character varying, permissions boolean)
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  vIdUser INTEGER [];
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_login
+            WHERE tb_login.username ILIKE '%' || pUser || '%' OR
+                  tb_login.email ILIKE '%' || pUser || '%' OR
+                  tb_login.name ILIKE '%' || pUser || '%')
+  THEN
+    vIdUser :=  ARRAY(SELECT id_user
+                      FROM tb_login
+                      WHERE tb_login.username ILIKE '%' || pUser || '%' OR
+                            email ILIKE '%' || pUser || '%' OR
+                            name ILIKE '%' || pUser || '%');
+    IF EXISTS(SELECT *
+              FROM tb_team
+              WHERE tb_team.id_user = ANY (vIdUser) AND id_project = idProject)
+    THEN
+      RETURN QUERY
+      SELECT
+        tb_login.id_user,
+        name,
+        tb_login.username,
+        profile_img,
+        tb_team.permissions
+      FROM tb_login
+        INNER JOIN tb_team ON tb_login.id_user = tb_team.id_user
+      WHERE tb_login.id_user = ANY (vIdUser) AND id_project = idProject;
+    ELSE RETURN QUERY
+    SELECT
+      tb_login.id_user,
+      name,
+      tb_login.username,
+      profile_img,
+      NULL :: BOOLEAN
+    FROM tb_login
+    WHERE tb_login.id_user = ANY (vIdUser);
+    END IF;
+  END IF;
+END;
+$$;
+
+
+ALTER FUNCTION public.searchusers(puser character varying, idproject integer) OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1255 OID 32929)
+-- Name: timeproject(json); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION timeproject(teamjson json) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  INSERT INTO tb_team (id_project, id_user, permissions)
+    SELECT
+      idproject,
+      iduser,
+      permission
+    FROM json_to_recordset(teamJson)
+      AS x(
+         idproject INTEGER,
+         iduser INTEGER,
+         permission SMALLINT
+         );
+  RETURN TRUE;
+END;
+$$;
+
+
+ALTER FUNCTION public.timeproject(teamjson json) OWNER TO postgres;
+
+--
+-- TOC entry 221 (class 1255 OID 24703)
+-- Name: verify_email(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION verify_email(usern character varying) RETURNS TABLE(statusemail boolean)
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  IF EXISTS(SELECT "authEmail"
+            FROM tb_login l
+            WHERE l.username ILIKE $1)
+  THEN
+    RETURN QUERY
+    SELECT "authEmail"
+    FROM tb_login l
+    WHERE l.username ILIKE $1;
+  END IF;
+END
+$_$;
+
+
+ALTER FUNCTION public.verify_email(usern character varying) OWNER TO postgres;
+
+--
+-- TOC entry 216 (class 1255 OID 16452)
+-- Name: verify_img(character varying, character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION verify_img(img character varying, usern character varying) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  IF EXISTS(SELECT
+              profile_img,
+              username,
+              email
+            FROM tb_login l
+            WHERE l.email = usern OR l.username = usern)
+  THEN
+    UPDATE tb_login l
+    SET profile_img = $1
+    WHERE l.email = usern OR l.username = usern;
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END;
+$_$;
+
+
+ALTER FUNCTION public.verify_img(img character varying, usern character varying) OWNER TO postgres;
+
+--
+-- TOC entry 230 (class 1255 OID 32910)
+-- Name: verify_imgproject(character varying, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION verify_imgproject(imgpath character varying, usern integer) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF EXISTS(SELECT
+              img_project,
+              name_project
+            FROM tb_projects
+            WHERE tb_projects.id_project = usern)
+  THEN
+    UPDATE tb_projects
+    SET img_project = imgPath
+    WHERE tb_projects.id_project = usern;
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END;
+$$;
+
+
+ALTER FUNCTION public.verify_imgproject(imgpath character varying, usern integer) OWNER TO postgres;
+
+--
+-- TOC entry 225 (class 1255 OID 32934)
+-- Name: verify_permission(integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION verify_permission(idproj integer, iduser integer) RETURNS TABLE(idproject integer, iduserr integer, permission integer)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_team
+            WHERE idproj = id_project AND iduser = id_user)
+  THEN
+    RETURN QUERY
+    SELECT
+      id_project,
+      id_user,
+      permissions
+    FROM tb_team
+    WHERE idproj = id_project AND iduser = id_user;
+  END IF;
+END;
+$$;
+
+
+ALTER FUNCTION public.verify_permission(idproj integer, iduser integer) OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1255 OID 16479)
+-- Name: verify_token(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION verify_token(usern character varying) RETURNS TABLE(usera character varying, status text)
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+  IF EXISTS(SELECT
+              l.username,
+              l.email
+            FROM tb_login l
+            WHERE l.username ILIKE $1 OR l.email ILIKE $1 AND "authEmail" = FALSE )
+  THEN
+    UPDATE tb_login l
+    SET "authEmail" = TRUE
+    WHERE l.username ILIKE $1 OR l.email ILIKE $1;
+    RETURN QUERY
+      SELECT
+    $1,
+    'Autenticado com sucesso' :: TEXT;
+  END IF;
+  IF EXISTS(SELECT
+              l.username,
+              l.email
+            FROM tb_login l
+            WHERE l.username ILIKE $1 OR l.email ILIKE $1 AND "authEmail" = TRUE)
+  THEN
+    RETURN QUERY
+    SELECT
+      $1,
+      'Já autenticado' :: TEXT;
+  END IF;
+END
+$_$;
+
+
+ALTER FUNCTION public.verify_token(usern character varying) OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 190 (class 1259 OID 16500)
+-- Name: tb_blocks; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE tb_blocks (
+    id_blocks integer NOT NULL,
+    name_blocks character varying(50) NOT NULL,
+    project_owner integer NOT NULL
+);
+
+
+ALTER TABLE tb_blocks OWNER TO postgres;
+
+--
+-- TOC entry 189 (class 1259 OID 16498)
+-- Name: tb_blocks_id_blocks_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE tb_blocks_id_blocks_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE tb_blocks_id_blocks_seq OWNER TO postgres;
+
+--
+-- TOC entry 2264 (class 0 OID 0)
+-- Dependencies: 189
+-- Name: tb_blocks_id_blocks_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE tb_blocks_id_blocks_seq OWNED BY tb_blocks.id_blocks;
+
+
+--
+-- TOC entry 195 (class 1259 OID 24615)
+-- Name: tb_checklist_tasks; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE tb_checklist_tasks (
+    id_checklist integer NOT NULL,
+    name_checklist character varying(20) NOT NULL,
+    id_task integer NOT NULL,
+    checked boolean NOT NULL
+);
+
+
+ALTER TABLE tb_checklist_tasks OWNER TO postgres;
+
+--
+-- TOC entry 194 (class 1259 OID 24613)
+-- Name: tb_checklist_tasks_id_checklist_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE tb_checklist_tasks_id_checklist_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE tb_checklist_tasks_id_checklist_seq OWNER TO postgres;
+
+--
+-- TOC entry 2265 (class 0 OID 0)
+-- Dependencies: 194
+-- Name: tb_checklist_tasks_id_checklist_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE tb_checklist_tasks_id_checklist_seq OWNED BY tb_checklist_tasks.id_checklist;
+
+
+--
+-- TOC entry 201 (class 1259 OID 24672)
+-- Name: tb_comments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE tb_comments (
+    id_comment integer NOT NULL,
+    id_task integer NOT NULL,
+    comment text NOT NULL
+);
+
+
+ALTER TABLE tb_comments OWNER TO postgres;
+
+--
+-- TOC entry 200 (class 1259 OID 24670)
+-- Name: tb_comments_id_comment_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE tb_comments_id_comment_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE tb_comments_id_comment_seq OWNER TO postgres;
+
+--
+-- TOC entry 2266 (class 0 OID 0)
+-- Dependencies: 200
+-- Name: tb_comments_id_comment_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE tb_comments_id_comment_seq OWNED BY tb_comments.id_comment;
+
+
+--
+-- TOC entry 185 (class 1259 OID 16437)
+-- Name: tb_login; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE tb_login (
+    email character varying(100) NOT NULL,
+    name character varying(80) NOT NULL,
+    password character varying(50),
+    profile_img character varying(50) DEFAULT '/imgs/default.png'::character varying,
+    username character varying(50) NOT NULL,
+    "authEmail" boolean DEFAULT false,
+    id_user integer NOT NULL
+);
+
+
+ALTER TABLE tb_login OWNER TO postgres;
+
+--
+-- TOC entry 186 (class 1259 OID 16483)
+-- Name: tb_login_id_user_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE tb_login_id_user_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE tb_login_id_user_seq OWNER TO postgres;
+
+--
+-- TOC entry 2267 (class 0 OID 0)
+-- Dependencies: 186
+-- Name: tb_login_id_user_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE tb_login_id_user_seq OWNED BY tb_login.id_user;
+
+
+--
+-- TOC entry 199 (class 1259 OID 24634)
+-- Name: tb_notifications; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE tb_notifications (
+    id_notification integer NOT NULL,
+    id_task integer,
+    id_block integer,
+    id_project integer,
+    id_user integer
+);
+
+
+ALTER TABLE tb_notifications OWNER TO postgres;
+
+--
+-- TOC entry 198 (class 1259 OID 24632)
+-- Name: tb_notifications_id_notification_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE tb_notifications_id_notification_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE tb_notifications_id_notification_seq OWNER TO postgres;
+
+--
+-- TOC entry 2268 (class 0 OID 0)
+-- Dependencies: 198
+-- Name: tb_notifications_id_notification_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE tb_notifications_id_notification_seq OWNED BY tb_notifications.id_notification;
+
+
+--
+-- TOC entry 188 (class 1259 OID 16492)
+-- Name: tb_projects; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE tb_projects (
+    id_project integer NOT NULL,
+    name_project character varying(20) NOT NULL,
+    id_user_owner integer NOT NULL,
+    description text,
+    img_project character varying(50) DEFAULT '/projects/default.png'::character varying,
+    active boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE tb_projects OWNER TO postgres;
+
+--
+-- TOC entry 187 (class 1259 OID 16490)
+-- Name: tb_projects_id_project_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE tb_projects_id_project_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE tb_projects_id_project_seq OWNER TO postgres;
+
+--
+-- TOC entry 2269 (class 0 OID 0)
+-- Dependencies: 187
+-- Name: tb_projects_id_project_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE tb_projects_id_project_seq OWNED BY tb_projects.id_project;
+
+
+--
+-- TOC entry 193 (class 1259 OID 24607)
+-- Name: tb_tasks; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE tb_tasks (
+    id_task integer NOT NULL,
+    name_task character varying(20) NOT NULL,
+    attachment character varying(20),
+    final_date timestamp without time zone,
+    id_block integer NOT NULL
+);
+
+
+ALTER TABLE tb_tasks OWNER TO postgres;
+
+--
+-- TOC entry 192 (class 1259 OID 24605)
+-- Name: tb_tasks_id_task_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE tb_tasks_id_task_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE tb_tasks_id_task_seq OWNER TO postgres;
+
+--
+-- TOC entry 2270 (class 0 OID 0)
+-- Dependencies: 192
+-- Name: tb_tasks_id_task_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE tb_tasks_id_task_seq OWNED BY tb_tasks.id_task;
+
+
+--
+-- TOC entry 191 (class 1259 OID 24587)
+-- Name: tb_team; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE tb_team (
+    id_project integer NOT NULL,
+    id_user integer NOT NULL,
+    permissions boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE tb_team OWNER TO postgres;
+
+--
+-- TOC entry 197 (class 1259 OID 24623)
+-- Name: tb_team_tasks; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE tb_team_tasks (
+    id_time_task integer NOT NULL,
+    id_task integer NOT NULL,
+    id_user integer NOT NULL
+);
+
+
+ALTER TABLE tb_team_tasks OWNER TO postgres;
+
+--
+-- TOC entry 196 (class 1259 OID 24621)
+-- Name: tb_time_tasks_id_time_task_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE tb_time_tasks_id_time_task_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE tb_time_tasks_id_time_task_seq OWNER TO postgres;
+
+--
+-- TOC entry 2271 (class 0 OID 0)
+-- Dependencies: 196
+-- Name: tb_time_tasks_id_time_task_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE tb_time_tasks_id_time_task_seq OWNED BY tb_team_tasks.id_time_task;
+
+
+--
+-- TOC entry 2089 (class 2604 OID 16503)
+-- Name: tb_blocks id_blocks; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_blocks ALTER COLUMN id_blocks SET DEFAULT nextval('tb_blocks_id_blocks_seq'::regclass);
+
+
+--
+-- TOC entry 2092 (class 2604 OID 24618)
+-- Name: tb_checklist_tasks id_checklist; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_checklist_tasks ALTER COLUMN id_checklist SET DEFAULT nextval('tb_checklist_tasks_id_checklist_seq'::regclass);
+
+
+--
+-- TOC entry 2095 (class 2604 OID 24675)
+-- Name: tb_comments id_comment; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_comments ALTER COLUMN id_comment SET DEFAULT nextval('tb_comments_id_comment_seq'::regclass);
+
+
+--
+-- TOC entry 2085 (class 2604 OID 16485)
+-- Name: tb_login id_user; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_login ALTER COLUMN id_user SET DEFAULT nextval('tb_login_id_user_seq'::regclass);
+
+
+--
+-- TOC entry 2094 (class 2604 OID 24637)
+-- Name: tb_notifications id_notification; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_notifications ALTER COLUMN id_notification SET DEFAULT nextval('tb_notifications_id_notification_seq'::regclass);
+
+
+--
+-- TOC entry 2086 (class 2604 OID 16495)
+-- Name: tb_projects id_project; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_projects ALTER COLUMN id_project SET DEFAULT nextval('tb_projects_id_project_seq'::regclass);
+
+
+--
+-- TOC entry 2091 (class 2604 OID 24610)
+-- Name: tb_tasks id_task; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_tasks ALTER COLUMN id_task SET DEFAULT nextval('tb_tasks_id_task_seq'::regclass);
+
+
+--
+-- TOC entry 2093 (class 2604 OID 24626)
+-- Name: tb_team_tasks id_time_task; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_team_tasks ALTER COLUMN id_time_task SET DEFAULT nextval('tb_time_tasks_id_time_task_seq'::regclass);
+
+
+--
+-- TOC entry 2245 (class 0 OID 16500)
+-- Dependencies: 190
+-- Data for Name: tb_blocks; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tb_blocks (id_blocks, name_blocks, project_owner) FROM stdin;
+1	joao	73
+2	joao2	73
+\.
+
+
+--
+-- TOC entry 2272 (class 0 OID 0)
+-- Dependencies: 189
+-- Name: tb_blocks_id_blocks_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('tb_blocks_id_blocks_seq', 2, true);
+
+
+--
+-- TOC entry 2250 (class 0 OID 24615)
+-- Dependencies: 195
+-- Data for Name: tb_checklist_tasks; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tb_checklist_tasks (id_checklist, name_checklist, id_task, checked) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2273 (class 0 OID 0)
+-- Dependencies: 194
+-- Name: tb_checklist_tasks_id_checklist_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('tb_checklist_tasks_id_checklist_seq', 1, false);
+
+
+--
+-- TOC entry 2256 (class 0 OID 24672)
+-- Dependencies: 201
+-- Data for Name: tb_comments; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tb_comments (id_comment, id_task, comment) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2274 (class 0 OID 0)
+-- Dependencies: 200
+-- Name: tb_comments_id_comment_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('tb_comments_id_comment_seq', 1, false);
+
+
+--
+-- TOC entry 2240 (class 0 OID 16437)
+-- Dependencies: 185
+-- Data for Name: tb_login; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tb_login (email, name, password, profile_img, username, "authEmail", id_user) FROM stdin;
+gabriel.ferreira25@smn.com.br	Gabriel Ferreira	44240fe37d8a37f17177c71b4f1022a2	/imgsUser/picture_gabriel1.png	gabriel1	t	22
+joao.@smn.com.br	Joao Vitor	83b5d2670de5eebbaa118604dff06b1d	/imgsUser/default.png	joao15592	f	31
+joao.vtor@smn.com.br	Joao Vitor	83b5d2670de5eebbaa118604dff06b1d	/imgsUser/default.png	joao155	f	32
+joao.vitor22@smn.com.br	joao vitor	dccd96c256bc7dd39bae41a405f25e43	/imgsUser/default.png	joao155945	f	37
+gabrielferrer@outlook.c.br	Gabriel	44240fe37d8a37f17177c71b4f1022a2	/imgsUser/default.png	Gabriel7467	f	30
+gabrielferrer@outlook.com.br	Gabriel	44240fe37d8a37f17177c71b4f1022a2	/imgsUser/default.png	Gabriel9634	t	34
+Miguakkk@smn.com.br	Miguel	44240fe37d8a37f17177c71b4f1022a2	/imgsUser/default.png	Miguel4977	f	35
+joao.vitor1@smn.com.br	Joao Vitor	c7a3390219a49fb03d4cf90cd18701c4	/imgsUser/default.png	joao1559	f	25
+gabriel@smnn.com.br	Gabriel	44240fe37d8a37f17177c71b4f1022a2	/imgsUser/default.png	Gabriel4285	t	24
+goku@smn.com.br	Goku	44240fe37d8a37f17177c71b4f1022a2	/imgsUser/default.png	Goku8209	f	26
+teste@smn.com.br	Teste	44240fe37d8a37f17177c71b4f1022a2	/imgsUser/default.png	Teste8221	f	27
+gabriel.ferreira@smn.com.br	Gabriel	38195fa4bd7b056ec7bb30b78c035302	/imgsUser/default.png	Gabriel	t	14
+teste2@smn.com.br	teste	44240fe37d8a37f17177c71b4f1022a2	/imgsUser/default.png	teste5839	f	28
+gabriel.ferreira2@smn.com.br	Gabriel	01c816ccbf8bab8a13479a6b51026cca	/imgsUser/default.png	Gabriel290	t	18
+gabrielferrer2@outlook.com.br	Gabriel	38195fa4bd7b056ec7bb30b78c035302	/imgsUser/default.png	Gabriel55	t	19
+teste3@smn.com.br	teste	44240fe37d8a37f17177c71b4f1022a2	/imgsUser/default.png	teste844	f	29
+gabrielf@smn.com.br	gabriel	38195fa4bd7b056ec7bb30b78c035302	/imgsUser/default.png	gabriel16	t	21
+gabrielferrer@outlook.co	Gabriel	01c816ccbf8bab8a13479a6b51026cca	/imgsUser/default.png	Gabriel2029	t	17
+joao.vitor@smn.com.r	Joao Vitor	83b5d2670de5eebbaa118604dff06b1d	/imgsUser/default.png	joao15	t	33
+joao.vitor@smn.com.b	Joao Vitor	1e3c59a8d87d6084dae5750a785e80b4	/imgsUser/default.png	joao150	t	20
+joao.vitor@smn.com.br	joao vitor	dccd96c256bc7dd39bae41a405f25e43	/imgsUser/default.png	joao15593	f	36
+\.
+
+
+--
+-- TOC entry 2275 (class 0 OID 0)
+-- Dependencies: 186
+-- Name: tb_login_id_user_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('tb_login_id_user_seq', 37, true);
+
+
+--
+-- TOC entry 2254 (class 0 OID 24634)
+-- Dependencies: 199
+-- Data for Name: tb_notifications; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tb_notifications (id_notification, id_task, id_block, id_project, id_user) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2276 (class 0 OID 0)
+-- Dependencies: 198
+-- Name: tb_notifications_id_notification_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('tb_notifications_id_notification_seq', 1, false);
+
+
+--
+-- TOC entry 2243 (class 0 OID 16492)
+-- Dependencies: 188
+-- Data for Name: tb_projects; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tb_projects (id_project, name_project, id_user_owner, description, img_project, active) FROM stdin;
+100	OHNA	22	OHNANANANAN	/imgsProjects/picture_100.png	t
+103	pa	25	pa	/imgsProjects/default.png	t
+104	tu	25	tu	/imgsProjects/default.png	t
+105	Teste	22	Projeto Teste	/imgsProjects/default.png	t
+73	FakeTrello	25	gaybriel	/imgsProjects/picture_73.png	t
+90	Gabigol	22	fjskanfa	/imgsProjects/picture_90.png	t
+96	OHNANANA	22	OHNANANANA	/imgsProjects/picture_96.png	t
+99	Teste	25	só estou testando essa porra	/imgsProjects/default.png	f
+\.
+
+
+--
+-- TOC entry 2277 (class 0 OID 0)
+-- Dependencies: 187
+-- Name: tb_projects_id_project_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('tb_projects_id_project_seq', 105, true);
+
+
+--
+-- TOC entry 2248 (class 0 OID 24607)
+-- Dependencies: 193
+-- Data for Name: tb_tasks; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tb_tasks (id_task, name_task, attachment, final_date, id_block) FROM stdin;
+1	Adicionar botoes	\N	2012-12-18 00:00:00	1
+2	JoaoTeste	\N	2017-09-22 00:00:00	2
+3	JoaoTeste	\N	2017-09-22 00:00:00	2
+\.
+
+
+--
+-- TOC entry 2278 (class 0 OID 0)
+-- Dependencies: 192
+-- Name: tb_tasks_id_task_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('tb_tasks_id_task_seq', 3, true);
+
+
+--
+-- TOC entry 2246 (class 0 OID 24587)
+-- Dependencies: 191
+-- Data for Name: tb_team; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tb_team (id_project, id_user, permissions) FROM stdin;
+73	37	f
+73	31	f
+73	32	f
+73	25	f
+73	22	t
+105	22	t
+73	26	t
+73	34	t
+103	25	t
+104	25	t
+99	25	t
+\.
+
+
+--
+-- TOC entry 2252 (class 0 OID 24623)
+-- Dependencies: 197
+-- Data for Name: tb_team_tasks; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tb_team_tasks (id_time_task, id_task, id_user) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2279 (class 0 OID 0)
+-- Dependencies: 196
+-- Name: tb_time_tasks_id_time_task_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('tb_time_tasks_id_time_task_seq', 1, false);
+
+
+--
+-- TOC entry 2102 (class 2606 OID 16505)
+-- Name: tb_blocks tb_blocks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_blocks
+    ADD CONSTRAINT tb_blocks_pkey PRIMARY KEY (id_blocks);
+
+
+--
+-- TOC entry 2106 (class 2606 OID 24620)
+-- Name: tb_checklist_tasks tb_checklist_tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_checklist_tasks
+    ADD CONSTRAINT tb_checklist_tasks_pkey PRIMARY KEY (id_checklist);
+
+
+--
+-- TOC entry 2110 (class 2606 OID 24680)
+-- Name: tb_comments tb_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_comments
+    ADD CONSTRAINT tb_comments_pkey PRIMARY KEY (id_comment);
+
+
+--
+-- TOC entry 2097 (class 2606 OID 16513)
+-- Name: tb_login tb_login_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_login
+    ADD CONSTRAINT tb_login_pkey PRIMARY KEY (id_user);
+
+
+--
+-- TOC entry 2108 (class 2606 OID 24639)
+-- Name: tb_notifications tb_notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_notifications
+    ADD CONSTRAINT tb_notifications_pkey PRIMARY KEY (id_notification);
+
+
+--
+-- TOC entry 2099 (class 2606 OID 16497)
+-- Name: tb_projects tb_projects_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_projects
+    ADD CONSTRAINT tb_projects_pkey PRIMARY KEY (id_project);
+
+
+--
+-- TOC entry 2104 (class 2606 OID 24612)
+-- Name: tb_tasks tb_tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_tasks
+    ADD CONSTRAINT tb_tasks_pkey PRIMARY KEY (id_task);
+
+
+--
+-- TOC entry 2100 (class 1259 OID 32948)
+-- Name: tb_blocks_name_blocks_uindex; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX tb_blocks_name_blocks_uindex ON tb_blocks USING btree (name_blocks);
+
+
+--
+-- TOC entry 2115 (class 2606 OID 24627)
+-- Name: tb_tasks id_block_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_tasks
+    ADD CONSTRAINT id_block_fkey FOREIGN KEY (id_block) REFERENCES tb_blocks(id_blocks);
+
+
+--
+-- TOC entry 2120 (class 2606 OID 24650)
+-- Name: tb_notifications id_block_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_notifications
+    ADD CONSTRAINT id_block_fkey FOREIGN KEY (id_block) REFERENCES tb_blocks(id_blocks);
+
+
+--
+-- TOC entry 2114 (class 2606 OID 24596)
+-- Name: tb_team id_project_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_team
+    ADD CONSTRAINT id_project_fkey FOREIGN KEY (id_project) REFERENCES tb_projects(id_project);
+
+
+--
+-- TOC entry 2121 (class 2606 OID 24655)
+-- Name: tb_notifications id_project_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_notifications
+    ADD CONSTRAINT id_project_fkey FOREIGN KEY (id_project) REFERENCES tb_projects(id_project);
+
+
+--
+-- TOC entry 2119 (class 2606 OID 24645)
+-- Name: tb_notifications id_task_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_notifications
+    ADD CONSTRAINT id_task_fkey FOREIGN KEY (id_task) REFERENCES tb_tasks(id_task);
+
+
+--
+-- TOC entry 2116 (class 2606 OID 24660)
+-- Name: tb_team_tasks id_task_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_team_tasks
+    ADD CONSTRAINT id_task_fkey FOREIGN KEY (id_task) REFERENCES tb_tasks(id_task);
+
+
+--
+-- TOC entry 2122 (class 2606 OID 24681)
+-- Name: tb_comments id_task_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_comments
+    ADD CONSTRAINT id_task_fkey FOREIGN KEY (id_task) REFERENCES tb_tasks(id_task);
+
+
+--
+-- TOC entry 2113 (class 2606 OID 24591)
+-- Name: tb_team id_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_team
+    ADD CONSTRAINT id_user_fkey FOREIGN KEY (id_user) REFERENCES tb_login(id_user);
+
+
+--
+-- TOC entry 2118 (class 2606 OID 24640)
+-- Name: tb_notifications id_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_notifications
+    ADD CONSTRAINT id_user_fkey FOREIGN KEY (id_user) REFERENCES tb_login(id_user);
+
+
+--
+-- TOC entry 2117 (class 2606 OID 24665)
+-- Name: tb_team_tasks id_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_team_tasks
+    ADD CONSTRAINT id_user_fkey FOREIGN KEY (id_user) REFERENCES tb_login(id_user);
+
+
+--
+-- TOC entry 2112 (class 2606 OID 16507)
+-- Name: tb_blocks project_block; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_blocks
+    ADD CONSTRAINT project_block FOREIGN KEY (project_owner) REFERENCES tb_projects(id_project);
+
+
+--
+-- TOC entry 2111 (class 2606 OID 16514)
+-- Name: tb_projects project_user; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tb_projects
+    ADD CONSTRAINT project_user FOREIGN KEY (id_user_owner) REFERENCES tb_login(id_user);
+
+
+-- Completed on 2017-09-26 09:24:49
+
+--
+-- PostgreSQL database dump complete
+--
+
