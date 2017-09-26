@@ -1,0 +1,20 @@
+div {
+  display: none;
+}
+
+@media screen and (max-width: 480px) {
+  div {
+    display: block;
+    width: 42px;
+    height: 42px;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    border-radius: 50%;
+    background-color: #9E9E9E;
+    background-image: url("../../../assets/arrow_back.svg");
+    background-size: 24px;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+}

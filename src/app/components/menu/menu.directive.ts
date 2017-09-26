@@ -69,19 +69,19 @@ export class MenuDirective implements ngAfterViewInit {
     this.viewRef.detectChanges();
 
     this.viewRef.rootNodes.forEach(rootNode => {
-      rootNode.style = 'position: absolute; top:' + (coordinate.y + 35) + 'px;' + 'left:' + (coordinate.x - 150) + 'px;';
+      rootNode.style = 'position: absolute; top:' + (coordinate.y + 35) + 'px;' + 'left:' + (coordinate.x - 140) + 'px;';
       rootNode.classList = 'open';
       document.body.appendChild(rootNode);
 
       if (rootNode.clientWidth) {
-        console.log(rootNode);
+        // console.log(rootNode);
       }
     });
   }
 
   close() {
     if(this.viewContainerRef.length) {
-      console.log('Deveria apagar');
+      // console.log('Deveria apagar');
       const viewRef = this.viewRef;
 
       viewRef.rootNodes.forEach(rootNode => {

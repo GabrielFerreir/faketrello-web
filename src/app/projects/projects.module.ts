@@ -6,12 +6,14 @@ import { FormsModule } from '@angular/forms';
 import { SnackbarsModule } from '../components/snackbars/snackbars.module';
 import { AlterarProjectsComponent } from './alterar-projects/alterar-projects.component';
 import { PesquisaDeMembrosDoProjetoPipe } from './pesquisa-de-membros-do-projeto.pipe';
+import {ArrowBackModule} from "../components/arrow-back/arrow-back.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    SnackbarsModule
+    SnackbarsModule,
+    ArrowBackModule
   ],
   declarations: [
     AddProjectsComponent,

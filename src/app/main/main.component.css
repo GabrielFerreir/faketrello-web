@@ -9,9 +9,9 @@ header {
   width: 100vw;
   height: 56px;
   background-color: #26C6DA;
-  box-shadow: 0px 8px 10px rgba(0,0,0,.14),
-              0px 3px 14px rgba(0,0,0,.12),
-              0px 4px 15px rgba(0,0,0,.20);
+  box-shadow: 0px 0px 4px rgba(0,0,0,.14),
+              0px 3px 4px rgba(0,0,0,.12),
+              0px 1px 5px rgba(0,0,0,.20);
   user-select: none;
   box-sizing: border-box;
   position: absolute;
@@ -172,44 +172,6 @@ nav ul .titulo {
   color: #FFF;
 }
 
-/*.opPerfil {*/
-  /*position: absolute;*/
-  /*top: 56px;*/
-  /*right: 15px;*/
-  /*width: 170px;*/
-  /*background-color: #FFF;*/
-  /*!*z-index: 1;*!*/
-  /*box-shadow: 0px 9px 12px rgba(0,0,0,.14),*/
-              /*0px 3px 16px rgba(0,0,0,.12),*/
-              /*0px 5px 6px rgba(0,0,0,.20);*/
-  /*transform-origin: top right;*/
-  /*transform: scale(0);*/
-  /*transition: All 280ms ease-in;*/
-/*}*/
-/*.opPerfil ul {*/
-  /*list-style: none;*/
-  /*cursor: pointer;*/
-/*}*/
-/*.opPerfil ul li {*/
-  /*width: 100%;*/
-  /*height: 35px;*/
-/*}*/
-/*.opPerfil ul li img {*/
-  /*float: left;*/
-  /*margin-left: 5px;*/
-  /*margin-top: 5.5px;*/
-  /*width: 24px;*/
-/*}*/
-/*.opPerfil ul li span {*/
-  /*float: left;*/
-  /*margin-left: 5px;*/
-  /*line-height: 35px;*/
-  /*font-size: 16px;*/
-  /*outline: none;*/
-/*}*/
-/*.opPerfil {*/
-  /*background-color: #ff0000;*/
-/*}*/
 
 header .checkPerfil:checked ~ .opPerfil {
     transform: scale(1);
@@ -261,9 +223,6 @@ header .checkNav:checked ~ nav {
   top: 8px;
   right: 8px;
 }
-
-
-
 .container {
   width: 100vw;
   height: calc(100vh - 56px);
@@ -271,4 +230,13 @@ header .checkNav:checked ~ nav {
   position: absolute;
   /*z-index: 0;*/
   top: 56px;
+}
+
+@media screen and (max-width: 480px) {
+  .perfil span {
+    display: none;
+  }
+  .perfil {
+    min-width: auto;
+  }
 }

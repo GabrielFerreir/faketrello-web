@@ -9,6 +9,9 @@ export class DragDropComponent implements OnInit {
   @ViewChild('container') container: ElementRef;
   @ViewChild('popup1') popup1: ElementRef;
 
+  /* MOBILE */
+  isMobile = false;
+
   /* TESTE TESTE TESTE*/
       popup;
   /* TESTE TESTE TESTE*/
@@ -48,13 +51,36 @@ export class DragDropComponent implements OnInit {
         this.getPosInicial(e);
       });
     }
+  /* TOUCH */
+    for (let i = 0; i < elemento.length; i++) {
+      elemento[i].addEventListener('touchstart', (e) => {
+        this.isMobile = true;
+        this.getPosInicial(e);
+        console.log('touch');
+      });
+    }
+  /* TOUCH */
 
       this.container.nativeElement.addEventListener('mousemove',(e) => {
         this.getMouseMove(e);
       });
+  /* TOUCH */
+      this.container.nativeElement.addEventListener('touchmove',(e) => {
+        this.getMouseMove(e);
+        console.log('touchmove');
+      });
+  /* TOUCH */
+
     this.container.nativeElement.addEventListener('mouseup',(e) => {
       this.getPosFinal(e);
     });
+  /* TOUCH */
+    this.container.nativeElement.addEventListener('touchend',(e) => {
+      this.getPosFinal(e);
+      console.log('touchEnd');
+
+    });
+  /* TOUCH */
 
 
     // larguraDaCaixa
@@ -66,9 +92,15 @@ export class DragDropComponent implements OnInit {
 
   getPosInicial(event) {
     // this.getScroll();
-    console.log('Pos Inicial');
+    // console.log(event);
     this.posInicialX = event.clientX;
     this.posInicialY = event.clientY;
+
+    if(this.isMobile) {
+      this.posInicialX = event.changedTouches["0"].clientX;
+      this.posInicialY = event.changedTouches["0"].clientY;
+    }
+
     this.bloco = event.target;
 
     // console.log(this.bloco);
@@ -110,6 +142,10 @@ try {
       }
       this.diferencaY = event.clientY - this.posInicialY;
 
+      if(this.isMobile) {
+          this.diferencaX = (event.changedTouches["0"].clientX) - this.posInicialX;
+          this.diferencaY = (event.changedTouches["0"].clientY) - this.posInicialY;
+      }
 
       this.bloco.style.transform = 'translate(' + this.diferencaX + 'px, ' + this.diferencaY + 'px) rotate(7deg)';
       this.bloco.style.opacity = '0.5';
@@ -118,7 +154,9 @@ try {
       this.bloco.style.width = (this.larguraDaCaixa - 10) + 'px';
       // this.bloco.style.top = this.posInicialY - this.bloco.clientHeight + 'px';
       // this.bloco.style.left = this.posInicialX - this.larguraDaCaixa + 'px';
-      // console.log(this.sombra);
+      console.log("--------------");
+      console.log(this.sombra);
+      console.log("--------------");
 
       if(this.pegaLocalNaOrdem(event)) {
         this.caixaDestino().insertBefore(this.sombra, this.pegaLocalNaOrdem(event));
@@ -161,9 +199,15 @@ try {
     }
   }
   pegaLocalNaOrdem(event) {
+    console.log('LOCAL');
     this.posFinalY = event.clientY - 40;
 
+    if(this.isMobile) {
+      this.posFinalY = event.changedTouches["0"].clientY - 40;
+    }
+
     let els = this.caixaDestino().querySelectorAll('.elemento');
+    console.log(els);
     let verificacao = false;
     let local = null;
     for(let i =0; i < els.length; i++) {
@@ -178,6 +222,7 @@ try {
     if( els && els.length == 0) {
       local = null;
     }
+    console.log('LOCAL');
     return local;
   }
   caixaDestino() {
@@ -197,7 +242,7 @@ try {
     } else {
         this.cxDestino = this.caixa;
     }
-    // console.log(this.cxDestino);
+    console.log(this.cxDestino);
     return this.cxDestino;
   }
   reset() {
@@ -225,6 +270,11 @@ try {
       elemento[i].addEventListener('mousedown', (e) => {
         this.getPosInicial(e);
       });
+      /* TOUCH */
+      elemento[i].addEventListener('touchstart', (e) => {
+        this.getPosInicial(e);
+      });
+      /* FIM TOUCH */
     }
   }
   teste() {
