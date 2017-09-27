@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="75b6d389-a43b-4d52-b051-390ab3f653e2" name="Default" comment="">
+<<<<<<< HEAD
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SQL/ApiLogin" afterPath="$PROJECT_DIR$/SQL/ApiLogin" />
+=======
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SQL/bancoo" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app-config.js" afterPath="$PROJECT_DIR$/app-config.js" />
+>>>>>>> origin/master
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controller/projectsController.js" afterPath="$PROJECT_DIR$/controller/projectsController.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -143,8 +148,13 @@
       <file leaf-file-name="projectsController.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controller/projectsController.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="184">
               <caret line="220" column="61" lean-forward="false" selection-start-line="220" selection-start-column="61" selection-end-line="220" selection-end-column="61" />
+=======
+            <state relative-caret-position="288">
+              <caret line="220" column="77" lean-forward="true" selection-start-line="220" selection-start-column="77" selection-end-line="220" selection-end-column="77" />
+>>>>>>> origin/master
               <folding>
                 <element signature="e#193#1449#0" expanded="false" />
                 <element signature="e#754#1139#0" expanded="false" />
@@ -164,8 +174,13 @@
       <file leaf-file-name="ApiLogin" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/SQL/ApiLogin">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="332">
               <caret line="737" column="37" lean-forward="true" selection-start-line="737" selection-start-column="37" selection-end-line="737" selection-end-column="37" />
+=======
+            <state relative-caret-position="-340">
+              <caret line="0" column="2" lean-forward="false" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="28" />
+>>>>>>> origin/master
               <folding>
                 <element signature="e#91#625#0" expanded="false" />
                 <element signature="e#628#1010#0" expanded="false" />
@@ -265,6 +280,10 @@
         <option value="$PROJECT_DIR$/app-server.js" />
         <option value="$PROJECT_DIR$/app-config.js" />
         <option value="$PROJECT_DIR$/SQL/ApiLogin" />
+<<<<<<< HEAD
+=======
+        <option value="$PROJECT_DIR$/app-config.js" />
+>>>>>>> origin/master
         <option value="$PROJECT_DIR$/controller/projectsController.js" />
       </list>
     </option>
@@ -515,7 +534,11 @@
       <workItem from="1506079806039" duration="18178000" />
       <workItem from="1506338842730" duration="20694000" />
       <workItem from="1506428047691" duration="21238000" />
+<<<<<<< HEAD
       <workItem from="1506511507934" duration="15214000" />
+=======
+      <workItem from="1506511507934" duration="14736000" />
+>>>>>>> origin/master
     </task>
     <task id="LOCAL-00001" summary="Mostrar projetos finalizado">
       <created>1505421275097</created>
@@ -528,7 +551,11 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="531423000" />
+=======
+    <option name="totallyTimeSpent" value="530945000" />
+>>>>>>> origin/master
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -853,6 +880,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/app-server.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
@@ -873,6 +901,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="332">
           <caret line="737" column="37" lean-forward="true" selection-start-line="737" selection-start-column="37" selection-end-line="737" selection-end-column="37" />
+=======
+    <entry file="file://$PROJECT_DIR$/SQL/ApiLogin">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-340">
+          <caret line="0" column="2" lean-forward="false" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="28" />
+>>>>>>> origin/master
           <folding>
             <element signature="e#91#625#0" expanded="false" />
             <element signature="e#628#1010#0" expanded="false" />
@@ -910,10 +944,33 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/controller/projectsController.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
           <caret line="220" column="61" lean-forward="false" selection-start-line="220" selection-start-column="61" selection-end-line="220" selection-end-column="61" />
+=======
+    <entry file="file://$PROJECT_DIR$/app-server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="32" column="27" lean-forward="false" selection-start-line="32" selection-start-column="27" selection-end-line="32" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app-config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="81" lean-forward="true" selection-start-line="9" selection-start-column="81" selection-end-line="9" selection-end-column="81" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/projectsController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="220" column="77" lean-forward="true" selection-start-line="220" selection-start-column="77" selection-end-line="220" selection-end-column="77" />
+>>>>>>> origin/master
           <folding>
             <element signature="e#193#1449#0" expanded="false" />
             <element signature="e#754#1139#0" expanded="false" />
