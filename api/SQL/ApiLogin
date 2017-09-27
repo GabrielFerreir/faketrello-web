@@ -566,26 +566,26 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION changeteam(idproj     INTEGER, idusert INTEGER, permission INTEGER,
-                                      idprojalvo INTEGER, iduseralvo INTEGER)
+CREATE OR REPLACE FUNCTION removeUsersTeam(idproj     INTEGER, idusert INTEGER, permission BOOLEAN,
+                                           iduseralvo INTEGER)
   RETURNS TABLE(
     statusCode INTEGER
   ) AS $$
 DECLARE
   vStatus INTEGER;
 BEGIN
-  IF permission <> 2
+  IF permission <> FALSE
   THEN
     IF EXISTS(SELECT *
               FROM tb_team
               WHERE idproj = id_project AND id_user = idusert)
        AND EXISTS(SELECT *
                   FROM tb_team
-                  WHERE idprojalvo = id_project AND
+                  WHERE idproj = id_project AND
                         iduseralvo = id_user)
     THEN
       DELETE FROM tb_team
-      WHERE idprojalvo = id_project AND
+      WHERE idproj = id_project AND
             id_user = iduseralvo
       RETURNING 200
         INTO
@@ -735,15 +735,14 @@ END;
 $$
 LANGUAGE plpgsql;
 
---SELECT * FROM searchUsers('gab',73);
+--SELECT * FROM searchUsers('a',73);
 
 CREATE OR REPLACE FUNCTION searchUsers(pUser CHARACTER VARYING, idProject INTEGER)
   RETURNS TABLE(
     idUser      INTEGER,
     nameUser    VARCHAR(50),
     username    VARCHAR(20),
-    imgUser     VARCHAR(50),
-    permissions BOOLEAN
+    imgUser     VARCHAR(50)
   ) AS $$
 DECLARE
   vIdUser INTEGER [];
@@ -759,36 +758,21 @@ BEGIN
                       WHERE tb_login.username ILIKE '%' || pUser || '%' OR
                             email ILIKE '%' || pUser || '%' OR
                             name ILIKE '%' || pUser || '%');
-    IF EXISTS(SELECT *
-              FROM tb_team
-              WHERE tb_team.id_user = ANY (vIdUser) AND id_project = idProject)
-    THEN
-      RETURN QUERY
-      SELECT
-        tb_login.id_user,
-        name,
-        tb_login.username,
-        profile_img,
-        tb_team.permissions
-      FROM tb_login
-        INNER JOIN tb_team ON tb_login.id_user = tb_team.id_user
-      WHERE tb_login.id_user = ANY (vIdUser) AND id_project = idProject;
-    ELSE RETURN QUERY
+
+    RETURN QUERY
     SELECT
       tb_login.id_user,
       name,
       tb_login.username,
-      profile_img,
-      NULL :: BOOLEAN
+      profile_img
     FROM tb_login
     WHERE tb_login.id_user = ANY (vIdUser);
     END IF;
-  END IF;
 END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION insertUsersTasks(users JSON)
+CREATE OR REPLACE FUNCTION insertTeamTasks(users JSON)
   RETURNS BOOLEAN AS $$
 BEGIN
   INSERT INTO tb_team_tasks (id_task, id_user)
@@ -803,4 +787,19 @@ BEGIN
   RETURN TRUE;
 END;
 $$
-  LANGUAGE plpgsql;
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION newComment(pIdTask INTEGER, pComment TEXT)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_tasks
+            WHERE id_task = pIdTask)
+  THEN
+    INSERT INTO tb_comments (id_task, comment) VALUES (pIdTask, pComment);
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;

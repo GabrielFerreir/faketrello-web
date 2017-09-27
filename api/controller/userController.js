@@ -231,24 +231,28 @@
       } else {
         auth = auth.split('Bearer').pop().trim()
       }
-      jwt.verify(auth, PASSWORD, function (error, data) {
-        if (error) {
-          reject(error)
-          res.status(401).json({error: 'Sessão invalida'})
-        } else {
-          db.any('SELECT * FROM consultuser($1);', [data.user])
-            .then(data => {
-              if (!data[0]) {
-                res.status(404).json({result: 'Nao encontrado'})
-              } else {
-                if (req.called === 1) {
-                  return resolve(data[0])
+      if (!PASSWORD) {
+        res.status(401).json({error: 'Token expirou'})
+      } else {
+        jwt.verify(auth, PASSWORD, function (error, data) {
+          if (error) {
+            res.status(401).json({error: 'Sessão invalida'})
+            reject(error)
+          } else {
+            db.any('SELECT * FROM consultuser($1);', [data.user])
+              .then(data => {
+                if (!data[0]) {
+                  res.status(404).json({result: 'Nao encontrado'})
+                } else {
+                  if (req.called === 1) {
+                    return resolve(data[0])
+                  }
+                  res.status(200).json(data[0])
                 }
-                res.status(200).json(data[0])
-              }
-            })
-        }
-      })
+              })
+          }
+        })
+      }
     })
   }
   //Manda email de confirmacao
@@ -425,7 +429,7 @@
         }
       })
   }
-
+  //Verifica se o email é valido e envia o email
   exports.verifyEmail = function (req, res) {
     db.any('SELECT * FROM emailexists($1);', [req.body.email])
       .then(data => {

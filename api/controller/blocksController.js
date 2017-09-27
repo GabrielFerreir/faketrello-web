@@ -81,7 +81,26 @@ exports.newtask = function (req, res) {
       }
     })
 }
-
+//Cria as checklists no banco
 exports.newChecklist = function (req, res) {
-
+  let json = req.body.jsonChecklists
+  db.any('SELECT * FROM buildChecklist($1,$2);', [req.params.id, JSON.stringify(json)])
+    .then(data => {
+      if (!data) {
+        res.status(404).json({error: 'Tarefa inexistente'})
+      } else {
+        res.status(200).json({result: 'Checklist criada com sucesso'})
+      }
+    })
+}
+//Cria comentario nas tarefas
+exports.newComment = function (req, res) {
+  db.any('SELECT * FROM newComment($1,$2)', [req.params.id, req.body.comment])
+    .then(data => {
+      if (data) {
+        res.status(200).json({result: 'Comentário adicionado a tarefa'})
+      } else {
+        res.status(404).json({error: 'Tarefa nao encontrada no banco'})
+      }
+    })
 }
