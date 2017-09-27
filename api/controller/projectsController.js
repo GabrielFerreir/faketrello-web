@@ -44,6 +44,7 @@ exports.newProject = async function (req, res) {
       }
     })
 }
+
 //Mostra os projetos do usuario na tela home
 exports.infoProject = async function (req, res) {
   req.called = 1
@@ -58,6 +59,7 @@ exports.infoProject = async function (req, res) {
       }
     })
 }
+
 //Mostra informações do projeto especifico
 exports.infoProjectSearch = function (req, res) {
   let auth = req.headers.authorization
@@ -83,6 +85,7 @@ exports.infoProjectSearch = function (req, res) {
     }
   })
 }
+
 //Apaga projetos
 exports.deleteproject = function (req, res) {
   let auth = req.headers.authorization
@@ -107,6 +110,7 @@ exports.deleteproject = function (req, res) {
     }
   })
 }
+
 //Altera dados do projeto
 exports.changeProject = function (req, res) {
   let auth = req.headers.authorization
@@ -151,6 +155,7 @@ exports.changeProject = function (req, res) {
   })
 
 }
+
 //Insere o time do projeto
 exports.insertTeam = function (req, res) {
   let json = req.body.team
@@ -163,6 +168,7 @@ exports.insertTeam = function (req, res) {
       }
     })
 }
+
 //Verifica se a permissao do usuario no projeto permite alterações
 exports.verifyPermission = function (req, res) {
   return new Promise(function (resolve, reject) {
@@ -191,6 +197,7 @@ exports.verifyPermission = function (req, res) {
 
   })
 }
+
 //Retira uma pessoa do time
 exports.removeUserTeam = async function (req, res) {
   req.body.idproject = req.params.id
@@ -206,6 +213,7 @@ exports.removeUserTeam = async function (req, res) {
       }
     })
 }
+
 //Pesquisa usuarios
 exports.searchUsers = function (req, res) {
   let idProject = req.params.id

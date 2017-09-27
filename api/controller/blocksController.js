@@ -12,6 +12,7 @@ exports.newblock = function (req, res) {
       }
     })
 }
+
 //Mostra os blocos do projeto
 exports.seachblock = function (req, res) {
   db.any('SELECT * FROM searchBlock($1)', [req.body.newname])
@@ -23,6 +24,7 @@ exports.seachblock = function (req, res) {
       }
     })
 }
+
 //Deleta um bloco
 exports.deleteBlock = function (req, res) {
   db.any('SELECT * FROM deleteBlock($1)', [req.body.nameBlock])
@@ -34,6 +36,7 @@ exports.deleteBlock = function (req, res) {
       }
     })
 }
+
 //Cria arquivo do anexo no servidor
 exports.buildAttachment = function (req, res) {
   return new Promise(async function (resolve, reject) {
@@ -60,6 +63,7 @@ exports.buildAttachment = function (req, res) {
     })
   })
 }
+
 //Cria uma nova tarefa
 exports.newtask = function (req, res) {
   db.any('SELECT * FROM newtasks($1,$2,$3,$4)', [req.body.nameTask, null, req.body.finalDate, req.body.idBlock])
@@ -81,6 +85,7 @@ exports.newtask = function (req, res) {
       }
     })
 }
+
 //Cria as checklists no banco
 exports.newChecklist = function (req, res) {
   let json = req.body.jsonChecklists
@@ -93,6 +98,7 @@ exports.newChecklist = function (req, res) {
       }
     })
 }
+
 //Cria comentario nas tarefas
 exports.newComment = function (req, res) {
   db.any('SELECT * FROM newComment($1,$2)', [req.params.id, req.body.comment])

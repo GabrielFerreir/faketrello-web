@@ -17,11 +17,11 @@
   app.post('/uploadImg', userController.imgs)
   app.get('/user', userController.infoUser)
   app.put('/authEmail', userController.authEmail)
-  //app.post('/lostPass', userController.emailPassword)
   app.get('/authentication', userController.validaToken)
   app.post('/newpass', userController.verifyEmail)
   app.post('/resendEmail', userController.verifyEmail)
   app.delete('/deleteUser', userController.deleteUser)
+
   //Parte de projetos
   app.post('/project', projectsController.newProject)
   app.get('/project', projectsController.infoProject)
@@ -31,6 +31,7 @@
   app.post('/insertUser', projectsController.insertTeam)
   app.delete('/userteam/:id', projectsController.removeUserTeam)
   app.get('/searchMembers/:id', projectsController.searchUsers)
+
   //Parte de blocos
   app.post('/newblock/:id', blocksController.newblock)
   app.post('/newtask', blocksController.newtask)

@@ -21,6 +21,7 @@
       console.log(error)
     }
   }
+
   //Segunda verificação
   exports.login = function (req, res) {
     let senha = req.body.password
@@ -49,6 +50,7 @@
       console.log(error)
     }
   }
+
   //Verifica se o token é válido
   exports.authSession = function (req, res) {
     let auth = req.headers.authorization
@@ -69,6 +71,7 @@
       }
     })
   }
+
   //Alteração de dados
   exports.change = function (req, res) {
     let auth = req.headers.authorization
@@ -115,6 +118,7 @@
       }
     })
   }
+
   //Altera senha do usuario
   exports.changepass = function (req, res) {
     let auth = req.headers.authorization
@@ -148,6 +152,7 @@
       }
     })
   }
+
   //Cadastro de usuario novo
   exports.newUser = async function (req, res) {
 
@@ -173,6 +178,7 @@
         }
       })
   }
+
   //Consulta do banco
   exports.db = function (req, res) {
     try {
@@ -188,6 +194,7 @@
       console.log(error)
     }
   }
+
   //Base64 to image
   exports.imgs = async function (req, res) {
     return new Promise(async function (resolve, reject) {
@@ -220,6 +227,7 @@
       })
     })
   }
+
   //Dados do usuário
   exports.infoUser = async function (req, res) {
     return new Promise(function (resolve, reject) {
@@ -255,6 +263,7 @@
       }
     })
   }
+
   //Manda email de confirmacao
   exports.email = async function (req, res) {
     let nodemailer = require('nodemailer')
@@ -306,6 +315,7 @@
       }
     })
   }
+
   //Envia a mensagem para o email
   exports.emailPassword = async function (req, res) {
     let nodemailer = require('nodemailer')
@@ -356,6 +366,7 @@
       }
     })
   }
+
   //Gera token para mandar no email
   exports.generatorTokken = async function (req, res) {
     return new Promise(function (resolve, reject) {
@@ -377,6 +388,7 @@
         })
     })
   }
+
   //Muda status da variavel booleana no banco
   exports.authEmail = function (req, res) {
     try {
@@ -393,6 +405,7 @@
       throw error
     }
   }
+
   //Valida token e muda variavel booleana no banco
   exports.validaToken = function (req, res) {
     let auth = req.headers.authorization
@@ -418,6 +431,7 @@
     })
 
   }
+
   //Deleta o usuario
   exports.deleteUser = function (req, res) {
     db.any('SELECT * FROM deleteuser($1);', [req.body.user])
@@ -429,6 +443,7 @@
         }
       })
   }
+
   //Verifica se o email é valido e envia o email
   exports.verifyEmail = function (req, res) {
     db.any('SELECT * FROM emailexists($1);', [req.body.email])
