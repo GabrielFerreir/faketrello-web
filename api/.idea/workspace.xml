@@ -9,15 +9,14 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.keystream" afterPath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.keystream" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.keystream.len" afterPath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.keystream.len" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.len" afterPath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.len" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.values" afterPath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.values" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.values.at" afterPath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.values.at" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.values.s" afterPath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata.values.s" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata_i" afterPath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_metadata_/metadata_i" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_src_/database/fakeTrello/schema/public.zip" afterPath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d/_src_/database/fakeTrello/schema/public.zip" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d.xml" afterPath="$PROJECT_DIR$/.idea/dataSources/d151bc40-835a-4b6f-abac-64434e7b2b9d.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SQL/ApiLogin" afterPath="$PROJECT_DIR$/SQL/ApiLogin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controller/blocksController.js" afterPath="$PROJECT_DIR$/controller/blocksController.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controller/projectsController.js" afterPath="$PROJECT_DIR$/controller/projectsController.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controller/userController.js" afterPath="$PROJECT_DIR$/controller/userController.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -165,38 +164,38 @@
       <file leaf-file-name="ApiLogin" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SQL/ApiLogin">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-112">
-              <caret line="739" column="0" lean-forward="true" selection-start-line="739" selection-start-column="0" selection-end-line="739" selection-end-column="0" />
+            <state relative-caret-position="221">
+              <caret line="737" column="39" lean-forward="true" selection-start-line="737" selection-start-column="39" selection-end-line="737" selection-end-column="39" />
               <folding>
-                <element signature="e#88#622#0" expanded="false" />
-                <element signature="e#625#1007#0" expanded="false" />
-                <element signature="e#1048#2067#0" expanded="false" />
-                <element signature="e#2070#2984#0" expanded="false" />
-                <element signature="e#2987#3526#0" expanded="false" />
-                <element signature="e#3529#3956#0" expanded="false" />
-                <element signature="e#3959#4311#0" expanded="false" />
-                <element signature="e#4314#4793#0" expanded="false" />
-                <element signature="e#4796#5243#0" expanded="false" />
-                <element signature="e#5246#5529#0" expanded="false" />
-                <element signature="e#5680#6238#0" expanded="false" />
-                <element signature="e#6287#7086#0" expanded="false" />
-                <element signature="e#7131#7666#0" expanded="false" />
-                <element signature="e#7728#8158#0" expanded="false" />
-                <element signature="e#8161#8632#0" expanded="false" />
-                <element signature="e#8635#9235#0" expanded="false" />
-                <element signature="e#9271#9771#0" expanded="false" />
-                <element signature="e#9816#10731#0" expanded="false" />
-                <element signature="e#10734#11405#0" expanded="false" />
-                <element signature="e#11451#11935#0" expanded="false" />
-                <element signature="e#11938#12319#0" expanded="false" />
-                <element signature="e#12322#12798#0" expanded="false" />
-                <element signature="e#12801#13673#0" expanded="false" />
-                <element signature="e#13676#14026#0" expanded="false" />
-                <element signature="e#14110#14634#0" expanded="false" />
-                <element signature="e#14637#14969#0" expanded="false" />
-                <element signature="e#15021#15851#0" expanded="false" />
-                <element signature="e#15854#16182#0" expanded="false" />
-                <element signature="e#16185#16744#0" expanded="false" />
+                <element signature="e#91#625#0" expanded="false" />
+                <element signature="e#628#1010#0" expanded="false" />
+                <element signature="e#1051#2070#0" expanded="false" />
+                <element signature="e#2073#2987#0" expanded="false" />
+                <element signature="e#2990#3529#0" expanded="false" />
+                <element signature="e#3532#3959#0" expanded="false" />
+                <element signature="e#3962#4314#0" expanded="false" />
+                <element signature="e#4317#4796#0" expanded="false" />
+                <element signature="e#4799#5246#0" expanded="false" />
+                <element signature="e#5249#5532#0" expanded="false" />
+                <element signature="e#5683#6241#0" expanded="false" />
+                <element signature="e#6290#7089#0" expanded="false" />
+                <element signature="e#7134#7669#0" expanded="false" />
+                <element signature="e#7731#8161#0" expanded="false" />
+                <element signature="e#8164#8635#0" expanded="false" />
+                <element signature="e#8638#9238#0" expanded="false" />
+                <element signature="e#9274#9774#0" expanded="false" />
+                <element signature="e#9819#10734#0" expanded="false" />
+                <element signature="e#10737#11408#0" expanded="false" />
+                <element signature="e#11454#11938#0" expanded="false" />
+                <element signature="e#11941#12322#0" expanded="false" />
+                <element signature="e#12325#12801#0" expanded="false" />
+                <element signature="e#12804#13676#0" expanded="false" />
+                <element signature="e#13679#14029#0" expanded="false" />
+                <element signature="e#14113#14637#0" expanded="false" />
+                <element signature="e#14640#14972#0" expanded="false" />
+                <element signature="e#15024#15854#0" expanded="false" />
+                <element signature="e#15857#16185#0" expanded="false" />
+                <element signature="e#16188#16747#0" expanded="false" />
                 <element signature="n#insertTeamTasks#0" expanded="false" />
                 <element signature="n#newComment#0" expanded="false" />
               </folding>
@@ -264,6 +263,7 @@
         <option value="$PROJECT_DIR$/controller/blocksController.js" />
         <option value="$PROJECT_DIR$/controller/projectsController.js" />
         <option value="$PROJECT_DIR$/app-server.js" />
+        <option value="/c36c0908/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/searchusers.(varchar,integer).sql" />
         <option value="$PROJECT_DIR$/SQL/ApiLogin" />
       </list>
     </option>
@@ -290,7 +290,7 @@
   <component name="NodeModulesDirectoryManager">
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="469" />
     <option name="y" value="-18" />
     <option name="width" value="697" />
@@ -514,7 +514,7 @@
       <workItem from="1506079806039" duration="18178000" />
       <workItem from="1506338842730" duration="20694000" />
       <workItem from="1506428047691" duration="21238000" />
-      <workItem from="1506511507934" duration="138000" />
+      <workItem from="1506511507934" duration="8514000" />
     </task>
     <task id="LOCAL-00001" summary="Mostrar projetos finalizado">
       <created>1505421275097</created>
@@ -527,10 +527,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="516347000" />
+    <option name="totallyTimeSpent" value="524723000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -538,16 +538,16 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22697368" sideWeight="0.34871408" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.47532895" sideWeight="0.34871408" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16611843" sideWeight="0.6580938" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16611843" sideWeight="0.6580938" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32730263" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22697368" sideWeight="0.65128595" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40625" sideWeight="0.65128595" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16490166" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20801815" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18305598" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -626,7 +626,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/middleware/errors.js" />
     <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/middleware/noc.js" />
     <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/middleware/response.js" />
     <entry file="file://$PROJECT_DIR$/../api_italo_bitbucket/smnauth-api/src/api/middleware/cors.js" />
@@ -879,40 +878,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="dbSrc:///c36c0908/d151bc40-835a-4b6f-abac-64434e7b2b9d/database/fakeTrello/schema/public/routine/searchusers.(varchar,integer).sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="34" column="3" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="34" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/SQL/ApiLogin">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-112">
-          <caret line="739" column="0" lean-forward="true" selection-start-line="739" selection-start-column="0" selection-end-line="739" selection-end-column="0" />
+        <state relative-caret-position="221">
+          <caret line="737" column="39" lean-forward="true" selection-start-line="737" selection-start-column="39" selection-end-line="737" selection-end-column="39" />
           <folding>
-            <element signature="e#88#622#0" expanded="false" />
-            <element signature="e#625#1007#0" expanded="false" />
-            <element signature="e#1048#2067#0" expanded="false" />
-            <element signature="e#2070#2984#0" expanded="false" />
-            <element signature="e#2987#3526#0" expanded="false" />
-            <element signature="e#3529#3956#0" expanded="false" />
-            <element signature="e#3959#4311#0" expanded="false" />
-            <element signature="e#4314#4793#0" expanded="false" />
-            <element signature="e#4796#5243#0" expanded="false" />
-            <element signature="e#5246#5529#0" expanded="false" />
-            <element signature="e#5680#6238#0" expanded="false" />
-            <element signature="e#6287#7086#0" expanded="false" />
-            <element signature="e#7131#7666#0" expanded="false" />
-            <element signature="e#7728#8158#0" expanded="false" />
-            <element signature="e#8161#8632#0" expanded="false" />
-            <element signature="e#8635#9235#0" expanded="false" />
-            <element signature="e#9271#9771#0" expanded="false" />
-            <element signature="e#9816#10731#0" expanded="false" />
-            <element signature="e#10734#11405#0" expanded="false" />
-            <element signature="e#11451#11935#0" expanded="false" />
-            <element signature="e#11938#12319#0" expanded="false" />
-            <element signature="e#12322#12798#0" expanded="false" />
-            <element signature="e#12801#13673#0" expanded="false" />
-            <element signature="e#13676#14026#0" expanded="false" />
-            <element signature="e#14110#14634#0" expanded="false" />
-            <element signature="e#14637#14969#0" expanded="false" />
-            <element signature="e#15021#15851#0" expanded="false" />
-            <element signature="e#15854#16182#0" expanded="false" />
-            <element signature="e#16185#16744#0" expanded="false" />
+            <element signature="e#91#625#0" expanded="false" />
+            <element signature="e#628#1010#0" expanded="false" />
+            <element signature="e#1051#2070#0" expanded="false" />
+            <element signature="e#2073#2987#0" expanded="false" />
+            <element signature="e#2990#3529#0" expanded="false" />
+            <element signature="e#3532#3959#0" expanded="false" />
+            <element signature="e#3962#4314#0" expanded="false" />
+            <element signature="e#4317#4796#0" expanded="false" />
+            <element signature="e#4799#5246#0" expanded="false" />
+            <element signature="e#5249#5532#0" expanded="false" />
+            <element signature="e#5683#6241#0" expanded="false" />
+            <element signature="e#6290#7089#0" expanded="false" />
+            <element signature="e#7134#7669#0" expanded="false" />
+            <element signature="e#7731#8161#0" expanded="false" />
+            <element signature="e#8164#8635#0" expanded="false" />
+            <element signature="e#8638#9238#0" expanded="false" />
+            <element signature="e#9274#9774#0" expanded="false" />
+            <element signature="e#9819#10734#0" expanded="false" />
+            <element signature="e#10737#11408#0" expanded="false" />
+            <element signature="e#11454#11938#0" expanded="false" />
+            <element signature="e#11941#12322#0" expanded="false" />
+            <element signature="e#12325#12801#0" expanded="false" />
+            <element signature="e#12804#13676#0" expanded="false" />
+            <element signature="e#13679#14029#0" expanded="false" />
+            <element signature="e#14113#14637#0" expanded="false" />
+            <element signature="e#14640#14972#0" expanded="false" />
+            <element signature="e#15024#15854#0" expanded="false" />
+            <element signature="e#15857#16185#0" expanded="false" />
+            <element signature="e#16188#16747#0" expanded="false" />
             <element signature="n#insertTeamTasks#0" expanded="false" />
             <element signature="n#newComment#0" expanded="false" />
           </folding>

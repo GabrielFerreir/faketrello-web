@@ -1,4 +1,4 @@
---SELECT * FROM tb_login;
+--SELECT * FROM tb_projects;
 
 --UPDATE tb_login SET profile_img = '/imgsUser/default.png'
 
@@ -735,17 +735,19 @@ END;
 $$
 LANGUAGE plpgsql;
 
---SELECT * FROM searchUsers('a',73);
+--SELECT * FROM searchUsers('joao',73);
 
-CREATE OR REPLACE FUNCTION searchUsers(pUser CHARACTER VARYING, idProject INTEGER)
+CREATE OR REPLACE FUNCTION searchusers(puser CHARACTER VARYING, idproject INTEGER)
   RETURNS TABLE(
-    idUser      INTEGER,
-    nameUser    VARCHAR(50),
-    username    VARCHAR(20),
-    imgUser     VARCHAR(50)
-  ) AS $$
+    iduser   INTEGER,
+    nameuser CHARACTER VARYING,
+    username CHARACTER VARYING,
+    imguser  CHARACTER VARYING
+  )
+AS $$
 DECLARE
   vIdUser INTEGER [];
+  reg     tb_team%ROWTYPE;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_login
@@ -759,6 +761,16 @@ BEGIN
                             email ILIKE '%' || pUser || '%' OR
                             name ILIKE '%' || pUser || '%');
 
+    FOR reg IN
+    SELECT id_user
+    FROM tb_team
+    WHERE id_user = ANY (vIdUser)
+    LOOP
+      vIdUser = array_remove(vIdUser, (SELECT id_user
+                                       FROM tb_team
+                                       WHERE id_user = ANY (vIdUser) AND id_project = idproject LIMIT 1));
+    END LOOP;
+
     RETURN QUERY
     SELECT
       tb_login.id_user,
@@ -767,7 +779,7 @@ BEGIN
       profile_img
     FROM tb_login
     WHERE tb_login.id_user = ANY (vIdUser);
-    END IF;
+  END IF;
 END;
 $$
 LANGUAGE plpgsql;
