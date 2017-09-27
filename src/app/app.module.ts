@@ -33,6 +33,8 @@ import {DragDropModule} from './drag-drop/drag-drop.module';
 import {MenuModule} from './components/menu/menu.module';
 import {MenuInfoUserModule} from './components/menu-info-user/menu-info-user.module';
 import { MenuInfoUserDirective } from './components/menu-info-user/menu-info-user.directive';
+import { ArrowBackComponent } from './components/arrow-back/arrow-back.component';
+import {ArrowBackModule} from "./components/arrow-back/arrow-back.module";
 
 
 @NgModule({
@@ -46,7 +48,7 @@ import { MenuInfoUserDirective } from './components/menu-info-user/menu-info-use
     AlterarSenhaDeUsuarioComponent,
     PaginaInicialComponent,
     HomeComponent,
-    AutenticaComponent,
+    AutenticaComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +62,8 @@ import { MenuInfoUserDirective } from './components/menu-info-user/menu-info-use
     ProjectsModule,
     DragDropModule,
     MenuModule,
-    MenuInfoUserModule
+    MenuInfoUserModule,
+    ArrowBackModule
   ],
   providers: [DadosDeUsuarioService,
               DadosDeUsuarioResolve,

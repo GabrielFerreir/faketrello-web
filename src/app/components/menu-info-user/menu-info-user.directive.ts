@@ -18,16 +18,17 @@ export class MenuInfoUserDirective implements ngAfterViewInit{
   ngAfterViewInit() {
 
     this.menuInfoUser.closeChange.subscribe( () => {
-      this.close();
+      this.close(null);
     })
 
-    this.close();
+    this.close(null);
 
     this.elementRef.nativeElement.addEventListener('click', event => {
       let pos = this.elementRef.nativeElement;
       pos = pos.getBoundingClientRect();
+
       let position = {
-        'x': pos.left,
+        'x': pos.right,
         'y': pos.top
       }
       this.render(position);
@@ -35,22 +36,22 @@ export class MenuInfoUserDirective implements ngAfterViewInit{
 
     document.addEventListener('mouseup', (e) => {
       if(this.elementRef.nativeElement !== e.target) {
-        this.close();
+        this.close(e.target);
       }
     });
     document.addEventListener('scroll', (e) => {
       if(this.elementRef.nativeElement !== e.target) {
-        this.close();
+        this.close(e.target);
       }
     });
     document.addEventListener('resize', (e) => {
       if (this.elementRef.nativeElement !== e.target) {
-        this.close();
+        this.close(e.target);
       }
     });
     document.addEventListener('touchend', (e) => {
       if(this.elementRef.nativeElement !== e.target) {
-        this.close();
+        this.close(e.target);
       }
     });
   }
@@ -61,28 +62,35 @@ export class MenuInfoUserDirective implements ngAfterViewInit{
       this.viewRef.detectChanges();
 
       this.viewRef.rootNodes.forEach(rootNode => {
-        rootNode.style = 'position: absolute; top:' + (coordenada.y + 56) + 'px;' + 'left:' + coordenada.x + 'px;' + 'z-index: 24;';
-        rootNode.classList = 'opPerfil';
+        rootNode.style = 'position: absolute; top:' + (coordenada.y) + 'px;' + 'left:' + (coordenada.x - 160) + 'px;' + 'z-index: 24;';
         document.body.appendChild(rootNode);
+        if(rootNode.classList == '') {
+          rootNode.classList = 'opPerfil off';
+        }
 
-        if (rootNode.clientWidth) {
-          console.log(rootNode);
+        if (rootNode.clientWidth && rootNode.classList != 'opPerfil on') {
+          // console.log(rootNode);
+          rootNode.classList = 'opPerfil on';
+
         }
       });
     }
 
-    close() {
-      if(this.viewContainerRef.length) {
+    close(e) {
+    // console.log(this.elementRef.nativeElement);
+    // console.log(e);
+
+      if (this.viewContainerRef.length) {
         console.log('Sumiu');
         const viewRef = this.viewRef;
 
         viewRef.rootNodes.forEach(rootNode => {
-          if(rootNode.classList) {
-            // rootNode.classList.remove('open');
+          if (rootNode.classList) {
+            rootNode.classList = 'opPerfil off';
           }
         });
 
-        setTimeout(() => this.viewContainerRef.remove(this.viewContainerRef.indexOf(viewRef)), 50);
+        setTimeout(() => this.viewContainerRef.remove(this.viewContainerRef.indexOf(viewRef)), 400);
       }
     }
 

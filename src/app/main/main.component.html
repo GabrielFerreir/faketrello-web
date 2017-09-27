@@ -49,18 +49,6 @@
 
     </div>
 
-
-
-
-  <!--</label>-->
-  <!--<input class="checkPerfil" type="checkbox" id="perfil" style="display: none"/>-->
-
-  <!--<div class="opPerfil">-->
-    <!--<ul>-->
-
-    <!--</ul>-->
-
-  <!--</div>-->
 </div>
 
   <div class="notificacoes">
@@ -75,16 +63,16 @@
 </div>
 <app-snackbars></app-snackbars>
 <app-menu-info-user #menuInfoUser>
-  <li><img src="../../assets/home_black.svg"/>
-  <span routerLink="/main">Home</span>
+  <li routerLink="/main"><img src="../../assets/home_black.svg"/>
+  <span>Home</span>
   </li>
-  <li><img src="../../assets/account_circle_black.svg"/>
-  <span routerLink="/alterarDados">Alterar Dados</span>
+  <li routerLink="/alterarDados"><img src="../../assets/account_circle_black.svg"/>
+  <span >Alterar Dados</span>
   </li>
-  <li><img src="../../assets/key.svg"/>
-  <span routerLink="/alterarSenha">Alterar Senha</span>
+  <li routerLink="/alterarSenha"><img src="../../assets/key.svg"/>
+  <span >Alterar Senha</span>
   </li>
-  <li><img src="../../assets/logout.svg"/>
-  <span (click)="logout()">Logout</span>
+  <li (click)="logout()"><img src="../../assets/logout.svg"/>
+  <span >Logout</span>
   </li>
 </app-menu-info-user>
