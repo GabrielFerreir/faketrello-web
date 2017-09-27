@@ -1,4 +1,4 @@
---SELECT * FROM tb_projects;
+--SELECT * FROM tb_login;
 
 --UPDATE tb_login SET profile_img = '/imgsUser/default.png'
 
@@ -524,21 +524,18 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION timeproject(teamJson JSON)
+CREATE OR REPLACE FUNCTION timeproject(pIdProject INTEGER, pIdUser INTEGER, permission BOOLEAN, pIdAdmin INTEGER)
   RETURNS BOOLEAN AS $$
 BEGIN
-  INSERT INTO tb_team (id_project, id_user, permissions)
-    SELECT
-      idproject,
-      iduser,
-      permission
-    FROM json_to_recordset(teamJson)
-      AS x(
-         idproject INTEGER,
-         iduser INTEGER,
-         permission BOOLEAN
-         );
-  RETURN TRUE;
+  IF EXISTS(SELECT *
+            FROM tb_team
+            WHERE id_user = pIdAdmin AND id_project = pIdProject AND permissions = TRUE)
+  THEN
+    INSERT
+    INTO tb_team (id_project, id_user, permissions) VALUES (pIdProject, pIdUser, permission);
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE ;
 END;
 $$
 LANGUAGE plpgsql;
@@ -768,7 +765,8 @@ BEGIN
     LOOP
       vIdUser = array_remove(vIdUser, (SELECT id_user
                                        FROM tb_team
-                                       WHERE id_user = ANY (vIdUser) AND id_project = idproject LIMIT 1));
+                                       WHERE id_user = ANY (vIdUser) AND id_project = idproject
+                                       LIMIT 1));
     END LOOP;
 
     RETURN QUERY
@@ -778,7 +776,8 @@ BEGIN
       tb_login.username,
       profile_img
     FROM tb_login
-    WHERE tb_login.id_user = ANY (vIdUser);
+    WHERE tb_login.id_user = ANY (vIdUser)
+    LIMIT 10;
   END IF;
 END;
 $$

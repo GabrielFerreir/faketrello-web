@@ -158,15 +158,27 @@ exports.changeProject = function (req, res) {
 
 //Insere o time do projeto
 exports.insertTeam = function (req, res) {
-  let json = req.body.team
-  db.any('SELECT * FROM timeproject($1)', [JSON.stringify(json)])
-    .then(data => {
-      if (!data) {
-        res.status(400).json({error: 'Erro'})
-      } else if (req.called !== 1) {
-        res.status(200).json({result: 'sucesso'})
-      }
-    })
+  let auth = req.headers.authorization
+
+  if ((!auth) || (!auth.startsWith('Bearer'))) {
+    res.status(401).json({error: 'Sessão Inválida'})
+  } else {
+    auth = auth.split('Bearer').pop().trim()
+  }
+  jwt.verify(auth, userController.senha, function (error, data) {
+    if (error) {
+      res.status(401).json({error: 'Sessão invalida'})
+    } else {
+      db.any('SELECT * FROM timeproject($1,$2,$3,$4)', [req.params.id, req.body.idUser, req.body.permission, data.id])
+        .then(data => {
+          if (!data) {
+            res.status(400).json({error: 'Erro'})
+          } else if (req.called !== 1) {
+            res.status(200).json({result: 'sucesso'})
+          }
+        })
+    }
+  })
 }
 
 //Verifica se a permissao do usuario no projeto permite alterações
@@ -220,7 +232,6 @@ exports.searchUsers = function (req, res) {
 
   db.any('SELECT * FROM searchUsers($1,$2)', [req.headers.Search, idProject])
     .then(data => {
-      console.log(data)
       if (!data || !data[0]) {
         res.status(404).json({error: 'Usuario inexistente'})
       } else {

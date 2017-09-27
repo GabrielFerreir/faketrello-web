@@ -28,7 +28,7 @@
   app.get('/project/:id', projectsController.infoProjectSearch)
   app.delete('/project/:id', projectsController.deleteproject)
   app.put('/project/:id', projectsController.changeProject)
-  app.post('/insertUser', projectsController.insertTeam)
+  app.post('/insertUser/:id', projectsController.insertTeam)
   app.delete('/userteam/:id', projectsController.removeUserTeam)
   app.get('/searchMembers/:id', projectsController.searchUsers)
 
