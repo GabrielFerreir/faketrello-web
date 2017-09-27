@@ -21,6 +21,7 @@ export class ProjectsServiceService {
   situacaoDetailProject = false;
   projects;
   project;
+  pesquisaMembros;
 
 
   ativaAddProjets() {
@@ -77,7 +78,7 @@ export class ProjectsServiceService {
         .subscribe((res) => {
           this.project = res;
           console.log(res);
-          console.log(res);
+          // console.log(res);
         }, error => {
           console.log(error);
         });
@@ -105,5 +106,51 @@ export class ProjectsServiceService {
     this.router.navigate(['main']);
   }
 
+  pesquisarMembros(parm, idproject) {
+    console.log(parm)
+    console.log(idproject);
+    if(parm.length > 0) {
+      if (this.dados.getCookieTokken()) {
+        var url = 'http://' + this.core.ipDaApi + '/searchMembers/' + idproject;
+        var headers = new Headers();
+        // headers.append('Authorization', 'Bearer ' + this.dados.getCookieTokken());
+        headers.append('Search', parm);
+        return this.http.get(url, {headers: headers})
+          .map(res => res.json())
+          .subscribe((res) => {
+          this.pesquisaMembros = res;
+            console.log(res);
+          }, error => {
+            this.pesquisaMembros = null;
+            console.log(error);
+          });
+      }
+    } else {
+      this.pesquisaMembros = null;
+    }
+  }
+
+  addMembrosProject(idUser, idProject) {
+    var url = 'http://' + this.core.ipDaApi + '/insertUser/' + idProject;
+    var json = JSON.stringify(
+      {
+        idUser: idUser,
+        permission: false
+      }
+    );
+    var params = json;
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.dados.getCookieTokken());
+
+    return this.http.post(url, params, {headers: headers})
+      .map(res => res.json())
+      .subscribe((res) => {
+        console.log(res)
+        this.snackbar.chamaSnackbar('Usuario Adicionado Com Sucesso!');
+      }, error => {
+        console.log(error);
+      });
+  }
 
 }
