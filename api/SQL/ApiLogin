@@ -735,7 +735,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
---SELECT * FROM searchUsers('joao',73);
+--SELECT * FROM searchUsers('a',107);
 
 CREATE OR REPLACE FUNCTION searchusers(puser CHARACTER VARYING, idproject INTEGER)
   RETURNS TABLE(
