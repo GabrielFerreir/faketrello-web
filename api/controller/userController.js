@@ -4,7 +4,7 @@
   const jwt = require('jsonwebtoken')
   const md5 = require('md5')
   let token
-  let PASSWORD
+  let PASSWORD = md5('senhaParaAuth')
 
   //Primeira verificação
   exports.userAuth = function (req, res) {
@@ -38,11 +38,10 @@
               user: req.body.user,
               id: data[0].id,
               authEmail: data[0].statusemail
-            }, md5(req.body.password), {
+            }, PASSWORD, {
               //expiresIn: '2 days'
             })
             res.json({token})
-            PASSWORD = md5(req.body.password)
             exports.senha = PASSWORD
           }
         })
@@ -156,27 +155,27 @@
   //Cadastro de usuario novo
   exports.newUser = async function (req, res) {
 
-    let caminho
-    if (!req.body.imgBase64) {
-      caminho = '/imgs/default.png'
-    } else {
-      caminho = await exports.imgs(req, res)
-    }
-    db.any('SELECT * FROM newuser($1,$2,$3,$4,$5);', [req.body.email, md5(req.body.password), caminho, req.body.name, req.body.username])
-      .then(async data => {
+    let caminho = '/imgsUser/default.png'
+
+    await db.any('SELECT * FROM newuser($1,$2,$3,$4,$5);', [req.body.email, md5(req.body.password), caminho, req.body.name, req.body.username])
+      .then(data => {
         if (!data || !data[0]) {
           res.status(409).json({error: 'Erro ao cadastrar: Usuário ou email já cadastrado'})
         } else {
-          exports.email(req, res)
-          db.any('SELECT * from verify_img($2,$1);', [req.body.username, caminho])
-            .then(data => {
-              if (!data || !data[0]) {
-                res.json({error: 'Erro ao cadastrar imagem no usuario'})
-              }
-            })
           res.status(200).json({result: 'Usuário cadastrado com sucesso'})
+          req.idNewUser = data[0].idnewuser
         }
       })
+    if(req.body.imgBase64) {
+
+    caminho = await exports.imgs(req, res)
+    db.any('SELECT * FROM verify_img($1,$2)', [caminho, req.body.username])
+      .then(data =>{
+        if(!data){
+          console.log(data)
+        }
+      })
+    }
   }
 
   //Consulta do banco
@@ -209,11 +208,13 @@
       response.type = matches[1]
       response.data = new Buffer(matches[2], 'base64')
       let caminhoBd
+
       if (req.called === 1) {
         caminhoBd = `./files/imgsProjects/picture_${req.idproj}.png`
       }
       else {
-        caminhoBd = `./files/imgsUser/picture_${req.body.username}.png`
+        console.log(req.idNewUser)
+        caminhoBd = `./files/imgsUser/picture_${req.idNewUser}.png`
       }
 
       let caminho = caminhoBd.replace('./files', '')
@@ -379,10 +380,9 @@
             let tokenEmail = jwt.sign({
               user: req.body.username,
               authEmail: data[0].statusemail
-            }, md5(req.body.password), {
+            }, PASSWORD, {
               expiresIn: '2 days'
             })
-            PASSWORD = md5(req.body.password)
             resolve(tokenEmail)
           }
         })
