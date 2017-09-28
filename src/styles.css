@@ -33,7 +33,6 @@ a {
   background-color: #F44336;
   color: #F44336;
 }
-
 .textFields ~ .labelText {
     color: rgba(0,0,0, .54);
     font-size: 16px;
@@ -59,14 +58,12 @@ a {
           width: 100%;
           top: 33px;
 }
-
-/*HOVER*/
 .textFields:hover ~ .border  { background-color: rgba(0,0,0, .42);}
-
-/*FOCUS*/
 .textFields:focus ~ .border {background-color: #2979ff;}
 .textFields:focus ~ .labelText {font-size: 12px;top: -8px;color: #304ffe;}
+
 .textFieldsPreenchido ~ .labelText {  /*color: #304ffe;*/font-size: 12px;  top: -8px;}
+
 .defaultButton {height: 36px;padding-left: 16px;padding-right: 16px;border-radius: 2px;font-family: 'Roboto';font-size: 16px;background-color: #2196F3;border: 0;color: #FFF;cursor: pointer;transition: all 375ms cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 .defaultButton:hover {box-shadow: 0 0 4px   rgba(0,0,0,0.14),
@@ -134,12 +131,10 @@ a {
 }
 .textFieldsMult:focus ~ .labelTextMult {font-size: 12px;top: -16px; left: 0; color: #304ffe; font-family: 'Roboto'}
 .textFieldsMultPreenchido ~ .labelTextMult { font-size: 12px; top: -16px; left: 0;}
-
 .select{
   border: none;
   background-color: transparent;
   outline: none;
 }
-
 
 

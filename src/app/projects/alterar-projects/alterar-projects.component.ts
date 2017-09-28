@@ -14,8 +14,6 @@ import { PesquisaDeMembrosDoProjetoPipe } from '../pesquisa-de-membros-do-projet
 export class AlterarProjectsComponent implements OnInit {
   id;
   img64;
-  campoDePesquisa;
-
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -26,8 +24,9 @@ export class AlterarProjectsComponent implements OnInit {
 
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-    console.log(this.id);
     this.projects.detailProject(this.id);
+    console.log(this.id);
+    this.OnResSearch();
   }
 
   /* IMAGEM  IMAGEM */
@@ -51,5 +50,36 @@ export class AlterarProjectsComponent implements OnInit {
   }
   /* IMAGEM  IMAGEM */
 
+  focus(el) {
+    // console.log(el);
+    const elem = el.target;
+    elem.focus();
 
+    // const header = document.querySelector('header').clientHeight + 16;
+    const pai = document.querySelector('.all');
+
+    const posEl = elem.getBoundingClientRect().y + pai.scrollTop;
+    console.log(elem.getBoundingClientRect().y);
+    console.log(pai.scrollTop);
+      pai.scrollTo(0, posEl - 50);
+
+    // console.log(header);
+    // console.log(posEl);
+  }
+  OnResSearch() {
+    const value = this.projects.campoDePesquisa;
+    const membros = document.querySelector('.membros');
+    const resSearch = document.querySelector('#resSearch');
+  if (value.length > 0) {
+    //   console.log(offResSearch);
+      resSearch.setAttribute('style', 'display: block');
+      membros.setAttribute('style', 'display: none');
+      console.log(resSearch);
+
+  } else {
+    resSearch.setAttribute('style', 'display: none');
+    membros.setAttribute('style', 'display: block');
+  }
+
+  }
 }
