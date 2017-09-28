@@ -535,7 +535,12 @@ BEGIN
     INTO tb_team (id_project, id_user, permissions) VALUES (pIdProject, pIdUser, permission);
     RETURN TRUE;
   END IF;
-  RETURN FALSE ;
+  IF pIdAdmin IS NULL THEN
+    INSERT
+    INTO tb_team (id_project, id_user, permissions) VALUES (pIdProject, pIdUser, permission);
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
 END;
 $$
 LANGUAGE plpgsql;
@@ -732,7 +737,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
---SELECT * FROM searchUsers('a',107);
+--SELECT * FROM searchUsers('joao1559',107);
 
 CREATE OR REPLACE FUNCTION searchusers(puser CHARACTER VARYING, idproject INTEGER)
   RETURNS TABLE(
@@ -743,42 +748,80 @@ CREATE OR REPLACE FUNCTION searchusers(puser CHARACTER VARYING, idproject INTEGE
   )
 AS $$
 DECLARE
-  vIdUser INTEGER [];
-  reg     tb_team%ROWTYPE;
+  vIdUser   INTEGER [];
+  reg       tb_team%ROWTYPE;
+  vIdUnique INTEGER;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_login
-            WHERE tb_login.username ILIKE '%' || pUser || '%' OR
-                  tb_login.email ILIKE '%' || pUser || '%' OR
-                  tb_login.name ILIKE '%' || pUser || '%')
+            WHERE tb_login.username LIKE puser OR tb_login.email LIKE puser OR tb_login.name LIKE puser)
   THEN
     vIdUser :=  ARRAY(SELECT id_user
                       FROM tb_login
-                      WHERE tb_login.username ILIKE '%' || pUser || '%' OR
-                            email ILIKE '%' || pUser || '%' OR
-                            name ILIKE '%' || pUser || '%');
+                      WHERE tb_login.username LIKE puser OR tb_login.email LIKE puser OR tb_login.name LIKE puser);
+    vIdUnique := (SELECT id_user
+                  FROM tb_login
+                  WHERE tb_login.username LIKE puser OR tb_login.email LIKE puser OR tb_login.name LIKE puser);
 
     FOR reg IN
     SELECT id_user
     FROM tb_team
     WHERE id_user = ANY (vIdUser)
     LOOP
-      vIdUser = array_remove(vIdUser, (SELECT id_user
-                                       FROM tb_team
-                                       WHERE id_user = ANY (vIdUser) AND id_project = idproject
-                                       LIMIT 1));
-    END LOOP;
+    vIdUser = array_remove(vIdUser, ( SELECT id_user
+    FROM tb_team
+    WHERE id_user = ANY (vIdUser) AND id_project = idproject
+    LIMIT 1));
+  END LOOP;
+  RETURN QUERY
+  SELECT
+    tb_login.id_user,
+    name,
+    tb_login.username,
+    profile_img
+  FROM tb_login
+  WHERE tb_login.id_user = ANY (vIdUser)
+  LIMIT 10;
+END IF;
+IF EXISTS(SELECT *
+          FROM tb_login
+          WHERE tb_login.username ILIKE '%' || pUser || '%' OR
+                tb_login.email ILIKE '%' || pUser || '%' OR
+                tb_login.name ILIKE '%' || pUser || '%')
+THEN
+  vIdUser :=  ARRAY(SELECT id_user
+                    FROM tb_login
+                    WHERE tb_login.username ILIKE '%' || pUser || '%' OR
+                          email ILIKE '%' || pUser || '%' OR
+                          name ILIKE '%' || pUser || '%');
 
-    RETURN QUERY
-    SELECT
-      tb_login.id_user,
-      name,
-      tb_login.username,
-      profile_img
-    FROM tb_login
-    WHERE tb_login.id_user = ANY (vIdUser)
-    LIMIT 10;
+  IF vIdUnique = ANY (vIdUser) THEN
+    vIdUser := array_remove(vIdUser, (SELECT id_user
+                                      FROM tb_login
+                                      WHERE tb_login.username LIKE puser OR tb_login.email LIKE puser OR tb_login.name LIKE puser));
   END IF;
+
+  FOR reg IN
+  SELECT id_user
+  FROM tb_team
+  WHERE id_user = ANY (vIdUser)
+  LOOP
+    vIdUser = array_remove(vIdUser, (SELECT id_user
+                                     FROM tb_team
+                                     WHERE id_user = ANY (vIdUser) AND id_project = idproject
+                                     LIMIT 1));
+  END LOOP;
+
+  RETURN QUERY
+  SELECT
+    tb_login.id_user,
+    name,
+    tb_login.username,
+    profile_img
+  FROM tb_login
+  WHERE tb_login.id_user = ANY (vIdUser)
+  LIMIT 10;
+END IF;
 END;
 $$
 LANGUAGE plpgsql;

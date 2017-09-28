@@ -19,7 +19,7 @@ exports.newProject = async function (req, res) {
         req.idproj = data[0].idproject
 
         //Inserindo img no banco
-        if (req.body.imgBase64 && req.body.imgBase64 !== '') {
+        if (req.body.imgBase64) {
           caminho = await userController.imgs(req, res)
           db.any('SELECT * FROM verify_imgproject($1,$2)', [caminho, req.idproj])
             .then(data => {
@@ -30,16 +30,16 @@ exports.newProject = async function (req, res) {
               }
             })
         } else {
-          //res.status(200).json({id: req.idproj})
+          res.status(200).json({id: req.idproj})
         }
 
         //Inserindo owner no team
-        req.body.team = [{
-          'idproject': req.idproj,
-          'iduser': newuser.id_usuario,
-          'permission': 'true'
-        }
-        ]
+
+        req.params.id = req.idproj
+        req.body.idUser = newuser.id_usuario
+        req.body.permission = 'true'
+        data.id = null
+
         exports.insertTeam(req, res)
       }
     })
@@ -232,7 +232,6 @@ exports.searchUsers = function (req, res) {
 
   db.any('SELECT * FROM searchUsers($1,$2)', [req.headers.search, idProject])
     .then(data => {
-      console.log(data)
       if (!data || !data[0]) {
         res.status(404).json({error: 'Usuario inexistente'})
       } else {
