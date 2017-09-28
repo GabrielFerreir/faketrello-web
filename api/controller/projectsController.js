@@ -230,8 +230,9 @@ exports.removeUserTeam = async function (req, res) {
 exports.searchUsers = function (req, res) {
   let idProject = req.params.id
 
-  db.any('SELECT * FROM searchUsers($1,$2)', [req.headers.Search, idProject])
+  db.any('SELECT * FROM searchUsers($1,$2)', [req.headers.search, idProject])
     .then(data => {
+      console.log(data)
       if (!data || !data[0]) {
         res.status(404).json({error: 'Usuario inexistente'})
       } else {
