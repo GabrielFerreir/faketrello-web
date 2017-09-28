@@ -1,3 +1,14 @@
+.hide {
+  width: 0;
+  height: 0;
+  transition: all ease 180ms ;
+}
+.hide * {
+  width: 0;
+  height: 0;
+  font-size: 0;
+  display: none;
+}
 .all {
   width: 700px;
   height: 450px;
@@ -88,6 +99,7 @@
   display: flex;
 }
 .right .membros .scroll {
+  overflow-x: hidden;
   overflow-y:scroll;
   width: calc(100% + 12px);
   height: 100%;
@@ -108,6 +120,7 @@
   margin-right: 8px;
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   background-color: #009587;
   float: left;
   border-radius: 50%;
@@ -126,17 +139,82 @@
   color: rgba(0,0,0, .54);
 }
 .right .scroll .membro h2 {
+  display: none;
+
+}
+.right .scroll .membro .more {
+  display: none;
+}
+
+.right .scroll .openMembro {
+  display: inline-block;
+  width: 100%;
+  height: 82px;
+  padding: 16px;
+  box-sizing: border-box;
+  background-color: #FAFAFA;
+  transition: all ease 180ms;
+}
+/*.right .scroll .openMembro:hover {*/
+  /*background-color: #00b8d4;*/
+/*}*/
+.right .scroll .openMembro .img {
+  width: 40px;
+  height: 40px;
+  margin-right: 0px;
+  margin-top: 4px;
+  background-size: cover;
+  background-position: center;
+  background-color: #E9E9E9;
+  float: left;
+  border-radius: 50%;
+  line-height: 40px;
+  text-align: center;
+  font-family: 'Roboto';
+  font-size: 18px;
+  color: #FFFFFF;
+}
+.right .scroll .openMembro h1 {
+  min-width: 180px;
+  float: left;
+  margin-left: 16px;
+  margin-top: 8px;
+  font-size: 16px;
+  font-family: 'Roboto Medium';
+  font-weight: normal;
+  color: rgba(0,0,0, .54);
+}
+.right .scroll .openMembro h2 {
+  min-width: 180px;
   float: left;
   font-size: 14px;
+  margin-left: 16px;
   font-family: 'Roboto';
   font-weight: normal;
-  color: #444444;
+  color: rgba(0,0,0, .54);
 }
-.right .scroll .membro .permissao {
-  float: left;
+.right .scroll .openMembro .more {
+  float: right;
+  width: 32px;
+  height: 32px;
+  background-image: url("../../../assets/more_vert.svg");
+  background-size: 24px;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-top: -18px;
+  cursor: pointer;
+}
+/deep/ .right .scroll .opMore {
+  display: none;
+}
+/deep/ .right .scroll .openOpMore {
+  position: absolute;
+  top: 10px;
+  width: 200px;
   height: 50px;
-  margin-top: -28px;
-  position: relative;
+  background-color: #F00;
+  z-index: 25;
+  display: block;
 }
 
 .left .imageUser {
@@ -265,6 +343,7 @@ input[type="checkbox"]:not(:checked) ~ .checkboxNameOn {
   padding: 16px;
   box-sizing: border-box;
   display: block;
+  cursor: default;
 }
 /deep/ .resSearch .img {
   border-radius: 50%;
@@ -275,7 +354,7 @@ input[type="checkbox"]:not(:checked) ~ .checkboxNameOn {
   color: #FFF;
   font-size: 26px;
   font-family: 'Roboto';
-  background-color: #00B8D4;
+  background-color: #009587;
   float: left;
 }
 /deep/ .resSearch h1 {
@@ -303,6 +382,7 @@ input[type="checkbox"]:not(:checked) ~ .checkboxNameOn {
   background-size: 24px;
   background-position: center;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 
 
@@ -358,18 +438,16 @@ input[type="checkbox"]:not(:checked) ~ .checkboxNameOn {
     min-height: 80px;
 
   }
-
   .right {
     width: 100%;
     height: auto;
     padding: 0 20px;
     overflow: hidden;
   }
-
   .right .membros {
     height: 130px;
+    border-bottom: 1px solid rgba(0,0,0,.56) ;
   }
-
   .botoes {
     width: 100%;
     height: 35px;
@@ -388,6 +466,13 @@ input[type="checkbox"]:not(:checked) ~ .checkboxNameOn {
     margin: 0 10px;
     /*background-color: #03A9F4;*/
     /*float: right;*/
+  }
+
+  .right .scroll .openMembro h1 {
+    min-width: 170px;
+  }
+  .right .scroll .openMembro h2 {
+    min-width: 170px;
   }
 }
 

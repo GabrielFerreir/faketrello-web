@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import {SnackbarsService} from '../../components/snackbars/snackbars.service';
 import {ProjectsServiceService} from '../projects-service.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -15,6 +15,9 @@ export class AlterarProjectsComponent implements OnInit {
   id;
   img64;
 
+
+  situacaoMembro = false;
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private projects: ProjectsServiceService,
@@ -27,6 +30,19 @@ export class AlterarProjectsComponent implements OnInit {
     this.projects.detailProject(this.id);
     console.log(this.id);
     this.OnResSearch();
+
+    // ESTADO DEFAULT DOS MEMBROS
+    document.addEventListener('click', ($event) => {
+      this.focusMembro($event);
+    });
+
+    // document.addEventListener('click', ($event) => {
+    //
+    // });
+  }
+
+  AfterViewInit() {
+    this.situacaoMembro = false;
   }
 
   /* IMAGEM  IMAGEM */
@@ -82,4 +98,36 @@ export class AlterarProjectsComponent implements OnInit {
   }
 
   }
+  focusMembro(event) {
+    if(event.target.className == 'membro' && !this.situacaoMembro) {
+          console.log('focus');
+          console.log(event.target);
+          const membro = document.querySelectorAll('.right .scroll .membro');
+            for(let i = 0; i < membro.length; i++) {
+              membro[i].className = 'hide';
+            }
+          this.situacaoMembro = true;
+          event.target.className = 'openMembro';
+    } else if(event.target.parentNode.className == 'membro' && !this.situacaoMembro){
+            console.log('focus');
+            console.log(event.target);
+            const membro = document.querySelectorAll('.right .scroll .membro');
+              for(let i = 0; i < membro.length; i++) {
+                membro[i].className = 'hide';
+              }
+            this.situacaoMembro = true;
+            event.target.parentNode.className = 'openMembro';
+    }else if(event.target.className != 'more' && this.situacaoMembro) {
+            // event.target.className = 'membro';
+            const openMembro = document.querySelector('.openMembro');
+            openMembro.className = 'membro';
+            const membro = document.querySelectorAll('.right .scroll .hide');
+            for(let i = 0; i < membro.length; i++) {
+              membro[i].className = 'membro';
+            }
+            this.situacaoMembro = false;
+    }
+  }
+
+
 }

@@ -62,26 +62,20 @@
 
     <section class="membros">
       <section class="scroll">
-        <div *ngFor="let membro of projects?.project?.team">
+        <div *ngFor="let membro of projects?.project?.team" style="position: relative">
           <article class="membro">
-            <!--<div class="img"></div>-->
             <div *ngIf="membro.profile_img == '/imgsUser/default.png'" class="img">{{ membro.name.charAt(0) | uppercase }}</div>
             <div *ngIf="membro.profile_img != '/imgsUser/default.png'" [style.background-image]="'url('+ 'http://' + core.ipDaApi + membro.profile_img +')'" class="img"></div>
 
 
             <h1>{{ membro.name }}</h1>
-            <!--<h2>{{ membro.username }}</h2>-->
-            <div class="permissao">
-              <!--<div class="checkbox">-->
-                <!--<input id="{{ membro.username }}" type="checkbox" [(ngModel)]="membro.permissions" [checked]="membro.permissions">-->
-
-                <!--<label for="{{ membro.username }}" class="checkboxNameOff">-->
-                  <!--<img src="../../../assets/star_border.svg"/>-->
-                <!--</label>-->
-                <!--<label for="{{ membro.username }}" class="checkboxNameOn">-->
-                  <!--<img src="../../../assets/star.svg"/>-->
-                <!--</label>-->
-              <!--</div>-->
+            <h2>{{ membro.username }}</h2>
+            <div class="more"></div>
+            <div class="openOpMore">
+              <ul>
+                <li>Remover Usuario</li>
+                <li>Promover Usuario</li>
+              </ul>
             </div>
           </article>
         </div>
