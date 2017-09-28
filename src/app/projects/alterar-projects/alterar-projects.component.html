@@ -31,7 +31,7 @@
       <input type="checkbox" id="pesquisa">
 
       <div class="div-campoDePesquisa" style="position: relative;">
-        <input type="text" class="textFields" (keyup)="projects.pesquisarMembros(this.campoDePesquisa, id)" (keyup)="OnResSearch(campoDePesquisa)" (focus)="focus($event)" placeholder="Pesquisar" [(ngModel)]="campoDePesquisa"/>
+        <input type="text" id="campoPesquisa" class="textFields" (keyup)="projects.pesquisarMembros(id)" (keyup)="OnResSearch()" (focus)="focus($event)" placeholder="Pesquisar" [(ngModel)]="projects.campoDePesquisa"/>
         <div class="border" style="width: 100%;"></div>
         <!--<label class="helperText"></label>-->
       </div>

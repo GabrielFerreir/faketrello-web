@@ -14,8 +14,6 @@ import { PesquisaDeMembrosDoProjetoPipe } from '../pesquisa-de-membros-do-projet
 export class AlterarProjectsComponent implements OnInit {
   id;
   img64;
-  campoDePesquisa = '';
-
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -28,7 +26,7 @@ export class AlterarProjectsComponent implements OnInit {
     this.id = this.route.snapshot.params['id'];
     this.projects.detailProject(this.id);
     console.log(this.id);
-    this.OnResSearch(this.campoDePesquisa);
+    this.OnResSearch();
   }
 
   /* IMAGEM  IMAGEM */
@@ -68,9 +66,9 @@ export class AlterarProjectsComponent implements OnInit {
     // console.log(header);
     // console.log(posEl);
   }
-  OnResSearch(value) {
+  OnResSearch() {
+    const value = this.projects.campoDePesquisa;
     const membros = document.querySelector('.membros');
-    // const offMembros = document.querySelector('.offMembros');
     const resSearch = document.querySelector('#resSearch');
   if (value.length > 0) {
     //   console.log(offResSearch);

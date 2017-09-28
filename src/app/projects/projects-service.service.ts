@@ -22,6 +22,7 @@ export class ProjectsServiceService {
   projects;
   project;
   pesquisaMembros;
+  campoDePesquisa = '';
 
 
   ativaAddProjets() {
@@ -106,8 +107,8 @@ export class ProjectsServiceService {
     this.router.navigate(['main']);
   }
 
-  pesquisarMembros(parm, idproject) {
-    console.log(parm)
+  pesquisarMembros(idproject) {
+    const parm = this.campoDePesquisa;
     console.log(idproject);
     if(parm.length > 0) {
       if (this.dados.getCookieTokken()) {
@@ -148,8 +149,19 @@ export class ProjectsServiceService {
       .subscribe((res) => {
         console.log(res)
         this.snackbar.chamaSnackbar('Usuario Adicionado Com Sucesso!');
+        this.campoDePesquisa = '';
+
+        const membros = document.querySelector('.membros');
+        const resSearch = document.querySelector('#resSearch');
+
+        resSearch.setAttribute('style', 'display: none');
+        membros.setAttribute('style', 'display: block');
+        // document.getElementById('pesquisa').setAttribute('value', '');
+        this.detailProject(idProject);
       }, error => {
         console.log(error);
+        // this.pesquisaMembros = '';
+
       });
   }
 

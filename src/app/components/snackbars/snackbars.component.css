@@ -8,6 +8,7 @@
   flex-wrap: wrap;
   justify-content: center;
   transition: all 480ms ease;
+  z-index: 25;
 }
 
 

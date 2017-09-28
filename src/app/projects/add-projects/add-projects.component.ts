@@ -55,6 +55,7 @@ export class AddProjectsComponent implements OnInit {
 
   }
   criarProject() {
+    console.log('function criarProject');
     this.projects.criaProject(this.nome, this.descricao, this.img64)
       .subscribe((res) => {
         console.log(res)
