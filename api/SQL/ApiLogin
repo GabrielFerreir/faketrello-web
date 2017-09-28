@@ -1,4 +1,4 @@
---SELECT * FROM tb_login;
+--SELECT * FROM vqntdmembers;
 
 --UPDATE tb_login SET profile_img = '/imgsUser/default.png'
 
@@ -125,18 +125,26 @@ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION newuser(emailD CHARACTER VARYING, passw CHARACTER VARYING, img CHARACTER VARYING,
                                    nameP  CHARACTER VARYING, usern CHARACTER VARYING)
-  RETURNS BOOLEAN
+  RETURNS TABLE(
+    idNewUser INTEGER
+  )
 LANGUAGE plpgsql
 AS $$
+DECLARE
+  vIdNewUser INTEGER;
 BEGIN
   IF NOT exists(SELECT *
                 FROM tb_login
                 WHERE emailD = tb_login.email OR usern = tb_login.username)
   THEN
-    INSERT INTO tb_login (email, password, profile_img, name, username) VALUES ($1, $2, $3, $4, $5);
-    RETURN TRUE;
+    INSERT INTO tb_login (email, password, profile_img, name, username) VALUES ($1, $2, $3, $4, $5)
+    RETURNING id_user
+      INTO vIdNewUser;
+    RETURN QUERY
+    SELECT vIdNewUser;
   ELSE
-    RETURN FALSE;
+    RETURN QUERY
+    SELECT 0;
   END IF;
 END
 $$;
@@ -197,7 +205,7 @@ BEGIN
   THEN
     UPDATE tb_login l
     SET profile_img = imgPath
-    WHERE l.email = usern OR l.username = usern;
+    WHERE l.email ILIKE usern OR l.username ILIKE usern;
     RETURN TRUE;
   ELSE
     RETURN FALSE;
@@ -429,7 +437,7 @@ BEGIN
   FROM tb_projects
   WHERE tb_projects.id_project IN (SELECT tb_team.id_project
                                    FROM tb_team
-                                   WHERE usern = id_user);
+                                   WHERE usern = id_user) AND active <> FALSE;
 END;
 $$
 LANGUAGE plpgsql;
@@ -527,15 +535,21 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION timeproject(pIdProject INTEGER, pIdUser INTEGER, permission BOOLEAN, pIdAdmin INTEGER)
   RETURNS BOOLEAN AS $$
 BEGIN
-  IF EXISTS(SELECT *
-            FROM tb_team
-            WHERE id_user = pIdAdmin AND id_project = pIdProject AND permissions = TRUE)
+  IF pIdAdmin <> 0 AND EXISTS(SELECT *
+                              FROM tb_team
+                              WHERE id_user = pIdAdmin AND id_project = pIdProject AND permissions = TRUE)
   THEN
     INSERT
     INTO tb_team (id_project, id_user, permissions) VALUES (pIdProject, pIdUser, permission);
     RETURN TRUE;
+
+  ELSEIF pIdAdmin = 0
+    THEN
+      INSERT
+      INTO tb_team (id_project, id_user, permissions) VALUES (pIdProject, pIdUser, permission);
+      RETURN TRUE;
   END IF;
-  RETURN FALSE ;
+  RETURN FALSE;
 END;
 $$
 LANGUAGE plpgsql;
@@ -559,6 +573,66 @@ BEGIN
     FROM tb_team
     WHERE idproj = id_project AND iduser = id_user;
   END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION exitProject(pIdUser INTEGER, pIdProject INTEGER)
+  RETURNS TABLE(
+    status INTEGER
+  ) AS $$
+DECLARE
+  vQntdAdmins  INTEGER;
+  vQntdMembers INTEGER;
+BEGIN
+
+  IF EXISTS(SELECT *
+            FROM tb_team
+            WHERE id_user = pIdUser AND id_project = pIdProject AND permissions = FALSE)
+  THEN
+    DELETE FROM tb_team
+    WHERE id_user = pIdUser AND id_project = pIdProject;
+    RETURN QUERY
+    SELECT 1;
+  END IF;
+
+  SELECT COUNT(id_user)
+  OVER (
+    PARTITION BY 1 )
+  INTO vQntdAdmins
+  FROM tb_team
+  WHERE id_project = pIdProject
+        AND permissions
+  LIMIT 1;
+
+  SELECT COUNT(id_user)
+  OVER (
+    PARTITION BY 1 )
+  INTO vQntdMembers
+  FROM tb_team
+  WHERE id_project = pIdProject
+        AND permissions = FALSE
+  LIMIT 1;
+
+  IF vQntdAdmins > 1
+  THEN
+
+    DELETE FROM tb_team
+    WHERE id_user = pIdUser AND id_project = pIdProject;
+    RETURN QUERY
+    SELECT 2;
+  ELSEIF vQntdAdmins > 1 AND vQntdMembers > 0
+    THEN
+      RETURN QUERY
+      SELECT 3;
+  ELSEIF vQntdAdmins = 1 AND vQntdMembers = 0
+    THEN
+    EXECUTE deactivateProject(pIdProject, pIdUser);
+    RETURN QUERY
+      SELECT 4;
+  END IF;
+  RETURN QUERY
+  SELECT 0;
 END;
 $$
 LANGUAGE plpgsql;
@@ -732,7 +806,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
---SELECT * FROM searchUsers('a',107);
+--SELECT * FROM searchUsers('joao1559',107);
 
 CREATE OR REPLACE FUNCTION searchusers(puser CHARACTER VARYING, idproject INTEGER)
   RETURNS TABLE(
@@ -743,9 +817,41 @@ CREATE OR REPLACE FUNCTION searchusers(puser CHARACTER VARYING, idproject INTEGE
   )
 AS $$
 DECLARE
-  vIdUser INTEGER [];
-  reg     tb_team%ROWTYPE;
+  vIdUser   INTEGER [];
+  reg       tb_team%ROWTYPE;
+  vIdUnique INTEGER;
 BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_login
+            WHERE tb_login.username LIKE puser OR tb_login.email LIKE puser OR tb_login.name LIKE puser)
+  THEN
+    vIdUser :=  ARRAY(SELECT id_user
+                      FROM tb_login
+                      WHERE tb_login.username LIKE puser OR tb_login.email LIKE puser OR tb_login.name LIKE puser);
+    vIdUnique := (SELECT id_user
+                  FROM tb_login
+                  WHERE tb_login.username LIKE puser OR tb_login.email LIKE puser OR tb_login.name LIKE puser);
+
+    FOR reg IN
+    SELECT id_user
+    FROM tb_team
+    WHERE id_user = ANY (vIdUser)
+    LOOP
+      vIdUser = array_remove(vIdUser, (SELECT id_user
+                                       FROM tb_team
+                                       WHERE id_user = ANY (vIdUser) AND id_project = idproject
+                                       LIMIT 1));
+    END LOOP;
+    RETURN QUERY
+    SELECT
+      tb_login.id_user,
+      name,
+      tb_login.username,
+      profile_img
+    FROM tb_login
+    WHERE tb_login.id_user = ANY (vIdUser)
+    LIMIT 10;
+  END IF;
   IF EXISTS(SELECT *
             FROM tb_login
             WHERE tb_login.username ILIKE '%' || pUser || '%' OR
@@ -757,6 +863,14 @@ BEGIN
                       WHERE tb_login.username ILIKE '%' || pUser || '%' OR
                             email ILIKE '%' || pUser || '%' OR
                             name ILIKE '%' || pUser || '%');
+
+    IF vIdUnique = ANY (vIdUser)
+    THEN
+      vIdUser := array_remove(vIdUser, (SELECT id_user
+                                        FROM tb_login
+                                        WHERE tb_login.username LIKE puser OR tb_login.email LIKE puser OR
+                                              tb_login.name LIKE puser));
+    END IF;
 
     FOR reg IN
     SELECT id_user

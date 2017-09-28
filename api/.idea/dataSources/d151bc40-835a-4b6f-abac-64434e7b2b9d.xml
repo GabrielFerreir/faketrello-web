@@ -14,7 +14,7 @@
     </database>
     <schema id="4" parent="2" name="public">
       <ObjectId>2200</ObjectId>
-      <IntrospectionTimestamp>2017-09-28.08:36:48.395</IntrospectionTimestamp>
+      <IntrospectionTimestamp>2017-09-28.16:51:01.395</IntrospectionTimestamp>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -35,8 +35,8 @@
     </schema>
     <schema id="10" parent="3" name="public">
       <ObjectId>2200</ObjectId>
-      <IntrospectionTimestamp>2017-09-28.08:36:47.881</IntrospectionTimestamp>
-      <IntrospectionStateNumber>2235</IntrospectionStateNumber>
+      <IntrospectionTimestamp>2017-09-28.16:51:01.264</IntrospectionTimestamp>
+      <IntrospectionStateNumber>2324</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -265,9 +265,19 @@
       <RoutineKind>function</RoutineKind>
       <ReturnsSet>1</ReturnsSet>
     </routine>
-    <routine id="47" parent="10" name="getproject">
+    <routine id="47" parent="10" name="exitproject">
+      <ObjectId>33006</ObjectId>
+      <StateNumber>2324</StateNumber>
+      <VolatilityKind>volatile</VolatilityKind>
+      <ArgumentsDefinition>piduser integer, pidproject integer</ArgumentsDefinition>
+      <ResultsDefinition>TABLE(status integer)</ResultsDefinition>
+      <LanguageName>plpgsql</LanguageName>
+      <RoutineKind>function</RoutineKind>
+      <ReturnsSet>1</ReturnsSet>
+    </routine>
+    <routine id="48" parent="10" name="getproject">
       <ObjectId>32946</ObjectId>
-      <StateNumber>2083</StateNumber>
+      <StateNumber>2272</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
       <ArgumentsDefinition>usern integer</ArgumentsDefinition>
       <ResultsDefinition>TABLE(id_project integer, namep character varying, descrip text, img character varying)</ResultsDefinition>
@@ -275,7 +285,7 @@
       <RoutineKind>function</RoutineKind>
       <ReturnsSet>1</ReturnsSet>
     </routine>
-    <routine id="48" parent="10" name="getprojectsearch">
+    <routine id="49" parent="10" name="getprojectsearch">
       <ObjectId>32945</ObjectId>
       <StateNumber>2129</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
@@ -285,7 +295,7 @@
       <RoutineKind>function</RoutineKind>
       <ReturnsSet>1</ReturnsSet>
     </routine>
-    <routine id="49" parent="10" name="insertteamtasks">
+    <routine id="50" parent="10" name="insertteamtasks">
       <ObjectId>32984</ObjectId>
       <StateNumber>2200</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
@@ -294,7 +304,7 @@
       <LanguageName>plpgsql</LanguageName>
       <RoutineKind>function</RoutineKind>
     </routine>
-    <routine id="50" parent="10" name="loginu">
+    <routine id="51" parent="10" name="loginu">
       <ObjectId>32914</ObjectId>
       <StateNumber>1974</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
@@ -304,7 +314,7 @@
       <RoutineKind>function</RoutineKind>
       <ReturnsSet>1</ReturnsSet>
     </routine>
-    <routine id="51" parent="10" name="newblocks">
+    <routine id="52" parent="10" name="newblocks">
       <ObjectId>32938</ObjectId>
       <StateNumber>2042</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
@@ -313,7 +323,7 @@
       <LanguageName>plpgsql</LanguageName>
       <RoutineKind>function</RoutineKind>
     </routine>
-    <routine id="52" parent="10" name="newcomment">
+    <routine id="53" parent="10" name="newcomment">
       <ObjectId>32985</ObjectId>
       <StateNumber>2208</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
@@ -322,7 +332,7 @@
       <LanguageName>plpgsql</LanguageName>
       <RoutineKind>function</RoutineKind>
     </routine>
-    <routine id="53" parent="10" name="newproject">
+    <routine id="54" parent="10" name="newproject">
       <ObjectId>24718</ObjectId>
       <StateNumber>1803</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
@@ -332,7 +342,7 @@
       <RoutineKind>function</RoutineKind>
       <ReturnsSet>1</ReturnsSet>
     </routine>
-    <routine id="54" parent="10" name="newtasks">
+    <routine id="55" parent="10" name="newtasks">
       <ObjectId>32958</ObjectId>
       <StateNumber>2112</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
@@ -342,16 +352,17 @@
       <RoutineKind>function</RoutineKind>
       <ReturnsSet>1</ReturnsSet>
     </routine>
-    <routine id="55" parent="10" name="newuser">
-      <ObjectId>16447</ObjectId>
-      <StateNumber>684</StateNumber>
+    <routine id="56" parent="10" name="newuser">
+      <ObjectId>32998</ObjectId>
+      <StateNumber>2292</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
       <ArgumentsDefinition>emaild character varying, passw character varying, img character varying, namep character varying, usern character varying</ArgumentsDefinition>
-      <ResultsDefinition>boolean</ResultsDefinition>
+      <ResultsDefinition>TABLE(idnewuser integer)</ResultsDefinition>
       <LanguageName>plpgsql</LanguageName>
       <RoutineKind>function</RoutineKind>
+      <ReturnsSet>1</ReturnsSet>
     </routine>
-    <routine id="56" parent="10" name="passwordtoemail">
+    <routine id="57" parent="10" name="passwordtoemail">
       <ObjectId>16475</ObjectId>
       <StateNumber>955</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
@@ -361,7 +372,7 @@
       <RoutineKind>function</RoutineKind>
       <ReturnsSet>1</ReturnsSet>
     </routine>
-    <routine id="57" parent="10" name="relogin">
+    <routine id="58" parent="10" name="relogin">
       <ObjectId>24710</ObjectId>
       <StateNumber>1610</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
@@ -371,7 +382,7 @@
       <RoutineKind>function</RoutineKind>
       <ReturnsSet>1</ReturnsSet>
     </routine>
-    <routine id="58" parent="10" name="removeusersteam">
+    <routine id="59" parent="10" name="removeusersteam">
       <ObjectId>32983</ObjectId>
       <StateNumber>2198</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
@@ -381,7 +392,7 @@
       <RoutineKind>function</RoutineKind>
       <ReturnsSet>1</ReturnsSet>
     </routine>
-    <routine id="59" parent="10" name="searchblock">
+    <routine id="60" parent="10" name="searchblock">
       <ObjectId>32947</ObjectId>
       <StateNumber>2087</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
@@ -391,9 +402,9 @@
       <RoutineKind>function</RoutineKind>
       <ReturnsSet>1</ReturnsSet>
     </routine>
-    <routine id="60" parent="10" name="searchusers">
+    <routine id="61" parent="10" name="searchusers">
       <ObjectId>32988</ObjectId>
-      <StateNumber>2235</StateNumber>
+      <StateNumber>2240</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
       <ArgumentsDefinition>puser character varying, idproject integer</ArgumentsDefinition>
       <ResultsDefinition>TABLE(iduser integer, nameuser character varying, username character varying, imguser character varying)</ResultsDefinition>
@@ -401,18 +412,9 @@
       <RoutineKind>function</RoutineKind>
       <ReturnsSet>1</ReturnsSet>
     </routine>
-    <routine id="61" parent="10" name="timeproject">
-      <ObjectId>32994</ObjectId>
-      <StateNumber>2229</StateNumber>
-      <VolatilityKind>volatile</VolatilityKind>
-      <ArgumentsDefinition>pidproject integer, piduser integer, permission boolean</ArgumentsDefinition>
-      <ResultsDefinition>boolean</ResultsDefinition>
-      <LanguageName>plpgsql</LanguageName>
-      <RoutineKind>function</RoutineKind>
-    </routine>
     <routine id="62" parent="10" name="timeproject">
-      <ObjectId>32995</ObjectId>
-      <StateNumber>2233</StateNumber>
+      <ObjectId>32996</ObjectId>
+      <StateNumber>2264</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
       <ArgumentsDefinition>pidproject integer, piduser integer, permission boolean, pidadmin integer</ArgumentsDefinition>
       <ResultsDefinition>boolean</ResultsDefinition>
@@ -430,10 +432,10 @@
       <ReturnsSet>1</ReturnsSet>
     </routine>
     <routine id="64" parent="10" name="verify_img">
-      <ObjectId>16452</ObjectId>
-      <StateNumber>852</StateNumber>
+      <ObjectId>32999</ObjectId>
+      <StateNumber>2294</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
-      <ArgumentsDefinition>img character varying, usern character varying</ArgumentsDefinition>
+      <ArgumentsDefinition>imgpath character varying, usern character varying</ArgumentsDefinition>
       <ResultsDefinition>boolean</ResultsDefinition>
       <LanguageName>plpgsql</LanguageName>
       <RoutineKind>function</RoutineKind>
@@ -1049,275 +1051,271 @@
       <ArgumentDirection>T</ArgumentDirection>
       <DataType>table(usern varchar, emailu varchar, passw varchar)|0</DataType>
     </argument>
-    <argument id="171" parent="47" name="usern">
+    <argument id="171" parent="47" name="piduser">
       <Position>1</Position>
       <DataType>integer|0</DataType>
     </argument>
-    <argument id="172" parent="47">
-      <ArgumentDirection>T</ArgumentDirection>
-      <DataType>table(id_project integer, namep varchar, descrip text, img varchar)|0</DataType>
-    </argument>
-    <argument id="173" parent="48" name="idpro">
-      <Position>1</Position>
-      <DataType>integer|0</DataType>
-    </argument>
-    <argument id="174" parent="48" name="iduser">
+    <argument id="172" parent="47" name="pidproject">
       <Position>2</Position>
+      <DataType>integer|0</DataType>
+    </argument>
+    <argument id="173" parent="47">
+      <ArgumentDirection>T</ArgumentDirection>
+      <DataType>table(status integer)|0</DataType>
+    </argument>
+    <argument id="174" parent="48" name="usern">
+      <Position>1</Position>
       <DataType>integer|0</DataType>
     </argument>
     <argument id="175" parent="48">
       <ArgumentDirection>T</ArgumentDirection>
+      <DataType>table(id_project integer, namep varchar, descrip text, img varchar)|0</DataType>
+    </argument>
+    <argument id="176" parent="49" name="idpro">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+    </argument>
+    <argument id="177" parent="49" name="iduser">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+    </argument>
+    <argument id="178" parent="49">
+      <ArgumentDirection>T</ArgumentDirection>
       <DataType>table(namep varchar, descrip text, img varchar, team json)|0</DataType>
     </argument>
-    <argument id="176" parent="49" name="users">
+    <argument id="179" parent="50" name="users">
       <Position>1</Position>
       <DataType>json|0</DataType>
     </argument>
-    <argument id="177" parent="49">
+    <argument id="180" parent="50">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>boolean|0</DataType>
     </argument>
-    <argument id="178" parent="50" name="emaild">
+    <argument id="181" parent="51" name="emaild">
       <Position>1</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="179" parent="50" name="passw">
+    <argument id="182" parent="51" name="passw">
       <Position>2</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="180" parent="50">
+    <argument id="183" parent="51">
       <ArgumentDirection>T</ArgumentDirection>
       <DataType>table(id integer, email varchar, password varchar, username varchar, statusemail boolean, senhacorreta boolean)|0</DataType>
     </argument>
-    <argument id="181" parent="51" name="nameq">
+    <argument id="184" parent="52" name="nameq">
       <Position>1</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="182" parent="51" name="idproj">
+    <argument id="185" parent="52" name="idproj">
       <Position>2</Position>
       <DataType>integer|0</DataType>
-    </argument>
-    <argument id="183" parent="51">
-      <ArgumentDirection>R</ArgumentDirection>
-      <DataType>boolean|0</DataType>
-    </argument>
-    <argument id="184" parent="52" name="pidtask">
-      <Position>1</Position>
-      <DataType>integer|0</DataType>
-    </argument>
-    <argument id="185" parent="52" name="pcomment">
-      <Position>2</Position>
-      <DataType>text|0</DataType>
     </argument>
     <argument id="186" parent="52">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>boolean|0</DataType>
     </argument>
-    <argument id="187" parent="53" name="nameproject">
+    <argument id="187" parent="53" name="pidtask">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+    </argument>
+    <argument id="188" parent="53" name="pcomment">
+      <Position>2</Position>
+      <DataType>text|0</DataType>
+    </argument>
+    <argument id="189" parent="53">
+      <ArgumentDirection>R</ArgumentDirection>
+      <DataType>boolean|0</DataType>
+    </argument>
+    <argument id="190" parent="54" name="nameproject">
       <Position>1</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="188" parent="53" name="iddono">
+    <argument id="191" parent="54" name="iddono">
       <Position>2</Position>
       <DataType>integer|0</DataType>
     </argument>
-    <argument id="189" parent="53" name="descricao">
+    <argument id="192" parent="54" name="descricao">
       <Position>3</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="190" parent="53" name="imgproject">
+    <argument id="193" parent="54" name="imgproject">
       <Position>4</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="191" parent="53">
+    <argument id="194" parent="54">
       <ArgumentDirection>T</ArgumentDirection>
       <DataType>table(idproject integer)|0</DataType>
     </argument>
-    <argument id="192" parent="54" name="nametask">
+    <argument id="195" parent="55" name="nametask">
       <Position>1</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="193" parent="54" name="attachment">
+    <argument id="196" parent="55" name="attachment">
       <Position>2</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="194" parent="54" name="date">
+    <argument id="197" parent="55" name="date">
       <Position>3</Position>
       <DataType>timestamp|0</DataType>
     </argument>
-    <argument id="195" parent="54" name="idblock">
+    <argument id="198" parent="55" name="idblock">
       <Position>4</Position>
       <DataType>integer|0</DataType>
     </argument>
-    <argument id="196" parent="54">
+    <argument id="199" parent="55">
       <ArgumentDirection>T</ArgumentDirection>
       <DataType>table(idtask integer, nametaskr varchar, dater timestamp, idblockowner integer)|0</DataType>
     </argument>
-    <argument id="197" parent="55" name="emaild">
+    <argument id="200" parent="56" name="emaild">
       <Position>1</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="198" parent="55" name="passw">
+    <argument id="201" parent="56" name="passw">
       <Position>2</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="199" parent="55" name="img">
+    <argument id="202" parent="56" name="img">
       <Position>3</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="200" parent="55" name="namep">
+    <argument id="203" parent="56" name="namep">
       <Position>4</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="201" parent="55" name="usern">
+    <argument id="204" parent="56" name="usern">
       <Position>5</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="202" parent="55">
-      <ArgumentDirection>R</ArgumentDirection>
-      <DataType>boolean|0</DataType>
+    <argument id="205" parent="56">
+      <ArgumentDirection>T</ArgumentDirection>
+      <DataType>table(idnewuser integer)|0</DataType>
     </argument>
-    <argument id="203" parent="56" name="usern">
+    <argument id="206" parent="57" name="usern">
       <Position>1</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="204" parent="56">
+    <argument id="207" parent="57">
       <ArgumentDirection>T</ArgumentDirection>
       <DataType>table(passwordr varchar, nameuser varchar)|0</DataType>
     </argument>
-    <argument id="205" parent="57" name="usernamed">
+    <argument id="208" parent="58" name="usernamed">
       <Position>1</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="206" parent="57">
+    <argument id="209" parent="58">
       <ArgumentDirection>T</ArgumentDirection>
       <DataType>table(usern varchar, passw varchar)|0</DataType>
     </argument>
-    <argument id="207" parent="58" name="idproj">
+    <argument id="210" parent="59" name="idproj">
       <Position>1</Position>
       <DataType>integer|0</DataType>
     </argument>
-    <argument id="208" parent="58" name="idusert">
+    <argument id="211" parent="59" name="idusert">
       <Position>2</Position>
       <DataType>integer|0</DataType>
     </argument>
-    <argument id="209" parent="58" name="permission">
+    <argument id="212" parent="59" name="permission">
       <Position>3</Position>
       <DataType>boolean|0</DataType>
     </argument>
-    <argument id="210" parent="58" name="iduseralvo">
+    <argument id="213" parent="59" name="iduseralvo">
       <Position>4</Position>
       <DataType>integer|0</DataType>
     </argument>
-    <argument id="211" parent="58">
+    <argument id="214" parent="59">
       <ArgumentDirection>T</ArgumentDirection>
       <DataType>table(statuscode integer)|0</DataType>
     </argument>
-    <argument id="212" parent="59" name="project_owner">
+    <argument id="215" parent="60" name="project_owner">
       <Position>1</Position>
       <DataType>varchar|0</DataType>
-    </argument>
-    <argument id="213" parent="59">
-      <ArgumentDirection>T</ArgumentDirection>
-      <DataType>table(nameblock varchar)|0</DataType>
-    </argument>
-    <argument id="214" parent="60" name="puser">
-      <Position>1</Position>
-      <DataType>varchar|0</DataType>
-    </argument>
-    <argument id="215" parent="60" name="idproject">
-      <Position>2</Position>
-      <DataType>integer|0</DataType>
     </argument>
     <argument id="216" parent="60">
       <ArgumentDirection>T</ArgumentDirection>
+      <DataType>table(nameblock varchar)|0</DataType>
+    </argument>
+    <argument id="217" parent="61" name="puser">
+      <Position>1</Position>
+      <DataType>varchar|0</DataType>
+    </argument>
+    <argument id="218" parent="61" name="idproject">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+    </argument>
+    <argument id="219" parent="61">
+      <ArgumentDirection>T</ArgumentDirection>
       <DataType>table(iduser integer, nameuser varchar, username varchar, imguser varchar)|0</DataType>
     </argument>
-    <argument id="217" parent="61" name="pidproject">
+    <argument id="220" parent="62" name="pidproject">
       <Position>1</Position>
       <DataType>integer|0</DataType>
     </argument>
-    <argument id="218" parent="61" name="piduser">
+    <argument id="221" parent="62" name="piduser">
       <Position>2</Position>
       <DataType>integer|0</DataType>
     </argument>
-    <argument id="219" parent="61" name="permission">
+    <argument id="222" parent="62" name="permission">
       <Position>3</Position>
       <DataType>boolean|0</DataType>
     </argument>
-    <argument id="220" parent="61">
-      <ArgumentDirection>R</ArgumentDirection>
-      <DataType>boolean|0</DataType>
-    </argument>
-    <argument id="221" parent="62" name="pidproject">
-      <Position>1</Position>
-      <DataType>integer|0</DataType>
-    </argument>
-    <argument id="222" parent="62" name="piduser">
-      <Position>2</Position>
-      <DataType>integer|0</DataType>
-    </argument>
-    <argument id="223" parent="62" name="permission">
-      <Position>3</Position>
-      <DataType>boolean|0</DataType>
-    </argument>
-    <argument id="224" parent="62" name="pidadmin">
+    <argument id="223" parent="62" name="pidadmin">
       <Position>4</Position>
       <DataType>integer|0</DataType>
     </argument>
-    <argument id="225" parent="62">
+    <argument id="224" parent="62">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>boolean|0</DataType>
     </argument>
-    <argument id="226" parent="63" name="usern">
+    <argument id="225" parent="63" name="usern">
       <Position>1</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="227" parent="63">
+    <argument id="226" parent="63">
       <ArgumentDirection>T</ArgumentDirection>
       <DataType>table(statusemail boolean)|0</DataType>
     </argument>
-    <argument id="228" parent="64" name="img">
+    <argument id="227" parent="64" name="imgpath">
       <Position>1</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="229" parent="64" name="usern">
+    <argument id="228" parent="64" name="usern">
       <Position>2</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="230" parent="64">
+    <argument id="229" parent="64">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>boolean|0</DataType>
     </argument>
-    <argument id="231" parent="65" name="imgpath">
+    <argument id="230" parent="65" name="imgpath">
       <Position>1</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="232" parent="65" name="usern">
+    <argument id="231" parent="65" name="usern">
       <Position>2</Position>
       <DataType>integer|0</DataType>
     </argument>
-    <argument id="233" parent="65">
+    <argument id="232" parent="65">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>boolean|0</DataType>
     </argument>
-    <argument id="234" parent="66" name="idproj">
+    <argument id="233" parent="66" name="idproj">
       <Position>1</Position>
       <DataType>integer|0</DataType>
     </argument>
-    <argument id="235" parent="66" name="iduser">
+    <argument id="234" parent="66" name="iduser">
       <Position>2</Position>
       <DataType>integer|0</DataType>
     </argument>
-    <argument id="236" parent="66">
+    <argument id="235" parent="66">
       <ArgumentDirection>T</ArgumentDirection>
       <DataType>table(idproject integer, iduserr integer, permission boolean)|0</DataType>
     </argument>
-    <argument id="237" parent="67" name="usern">
+    <argument id="236" parent="67" name="usern">
       <Position>1</Position>
       <DataType>varchar|0</DataType>
     </argument>
-    <argument id="238" parent="67">
+    <argument id="237" parent="67">
       <ArgumentDirection>T</ArgumentDirection>
       <DataType>table(usera varchar, status text)|0</DataType>
     </argument>
