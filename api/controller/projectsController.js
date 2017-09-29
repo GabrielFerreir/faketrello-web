@@ -11,7 +11,7 @@ exports.newProject = async function (req, res) {
 
   caminho = '/imgsProjects/default.png'
 
-  db.any('SELECT * FROM newproject($1,$2,$3,$4);', [req.body.nameProject, newuser.id_usuario, req.body.description, caminho])
+  db.any('SELECT * FROM newproject($1,$2,$3,$4);', [req.body.nameProject, newuser.id_user, req.body.description, caminho])
     .then(async data => {
       if (!data || !data[0]) {
         res.status(404).json({error: 'Nao foi possivel encontrar esse usuário'})
@@ -34,12 +34,9 @@ exports.newProject = async function (req, res) {
         }
 
         //Inserindo owner no team
-
-        req.params.id = req.idproj
-        req.body.idUser = newuser.id_usuario
-        req.body.permission = true
-        req.id = 0
-        exports.insertTeam(req, res)
+        req.idOwner = newuser.id_user
+        req.permission = true
+        exports.insertOwner(req, res)
       }
     })
 }
@@ -49,7 +46,7 @@ exports.infoProject = async function (req, res) {
   req.called = 1
   let info = await userController.infoUser(req, res)
 
-  db.any('SELECT * FROM getproject($1);', [info.id_usuario])
+  db.any('SELECT * FROM getproject($1);', [info.id_user])
     .then(data => {
       if (!data || !data[0]) {
         res.status(404).json({error: 'Esse usuario nao possui projetos'})
@@ -158,30 +155,42 @@ exports.changeProject = function (req, res) {
 //Insere o time do projeto
 exports.insertTeam = function (req, res) {
   let auth = req.headers.authorization
-  let idAdmin = req.id
 
   if ((!auth) || (!auth.startsWith('Bearer'))) {
     res.status(401).json({error: 'Sessão Inválida'})
   } else {
     auth = auth.split('Bearer').pop().trim()
   }
-  jwt.verify(auth, userController.senha, function (error, data) {
-    if (error && idAdmin !== 0) {
+  jwt.verify(auth, userController.senha, async function (error, data) {
+    if (error) {
       res.status(401).json({error: 'Sessão invalida'})
     } else {
-      if (idAdmin === 0) {
-        data.id = 0
-      }
-      db.any('SELECT * FROM timeproject($1,$2,$3,$4)', [req.params.id, req.body.idUser, req.body.permission, data.id])
+
+      db.any('SELECT * FROM timeproject($1,$2,$3,$4,$5)', [req.params.id, req.body.idUser, req.body.permission, data.id])
         .then(data => {
           if (!data) {
             res.status(400).json({error: 'Erro'})
-          } else if (req.called !== 1) {
+          } else {
             res.status(200).json({result: 'sucesso'})
           }
         })
     }
   })
+}
+
+exports.insertOwner = function (req, res) {
+  console.log(req.body.idproj)
+  console.log(req.idOwner)
+  console.log(req.permission)
+  db.any('SELECT * FROM insertOwner($1,$2,$3)', [req.idproj, req.idOwner, req.permission])
+    .then(data => {
+      if(!data){
+        console.log('nao foi')
+      } else {
+        console.log('foi')
+      }
+
+    })
 }
 
 //Se retira do projeto
@@ -198,13 +207,13 @@ exports.exitProject = function (req, res) {
     if (error) {
       res.status(401).json({error: 'Sessão invalida'})
     } else {
-      db.any('SELECT * FROM exitproject($1)', [data.id, idProject])
+      db.any('SELECT * FROM exitproject($1,$2)', [data.id, idProject])
         .then(data => {
           if (!data || data[0].status === 0) {
             res.status(404).json({error: 'Usuario ou projeto nao encontrado'})
           }
           else if (data[0].status === 1) {
-            res.status(200).json({result: 'Membro removido'})
+            res.status(200).json({result: 'Você saiu'})
           }
           else if (data[0].status === 2) {
             res.status(200).json({result: 'Há mais administradores, administrador que tentou sair conseguiu'})
@@ -221,7 +230,7 @@ exports.exitProject = function (req, res) {
 }
 
 //Verifica se a permissao do usuario no projeto permite alterações
-exports.verifyPermission = function (req, res) {
+exports.verifyPermission = async function (req, res) {
   return new Promise(function (resolve, reject) {
     let auth = req.headers.authorization
 
@@ -253,7 +262,8 @@ exports.verifyPermission = function (req, res) {
 exports.removeUserTeam = async function (req, res) {
   req.body.idproject = req.params.id
   let permission = await exports.verifyPermission(req, res)
-  db.any('SELECT * FROM removeUsersTeam($1,$2,$3,$4,$5)', [req.body.idproject, req.body.iduser, permission[0].permission, req.body.idusertarget])
+  console.log(req.body.idusertarget)
+  db.any('SELECT * FROM removeUsersTeam($1,$2,$3,$4)', [req.body.idproject, permission[0].iduserr, permission[0].permission, req.body.idusertarget])
     .then(data => {
       if (data[0].statuscode === 200) {
         res.status(200).json({result: 'Usuario removido do projeto'})
@@ -261,6 +271,20 @@ exports.removeUserTeam = async function (req, res) {
         res.status(401).json({result: 'Voce nao tem permissao'})
       } else {
         res.status(404).json({result: 'Usuario nao encontrado no projeto'})
+      }
+    })
+}
+
+//Promove um usuario a administrador
+exports.promoteUser = async function (req, res) {
+  req.body.idproject = req.params.id
+  let permission = await exports.verifyPermission(req, res)
+  db.any('SELECT * FROM changePermissionMember($1,$2,$3)', [req.params.id, req.body.idusertarget, permission[0].permission])
+    .then(data => {
+      if (data[0].status === 0) {
+        res.status(401).json({error: 'Deu merda'})
+      } else {
+        res.status(200).json({result: 'Alterou permissao'})
       }
     })
 }

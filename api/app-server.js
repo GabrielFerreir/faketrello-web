@@ -29,12 +29,15 @@
   app.delete('/project/:id', projectsController.deleteproject)
   app.put('/project/:id', projectsController.changeProject)
   app.post('/insertUser/:id', projectsController.insertTeam)
-  app.delete('/userteam/:id', projectsController.removeUserTeam)
+  app.delete('/userTeam/:id', projectsController.removeUserTeam)
   app.get('/searchMembers/:id', projectsController.searchUsers)
+  app.put('/promoteUser/:id', projectsController.promoteUser)
+  app.delete('/exitProject/:id', projectsController.exitProject)
 
   //Parte de blocos
-  app.post('/newblock/:id', blocksController.newblock)
-  app.post('/newtask', blocksController.newtask)
+  app.post('/newBlock/:id', blocksController.newblock)
+  app.post('/newTask', blocksController.newtask)
+  app.post('/verifyPermission', projectsController.verifyPermission)
 
   let filesPath
 
