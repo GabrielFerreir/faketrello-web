@@ -55,13 +55,12 @@ export class AddProjectsComponent implements OnInit {
 
   }
   criarProject() {
-    console.log('function criarProject');
     this.projects.criaProject(this.nome, this.descricao, this.img64)
       .subscribe((res) => {
         console.log(res)
         this.projects.fechaAddProjets();
         this.snackbar.chamaSnackbar('Projeto Criado Com Sucesso!');
-        console.log('Cadastrou');
+        // console.log('Cadastrou');
         this.projects.searchProjects();
 
       }, error => {

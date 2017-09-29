@@ -3,7 +3,7 @@
   <section class="project-card" *ngFor="let projeto of projects.projects">
     <div class="img">
       <img *ngIf="projeto.img != '/imgsProjects/default.png'" src="{{'http://' + core.ipDaApi + '/' + projeto.img}}" width="100%" style="min-height: 196px;">
-      <div *ngIf="projeto.img == '/imgsProjects/default.png'">{{projeto.namep.charAt(0)}}</div>
+      <div *ngIf="projeto.img == '/imgsProjects/default.png'">{{ projeto.namep.charAt(0) | uppercase }}</div>
       <!--{{ projeto.namep }}-->
       <!--{{projeto.namep.charAt(0)}}-->
       <!--<span>http://192.168.52.105:8080{{ projeto.img }}</span>-->
@@ -13,7 +13,7 @@
     <div class="acoes">
       {{ projeto.namep }}
       <img class="icon" (click)="projects.detailProject(projeto.id_project)" src="../../assets/settings.svg">
-      <img class="icon" (click)="popupConfirmacao.ativaPopUpConfirmacao('Alerta', 'Tem certeza que deseja Excluir?', projeto.idproject)" src="../../assets/delete.svg">
+      <img class="icon" (click)="popupConfirmacao.ativaPopUpConfirmacao('Alerta', 'Tem certeza que deseja Excluir?', projeto.id_project)" src="../../assets/delete.svg">
       <!--<img class="icon" (click)="projects.detailProject(projeto.id_project)" src="../../assets/info.svg">-->
     </div>
   </section>

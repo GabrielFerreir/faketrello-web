@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CoreService } from '../Services/core.service';
 import { DadosDeUsuarioService } from '../Services/dados-de-usuario.service';
-import { Http, Headers } from '@angular/http';
+import {Http, Headers, RequestOptions} from '@angular/http';
 import {Router} from "@angular/router";
 import {PopupConfirmacaoService} from "../components/popup-confirmacao/popup-confirmacao.service";
 import {SnackbarsService} from "../components/snackbars/snackbars.service";
@@ -106,7 +106,6 @@ export class ProjectsServiceService {
     this.situacaoDetailProject = false;
     this.router.navigate(['main']);
   }
-
   pesquisarMembros(idproject) {
     const parm = this.campoDePesquisa;
     console.log(idproject);
@@ -130,7 +129,6 @@ export class ProjectsServiceService {
       this.pesquisaMembros = null;
     }
   }
-
   addMembrosProject(idUser, idProject) {
     var url = 'http://' + this.core.ipDaApi + '/insertUser/' + idProject;
     var json = JSON.stringify(
@@ -164,5 +162,69 @@ export class ProjectsServiceService {
 
       });
   }
+  delUserProject(idProject, idUser) {
+    if (this.dados.getCookieTokken()) {
+      let url = 'http://' + this.core.ipDaApi + '/userTeam/' + idProject;
+      let json = JSON.stringify(
+        {
+          idusertarget: idUser
+        }
+      );
+      let params = json;
+
+      let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.dados.getCookieTokken() });
+
+      let options = new RequestOptions({ headers: headers, body: params });
+      return this.http.delete(url, options)
+        .map(res => res.json())
+        .subscribe((res) => {
+          console.log(res);
+          this.detailProject(idProject);
+        }, error => {
+          console.log(error);
+        });
+    }
+  }
+  permissaoUserProject(idProject, idUser) {
+    var url = 'http://' + this.core.ipDaApi + '/promoteUser/' + idProject;
+    var json = JSON.stringify(
+      {
+        idusertarget: idUser,
+      }
+    );
+    var params = json;
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.dados.getCookieTokken());
+
+    return this.http.put(url, params, {headers: headers})
+      .map(res => res.json())
+      .subscribe((res) => {
+      this.detailProject(idProject)
+        console.log(res)
+      }, error => {
+        console.log(error);
+
+      });
+  }
+  sairUserProject(idProject) {
+    if (this.dados.getCookieTokken()) {
+      let url = 'http://' + this.core.ipDaApi + '/exitProject/' + idProject;
+
+      let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.dados.getCookieTokken() });
+
+      let options = new RequestOptions({ headers: headers });
+      return this.http.delete(url, options)
+        .map(res => res.json())
+        .subscribe((res) => {
+          console.log(res);
+          this.router.navigate(['/main']);
+          this.searchProjects()
+        }, error => {
+          console.log(error);
+        });
+    }
+  }
+
 
 }
