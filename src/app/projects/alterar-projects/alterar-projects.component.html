@@ -4,7 +4,7 @@
 
     <div *ngIf="img64" class="imageUser" id="preview" [style.background-image]="'url('+ img64 +')'"></div>
     <div *ngIf="projects?.project?.img != '/imgsProjects/default.png' && !img64" id="preview" class="imageUser" [style.background-image]="'url('+ 'http://' + core.ipDaApi + projects?.project?.img +')'"></div>
-    <div *ngIf="projects?.project?.img == '/imgsProjects/default.png' && !img64" class="imageUser">{{projects?.project?.namep.charAt(0)}}</div>
+    <div *ngIf="projects?.project?.img == '/imgsProjects/default.png' && !img64" class="imageUser">{{projects?.project?.namep.charAt(0) | uppercase }}</div>
     <div class="addImageUser" (click)="chamaFile()">+</div>
 
     <div class="nome">
@@ -71,12 +71,14 @@
             <h1>{{ membro.name }}</h1>
             <h2>{{ membro.username }}</h2>
             <div class="more"></div>
-            <div class="openOpMore">
-              <ul>
-                <li>Remover Usuario</li>
-                <li>Promover Usuario</li>
-              </ul>
+            <div class="opMoreOff">
+              <span *ngIf="membro.permissions && membro.id_user != idUser" (click)="projects.permissaoUserProject(id, membro.id_user)">Rebaixar Membro</span>
+              <span *ngIf="!membro.permissions && membro.id_user != idUser" (click)="projects.permissaoUserProject(id, membro.id_user)">Promover Membro</span>
+
+              <span *ngIf="membro.id_user == idUser" (click)="projects.sairUserProject(id)">Sair</span>
+              <span *ngIf="membro.id_user != idUser" (click)="projects.delUserProject(id, membro.id_user)">Deletar Membro</span>
             </div>
+
           </article>
         </div>
 
@@ -106,5 +108,7 @@
 <app-arrow-back (click)="projects.fechaDetailProject()"></app-arrow-back>
 
 </section>
+
+
 
 

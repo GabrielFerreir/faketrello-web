@@ -11,10 +11,14 @@ div {
     top: 16px;
     left: 16px;
     border-radius: 50%;
-    background-color: #009587;
+    /*background-color: #009587;*/
     background-image: url("../../../assets/arrow_back.svg");
     background-size: 24px;
     background-position: center;
     background-repeat: no-repeat;
+    transition: all ease 180ms;
+  }
+  div:hover {
+    background-color: #009587;
   }
 }
