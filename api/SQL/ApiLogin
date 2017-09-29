@@ -1,4 +1,4 @@
---SELECT * FROM vqntdmembers;
+--SELECT * FROM tb_projects;
 
 --UPDATE tb_login SET profile_img = '/imgsUser/default.png'
 
@@ -259,7 +259,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION consultuser(usern VARCHAR)
   RETURNS TABLE(
-    id_usuario INTEGER,
+    id_user    INTEGER,
     email      VARCHAR(50),
     username   VARCHAR(50),
     password   VARCHAR(20),
@@ -532,27 +532,42 @@ END;
 $$
 LANGUAGE plpgsql;
 
+--SELECT * FROM timeproject(73,22,false,
+
 CREATE OR REPLACE FUNCTION timeproject(pIdProject INTEGER, pIdUser INTEGER, permission BOOLEAN, pIdAdmin INTEGER)
   RETURNS BOOLEAN AS $$
 BEGIN
-  IF pIdAdmin <> 0 AND EXISTS(SELECT *
-                              FROM tb_team
-                              WHERE id_user = pIdAdmin AND id_project = pIdProject AND permissions = TRUE)
+  IF EXISTS(SELECT *
+            FROM tb_team
+            WHERE id_user = pIdAdmin AND id_project = pIdProject AND permissions = TRUE)
   THEN
     INSERT
     INTO tb_team (id_project, id_user, permissions) VALUES (pIdProject, pIdUser, permission);
     RETURN TRUE;
-
-  ELSEIF pIdAdmin = 0
-    THEN
-      INSERT
-      INTO tb_team (id_project, id_user, permissions) VALUES (pIdProject, pIdUser, permission);
-      RETURN TRUE;
   END IF;
   RETURN FALSE;
 END;
 $$
 LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insertOwner(pIdProject INTEGER, pIdUser INTEGER, permission BOOLEAN)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_projects
+            WHERE id_project = pIdProject)
+  THEN
+    INSERT
+    INTO tb_team (id_project, id_user, permissions) VALUES (pIdProject, pIdUser, permission);
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
+
+
 
 CREATE OR REPLACE FUNCTION verify_permission(idproj INTEGER, iduser INTEGER)
   RETURNS TABLE(
@@ -627,8 +642,8 @@ BEGIN
       SELECT 3;
   ELSEIF vQntdAdmins = 1 AND vQntdMembers = 0
     THEN
-    EXECUTE deactivateProject(pIdProject, pIdUser);
-    RETURN QUERY
+      EXECUTE deactivateProject(pIdProject, pIdUser);
+      RETURN QUERY
       SELECT 4;
   END IF;
   RETURN QUERY
@@ -675,6 +690,30 @@ END;
 $$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION changePermissionMember(pIdProject INTEGER, pIdUserTarget INTEGER, permission BOOLEAN)
+  RETURNS TABLE(
+    status INTEGER
+  ) AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_team
+            WHERE id_project = pIdProject AND
+                  id_user = pIdUserTarget) AND permission = TRUE
+  THEN
+
+    UPDATE tb_team
+    SET permissions = NOT permissions
+    WHERE id_project = pIdProject AND
+          id_user = pIdUserTarget;
+    RETURN QUERY
+    SELECT 1;
+  END IF;
+  RETURN QUERY
+  SELECT 0;
+END;
+$$
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION newblocks(nameq CHARACTER VARYING, idproj INTEGER)
   RETURNS BOOLEAN AS $$
 BEGIN
@@ -692,10 +731,14 @@ LANGUAGE plpgsql;
 
 --INSERT INTO tb_team(id_project,id_user,permissions)values(73,31,2),(73,32,2);
 
---A fazer...
+--SELECT * FROM searchblock
+
 CREATE OR REPLACE FUNCTION searchblock(projectOwner CHARACTER VARYING)
   RETURNS TABLE(
-    nameBlock VARCHAR(50)
+    nameBlock VARCHAR(50),
+    nameTasks VARCHAR(50),
+    anexo     VARCHAR(20),
+    dataFinal TIMESTAMP
   ) AS $$
 DECLARE
   vIdBlocks INTEGER [];
@@ -711,6 +754,15 @@ BEGIN
                       FROM tb_tasks
                       WHERE id_block = ANY (vIdBlocks));
   END IF;
+  RETURN QUERY
+  SELECT
+    name_blocks,
+    name_task,
+    attachment,
+    final_date
+  FROM tb_blocks
+    INNER JOIN tb_tasks ON tb_blocks.id_blocks = tb_tasks.id_block
+  WHERE id_blocks = ANY (vIdBlocks) AND id_block = ANY (vIdBlocks);
 END;
 $$
 LANGUAGE plpgsql;
@@ -806,7 +858,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
---SELECT * FROM searchUsers('joao1559',107);
+--SELECT * FROM searchUsers('joao',107);
 
 CREATE OR REPLACE FUNCTION searchusers(puser CHARACTER VARYING, idproject INTEGER)
   RETURNS TABLE(
