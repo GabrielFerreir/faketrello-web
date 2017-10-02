@@ -566,9 +566,6 @@ END;
 $$
 LANGUAGE plpgsql;
 
-
-
-
 CREATE OR REPLACE FUNCTION verify_permission(idproj INTEGER, iduser INTEGER)
   RETURNS TABLE(
     idproject  INTEGER,

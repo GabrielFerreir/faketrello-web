@@ -179,9 +179,7 @@ exports.insertTeam = function (req, res) {
 }
 
 exports.insertOwner = function (req, res) {
-  console.log(req.body.idproj)
-  console.log(req.idOwner)
-  console.log(req.permission)
+
   db.any('SELECT * FROM insertOwner($1,$2,$3)', [req.idproj, req.idOwner, req.permission])
     .then(data => {
       if(!data){
