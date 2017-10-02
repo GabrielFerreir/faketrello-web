@@ -37,6 +37,14 @@ exports.newProject = async function (req, res) {
         req.idOwner = newuser.id_user
         req.permission = true
         exports.insertOwner(req, res)
+        exports.defaultBlocks(req, res)
+
+        db.any('SELECT * FROM insertTeamNewProject($1)', [req.body.teamJson])
+          .then(data => {
+            if(!data) {
+              res.json({error:'Falha ao inserir time de criação do projeto'})
+            }
+          })
       }
     })
 }
@@ -166,28 +174,26 @@ exports.insertTeam = function (req, res) {
       res.status(401).json({error: 'Sessão invalida'})
     } else {
 
-      db.any('SELECT * FROM timeproject($1,$2,$3,$4,$5)', [req.params.id, req.body.idUser, req.body.permission, data.id])
+      db.any('SELECT * FROM timeproject($1,$2,$3,$4)', [req.params.id, req.body.idUser, req.body.permission, data.id])
         .then(data => {
           if (!data) {
             res.status(400).json({error: 'Erro'})
           } else {
-            res.status(200).json({result: 'sucesso'})
+            res.status(200).json({result: 'Sucesso'})
           }
         })
     }
   })
 }
 
+//Insere o dono do projeto
 exports.insertOwner = function (req, res) {
 
   db.any('SELECT * FROM insertOwner($1,$2,$3)', [req.idproj, req.idOwner, req.permission])
     .then(data => {
-      if(!data){
-        console.log('nao foi')
-      } else {
-        console.log('foi')
+      if (!data) {
+        res.json({error: 'Falha ao inserir dono do projeto'})
       }
-
     })
 }
 
@@ -260,7 +266,6 @@ exports.verifyPermission = async function (req, res) {
 exports.removeUserTeam = async function (req, res) {
   req.body.idproject = req.params.id
   let permission = await exports.verifyPermission(req, res)
-  console.log(req.body.idusertarget)
   db.any('SELECT * FROM removeUsersTeam($1,$2,$3,$4)', [req.body.idproject, permission[0].iduserr, permission[0].permission, req.body.idusertarget])
     .then(data => {
       if (data[0].statuscode === 200) {
@@ -297,6 +302,16 @@ exports.searchUsers = function (req, res) {
         res.status(404).json({error: 'Usuario inexistente'})
       } else {
         res.status(200).json(data)
+      }
+    })
+}
+
+//Criando os blocos padrões
+exports.defaultBlocks = function (req, res) {
+  db.any('SELECT * FROM defaultBlocks($1)', [req.idproj])
+    .then(data => {
+      if (!data) {
+        res.json({error: 'Falha ao criar blocos padrões'})
       }
     })
 }

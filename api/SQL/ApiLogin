@@ -1,4 +1,4 @@
---SELECT * FROM tb_projects;
+--SELECT * FROM tb_tasks where id_block = 15;
 
 --UPDATE tb_login SET profile_img = '/imgsUser/default.png'
 
@@ -418,6 +418,25 @@ END;
 $$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION insertTeamNewProject(pTeam JSON)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  INSERT INTO tb_team (id_project, id_user, permissions)
+    SELECT
+      idProject,
+      idUser,
+      permission
+    FROM json_to_recordset(pTeam)
+      AS x(
+         idProject INTEGER,
+         idUser INTEGER,
+         permission BOOLEAN
+         )
+  RETURNING TRUE;
+END;
+$$
+LANGUAGE plpgsql;
+
 --SELECT * FROM getproject(25);
 
 CREATE OR REPLACE FUNCTION getproject(usern INTEGER)
@@ -711,6 +730,24 @@ END;
 $$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION defaultBlocks(pIdProject INTEGER)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT id_project
+            FROM tb_projects
+            WHERE id_project = pIdProject)
+  THEN
+    INSERT INTO tb_blocks (name_blocks, project_owner)
+    VALUES ('A fazer', pIdProject),
+      ('Fazendo', pIdProject),
+      ('Concluído', pIdProject);
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION newblocks(nameq CHARACTER VARYING, idproj INTEGER)
   RETURNS BOOLEAN AS $$
 BEGIN
@@ -726,53 +763,76 @@ END;
 $$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION changeBlockName(pNewName CHARACTER VARYING, pIdBlock INTEGER)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_blocks
+            WHERE id_blocks = pIdBlock)
+  THEN
+    UPDATE tb_blocks
+    SET name_blocks = pNewName
+    WHERE id_blocks = pIdBlock;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
 --INSERT INTO tb_team(id_project,id_user,permissions)values(73,31,2),(73,32,2);
 
---SELECT * FROM searchblock
+--SELECT * FROM searchblock(156)
 
-CREATE OR REPLACE FUNCTION searchblock(projectOwner CHARACTER VARYING)
+CREATE OR REPLACE FUNCTION searchblock(projectOwner INTEGER)
   RETURNS TABLE(
-    nameBlock VARCHAR(50),
-    nameTasks VARCHAR(50),
-    anexo     VARCHAR(20),
-    dataFinal TIMESTAMP
+    nameProject VARCHAR(50),
+    nameBlock   VARCHAR(50),
+    tasks       JSON
   ) AS $$
 DECLARE
-  vIdBlocks INTEGER [];
-  vIdTasks  INTEGER [];
+  vIdBlocks     INTEGER [];
+  vName_project VARCHAR(50);
 BEGIN
+  SELECT name_project
+  INTO vName_project
+  FROM tb_projects
+  WHERE id_project = projectOwner;
+
   vIdBlocks := ARRAY(SELECT id_blocks
                      FROM tb_blocks
                      WHERE project_owner = projectOwner);
 
   IF vIdBlocks IS NOT NULL
   THEN
-    vIdTasks := ARRAY(SELECT *
-                      FROM tb_tasks
-                      WHERE id_block = ANY (vIdBlocks));
+    RETURN QUERY
+    SELECT
+      vName_project,
+      name_blocks,
+      (SELECT COALESCE(json_agg(TasksJson), '[]')
+       FROM (SELECT
+               id_task,
+               name_task,
+               final_date
+             FROM tb_tasks
+             WHERE id_block = ANY (vIdBlocks)) AS TasksJson
+      ) tasks
+    FROM tb_blocks
+    WHERE id_blocks = ANY (vIdBlocks);
   END IF;
-  RETURN QUERY
-  SELECT
-    name_blocks,
-    name_task,
-    attachment,
-    final_date
-  FROM tb_blocks
-    INNER JOIN tb_tasks ON tb_blocks.id_blocks = tb_tasks.id_block
-  WHERE id_blocks = ANY (vIdBlocks) AND id_block = ANY (vIdBlocks);
 END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION deleteBlock(nameBlock CHARACTER VARYING)
+CREATE OR REPLACE FUNCTION deleteBlock(pIdBlock INTEGER)
   RETURNS BOOLEAN AS $$
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_blocks
-            WHERE nameBlock ILIKE name_blocks)
+            WHERE id_blocks = pIdBlock)
   THEN
     DELETE FROM tb_blocks
-    WHERE name_blocks ILIKE nameBlock;
+    WHERE id_blocks = pIdBlock;
     RETURN TRUE;
   END IF;
   RETURN FALSE;

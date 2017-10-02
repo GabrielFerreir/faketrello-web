@@ -33,11 +33,13 @@
   app.get('/searchMembers/:id', projectsController.searchUsers)
   app.put('/promoteUser/:id', projectsController.promoteUser)
   app.delete('/exitProject/:id', projectsController.exitProject)
+  app.post('/project/verifyPermission', projectsController.verifyPermission)
 
   //Parte de blocos
-  app.post('/newBlock/:id', blocksController.newblock)
-  app.post('/newTask', blocksController.newtask)
-  app.post('/verifyPermission', projectsController.verifyPermission)
+  app.post('/blocks/:id', blocksController.newblock)
+  app.put('/blocks/:id', blocksController.changeBlockName)
+  app.get('/project/blocks/:id', blocksController.seachblocks)
+  app.post('/blocks/task/:id', blocksController.newtask)
 
   let filesPath
 
