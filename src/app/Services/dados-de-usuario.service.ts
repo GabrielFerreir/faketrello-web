@@ -11,9 +11,7 @@ export class DadosDeUsuarioService {
               private http: Http,
               private core: CoreService) {
   }
-
   dadosDeUsuario;
-
   criarCookie(tokken) {
     var data = new Date();
     data.setTime(data.getTime() + (24 * 60 * 60 * 1000))
@@ -75,7 +73,7 @@ export class DadosDeUsuarioService {
             return true;
           }, error => {
             console.log('Fazendo logout');
-            this.logout();
+            // this.logout();
             return false;
           });
     } else {
@@ -110,7 +108,6 @@ export class DadosDeUsuarioService {
     return this.http.put(url, params, {headers: headers})
       .map(res => res.json());
   }
-
   alterarSenhaDeUsuario(oldpass, newpass) {
     var url = 'http://' + this.core.ipDaApi + '/session/changepassword';
     var json = JSON.stringify(

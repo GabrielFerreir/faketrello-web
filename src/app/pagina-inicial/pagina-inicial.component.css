@@ -1,3 +1,6 @@
+a {
+  color: #111;
+}
 .container {
   width: 100vw;
   height: 100%  ;
@@ -36,13 +39,15 @@
 .project-card .img div {
   /*margin: 0 auto;*/
   font-size: 60px;
-  width: 90%;
+  width: 100%;
   height: 196px;
   line-height: 196px;
   float: left;
-  margin-left: 5%;
   box-sizing: border-box;
   color: #26C6DA;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
 }
 .project-card .acoes {

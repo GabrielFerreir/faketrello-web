@@ -1,10 +1,12 @@
 <section class="projeto">
-  <div class="img">N</div>
-  <h1>Nome de Projeto</h1>
+
+  <div class="img">{{ projects?.project?.namep.charAt(0) | uppercase }}</div>
+
+  <h1>{{ projects?.project?.namep | uppercase }}</h1>
 </section>
 
-<section class="container" #container>
-<div>
+<section class="container"  #container>
+<div id="dragDrop">
 
 
   <section class="caixa">
@@ -15,6 +17,48 @@
       <div class="popup" #popup1>
       </div>
       </header>
+
+    <article class="elemento">
+      Teste
+      <br/>
+      <span class="prazo">
+        21/09/2017
+      </span>
+      <div class="editElemento" (click)="teste()">
+      </div>
+    </article>
+
+  </section>
+
+  <section class="caixa">
+    <header>A FAZER
+      <div class="more_horiz" [menu]="appmenu"></div>
+
+
+      <div class="popup" #popup1>
+      </div>
+    </header>
+
+    <article class="elemento">
+      Teste
+      <br/>
+      <span class="prazo">
+        21/09/2017
+      </span>
+      <div class="editElemento" (click)="teste()">
+      </div>
+    </article>
+
+  </section>
+
+  <section class="caixa">
+    <header>A FAZER
+      <div class="more_horiz" [menu]="appmenu"></div>
+
+
+      <div class="popup" #popup1>
+      </div>
+    </header>
 
     <article class="elemento">
       Teste

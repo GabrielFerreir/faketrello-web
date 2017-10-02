@@ -59,7 +59,7 @@ const APP_ROUTES: Routes = [
             alterar: DadosDeUsuarioResolve
           }
         },
-      {path: 'DragDrop', component: DragDropComponent},
+      {path: 'project/:id', component: DragDropComponent},
 
     ]},
    {path: 'home', component: HomeComponent},

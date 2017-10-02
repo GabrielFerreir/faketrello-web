@@ -52,8 +52,8 @@
 }
 
 .caixa {
-  width: 25vw;
-  min-width: 100px;
+  min-width: 35vw;
+  /*min-width: 100px;*/
   overflow-y: auto;
   overflow-x: hidden;
   float: left;

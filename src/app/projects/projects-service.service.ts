@@ -85,6 +85,21 @@ export class ProjectsServiceService {
         });
     }
   }
+  viewDetailProject(id) {
+    if (this.dados.getCookieTokken()) {
+      var url = 'http://' + this.core.ipDaApi + '/project/' + id;
+      var headers = new Headers();
+      headers.append('Authorization', 'Bearer ' + this.dados.getCookieTokken());
+      return this.http.get(url, {headers: headers})
+        .map(res => res.json())
+        .subscribe((res) => {
+          this.project = res;
+          console.log(res);
+        }, error => {
+          console.log(error);
+        });
+    }
+  }
   delProject(id) {
     if (this.dados.getCookieTokken()) {
       var url = 'http://' + this.core.ipDaApi + '/project/' + id;
