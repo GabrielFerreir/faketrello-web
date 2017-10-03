@@ -39,7 +39,13 @@ export class DragDropComponent implements OnInit {
   deuScroll;
   intervalP;
   intervalN;
+    /* DEFAULT SCROLL */
 
+      piScrollDefaultX = 0;
+      diferencaPDesfault;
+      scrollDefault = false;
+      scroltDefaultUltimaPos;
+    /* DEFAULT SCROLL */
   /* DRAGDROP */
 
   constructor(private projects: ProjectsServiceService,
@@ -49,6 +55,7 @@ export class DragDropComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
     this.projects.viewDetailProject(this.id);
+    this.projects.searchBlocks(this.id);
 
     let elemento = document.querySelectorAll('.elemento');
     for (let i = 0; i < elemento.length; i++) {
@@ -56,6 +63,12 @@ export class DragDropComponent implements OnInit {
         this.getPosInicial(e);
       });
     }
+    this.container.nativeElement.addEventListener('mousemove', (e) => {
+      this.getMouseMove(e);
+    });
+    this.container.nativeElement.addEventListener('mouseup', (e) => {
+      this.getPosFinal(e);
+    });
     /* TOUCH */
     for (let i = 0; i < elemento.length; i++) {
       elemento[i].addEventListener('touchstart', (e) => {
@@ -64,38 +77,26 @@ export class DragDropComponent implements OnInit {
         console.log('touch');
       });
     }
-    /* TOUCH */
-
-    this.container.nativeElement.addEventListener('mousemove', (e) => {
-      this.getMouseMove(e);
-    });
-    /* TOUCH */
     this.container.nativeElement.addEventListener('touchmove', (e) => {
       this.getMouseMove(e);
       // console.log('touchmove');
     });
-    /* TOUCH */
-
-    this.container.nativeElement.addEventListener('mouseup', (e) => {
-      this.getPosFinal(e);
-    });
-    /* TOUCH */
     this.container.nativeElement.addEventListener('touchend', (e) => {
       this.getPosFinal(e);
       console.log('touchEnd');
-
     });
     /* TOUCH */
 
+
     // larguraDaCaixa
-    this.larguraDaCaixa = document.getElementsByClassName('caixa')[0].clientWidth;
+    this.larguraDaCaixa = document.querySelectorAll('.caixa')[0].clientWidth;
     this.larguraDaCaixa = this.larguraDaCaixa - (this.larguraDaCaixa * 0.1);
-
   }
-
   getPosInicial(event) {
-    this.posInicialX = event.clientX + this.getScroll();
-    this.posInicialY = event.clientY;
+    if(!this.isMobile) {
+      this.posInicialX = event.clientX + this.getScroll();
+      this.posInicialY = event.clientY;
+    }
     if (this.isMobile) {
       this.posInicialX = event.changedTouches["0"].clientX + this.getScroll();
       this.posInicialY = event.changedTouches["0"].clientY;
@@ -132,19 +133,23 @@ export class DragDropComponent implements OnInit {
     this.sombra.className = "sombra";
     this.sombra.setAttribute("_ngcontent-c4", "");
   }
-
   getMouseMove(event) {
     if (this.posInicialX) {
+      event.preventDefault();
       this.fazScroll(event);
-      this.diferencaX = (event.clientX + this.getScroll()) - this.posInicialX;
-      this.diferencaY = (event.clientY) - this.posInicialY;
+      if(!this.isMobile) {
+        this.diferencaX = (event.clientX + this.getScroll()) - this.posInicialX;
+        console.log('diferença X DESKTOP: ' + this.diferencaX);
+        this.diferencaY = (event.clientY) - this.posInicialY;
+      }
       if (this.isMobile) {
-        this.diferencaX = (event.changedTouches["0"].clientX) - this.posInicialX;
+        this.diferencaX = (event.changedTouches["0"].clientX + this.getScroll()) - this.posInicialX;
         console.log('diferença X MOBILE: ' + this.diferencaX);
         this.diferencaY = (event.changedTouches["0"].clientY) - this.posInicialY;
       }
       if (this.isMobile) {
-        this.bloco.style.transform = 'translate(' + (event.changedTouches["0"].clientX - this.posInicialX) + 'px, ' + this.diferencaY + 'px) rotate(7deg)';
+        this.bloco.style.transform = 'translate(' + (event.changedTouches['0'].clientX - this.posInicialX) + 'px, ' + this.diferencaY + 'px) rotate(7deg)';
+        console.log('translate(' + (event.changedTouches['0'].clientX - this.posInicialX) + 'px, ' + this.diferencaY + 'px) rotate(7deg)');
       } else {
         this.bloco.style.transform = 'translate(' + (event.clientX - this.posInicialX) + 'px, ' + this.diferencaY + 'px) rotate(7deg)';
       }
@@ -160,7 +165,6 @@ export class DragDropComponent implements OnInit {
       this.clicou = true;
     }
   }
-
   getPosFinal(event) {
     if (this.clicou) {
       this.caixaDestino().removeChild(this.sombra);
@@ -177,13 +181,11 @@ export class DragDropComponent implements OnInit {
     this.reset();
     this.recriaListener();
   }
-
   getScroll() {
     let scroll = document.querySelector('#dragDrop').scrollLeft;
-    console.log('GetScroll: ' + scroll)
+    // console.log('GetScroll: ' + scroll)
     return scroll;
   }
-
   fazScroll(mouse) {
     clearInterval(this.intervalN);
     clearInterval(this.intervalP);
@@ -191,53 +193,52 @@ export class DragDropComponent implements OnInit {
     if (this.posInicialX) {
       this.tamanhoDaTela = document.querySelector('#dragDrop').clientWidth;
       this.areaDeScroll = this.tamanhoDaTela * 0.2;
-      if (mouse.clientX > this.tamanhoDaTela - this.areaDeScroll) {
-          document.querySelector('#dragDrop').scrollBy(20, 0);
+      if(!this.isMobile) {
+        if (mouse.clientX > this.tamanhoDaTela - this.areaDeScroll) {
+          document.querySelector('#dragDrop').scrollBy(5, 0);
           clearInterval(this.intervalP);
           this.intervalN = setInterval(() => {
-            document.querySelector('#dragDrop').scrollBy(20, 0);
+            document.querySelector('#dragDrop').scrollBy(5, 0);
             if (this.getScroll() >= document.querySelector('#dragDrop').clientWidth - 48) {
               clearInterval(this.intervalN);
             }
-          }, 25);
-      }
-      else if (this.areaDeScroll > mouse.clientX) {
-            document.querySelector('#dragDrop').scrollBy(-20, 0);
-            clearInterval(this.intervalN);
-            this.intervalP = setInterval(() => {
-              document.querySelector('#dragDrop').scrollBy(-20, 0);
-              if (this.getScroll() <= 0) {
-                clearInterval(this.intervalP);
-              }
-            }, 25);
-      }
-
-      if(this.isMobile) {
-        console.log('ChangedTouches: ' + mouse.changedTouches["0"].clientX);
-        if(mouse.changedTouches["0"].clientX > this.tamanhoDaTela - this.areaDeScroll) {
-          document.querySelector('#dragDrop').scrollBy(20, 0);
-          clearInterval(this.intervalP);
-          this.intervalN = setInterval(() => {
-            document.querySelector('#dragDrop').scrollBy(20, 0);
-            if (this.getScroll() >= document.querySelector('#dragDrop').clientWidth - 48) {
-              clearInterval(this.intervalN);
-            }
-          }, 25);
+          }, 35);
         }
-        else if(this.areaDeScroll > mouse.changedTouches["0"].clientX) {
-          document.querySelector('#dragDrop').scrollBy(-20, 0);
+        else if (this.areaDeScroll > mouse.clientX) {
+          document.querySelector('#dragDrop').scrollBy(-5, 0);
           clearInterval(this.intervalN);
           this.intervalP = setInterval(() => {
-            document.querySelector('#dragDrop').scrollBy(-20, 0);
+            document.querySelector('#dragDrop').scrollBy(-5, 0);
             if (this.getScroll() <= 0) {
               clearInterval(this.intervalP);
             }
-          }, 25);
+          }, 35);
+        }
+      }
+      if(this.isMobile) {
+        if(mouse.changedTouches["0"].clientX > this.tamanhoDaTela - this.areaDeScroll) {
+          document.querySelector('#dragDrop').scrollBy(5, 0);
+          clearInterval(this.intervalP);
+          this.intervalN = setInterval(() => {
+            document.querySelector('#dragDrop').scrollBy(5, 0);
+            if (this.getScroll() >= document.querySelector('#dragDrop').scrollWidth) {
+              clearInterval(this.intervalN);
+            }
+          }, 35);
+        }
+        else if(this.areaDeScroll > mouse.changedTouches["0"].clientX) {
+          document.querySelector('#dragDrop').scrollBy(-5, 0);
+          clearInterval(this.intervalN);
+          this.intervalP = setInterval(() => {
+            document.querySelector('#dragDrop').scrollBy(-5, 0);
+            if (this.getScroll() <= 0) {
+              clearInterval(this.intervalP);
+            }
+          }, 35);
         }
       }
     }
   }
-
   pegaLocalNaOrdem(event) {
     // console.log('LOCAL');
     this.posFinalY = event.clientY - 40;
@@ -265,7 +266,6 @@ export class DragDropComponent implements OnInit {
     // console.log('LOCAL');
     return local;
   }
-
   caixaDestino() {
     if (this.diferencaX && this.diferencaX > this.larguraDaCaixa) {
       let quantidadeDeIrmaos = Math.floor(this.diferencaX / this.larguraDaCaixa);
@@ -286,7 +286,6 @@ export class DragDropComponent implements OnInit {
     // console.log(this.cxDestino);
     return this.cxDestino;
   }
-
   reset() {
     this.posInicialX = 0;
     this.posInicialY = 0;
@@ -306,21 +305,23 @@ export class DragDropComponent implements OnInit {
     // this.mexeu = false;
     this.clicou = false;
   }
-
   recriaListener() {
     let elemento = document.querySelectorAll('.elemento');
     for (let i = 0; i < elemento.length; i++) {
-      elemento[i].addEventListener('mousedown', (e) => {
-        this.getPosInicial(e);
-      });
+      if(!this.isMobile) {
+        elemento[i].addEventListener('mousedown', (e) => {
+          this.getPosInicial(e);
+        });
+      }
       /* TOUCH */
-      elemento[i].addEventListener('touchstart', (e) => {
-        this.getPosInicial(e);
-      });
+      if(this.isMobile) {
+        elemento[i].addEventListener('touchstart', (e) => {
+          this.getPosInicial(e);
+        });
+      }
       /* FIM TOUCH */
     }
   }
-
   teste() {
     alert('A');
   }

@@ -23,6 +23,7 @@ export class ProjectsServiceService {
   project;
   pesquisaMembros;
   campoDePesquisa = '';
+  blocks;
 
 
   ativaAddProjets() {
@@ -235,6 +236,22 @@ export class ProjectsServiceService {
           console.log(res);
           this.router.navigate(['/main']);
           this.searchProjects()
+        }, error => {
+          console.log(error);
+        });
+    }
+  }
+
+  searchBlocks(id) {
+    if (this.dados.getCookieTokken()) {
+      var url = 'http://' + this.core.ipDaApi + '/project/blocks/' + id;
+      var headers = new Headers();
+      headers.append('Authorization', 'Bearer ' + this.dados.getCookieTokken());
+      return this.http.get(url, {headers: headers})
+        .map(res => res.json())
+        .subscribe((res) => {
+          console.log(res);
+          this.blocks = res;
         }, error => {
           console.log(error);
         });

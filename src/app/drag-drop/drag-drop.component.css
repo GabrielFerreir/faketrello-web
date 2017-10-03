@@ -38,7 +38,6 @@
   float: left;
   font-family: 'Open Sans';
   cursor: default;
-  padding: 0 5%;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -230,7 +229,8 @@
   }
 
   .caixa {
-    min-width: 140px;
+    /*min-width: 200px;*/
+    min-width: 90vw;
   }
   .caixa header {
     width: auto;
