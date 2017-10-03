@@ -1,4 +1,5 @@
 let db = require('../db-config.js')
+let fs = require('fs')
 
 //Adiciona quadros nos projetos
 exports.newblock = function (req, res) {
@@ -27,12 +28,12 @@ exports.changeBlockName = function (req, res) {
 
 //Mostra os blocos do projeto
 exports.seachblocks = function (req, res) {
-  db.any('SELECT * FROM searchBlock($1)', [req.params.id])
+  db.any('SELECT * FROM searchblock($1)', [req.params.id])
     .then(data => {
       if (!data || !data[0]) {
         res.status(404).json({error: 'Esse projeto nao foi encontrado'})
       } else {
-        res.status(200).json({data})
+        res.status(200).json(data)
       }
     })
 }
@@ -71,6 +72,30 @@ exports.newtask = function (req, res) {
         } else {
           res.status(200).json({result: 'Tafera criada'})
         }
+      }
+    })
+}
+
+//Altera tarefa
+exports.changeTask = function (req, res) {
+  db.any('SELECT * FROM changeTask($1,$2,$3)', [req.params.id, req.body.nameTask, req.body.finaDate])
+    .then(data => {
+      if(!data) {
+        res.status(404).json({error: 'Tarefa nao encontrada'})
+      } else {
+        res.status(200).json({result: 'Alterado com sucesso'})
+      }
+    })
+}
+
+//Mostra conteudo das tarefas
+exports.showContentTask = function (req, res) {
+  db.any('SELECT * FROM showContentTask($1)', [req.params.id])
+    .then(data => {
+      if(!data || !data[0]) {
+        res.status(404).json({error: 'Tarefa nao existe ou vazia'})
+      } else {
+        res.status(200).json(data)
       }
     })
 }
@@ -128,6 +153,37 @@ exports.newComment = function (req, res) {
         res.status(200).json({result: 'Comentário adicionado a tarefa'})
       } else {
         res.status(404).json({error: 'Tarefa nao encontrada no banco'})
+      }
+    })
+}
+
+//Altera comentario
+exports.changeComment = function (req, res) {
+  db.any('SELECT * FROM ')
+}
+
+//Deleta o attachment
+exports.deleteAttachment = function (req, res) {
+  db.any('SELECT * FROM getPathAttachment($1)', [req.params.id])
+    .then(data => {
+      if (!data || !data[0]) {
+        res.status(404).json({error: ' Tarefa inexistente'})
+      } else {
+        fs.unlink('./files' + data[0].path, function (error) {
+          if (error) {
+            console.log(error)
+          }
+          else {
+            db.any('SELECT * FROM removePathAttachment($1)', [req.params.id])
+              .then(data => {
+                if (!data) {
+                  res.status(404).json({error: ' Tarefa inexistente'})
+                } else {
+                  res.status(200).json({result: 'Anexo removido'})
+                }
+              })
+          }
+        })
       }
     })
 }

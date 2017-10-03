@@ -15,6 +15,7 @@
   app.post('/newuser', userController.newUser)
   app.get('/users', userController.db)
   app.post('/uploadImg', userController.imgs)
+  app.delete('/imgUser/:id', userController.removeImg)
   app.get('/user', userController.infoUser)
   app.put('/authEmail', userController.authEmail)
   app.get('/authentication', userController.validaToken)
@@ -40,6 +41,8 @@
   app.put('/blocks/:id', blocksController.changeBlockName)
   app.get('/project/blocks/:id', blocksController.seachblocks)
   app.post('/blocks/task/:id', blocksController.newtask)
+  app.get('/blocks/task/:id', blocksController.showContentTask)
+  app.get('/blocks/task/:id', blocksController.deleteAttachment)
 
   let filesPath
 

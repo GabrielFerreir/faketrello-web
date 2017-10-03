@@ -1,8 +1,9 @@
 (async () => {
   let db = await require('../db-config.js')
-  let projectsController = require('./projectsController')
+  //let projectsController = require('./projectsController')
   const jwt = require('jsonwebtoken')
   const md5 = require('md5')
+  const fs = require('fs')
   let token
   let PASSWORD = md5('senhaParaAuth')
 
@@ -85,20 +86,13 @@
         res.status(401).json({error: 'Sessão invalida'})
       } else {
         try {
-          if (req.body.imgBase64) {
-            let caminho = await exports.imgs(req, res)
-            db.any('SELECT * from verify_img($2,$1);', [req.body.username, caminho])
-              .then(data => {
-                if (!data[0].verify_img) {
-                  res.json({error: 'Usuario nao encontrado'})
-                }
-              })
-          }
-          db.any('SELECT * FROM changeUser($1,$2,$3,$4,$5);', [null, req.body.username, data.user, req.body.email, req.body.name])
+          await db.any('SELECT * FROM changeUser($1,$2,$3,$4,$5);', [null, req.body.username, data.user, req.body.email, req.body.name])
             .then(data => {
               if (!data || !data[0]) {
                 res.status(409).json({Error: 'A alteração falhou'})
               } else {
+                console.log(data[0].iduser)
+                req.idUserChange = data[0].iduser
                 db.any('SELECT * FROM relogin($1);', [req.body.username])
                   .then(data => {
                     if (!data || !data[0]) {
@@ -111,6 +105,15 @@
                   })
               }
             })
+          if (req.body.imgBase64) {
+            let caminho = await exports.imgs(req, res)
+            db.any('SELECT * from verify_img($2,$1);', [req.body.username, caminho])
+              .then(data => {
+                if (!data[0].verify_img) {
+                  res.json({error: 'Usuario nao encontrado'})
+                }
+              })
+          }
         } catch (error) {
           console.log(error)
         }
@@ -164,17 +167,18 @@
         } else {
           res.status(200).json({result: 'Usuário cadastrado com sucesso'})
           req.idNewUser = data[0].idnewuser
+          req.called = 2
         }
       })
-    if(req.body.imgBase64) {
+    if (req.body.imgBase64) {
 
-    caminho = await exports.imgs(req, res)
-    db.any('SELECT * FROM verify_img($1,$2)', [caminho, req.body.username])
-      .then(data =>{
-        if(!data){
-          console.log(data)
-        }
-      })
+      caminho = await exports.imgs(req, res)
+      db.any('SELECT * FROM verify_img($1,$2)', [caminho, req.body.username])
+        .then(data => {
+          if (!data) {
+            console.log(data)
+          }
+        })
     }
   }
 
@@ -208,13 +212,13 @@
       response.type = matches[1]
       response.data = new Buffer(matches[2], 'base64')
       let caminhoBd
-
       if (req.called === 1) {
         caminhoBd = `./files/imgsProjects/picture_${req.idproj}.png`
       }
-      else {
-        console.log(req.idNewUser)
+      else if (req.called === 2) {
         caminhoBd = `./files/imgsUser/picture_${req.idNewUser}.png`
+      } else {
+        caminhoBd = `./files/imgsUser/picture_${req.idUserChange}.png`
       }
 
       let caminho = caminhoBd.replace('./files', '')
@@ -227,6 +231,24 @@
         }
       })
     })
+  }
+
+  //Remove img do usuario
+  exports.removeImg = function (req, res) {
+    db.any('SELECT * FROM removeImg($1)', [req.params.id])
+      .then(data => {
+        if (!data || !data[0]) {
+          res.status(409).json({error: 'Imagem já é default'})
+        } else {
+          fs.unlink(`./files${data[0].path}`, function (error) {
+            if (error) {
+              console.log(error)
+            } else {
+              res.status(200).json({result: 'Imagem removida'})
+            }
+          })
+        }
+      })
   }
 
   //Dados do usuário

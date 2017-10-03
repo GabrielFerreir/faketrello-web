@@ -1,6 +1,8 @@
---SELECT * FROM tb_tasks where id_block = 15;
+--SELECT * FROM tb_blocks where project_owner = 163;
 
 --UPDATE tb_login SET profile_img = '/imgsUser/default.png'
+
+--INSERT INTO tb_comments(id_task,comment) values(3,'teste0'),(3,'teste1'),(3,'teste2'),(3,'teste3')
 
 CREATE OR REPLACE FUNCTION loginU(emailD VARCHAR, passw VARCHAR)
   RETURNS TABLE(
@@ -49,12 +51,15 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION changeuser(pass   CHARACTER VARYING, usern CHARACTER VARYING, usertoken CHARACTER VARYING,
                                       emailp CHARACTER VARYING, nomep CHARACTER VARYING)
   RETURNS TABLE(
+    idUser    INTEGER,
     emaild    CHARACTER VARYING,
     namep     CHARACTER VARYING,
     usernamer CHARACTER VARYING,
     imageuser CHARACTER VARYING)
 LANGUAGE plpgsql
 AS $$
+DECLARE
+  vIdUser INTEGER;
 BEGIN
   IF NOT EXISTS(SELECT
                   l.username,
@@ -68,6 +73,11 @@ BEGIN
                         WHERE l.username = $3 OR l.email = $3))
   THEN
 
+    SELECT id_user
+    INTO vIdUser
+    FROM tb_login l
+    WHERE l.username = $3 OR l.email = $3;
+
     UPDATE tb_login l
     SET username = $2,
       email      = $4,
@@ -76,6 +86,7 @@ BEGIN
 
     RETURN QUERY
     SELECT
+      vIdUser,
       $4,
       $5,
       $2,
@@ -251,6 +262,33 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION removeImg(pIdUser INTEGER)
+  RETURNS TABLE(
+    path VARCHAR(50)
+  ) AS $$
+DECLARE
+  vPath VARCHAR(50);
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_login
+            WHERE id_user = pIdUser AND profile_img <> '/imgsUser/default.png')
+  THEN
+    SELECT profile_img
+    INTO vPath
+    FROM tb_login
+    WHERE id_user = pIdUser;
+
+    UPDATE tb_login
+    SET profile_img = '/imgsUser/default.png'
+    WHERE id_user = pIdUser;
+
+    RETURN QUERY
+    SELECT vPath;
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
 --SELECT * FROM verify_img('/default.png','joaoo');
 
 --UPDATE tb_login SET profile_img = '/default.png'
@@ -262,9 +300,9 @@ CREATE OR REPLACE FUNCTION consultuser(usern VARCHAR)
     id_user    INTEGER,
     email      VARCHAR(50),
     username   VARCHAR(50),
-    password   VARCHAR(20),
+    PASSWORD   VARCHAR(20),
     img        VARCHAR(50),
-    name       VARCHAR(50),
+    NAME       VARCHAR(50),
     statusAuth BOOLEAN
   ) AS $$
 BEGIN
@@ -782,7 +820,7 @@ LANGUAGE plpgsql;
 
 --INSERT INTO tb_team(id_project,id_user,permissions)values(73,31,2),(73,32,2);
 
---SELECT * FROM searchblock(156)
+--SELECT * FROM searchblock(164)
 
 CREATE OR REPLACE FUNCTION searchblock(projectOwner INTEGER)
   RETURNS TABLE(
@@ -874,6 +912,60 @@ END;
 $$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION changeTask(pIdTask INTEGER, pNameTask CHARACTER VARYING, pDate TIMESTAMP)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_tasks
+            WHERE id_task = pIdTask)
+  THEN
+    UPDATE tb_tasks
+    SET name_task = pNameTask AND final_date = pDate;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION showContentTask(pIdTask INTEGER)
+  RETURNS TABLE(
+    team       JSON,
+    comments   JSON,
+    checklists JSON
+  ) AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_tasks
+            WHERE id_task = pIdTask)
+  THEN
+    RETURN QUERY
+    SELECT
+      (SELECT coalesce(json_agg(teamTask), '[]')
+       FROM (SELECT id_user
+             FROM tb_team_tasks
+             WHERE id_task = pIdTask) AS teamTask),
+
+      (SELECT coalesce(json_agg(jsonComments), '[]')
+       FROM (SELECT
+               l.id_comment,
+               l.comment
+             FROM tb_comments l
+             WHERE l.id_task = pIdTask) AS jsonComments),
+
+      (SELECT coalesce(json_agg(jsonChecklist), '[]')
+       FROM (SELECT
+               id_checklist,
+               name_checklist,
+               checked
+             FROM tb_checklist_tasks
+             WHERE id_task = pIdTask) AS jsonChecklist);
+
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION buildAttachment(path CHARACTER VARYING, idtask INTEGER)
   RETURNS BOOLEAN AS $$
 BEGIN
@@ -886,6 +978,41 @@ BEGIN
     WHERE id_task = idtask;
     RETURN TRUE;
   END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION getPathAttachment(pIdTask INTEGER)
+  RETURNS TABLE(
+    path VARCHAR(20)
+  ) AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_tasks
+            WHERE id_task = pIdTask)
+  THEN
+    RETURN QUERY
+    SELECT attachment
+    FROM tb_tasks
+    WHERE id_task = pIdTask;
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION removePathAttachment(pIdTask INTEGER)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_tasks
+            WHERE id_task = pIdTask)
+  THEN
+    UPDATE tb_tasks
+    SET attachment = NULL
+    WHERE id_task = pIdTask;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
 END;
 $$
 LANGUAGE plpgsql;
@@ -1037,3 +1164,5 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql;
+
+--CREATE OR REPLACE FUNCTION changeComment()
