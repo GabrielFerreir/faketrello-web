@@ -1,6 +1,7 @@
 import {Component, ElementRef, Input, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
 import { DadosDeUsuarioService } from '../Services/dados-de-usuario.service';
 import {MenuComponent} from "../components/menu/menu.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -13,11 +14,19 @@ export class HomeComponent implements OnInit {
   // @ViewChild(TemplateRef) templateRef: TemplateRef<any>;
   // @Output() closeChange: EventEmitter<any> = new EventEmitter();
 
-  constructor(private dadosDeUsuarioService: DadosDeUsuarioService, private elementRef: ElementRef) { }
+  constructor(private dadosDeUsuarioService: DadosDeUsuarioService, private elementRef: ElementRef,
+              private router: Router) { }
 
   ngOnInit() {
     // this.dadosDeUsuarioService.getCookieTokken();
-    this.dadosDeUsuarioService.logar();
+    // this.dadosDeUsuarioService.logar();
+    //FAZ O LOGIN QUANDO O USUARIO JÁ ESTÁ AUTENTICADO
+    if(this.dadosDeUsuarioService.getCookieTokken()) {
+      this.dadosDeUsuarioService.logar()
+        .subscribe((res) => {
+          this.router.navigate(['/main']);
+        });
+    }
   }
 
 

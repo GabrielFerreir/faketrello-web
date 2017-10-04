@@ -2,8 +2,8 @@
   <div class="login" #login>
     <!--<img src="./../../assets/logo.png"/>-->
 <div #telas style="width: auto; display: flex">
-  <div #tela1 class="tela1" style="min-width: calc(100% - 100px ); float: left; margin: 15px 50px;">
-    <div style="position: relative; width: 200px; float:left;">
+  <div #tela1 class="tela1">
+    <div style="position: relative; width: 250px; float:left;">
       <input id="usuario" #HTMLusuario [(ngModel)]="usuario" (blur)="chama()" (keyup.enter)="verificaUsuario()" value="{{ usuario }}" class="textFields" type="text" name="usuario"/>
       <label [style.color]="codeStatusUsuario == '404' ? '#F44336' : ''" class="labelText" for="usuario">Usuario</label>
       <div [style.background-color]="codeStatusUsuario == '404' ? '#F44336' : ''" class="border"></div>
@@ -15,12 +15,12 @@
       </label>
     </div>
     <button (click)="verificaUsuario()"
-            style="float:left; width:200px; margin-top:55px;"
+            style="float:left; width:250px; margin-top:55px;"
             class="denseButton">
       PROXIMO
     </button>
 
-    <span style="width:200px; float: left; margin-top: 15px; text-align: right; font-size: 13px; color: #ff0000">
+    <span style="width:250px; float: left; margin-top: 15px; text-align: right; font-size: 13px; color: #ff0000">
           <a routerLink="/cadastro">
             Cadastrar-se
         </a></span>
@@ -28,9 +28,9 @@
   </div>
 
 
-  <div #tela2 class="tela2" style="min-width: calc(100% - 100px ); float: left; margin: 15px 50px;">
+  <div #tela2 class="tela2">
     <img src="./../../../assets/arrow_back.svg" #arrowBack  (click)="voltaAoEmail()">
-    <div style="position: relative; width: 200px; float:left;">
+    <div style="position: relative; width: 225px; float:left;">
 
       <input id="senha" #HTMLsenha [(ngModel)]="senha" (blur)="chama()" (keyup.enter)="verificaSenha()" value="{{ senha }}" class="textFields" type="password" name="senha"/>
       <label [style.color]="codeStatusSenha == '401' ? '#F44336' : ''" class="labelText" for="senha">Senha</label>
@@ -41,17 +41,17 @@
         [style.display]="codeStatusSenha == '401' ? 'block' : 'none'"
         class="helperText">{{ mensagemSenha }}</label>
 
-      <label style="float:left; width:200px; text-align:right; margin-top:45px; font-size:12px; color:#333;"><a routerLink="/esqueciMinhaSenha">Esqueci minha</a></label>
+      <label style="float:left; width:225px; text-align:right; margin-top:45px; font-size:12px; color:#333;"><a routerLink="/esqueciMinhaSenha">Esqueci minha</a></label>
     </div>
 
     <button (click)="verificaSenha()"
-            style="float:left; width:200px; margin-top:20px; "
+            style="float:left; width:225px; margin-top:20px; "
             class="denseButton">
       ENTRAR
     </button>
   </div>
 </div>
-
-
     </div>
   </div>
+
+<app-arrow-back routerLink="/home"> </app-arrow-back>

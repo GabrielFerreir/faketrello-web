@@ -2,59 +2,47 @@
   <div class="login">
     <!-- <img src="./../../assets/logo.png"/> -->
     <input type="file" (change)="previewFile($event.target)" id="file" style="display: none;">
-
-
     <img *ngIf="img64" src="{{img64}}" class="imageUser" id="preview"/>
     <div *ngIf="!img64" class="imageUser"></div>
     <div class="addImageUser" (click)="chamaFile()">+</div>
-
       <div style="width:300px; height: 100%; padding-top:10px; overflow-x: hidden;">
-
-        <a routerLink="/home"><img src="./../../../assets/arrow_back.svg" #arrowBack style="position: absolute; top:25px; left:25px; width:30px; cursor: pointer"></a>
-
-
+        <!--<a routerLink="/home"><img src="./../../../assets/arrow_back.svg" #arrowBack style="position: absolute; top:25px; left:25px; width:30px; cursor: pointer"></a>-->
         <div style="position: relative; width: 200px; float:left; margin-left: 50px;">
-          <input #HTMLNome [(ngModel)]="nome"  value="{{ nome }}"  (blur)="geraUserName(nome)" (blur)="chama()" (blur)="verificaNome(nome)" (blur)="habilitaBotao()" type="text" name="nome" class="textFields"/>
+          <input #HTMLNome [(ngModel)]="nome"  value="{{ nome }}"  (blur)="geraUserName(nome); chama(); verificaNome(nome); habilitaBotao()" type="text" id="nome" class="textFields"/>
           <label class="labelText" for="nome">Nome</label>
           <div class="border"></div>
           <label class="helperText"
                  [style.color]="codeSatusNome == '400' ? '#F44336' : ''"
                  [style.display]="codeSatusNome == '400' ? 'block' : 'none'"
           >{{ errorNome }}</label>
-
-
         </div>
-
        <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
-          <input #HTMLEmail autocomplete="off" [(ngModel)]="email"  (blur)="verificaEmail(email)" (blur)="chama()" (blur)="habilitaBotao()" type="text" name="email" class="textFields"/>
-          <label class="labelText" for="nome">Email</label>
+          <input #HTMLEmail autocomplete="off" [(ngModel)]="email"  (blur)="chama(); verificaEmail(email); habilitaBotao()"type="text" id="email" class="textFields"/>
+          <label class="labelText" for="email">Email</label>
           <div class="border"></div>
          <label class="helperText"
                 [style.color]="codeSatusEmail == '400' ? '#F44336' : '409' ? '#F44336' : ''"
                 [style.display]="codeSatusEmail == '400' ? 'block' : '409' ? 'block' : 'none'"
          >{{ errorEmail }}</label>
         </div>
-
         <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
-          <input #HTMLSenha [(ngModel)]="senha"  (blur)="verificaSenha()" (blur)="chama()" (blur)="habilitaBotao()" type="password" name="senha" class="textFields"/>
-          <label class="labelText" for="nome">Senha</label>
+          <input #HTMLSenha [(ngModel)]="senha"  (blur)="verificaSenha(); senhasConferem()" (blur)="chama()" (blur)="habilitaBotao()" type="password" id="senha" class="textFields"/>
+          <label class="labelText" for="senha">Senha</label>
           <div class="border"></div>
           <label class="helperText"
                  [style.color]="codeSatusSenha == '400' ? '#F44336' : ''"
                  [style.display]="codeSatusSenha == '400' ? 'block' : 'none'"
           >{{ errorSenha }}</label>
         </div>
-
           <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top: 60px;">
-            <input #HTMLConfirmaSenha [(ngModel)]="confirmaSenha" (keyup.enter)="criaUsuario()" (blur)="senhasConferem()" (blur)="chama()" (blur)="habilitaBotao()" type="password" name="confirmaSenha" class="textFields"/>
-            <label class="labelText" for="nome">Confirme sua senha</label>
+            <input #HTMLConfirmaSenha [(ngModel)]="confirmaSenha" (keyup.enter)="criaUsuario()" (blur)="senhasConferem()" (blur)="chama()" (blur)="habilitaBotao()" type="password" id="confirmaSenha" class="textFields"/>
+            <label class="labelText" for="confirmaSenha">Confirme sua senha</label>
             <div class="border"></div>
             <label class="helperText"
                    [style.color]="codeSatusConfirmaSenha == '400' ? '#F44336' : ''"
                    [style.display]="codeSatusConfirmaSenha == '400' ? 'block' : 'none'"
             >{{ errorConfirmaSenha }}</label>
           </div>
-
           <button
             (click)="criaUsuario()"
             class="denseButton disabledButton"
@@ -62,7 +50,8 @@
             #HTMLCadastrar>
               CADASTRAR
           </button>
-
       </div>
   </div>
 </div>
+
+<app-arrow-back routerLink="/home"> </app-arrow-back>

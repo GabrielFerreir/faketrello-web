@@ -3,7 +3,7 @@
   <div style="width:300px; height: 100%; padding-top:10px;">
 
     <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-right: 50px;">
-      <input #HTMLNovaSenha [(ngModel)]="novaSenha" (blur)="chama()" (blur)="validaNovaSenha()" type="password" name="novaSenha" class="textFields"/>
+      <input #HTMLNovaSenha [(ngModel)]="novaSenha" (blur)="chama()" (blur)="validaNovaSenha()" type="password" id="novaSenha" class="textFields"/>
       <label class="labelText" for="novaSenha">Nova Senha</label>
       <div class="border"></div>
 
@@ -15,7 +15,7 @@
     </div>
 
     <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
-      <input #HTMLConfirmaNovaSenha [(ngModel)]="confirmaNovaSenha" (blur)="chama()" (blur)="validaConfirmaNovaSenha()" type="password" name="confirmaNovaSenha" class="textFields"/>
+      <input #HTMLConfirmaNovaSenha [(ngModel)]="confirmaNovaSenha" (blur)="chama()" (blur)="validaConfirmaNovaSenha()" type="password" id="confirmaNovaSenha" class="textFields"/>
       <label class="labelText" for="confirmaNovaSenha">Confirme a Nova Senha</label>
       <div class="border"></div>
 
@@ -29,7 +29,7 @@
 
 
     <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:20px;">
-      <input #HTMLSenhaAtual autocomplete="off" [(ngModel)]="senhaAtual" (blur)="chama()" (blur)="validaSenhaAtual()" type="password" name="senhaAtual" class="textFields"/>
+      <input #HTMLSenhaAtual autocomplete="off" [(ngModel)]="senhaAtual" (blur)="chama()" (blur)="validaSenhaAtual()" type="password" id="senhaAtual" class="textFields"/>
       <label class="labelText" for="senhaAtual">Digite a Senha Atual</label>
       <div class="border"></div>
 

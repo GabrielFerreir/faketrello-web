@@ -53,7 +53,6 @@ export class LoginComponent implements OnInit {
     }
     this.HTMLusuario.nativeElement.focus();
   }
-
   verificaUsuario() {
     if (this.usuario) {
         this.dadosService.verificaUsuarioExiste(this.usuario)
@@ -71,22 +70,19 @@ export class LoginComponent implements OnInit {
       this.mensagemUsuario = 'Digite um usuario';
     }
   }
-
   emailInvalido() {
     if (this.codeStatusUsuario == '404') {
       this.mensagemUsuario = 'Usuário inexistente';
     }
   }
-
   emailValido() {
     this.telas.nativeElement.style = "transition: all 480ms ease-out; width:auto; display:flex; transform: translateX(-100%)";
-    this.arrowBack.nativeElement.style =  'float: left; margin-left: -45px; margin-top:-10px; width: 28px;';
+    this.arrowBack.nativeElement.style =  'float: left; margin-left: -40px; margin-top:5px; width: 24px;';
 
     setTimeout(() => {
       this.HTMLsenha.nativeElement.focus();
     }, 480);
   }
-
   voltaAoEmail() {
     this.telas.nativeElement.style = 'transition: all 480ms ease-out; width:auto; display:flex; transform: translateX(0)';
 
@@ -95,7 +91,6 @@ export class LoginComponent implements OnInit {
       }, 480);
 
   }
-
   verificaSenha() {
     if(this.senha) {
       this.dadosService.gerarTokken(this.usuario, this.senha)
