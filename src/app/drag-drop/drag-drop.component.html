@@ -9,21 +9,26 @@
 <div id="dragDrop">
 
 
-  <section class="caixa" *ngFor="let caixas of blocks; let i = index">
+  <section class="caixa" *ngFor="let caixas of dragDropService.blocks; let i = index">
     <header>{{ caixas.nameblock }}
       <div class="more_horiz" [menu]="appmenu"></div>
-      <div class="popup" #popup1>
-      </div>
-      </header>
-    <article class="elemento" *ngFor="let elementos of blocks[i].tasks">
+      <div class="popup" #popup1></div>
+    </header>
+
+    <article class="elemento" *ngFor="let elementos of dragDropService.blocks[i].tasks">
       {{ elementos.name_task }}
       <br/>
       <span class="prazo">
-        21/09/2017
+        {{ elementos.final_date | date: 'dd/MM/yyyy' }}
       </span>
       <div class="editElemento" (click)="teste()">
       </div>
     </article>
+
+    <article class="addElemento" (click)="onAddElemento(caixas.idblock, caixas.nameblock)">
+      Adicionar Elemento..
+    </article>
+
   </section>
 
 
@@ -39,3 +44,5 @@
     <li style="background-color: #FFF; height: auto; padding: 8px 16px 8px 24px; box-sizing: border-box; color: #444; height: 32px; line-height: 24px; cursor: pointer; overflow: hidden; font-size: 15px; font-family: Roboto">Adicionar Nova Tarefa</li>
     <li style="background-color: #FFF; height: auto; padding: 8px 16px 8px 24px; box-sizing: border-box; color: #444; height: 32px; line-height: 24px; cursor: pointer; overflow: hidden; font-size: 15px; font-family: Roboto">Remover Bloco</li>
 </app-menu>
+
+<app-add-elemento *ngIf="dragDropService.addElemento"></app-add-elemento>

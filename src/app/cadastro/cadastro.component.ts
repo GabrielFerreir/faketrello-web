@@ -114,6 +114,7 @@ verificaEmail(email) {
         }, error => {
           this.codeSatusEmail = '200';
           this.errorEmail = '';
+          console.log(error);
         });
 
   }else {

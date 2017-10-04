@@ -216,7 +216,7 @@
   background-color: #CCC;
   color: #FFF;
   border-radius: 50%;
-  line-height: 140px;
+  line-height: 120px;
   text-align: center;
   font-family: 'Roboto';
   font-size: 72px;
@@ -255,8 +255,6 @@
 .left textarea {
   min-height: 150px;
 }
-
-
 /* CHECKBOX */
 .checkbox {
   height: 28px;
@@ -489,7 +487,6 @@ input[type="checkbox"]:not(:checked) ~ .checkboxNameOn {
   .right .scroll .openMembro h2 {
     min-width: 170px;
   }
-
   .opMore {
     width: 170px;
   }
