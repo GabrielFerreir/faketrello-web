@@ -9,14 +9,14 @@
 <div id="dragDrop">
 
 
-  <section class="caixa" *ngFor="let caixa of projects.blocks">
-    <header>{{ caixa.nameblock }}
+  <section class="caixa" *ngFor="let caixas of blocks; let i = index">
+    <header>{{ caixas.nameblock }}
       <div class="more_horiz" [menu]="appmenu"></div>
       <div class="popup" #popup1>
       </div>
       </header>
-    <article class="elemento">
-      Teste
+    <article class="elemento" *ngFor="let elementos of blocks[i].tasks">
+      {{ elementos.name_task }}
       <br/>
       <span class="prazo">
         21/09/2017

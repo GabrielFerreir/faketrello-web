@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ProjectsServiceService} from "../projects/projects-service.service";
 import {ActivatedRoute, Route, Router} from "@angular/router";
 
@@ -12,6 +12,7 @@ export class DragDropComponent implements OnInit {
   @ViewChild('popup1') popup1: ElementRef;
 
   id;
+  blocks;
 
   /* DRAGDROP */
   /* MOBILE */
@@ -55,7 +56,20 @@ export class DragDropComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
     this.projects.viewDetailProject(this.id);
-    this.projects.searchBlocks(this.id);
+    this.projects.searchBlocks(this.id)
+      .subscribe((res) => {
+        console.log(res);
+        this.blocks = res;
+
+      }, error => {
+        console.log(error);
+      }, () => {
+      setTimeout(() => {
+        this.larguraDaCaixa = document.querySelectorAll('.caixa')[0].clientWidth;
+        this.larguraDaCaixa = this.larguraDaCaixa - (this.larguraDaCaixa * 0.1);
+      }, 100);
+
+      });
 
     let elemento = document.querySelectorAll('.elemento');
     for (let i = 0; i < elemento.length; i++) {
@@ -88,10 +102,11 @@ export class DragDropComponent implements OnInit {
     /* TOUCH */
 
 
-    // larguraDaCaixa
-    this.larguraDaCaixa = document.querySelectorAll('.caixa')[0].clientWidth;
-    this.larguraDaCaixa = this.larguraDaCaixa - (this.larguraDaCaixa * 0.1);
+
+
+
   }
+
   getPosInicial(event) {
     if(!this.isMobile) {
       this.posInicialX = event.clientX + this.getScroll();
