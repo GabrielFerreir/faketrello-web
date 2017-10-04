@@ -80,10 +80,22 @@ exports.newtask = function (req, res) {
 exports.changeTask = function (req, res) {
   db.any('SELECT * FROM changeTask($1,$2,$3)', [req.params.id, req.body.nameTask, req.body.finaDate])
     .then(data => {
-      if(!data) {
+      if (!data) {
         res.status(404).json({error: 'Tarefa nao encontrada'})
       } else {
         res.status(200).json({result: 'Alterado com sucesso'})
+      }
+    })
+}
+
+//Move a tarefa de bloco
+exports.moveTask = function (req, res) {
+  db.any('SELECT * FROM moveTask($1,$2)', [req.body.idTask, req.body.idBlock])
+    .then(data => {
+      if (!data) {
+        res.status(400).json({error: 'Erro ao mover tarefa'})
+      } else {
+        res.status(200).json({result: 'Tarefa movida'})
       }
     })
 }
@@ -92,7 +104,7 @@ exports.changeTask = function (req, res) {
 exports.showContentTask = function (req, res) {
   db.any('SELECT * FROM showContentTask($1)', [req.params.id])
     .then(data => {
-      if(!data || !data[0]) {
+      if (!data || !data[0]) {
         res.status(404).json({error: 'Tarefa nao existe ou vazia'})
       } else {
         res.status(200).json(data)

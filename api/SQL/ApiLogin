@@ -1,8 +1,24 @@
---SELECT * FROM tb_blocks where project_owner = 163;
+--SELECT * FROM tb_comments;
+
+--INSERT INTO tb_blocks(name_blocks,project_owner) values('teste do teste', 163)
 
 --UPDATE tb_login SET profile_img = '/imgsUser/default.png'
 
 --INSERT INTO tb_comments(id_task,comment) values(3,'teste0'),(3,'teste1'),(3,'teste2'),(3,'teste3')
+
+CREATE OR REPLACE FUNCTION emailNewUser(pEmail VARCHAR(50))
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT email
+            FROM tb_login
+            WHERE email ILIKE pEmail)
+  THEN
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION loginU(emailD VARCHAR, passw VARCHAR)
   RETURNS TABLE(
@@ -820,22 +836,18 @@ LANGUAGE plpgsql;
 
 --INSERT INTO tb_team(id_project,id_user,permissions)values(73,31,2),(73,32,2);
 
---SELECT * FROM searchblock(164)
+--SELECT * FROM searchblock(73)
 
 CREATE OR REPLACE FUNCTION searchblock(projectOwner INTEGER)
   RETURNS TABLE(
-    nameProject VARCHAR(50),
-    nameBlock   VARCHAR(50),
-    tasks       JSON
+    idBlock   INTEGER,
+    nameBlock VARCHAR(50),
+    tasks     JSON
   ) AS $$
 DECLARE
-  vIdBlocks     INTEGER [];
-  vName_project VARCHAR(50);
+  vIdBlocks INTEGER [];
 BEGIN
-  SELECT name_project
-  INTO vName_project
-  FROM tb_projects
-  WHERE id_project = projectOwner;
+
 
   vIdBlocks := ARRAY(SELECT id_blocks
                      FROM tb_blocks
@@ -845,18 +857,18 @@ BEGIN
   THEN
     RETURN QUERY
     SELECT
-      vName_project,
-      name_blocks,
+      tb.id_blocks,
+      tb.name_blocks,
       (SELECT COALESCE(json_agg(TasksJson), '[]')
        FROM (SELECT
-               id_task,
-               name_task,
-               final_date
-             FROM tb_tasks
-             WHERE id_block = ANY (vIdBlocks)) AS TasksJson
+               tt.id_task,
+               tt.name_task,
+               tt.final_date
+             FROM tb_tasks tt
+             WHERE tt.id_block = tb.id_blocks) AS TasksJson
       ) tasks
-    FROM tb_blocks
-    WHERE id_blocks = ANY (vIdBlocks);
+    FROM tb_blocks tb
+    WHERE tb.id_blocks = ANY (vIdBlocks);
   END IF;
 END;
 $$
@@ -921,6 +933,25 @@ BEGIN
   THEN
     UPDATE tb_tasks
     SET name_task = pNameTask AND final_date = pDate;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION moveTask(pIdTask INTEGER, pIdBlock INTEGER)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_tasks
+            WHERE id_task = pIdTask) AND EXISTS(SELECT *
+                                                FROM tb_blocks
+                                                WHERE id_blocks = pIdBlock)
+  THEN
+    UPDATE tb_tasks
+    SET id_block = pIdBlock
+    WHERE id_task = pIdTask;
     RETURN TRUE;
   END IF;
   RETURN FALSE;
@@ -1151,18 +1182,41 @@ $$
 LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION newComment(pIdTask INTEGER, pComment TEXT)
-  RETURNS BOOLEAN AS $$
+  RETURNS TABLE(
+    idComment INTEGER
+  ) AS $$
+DECLARE
+  vIdComment INTEGER;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_tasks
             WHERE id_task = pIdTask)
   THEN
-    INSERT INTO tb_comments (id_task, comment) VALUES (pIdTask, pComment);
+    INSERT INTO tb_comments (id_task, comment) VALUES (pIdTask, pComment)
+    RETURNING id_comment
+      INTO vIdComment;
+    RETURN QUERY
+    SELECT vIdComment;
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+--SELECT * FROM changeComment(2, 'joao1234')
+
+CREATE OR REPLACE FUNCTION changeComment(pIdComment INTEGER, pNewComment CHARACTER VARYING)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_comments
+            WHERE id_comment = pIdComment)
+  THEN
+    UPDATE tb_comments
+    SET comment = pNewComment
+    WHERE id_comment = pIdComment;
     RETURN TRUE;
   END IF;
   RETURN FALSE;
 END;
 $$
 LANGUAGE plpgsql;
-
---CREATE OR REPLACE FUNCTION changeComment()

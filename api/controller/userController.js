@@ -23,6 +23,18 @@
     }
   }
 
+  //Verifica se o email nao existe
+  exports.emailExists = function (req, res) {
+    db.any('SELECT * FROM emailnewuser($1)', [req.body.email])
+      .then(data => {
+        if(!data) {
+          res.status(409).json({error:'Email existe'})
+        } else {
+          res.status(200).json({error:'Email nao existe'})
+        }
+      })
+  }
+
   //Segunda verificação
   exports.login = function (req, res) {
     let senha = req.body.password

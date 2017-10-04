@@ -7,6 +7,7 @@
   const compression = require('compression')
   let blocksController = require('./controller/blocksController')
 
+  //Parte de usuario
   app.get('/userInfo', userController.userAuth)
   app.post('/login', userController.login)
   app.get('/session', userController.authSession)
@@ -22,6 +23,7 @@
   app.post('/newpass', userController.verifyEmail)
   app.post('/resendEmail', userController.verifyEmail)
   app.delete('/deleteUser', userController.deleteUser)
+  app.post('/emailExists', userController.emailExists)
 
   //Parte de projetos
   app.post('/project', projectsController.newProject)
@@ -42,7 +44,7 @@
   app.get('/project/blocks/:id', blocksController.seachblocks)
   app.post('/blocks/task/:id', blocksController.newtask)
   app.get('/blocks/task/:id', blocksController.showContentTask)
-  app.get('/blocks/task/:id', blocksController.deleteAttachment)
+  app.get('/task/attachment/:id', blocksController.deleteAttachment)
 
   let filesPath
 
