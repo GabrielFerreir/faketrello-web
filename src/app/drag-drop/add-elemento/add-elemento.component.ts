@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DragDropService} from '../drag-drop.service';
 import {ProjectsServiceService} from '../../projects/projects-service.service';
+import {isNumber} from "util";
 
 @Component({
   selector: 'app-add-elemento',
@@ -20,7 +21,7 @@ export class AddElementoComponent implements OnInit {
 
   offPopupAddElementos(e) {
     if(e.target) {
-      if(e.target.className != 'popupAddElemento' && e.target.parentNode.className != 'popupAddElemento') {
+      if(e.target.className != 'popupAddElemento' && e.target.parentNode.className != 'popupAddElemento' && e.target.parentNode.parentNode.className != 'popupAddElemento') {
         this.dragDropService.addElemento = false;
         this.dragDropService.idBlock = null;
         this.dragDropService.nomeBlock = null;
@@ -32,7 +33,29 @@ export class AddElementoComponent implements OnInit {
     }
 
   }
+  mascaraData() {
 
+    if(this.dragDropService.dataTarefa.length == 2) {
+      this.dragDropService.dataTarefa = this.dragDropService.dataTarefa + '/';
+    }
+    if(this.dragDropService.dataTarefa.length == 5) {
+      this.dragDropService.dataTarefa = this.dragDropService.dataTarefa + '/';
+    }
+    if(this.dragDropService.dataTarefa.length == 10) {
+      const A = Date.parse(this.dragDropService.dataTarefa);
+      console.log(A);
+      if(isNaN(A)) {
+        console.log('Data Invalida');
+      } else {
+        console.log('Data Valida');
+      }
+    }
+    if(this.dragDropService.dataTarefa.length > 10) {
+      console.log(this.dragDropService.dataTarefa.length);
+      // this.dragDropService.dataTarefa = this.dragDropService.dataTarefa.substr(1,(this.dragDropService.dataTarefa.length));
+      this.dragDropService.dataTarefa = this.dragDropService.dataTarefa.slice(0, -1);
+    }
+  }
   addTarefa() {
     this.dragDropService.addTarefa()
   .subscribe((res) => {

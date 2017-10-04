@@ -1,4 +1,14 @@
 <section class="popupAddElemento">
   <h1>Nova Tarefa</h1>
-  <input type="text" class="textFields" [(ngModel)]="dragDropService.nomeTarefa" (keyup.enter)="addTarefa()">
+  <div style="position: relative; margin-top: 10px;">
+    <input type="text" class="textFields" [(ngModel)]="dragDropService.nomeTarefa" (keyup.enter)="addTarefa()">
+    <label class="labelText">Nome</label>
+    <div class="border"></div>
+  </div>
+  <div style="position: relative; margin-top: 60px;">
+    <input type="text" class="textFields" [(ngModel)]="dragDropService.dataTarefa" (keyup)="mascaraData()" (keyup.enter)="addTarefa()">
+    <label class="labelText">Data</label>
+    <div class="border"></div>
+  </div>
+
 </section>
