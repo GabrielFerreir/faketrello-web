@@ -39,16 +39,15 @@ export class AddElementoComponent implements OnInit {
       console.log(res);
       this.offPopupAddElementos('TRUE');
       // BUSCA OS BLOCOS NOVAMENTE
-      // this.projectsService.searchBlocks(this.dragDropService.idProjeto)
-        // .subscribe((res) => {
-        //   console.log('res:')
-        //   console.log(res);
-        //   this.dragDropService.blocks = res;
-        // }, error => {
-        //   console.log(error);
-        // }, () => {
-        //   this.listenerInit();
-        // });
+      this.projectsService.searchBlocks(this.dragDropService.idProjeto)
+        .subscribe((res) => {
+          console.log('res:')
+          console.log(res);
+          this.dragDropService.blocks = res;
+        }, error => {
+          console.error(error);
+        }, () => {
+        });
 
     }, error => {
       console.error(error);
