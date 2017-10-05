@@ -572,7 +572,8 @@ BEGIN
     SET
       name_project = namep,
       description  = descrip,
-      img_project  = imgp
+      img_project  = imgp,
+      active       = TRUE
     WHERE id_project = idproj
     RETURNING id_project
       INTO idproject;
@@ -881,6 +882,8 @@ BEGIN
             FROM tb_blocks
             WHERE id_blocks = pIdBlock)
   THEN
+    DELETE FROM tb_tasks
+    WHERE id_block = pIdBlock;
     DELETE FROM tb_blocks
     WHERE id_blocks = pIdBlock;
     RETURN TRUE;
@@ -893,38 +896,42 @@ LANGUAGE plpgsql;
 --SELECT * FROM newtasks('joao','21/09/2017',2)
 
 CREATE OR REPLACE FUNCTION newtasks(nametask CHARACTER VARYING, attachment CHARACTER VARYING, date TIMESTAMP,
+                                    descrip  TEXT,
                                     idblock  INTEGER)
   RETURNS TABLE(
     idTask       INTEGER,
     nameTaskR    VARCHAR(20),
     dateR        TIMESTAMP,
+    description  TEXT,
     idBlockOwner INTEGER
   ) AS $$
 DECLARE
   vIdTask     INTEGER;
   vNameTask   VARCHAR(20);
   vDate       TIMESTAMP;
+  vDescript   TEXT;
   vBlockOwner INTEGER;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_blocks
             WHERE id_blocks = idblock)
   THEN
-    INSERT INTO tb_tasks (name_task, final_date, id_block) VALUES (nametask, date, idblock)
-    RETURNING id_task, name_task, final_date, id_block
-      INTO vIdTask, vNameTask, vDate, vBlockOwner;
+    INSERT INTO tb_tasks (name_task, final_date, description, id_block) VALUES (nametask, date, descrip, idblock)
+    RETURNING id_task, name_task, final_date, descrip, id_block
+      INTO vIdTask, vNameTask, vDate, vDescript, vBlockOwner;
     RETURN QUERY
     SELECT
       vIdTask,
       vNameTask,
       vDate,
+      vDescript,
       vBlockOwner;
   END IF;
 END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION changeTask(pIdTask INTEGER, pNameTask CHARACTER VARYING, pDate TIMESTAMP)
+CREATE OR REPLACE FUNCTION changeTask(pIdTask INTEGER, pNameTask CHARACTER VARYING, pDate TIMESTAMP, pDescription TEXT)
   RETURNS BOOLEAN AS $$
 BEGIN
   IF EXISTS(SELECT *
@@ -932,7 +939,10 @@ BEGIN
             WHERE id_task = pIdTask)
   THEN
     UPDATE tb_tasks
-    SET name_task = pNameTask AND final_date = pDate;
+    SET name_task = pNameTask,
+      final_date  = pDate,
+      description = pDescription
+    WHERE id_task = pIdTask;
     RETURN TRUE;
   END IF;
   RETURN FALSE;
@@ -961,9 +971,13 @@ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION showContentTask(pIdTask INTEGER)
   RETURNS TABLE(
-    team       JSON,
-    comments   JSON,
-    checklists JSON
+    nameTask    VARCHAR(50),
+    attachment  VARCHAR(50),
+    finalDate   TIMESTAMP,
+    description TEXT,
+    team        JSON,
+    comments    JSON,
+    checklists  JSON
   ) AS $$
 BEGIN
   IF EXISTS(SELECT *
@@ -972,6 +986,10 @@ BEGIN
   THEN
     RETURN QUERY
     SELECT
+      l.name_task,
+      l.attachment,
+      l.final_date,
+      l.description,
       (SELECT coalesce(json_agg(teamTask), '[]')
        FROM (SELECT id_user
              FROM tb_team_tasks
@@ -990,7 +1008,9 @@ BEGIN
                name_checklist,
                checked
              FROM tb_checklist_tasks
-             WHERE id_task = pIdTask) AS jsonChecklist);
+             WHERE id_task = pIdTask) AS jsonChecklist)
+    FROM tb_tasks l
+    WHERE l.id_task = pIdTask;
 
   END IF;
 END;
@@ -1048,22 +1068,22 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION buildChecklist(idtask INTEGER, checklist JSON)
+CREATE OR REPLACE FUNCTION buildChecklist(pIdTask INTEGER, pChecklist JSON)
   RETURNS BOOLEAN AS $$
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_tasks
-            WHERE id_task = idTask)
+            WHERE id_task = pIdTask)
   THEN
     INSERT INTO tb_checklist_tasks (name_checklist, id_task, checked)
       SELECT
-        namechecklist,
-        idtask,
+        "namechecklist",
+        "idTask",
         checked
-      FROM json_to_recordset(checklist)
+      FROM json_to_recordset(pChecklist)
         AS x(
-           namechecklist VARCHAR(20),
-           idtask INTEGER,
+           "namechecklist" VARCHAR(20),
+           "idTask" INTEGER,
            checked BOOLEAN
            );
     RETURN TRUE;

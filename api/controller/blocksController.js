@@ -52,7 +52,7 @@ exports.deleteBlock = function (req, res) {
 
 //Cria uma nova tarefa
 exports.newtask = function (req, res) {
-  db.any('SELECT * FROM newtasks($1,$2,$3,$4)', [req.body.nameTask, null, req.body.finalDate, req.params.id])
+  db.any('SELECT * FROM newtasks($1,$2,$3,$4,$5)', [req.body.nameTask, null, req.body.finalDate, req.body.description, req.params.id])
     .then(data => {
       if (!data || !data[0]) {
         res.status(404).json({error: 'Nao foi encontrado esse bloco no projeto'})
@@ -78,7 +78,7 @@ exports.newtask = function (req, res) {
 
 //Altera tarefa
 exports.changeTask = function (req, res) {
-  db.any('SELECT * FROM changeTask($1,$2,$3)', [req.params.id, req.body.nameTask, req.body.finaDate])
+  db.any('SELECT * FROM changeTask($1,$2,$3,$4)', [req.body.idTask, req.body.nameTask, req.body.finalDate, req.body.description])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Tarefa nao encontrada'})
@@ -147,7 +147,7 @@ exports.buildAttachment = function (req, res) {
 //Cria as checklists no banco
 exports.newChecklist = function (req, res) {
   let json = req.body.jsonChecklists
-  db.any('SELECT * FROM buildChecklist($1,$2);', [req.params.id, JSON.stringify(json)])
+  db.any('SELECT * FROM buildChecklist($1,$2);', [req.body.idTask, JSON.stringify(json)])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Tarefa inexistente'})
@@ -159,7 +159,7 @@ exports.newChecklist = function (req, res) {
 
 //Cria comentario nas tarefas
 exports.newComment = function (req, res) {
-  db.any('SELECT * FROM newComment($1,$2)', [req.params.id, req.body.comment])
+  db.any('SELECT * FROM newComment($1,$2)', [req.body.idTask, req.body.comment])
     .then(data => {
       if (data) {
         res.status(200).json({result: 'Comentário adicionado a tarefa'})

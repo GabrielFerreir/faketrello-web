@@ -41,8 +41,8 @@ exports.newProject = async function (req, res) {
 
         db.any('SELECT * FROM insertTeamNewProject($1)', [req.body.teamJson])
           .then(data => {
-            if(!data) {
-              res.json({error:'Falha ao inserir time de criação do projeto'})
+            if (!data) {
+              res.json({error: 'Falha ao inserir time de criação do projeto'})
             }
           })
       }
@@ -128,14 +128,15 @@ exports.changeProject = function (req, res) {
   } else {
     auth = auth.split('Bearer').pop().trim()
   }
-  jwt.verify(auth, userController.senha, function (error, data) {
+  jwt.verify(auth, userController.senha, async function (error, data) {
     if (error) {
       res.status(401).json({error: 'Sessão invalida'})
     } else {
       req.body.iduser = data.id
       req.body.idproject = id
-      let permission = exports.verifyPermission(req, res)
-      db.any('SELECT * FROM changeproject($1,$2,$3,$4,$5);', [id, req.body.nameproject, req.body.description, caminho, permission])
+      let permission = await exports.verifyPermission(req, res)
+
+      db.any('SELECT * FROM changeproject($1,$2,$3,$4,$5);', [id, req.body.nameProject, req.body.description, caminho, permission[0].permission])
         .then(async data => {
           if (!data) {
             res.status(400).json({error: 'Projeto nao encontrado ou pertence a outras pessoas'})
@@ -252,7 +253,6 @@ exports.verifyPermission = async function (req, res) {
             if (!data || !data[0]) {
               reject('Usuario nao faz parte do projeto')
             } else {
-              console.log(data)
               resolve(data)
             }
           })

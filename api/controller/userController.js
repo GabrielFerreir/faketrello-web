@@ -27,10 +27,10 @@
   exports.emailExists = function (req, res) {
     db.any('SELECT * FROM emailnewuser($1)', [req.body.email])
       .then(data => {
-        if(!data) {
-          res.status(409).json({error:'Email existe'})
+        if (!data) {
+          res.status(409).json({error: 'Email existe'})
         } else {
-          res.status(200).json({error:'Email nao existe'})
+          res.status(200).json({error: 'Email nao existe'})
         }
       })
   }
@@ -103,7 +103,6 @@
               if (!data || !data[0]) {
                 res.status(409).json({Error: 'A alteração falhou'})
               } else {
-                console.log(data[0].iduser)
                 req.idUserChange = data[0].iduser
                 db.any('SELECT * FROM relogin($1);', [req.body.username])
                   .then(data => {
@@ -118,13 +117,22 @@
               }
             })
           if (req.body.imgBase64) {
-            let caminho = await exports.imgs(req, res)
-            db.any('SELECT * from verify_img($2,$1);', [req.body.username, caminho])
-              .then(data => {
-                if (!data[0].verify_img) {
-                  res.json({error: 'Usuario nao encontrado'})
-                }
-              })
+            let caminho;
+            try {
+              caminho = await exports.imgs(req, res)
+            } catch (e) {
+              console.log(e);
+            }
+            if(caminho !== 'Tipo de arquivo errado') {
+              db.any('SELECT * from verify_img($2,$1);', [req.body.username, caminho])
+                .then(data => {
+                  if (!data[0].verify_img) {
+                    res.json({error: 'Usuario nao encontrado'})
+                  }
+                })
+            } else {
+              res.status(415).json(caminho)
+            }
           }
         } catch (error) {
           console.log(error)
@@ -218,30 +226,32 @@
       let matches = image.match(/^data:([A-Za-z-+/]+);base64,(.+)$/)
       let response = {}
 
-      if (matches.length !== 3) {
-        return new Error('Invalid input string')
-      }
-      response.type = matches[1]
-      response.data = new Buffer(matches[2], 'base64')
-      let caminhoBd
-      if (req.called === 1) {
-        caminhoBd = `./files/imgsProjects/picture_${req.idproj}.png`
-      }
-      else if (req.called === 2) {
-        caminhoBd = `./files/imgsUser/picture_${req.idNewUser}.png`
+      if (matches === null || matches.length !== 3) {
+        reject('Tipo de arquivo errado')
       } else {
-        caminhoBd = `./files/imgsUser/picture_${req.idUserChange}.png`
-      }
+        response.type = matches[1]
 
-      let caminho = caminhoBd.replace('./files', '')
-
-      fs.writeFile(caminhoBd, response.data, function (error) {
-        if (error) {
-          reject(error)
-        } else {
-          resolve(caminho)
+        response.data = new Buffer(matches[2], 'base64')
+        let caminhoBd
+        if (req.called === 1) {
+          caminhoBd = `./files/imgsProjects/picture_${req.idproj}.png`
         }
-      })
+        else if (req.called === 2) {
+          caminhoBd = `./files/imgsUser/picture_${req.idNewUser}.png`
+        } else {
+          caminhoBd = `./files/imgsUser/picture_${req.idUserChange}.png`
+        }
+
+        let caminho = caminhoBd.replace('./files', '')
+
+        fs.writeFile(caminhoBd, response.data, function (error) {
+          if (error) {
+            reject(error)
+          } else {
+            resolve(caminho)
+          }
+        })
+      }
     })
   }
 
