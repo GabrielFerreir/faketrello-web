@@ -43,8 +43,7 @@ export class DragDropService {
 
   listenerInit() {
     setTimeout(() => {
-      this.larguraDaCaixa = document.querySelectorAll('.caixa')[0].clientWidth;
-      this.larguraDaCaixa = this.larguraDaCaixa - (this.larguraDaCaixa * 0.1);
+      this.setTamanhos();
 
       const elemento = document.querySelectorAll('.elemento');
       for (let i = 0; i < elemento.length; i++) {
@@ -77,6 +76,12 @@ export class DragDropService {
       /* TOUCH */
     }, 100);
   }
+  setTamanhos() {
+    this.larguraDaCaixa = document.querySelectorAll('.caixa')[0].clientWidth;
+    this.larguraDaCaixa = this.larguraDaCaixa - (this.larguraDaCaixa * 0.1);
+
+    this.tamanhoDaTela = document.querySelector('#dragDrop').clientWidth;
+  }
   getPosInicial(event) {
     if(!this.isMobile) {
       this.posInicialX = event.clientX + this.getScroll();
@@ -102,8 +107,7 @@ export class DragDropService {
     console.log(this.posicaoBlocoX);
     console.log(this.posicaoBlocoY);
     this.caixa = event.target.parentNode;
-    // console.log(this.dragDropService.caixa);
-    // this.container.nativeElement.style.cursor = 'move';
+    console.log(this.caixa);
     this.sombra = document.createElement('article');
     this.sombra.className = 'sombra';
     this.sombra.setAttribute('_ngcontent-c4', '');
@@ -130,7 +134,6 @@ export class DragDropService {
       }
       this.bloco.style.opacity = '0.5';
       this.bloco.style.position = 'absolute';
-      // console.log(this.dragDropService.larguraDaCaixa + 'px');
       this.bloco.style.width = (this.larguraDaCaixa - 10) + 'px';
       if (this.pegaLocalNaOrdem(event)) {
         this.caixaDestino().insertBefore(this.sombra, this.pegaLocalNaOrdem(event));
@@ -164,7 +167,6 @@ export class DragDropService {
     clearInterval(this.intervalNext);
     clearInterval(this.intervalPrev);
     if (this.posInicialX) {
-      this.tamanhoDaTela = document.querySelector('#dragDrop').clientWidth;
       this.areaDeScroll = this.tamanhoDaTela * 0.2;
       if(!this.isMobile) {
         if (mouse.clientX > this.tamanhoDaTela - this.areaDeScroll) {
@@ -240,20 +242,21 @@ export class DragDropService {
   caixaDestino() {
     if (this.diferencaX && this.diferencaX > this.larguraDaCaixa) {
       const quantidadeDeIrmaos = Math.floor(this.diferencaX / this.larguraDaCaixa);
-      this.cxDestino = this.caixa.nextElementSibling;
+      console.log('qtd:' + quantidadeDeIrmaos);
+      this.cxDestino = this.caixa.parentNode.nextElementSibling.querySelector('.body');
+      console.log(this.cxDestino);
       for (let i = 1; i < quantidadeDeIrmaos; i++) {
-        this.cxDestino = this.cxDestino.nextElementSibling;
+        this.cxDestino = this.cxDestino.parentNode.nextElementSibling.querySelector('.body');
       }
     } else if (this.diferencaX && this.diferencaX < -this.larguraDaCaixa) {
       const quantidadeDeIrmaos = Math.floor(this.diferencaX / -this.larguraDaCaixa);
-      this.cxDestino = this.caixa.previousElementSibling;
+      this.cxDestino = this.caixa.parentNode.previousElementSibling.querySelector('.body');
       for (let i = 1; i < quantidadeDeIrmaos; i++) {
-        this.cxDestino = this.cxDestino.previousElementSibling;
+        this.cxDestino = this.cxDestino.parentNode.previousElementSibling.querySelector('.body');
       }
     } else {
       this.cxDestino = this.caixa;
     }
-    // console.log(this.dragDropService.cxDestino);
     return this.cxDestino;
   }
   reset() {
@@ -304,7 +307,6 @@ export class DragDropService {
       this.idBlock = null;
     }
   }
-
   addTarefa() {
     var url = 'http://' + this.core.ipDaApi + '/blocks/task/' + this.idBlock;
     if(this.dataTarefa) {
