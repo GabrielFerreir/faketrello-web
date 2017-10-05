@@ -4,7 +4,7 @@ const databaseConfig = {
   'port': 5432,
   'database': 'fakeTrello',
   'user': 'postgres',
-  'password': '91416644'
+  'password': 'admin'
 }
 const initOptions = {
   promiseLib: promise

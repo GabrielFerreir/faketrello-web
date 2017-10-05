@@ -65,23 +65,11 @@
 
   //Verifica se o token é válido
   exports.authSession = function (req, res) {
-    let auth = req.headers.authorization
 
-    if ((!auth) || (!auth.startsWith('Bearer'))) {
-      res.status(401).json({error: 'Sessão Inválida'})
-    } else {
-      auth = auth.split('Bearer').pop().trim()
-    }
-    jwt.verify(auth, PASSWORD, function (error, data) {
-      if (error) {
-        res.status(401).json({error: 'Sessão invalida'})
-      } else {
         res.status(200).json({
-          user: data.user,
-          statusAcc: data.authEmail
+          user: req.dataToken.user,
+          statusAcc: req.dataToken.authEmail
         })
-      }
-    })
   }
 
   //Alteração de dados
