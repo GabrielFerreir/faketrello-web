@@ -48,11 +48,10 @@ export class CadastroComponent implements OnInit {
 
   ngOnInit() {}
 
-  chamaFile() {
+chamaFile() {
     let el = document.getElementById('file');
     el.click();
-  }
-
+}
 chama(){
   this.nome.length > 0 ? this.HTMLNome.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLNome.nativeElement.classList.remove('textFieldsPreenchido');
   this.email.length > 0 ? this.HTMLEmail.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLEmail.nativeElement.classList.remove('textFieldsPreenchido');
@@ -67,7 +66,6 @@ geraUserName(nome) {
       this.userName = userName;
     }
   }
-
 verificaNome(nome){
   const filtro = /^[A-Za-z ]+$/;
 
@@ -96,7 +94,6 @@ verificaNome(nome){
     return false;
   }
 }
-
 verificaEmail(email) {
   var filtro = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 
@@ -157,7 +154,6 @@ senhasConferem() {
       return false;
     }
 }
-
 habilitaBotao() {
   console.log(this.codeSatusNome)
   console.log(this.codeSatusEmail)
@@ -173,7 +169,6 @@ habilitaBotao() {
     this.HTMLCadastrar.nativeElement.classList.add('disabledButton');
   }
 }
-
 criaUsuario() {
     if(this.podeCriarUsuario == true) {
       var url = 'http://' + this.core.ipDaApi + '/newuser';
@@ -207,8 +202,6 @@ criaUsuario() {
     console.log('Insira todos os dados');
   }
 }
-
-
 fazerLogin() {
   console.log('1')
   if(this.senha) {
@@ -233,8 +226,6 @@ fazerLogin() {
     );
 }
 }
-
-
 previewFile(el) {
     console.log(el)
     var reader  = new FileReader();
@@ -253,5 +244,4 @@ previewFile(el) {
     }
 
   }
-
 }

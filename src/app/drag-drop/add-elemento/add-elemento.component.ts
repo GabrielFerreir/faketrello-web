@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {DragDropService} from '../drag-drop.service';
 import {ProjectsServiceService} from '../../projects/projects-service.service';
-import {isNumber} from "util";
 
 @Component({
   selector: 'app-add-elemento',
@@ -9,6 +8,9 @@ import {isNumber} from "util";
   styleUrls: ['./add-elemento.component.css']
 })
 export class AddElementoComponent implements OnInit {
+  @ViewChild('HTMLNome') HTMLNome: ElementRef;
+  @ViewChild('HTMLData') HTMLData: ElementRef;
+
 
   constructor(private dragDropService: DragDropService,
               private projectsService: ProjectsServiceService) { }
@@ -18,42 +20,55 @@ export class AddElementoComponent implements OnInit {
       this.offPopupAddElementos(e);
     });
   }
-
+  inputs(){
+    this.dragDropService.nomeTarefa.length > 0 ? this.HTMLNome.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLNome.nativeElement.classList.remove('textFieldsPreenchido');
+    this.dragDropService.dataTarefa.length > 0 ? this.HTMLData.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLData.nativeElement.classList.remove('textFieldsPreenchido');
+  }
   offPopupAddElementos(e) {
     if(e.target) {
       if(e.target.className != 'popupAddElemento' && e.target.parentNode.className != 'popupAddElemento' && e.target.parentNode.parentNode.className != 'popupAddElemento') {
         this.dragDropService.addElemento = false;
         this.dragDropService.idBlock = null;
         this.dragDropService.nomeBlock = null;
+        this.dragDropService.nomeTarefa = '';
+        this.dragDropService.dataTarefa = '';
       }
     } else if(e == 'TRUE') {
       this.dragDropService.addElemento = false;
       this.dragDropService.idBlock = null;
       this.dragDropService.nomeBlock = null;
+      this.dragDropService.nomeTarefa = '';
+      this.dragDropService.dataTarefa = '';
     }
-
   }
-  mascaraData() {
+  mascaraData(e) {
+    if(this.dragDropService.dataTarefa) {
+      this.dragDropService.dataTarefa = this.dragDropService.dataTarefa.substr(0,10);
+      let date = this.dragDropService.dataTarefa.split('/');
+      date = date.join();
 
-    if(this.dragDropService.dataTarefa.length == 2) {
-      this.dragDropService.dataTarefa = this.dragDropService.dataTarefa + '/';
-    }
-    if(this.dragDropService.dataTarefa.length == 5) {
-      this.dragDropService.dataTarefa = this.dragDropService.dataTarefa + '/';
-    }
-    if(this.dragDropService.dataTarefa.length == 10) {
-      const A = Date.parse(this.dragDropService.dataTarefa);
-      console.log(A);
-      if(isNaN(A)) {
-        console.log('Data Invalida');
-      } else {
-        console.log('Data Valida');
+      date = date.toString().replace(/[^0-9]+/g, '');
+      if (date.length > 2) {
+        date = date.substring(0, 2) + '/' + date.substring(2);
       }
-    }
-    if(this.dragDropService.dataTarefa.length > 10) {
-      console.log(this.dragDropService.dataTarefa.length);
-      // this.dragDropService.dataTarefa = this.dragDropService.dataTarefa.substr(1,(this.dragDropService.dataTarefa.length));
-      this.dragDropService.dataTarefa = this.dragDropService.dataTarefa.slice(0, -1);
+      if (date.length > 5) {
+        date = date.substring(0, 5) + '/' + date.substring(5, 9);
+      }
+      if(date.length === 10) {
+        let dia = date.split('/')[0];
+        let mes = date.split('/')[1] - 1;
+        let ano = date.split('/')[2];
+        if( dia < 1 || dia > 31 ||
+          mes < 1 || mes > 11 ||
+          ano < 1800 || mes > 3000) {
+          console.log('ERROR');
+        } else {
+          console.log('Data Valida');
+          let dataF = new Date(ano, mes, dia).getTime()
+          console.log(dataF);
+        }
+      }
+      this.dragDropService.dataTarefa = date;
     }
   }
   addTarefa() {
@@ -76,8 +91,5 @@ export class AddElementoComponent implements OnInit {
       console.error(error);
     });
   }
-
-
-
 
 }

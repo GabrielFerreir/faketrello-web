@@ -32,7 +32,9 @@ export class DragDropService {
   intervalNext;
 
 
-  addElemento: boolean;
+  // addElemento: boolean;
+  addElemento;
+  addInfoEl;
   nomeBlock: string;
 
   nomeTarefa;
@@ -290,27 +292,47 @@ export class DragDropService {
   teste() {
     alert('A');
   }
-  onAddElemento(idBlock, nomeBlock) {
+  onAddElemento(event, idBlock) {
     this.addElemento = true;
     this.idBlock = idBlock;
-    this.nomeBlock = nomeBlock;
+    this.addInfoEl = event.target.parentNode;
+    console.log(event.target.parentNode);
+  }
+  offPopupAddElementos(e) {
+    if(this.addInfoEl != e.target.parentNode.parentNode.parentNode) {
+      this.addElemento = false;
+      this.idBlock = null;
+    }
   }
 
   addTarefa() {
     var url = 'http://' + this.core.ipDaApi + '/blocks/task/' + this.idBlock;
-    var json = JSON.stringify(
-      {
-        nameTask: this.nomeTarefa,
-        finalDate: this.dataTarefa
-      }
-    );
+    if(this.dataTarefa) {
+      let date = this.dataTarefa.split('/');
+      date = date[2] + '-' + date[1] + '-' + date[0];
+      var json = JSON.stringify(
+        {
+          nameTask: this.nomeTarefa,
+          finalDate: date
+        }
+      );
+    } else {
+      var json = JSON.stringify(
+        {
+          nameTask: this.nomeTarefa,
+          finalDate: null
+        }
+      );
+    }
+
+
     var params = json;
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
     return this.http.post(url, params, {headers: headers})
-      .map(res => res.json())
 
   }
+
 
 }

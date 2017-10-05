@@ -13,7 +13,8 @@ export class DragDropComponent implements OnInit {
 
   constructor(private projects: ProjectsServiceService,
               private route: ActivatedRoute,
-              private dragDropService: DragDropService) {
+              private dragDropService: DragDropService,
+              private projectsService: ProjectsServiceService) {
   }
 
   ngOnInit() {
@@ -28,6 +29,31 @@ export class DragDropComponent implements OnInit {
       }, () => {
       this.dragDropService.container = this.container;
       this.dragDropService.listenerInit();
+        document.addEventListener('mousedown', (e) => {
+          this.dragDropService.offPopupAddElementos(e);
+        });
+      });
+  }
+
+  addTarefa() {
+    this.dragDropService.addTarefa()
+      .subscribe((res) => {
+        console.log(res);
+        this.dragDropService.addElemento = false;
+        // BUSCA OS BLOCOS NOVAMENTE
+        this.projectsService.searchBlocks(this.dragDropService.idProjeto)
+          .subscribe((res) => {
+            console.log(res);
+            this.dragDropService.blocks = res;
+            this.dragDropService.nomeTarefa = '';
+            this.dragDropService.dataTarefa = '';
+          }, error => {
+            console.error(error);
+          }, () => {
+          });
+
+      }, error => {
+        console.error(error);
       });
   }
 
