@@ -6,6 +6,7 @@
 
 --INSERT INTO tb_comments(id_task,comment) values(3,'teste0'),(3,'teste1'),(3,'teste2'),(3,'teste3')
 
+
 CREATE OR REPLACE FUNCTION emailNewUser(pEmail VARCHAR(50))
   RETURNS BOOLEAN AS $$
 BEGIN
