@@ -14,12 +14,12 @@
 
     if (req.method === 'OPTIONS')
       return res.status(204).end()
-    console.log(req)
-    if (req._parsedUrl.pathname === '/userinfo' || req._parsedUrl.pathname === '/login'
+    if (req._parsedUrl.pathname === '/userinfo' || req._parsedUrl.pathname === '/login' || req._parsedUrl.pathname === '/newuser'
        || req.originalUrl.includes('/imgsProjects/') || req.originalUrl.includes('/imgsUser/')
        || req.originalUrl.includes('/assets/')) {
       next()
     } else {
+      //console.log(req)
 
       let auth = req.headers.authorization
 
