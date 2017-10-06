@@ -1,11 +1,10 @@
---SELECT * FROM tb_comments;
+--SELECT * FROM tb_blocks;
 
 --INSERT INTO tb_blocks(name_blocks,project_owner) values('teste do teste', 163)
-
+--INSERT INTO tb_tasks(name_task, id_block, description, position) values('teste do teste', 2, 'teste', 1);
 --UPDATE tb_login SET profile_img = '/imgsUser/default.png'
 
 --INSERT INTO tb_comments(id_task,comment) values(3,'teste0'),(3,'teste1'),(3,'teste2'),(3,'teste3')
-
 
 CREATE OR REPLACE FUNCTION emailNewUser(pEmail VARCHAR(50))
   RETURNS BOOLEAN AS $$

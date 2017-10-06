@@ -15,8 +15,8 @@
     if (req.method === 'OPTIONS')
       return res.status(204).end()
     if (req._parsedUrl.pathname === '/userinfo' || req._parsedUrl.pathname === '/login' || req._parsedUrl.pathname === '/newuser'
-       || req.originalUrl.includes('/imgsProjects/') || req.originalUrl.includes('/imgsUser/')
-       || req.originalUrl.includes('/assets/')) {
+      || req.originalUrl.includes('/imgsProjects/') || req.originalUrl.includes('/imgsUser/')
+      || req.originalUrl.includes('/assets/')) {
       next()
     } else {
       //console.log(req)
@@ -41,6 +41,7 @@
 
   //Parte de usuario
   app.get('/userInfo', userController.userAuth)
+  app.get('/usernameInfo', userController.usernameAuth)
   app.post('/login', userController.login)
   app.get('/session', userController.authSession)
   app.put('/session/change', userController.change)

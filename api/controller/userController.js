@@ -1,6 +1,5 @@
 (async () => {
   let db = await require('../db-config.js')
-  //let projectsController = require('./projectsController')
   const jwt = require('jsonwebtoken')
   const md5 = require('md5')
   const fs = require('fs')
@@ -9,6 +8,22 @@
 
   //Primeira verificação
   exports.userAuth = function (req, res) {
+    try {
+      db.any('SELECT * FROM loginU($1,$2);', [req.query.user, null])
+        .then(data => {
+          if (!data[0] || !data[0].email) {
+            res.status(404).json('Usuário Incorreto')
+          } else {
+            res.status(200).json('Usuario Encontrado')
+          }
+        })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  //Verificação alterar username
+  exports.usernameAuth = function (req, res) {
     try {
       db.any('SELECT * FROM loginU($1,$2);', [req.query.user, null])
         .then(data => {
