@@ -10,36 +10,38 @@
   let blocksController = require('./controller/blocksController')
   let PASSWORD = md5('senhaParaAuth')
 
-  // app.use(function (req, res, next) {
-  //
-  //   if (req.method === 'OPTIONS')
-  //     return res.status(204).end();
-  //
-  //   if (req._parsedUrl.pathname === '/userinfo' || req._parsedUrl.pathname === '/login') {
-  //     next()
-  //   } else {
-  //
-  //     let auth = req.headers.authorization
-  //
-  //     if ((!auth) || (!auth.startsWith('Bearer'))) {
-  //       return res.status(401).json({error: 'Token errado'})
-  //     } else {
-  //       auth = auth.split('Bearer').pop().trim()
-  //     }
-  //     jwt.verify(auth, PASSWORD, async function (error, data) {
-  //       if (error) {
-  //         return res.status(401).json({error: 'Sessão invalida'})
-  //       } else {
-  //         console.log(data)
-  //         req.dataToken = data
-  //         next()
-  //       }
-  //     })
-  //   }
-  // })
+  app.use(function (req, res, next) {
+
+    if (req.method === 'OPTIONS')
+      return res.status(204).end()
+    if (req._parsedUrl.pathname === '/userinfo' || req._parsedUrl.pathname === '/login' || req._parsedUrl.pathname === '/newuser'
+      || req.originalUrl.includes('/imgsProjects/') || req.originalUrl.includes('/imgsUser/')
+      || req.originalUrl.includes('/assets/')) {
+      next()
+    } else {
+      //console.log(req)
+
+      let auth = req.headers.authorization
+
+      if ((!auth) || (!auth.startsWith('Bearer'))) {
+        return res.status(401).json({error: 'Token errado'})
+      } else {
+        auth = auth.split('Bearer').pop().trim()
+      }
+      jwt.verify(auth, PASSWORD, async function (error, data) {
+        if (error) {
+          return res.status(401).json({error: 'Sessão invalida'})
+        } else {
+          req.dataToken = data
+          next()
+        }
+      })
+    }
+  })
 
   //Parte de usuario
   app.get('/userInfo', userController.userAuth)
+  app.get('/usernameInfo', userController.usernameAuth)
   app.post('/login', userController.login)
   app.get('/session', userController.authSession)
   app.put('/session/change', userController.change)

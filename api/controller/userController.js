@@ -1,6 +1,5 @@
 (async () => {
   let db = await require('../db-config.js')
-  //let projectsController = require('./projectsController')
   const jwt = require('jsonwebtoken')
   const md5 = require('md5')
   const fs = require('fs')
@@ -9,6 +8,22 @@
 
   //Primeira verificação
   exports.userAuth = function (req, res) {
+    try {
+      db.any('SELECT * FROM loginU($1,$2);', [req.query.user, null])
+        .then(data => {
+          if (!data[0] || !data[0].email) {
+            res.status(404).json('Usuário Incorreto')
+          } else {
+            res.status(200).json('Usuario Encontrado')
+          }
+        })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  //Verificação alterar username
+  exports.usernameAuth = function (req, res) {
     try {
       db.any('SELECT * FROM loginU($1,$2);', [req.query.user, null])
         .then(data => {
@@ -65,117 +80,80 @@
 
   //Verifica se o token é válido
   exports.authSession = function (req, res) {
-    let auth = req.headers.authorization
 
-    if ((!auth) || (!auth.startsWith('Bearer'))) {
-      res.status(401).json({error: 'Sessão Inválida'})
-    } else {
-      auth = auth.split('Bearer').pop().trim()
-    }
-    jwt.verify(auth, PASSWORD, function (error, data) {
-      if (error) {
-        res.status(401).json({error: 'Sessão invalida'})
-      } else {
-        res.status(200).json({
-          user: data.user,
-          statusAcc: data.authEmail
-        })
-      }
+    res.status(200).json({
+      user: req.dataToken.user,
+      statusAcc: req.dataToken.authEmail
     })
   }
 
   //Alteração de dados
-  exports.change = function (req, res) {
-    let auth = req.headers.authorization
-
-    if ((!auth) || (!auth.startsWith('Bearer'))) {
-      res.status(401).json({error: 'Token errado'})
-    } else {
-      auth = auth.split('Bearer').pop().trim()
-    }
-    jwt.verify(auth, PASSWORD, async function (error, data) {
-      if (error) {
-        res.status(401).json({error: 'Sessão invalida'})
-      } else {
+  exports.change = async function (req, res) {
+    try {
+      await db.any('SELECT * FROM changeUser($1,$2,$3,$4,$5);', [null, req.body.username, req.dataToken.user, req.body.email, req.body.name])
+        .then(data => {
+          if (!data || !data[0]) {
+            res.status(409).json({Error: 'A alteração falhou'})
+          } else {
+            req.idUserChange = data[0].iduser
+            db.any('SELECT * FROM relogin($1);', [req.body.username])
+              .then(data => {
+                if (!data || !data[0]) {
+                  res.status(404).json({error: 'Usuario nao encontrado'})
+                } else {
+                  req.body.password = data[0].passw
+                  req.body.user = req.body.username
+                  exports.login(req, res)
+                }
+              })
+          }
+        })
+      if (req.body.imgBase64) {
+        let caminho
         try {
-          await db.any('SELECT * FROM changeUser($1,$2,$3,$4,$5);', [null, req.body.username, data.user, req.body.email, req.body.name])
+          caminho = await exports.imgs(req, res)
+        } catch (e) {
+          console.log(e)
+        }
+        if (caminho !== 'Tipo de arquivo errado') {
+          db.any('SELECT * from verify_img($2,$1);', [req.body.username, caminho])
             .then(data => {
-              if (!data || !data[0]) {
-                res.status(409).json({Error: 'A alteração falhou'})
-              } else {
-                req.idUserChange = data[0].iduser
-                db.any('SELECT * FROM relogin($1);', [req.body.username])
-                  .then(data => {
-                    if (!data || !data[0]) {
-                      res.status(404).json({error: 'Usuario nao encontrado'})
-                    } else {
-                      req.body.password = data[0].passw
-                      req.body.user = req.body.username
-                      exports.login(req, res)
-                    }
-                  })
+              if (!data[0].verify_img) {
+                res.json({error: 'Usuario nao encontrado'})
               }
             })
-          if (req.body.imgBase64) {
-            let caminho;
-            try {
-              caminho = await exports.imgs(req, res)
-            } catch (e) {
-              console.log(e);
-            }
-            if(caminho !== 'Tipo de arquivo errado') {
-              db.any('SELECT * from verify_img($2,$1);', [req.body.username, caminho])
-                .then(data => {
-                  if (!data[0].verify_img) {
-                    res.json({error: 'Usuario nao encontrado'})
-                  }
-                })
-            } else {
-              res.status(415).json(caminho)
-            }
-          }
-        } catch (error) {
-          console.log(error)
+        } else {
+          res.status(415).json(caminho)
         }
       }
-    })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   //Altera senha do usuario
   exports.changepass = function (req, res) {
-    let auth = req.headers.authorization
     let whocall = false
     let oldpass
 
-    if ((!auth) || (!auth.startsWith('Bearer'))) {
-      res.status(401).json({error: 'Token errado'})
+    if (req.body.oldpass) {
+      whocall = true
+      oldpass = md5(req.body.oldpass)
     } else {
-      auth = auth.split('Bearer').pop().trim()
+      whocall = false
+      oldpass = null
     }
-    jwt.verify(auth, PASSWORD, async function (error, data) {
-      if (error) {
-        res.status(401).json({error: 'Sessão invalida'})
-      } else {
-        if (req.body.oldpass) {
-          whocall = true
-          oldpass = md5(req.body.oldpass)
+    db.any('SELECT * FROM changepass($1,$2,$3,$4);', [req.dataToken.user, oldpass, md5(req.body.newpass), whocall])
+      .then(data => {
+        if (!data[0].changepass) {
+          res.status(401).json({error: 'Senha atual não confere'})
         } else {
-          whocall = false
-          oldpass = null
+          res.status(200).json({result: 'Senha Alterada com sucesso'})
         }
-        db.any('SELECT * FROM changepass($1,$2,$3,$4);', [data.user, oldpass, md5(req.body.newpass), whocall])
-          .then(data => {
-            if (!data[0].changepass) {
-              res.status(401).json({error: 'Senha atual não confere'})
-            } else {
-              res.status(200).json({result: 'Senha Alterada com sucesso'})
-            }
-          })
-      }
-    })
+      })
   }
 
-  //Cadastro de usuario novo
+//Cadastro de usuario novo
   exports.newUser = async function (req, res) {
 
     let caminho = '/imgsUser/default.png'
@@ -202,7 +180,7 @@
     }
   }
 
-  //Consulta do banco
+//Consulta do banco
   exports.db = function (req, res) {
     try {
       db.any('SELECT * FROM consult();')
@@ -218,7 +196,7 @@
     }
   }
 
-  //Base64 to image
+//Base64 to image
   exports.imgs = async function (req, res) {
     return new Promise(async function (resolve, reject) {
       const fs = require('fs')
@@ -255,7 +233,7 @@
     })
   }
 
-  //Remove img do usuario
+//Remove img do usuario
   exports.removeImg = function (req, res) {
     db.any('SELECT * FROM removeImg($1)', [req.params.id])
       .then(data => {
@@ -273,43 +251,26 @@
       })
   }
 
-  //Dados do usuário
+//Dados do usuário
   exports.infoUser = async function (req, res) {
     return new Promise(function (resolve, reject) {
 
-      let auth = req.headers.authorization
-
-      if ((!auth) || (!auth.startsWith('Bearer'))) {
-        res.status(401).json({error: 'Sessão Inválida'})
-      } else {
-        auth = auth.split('Bearer').pop().trim()
-      }
-      if (!PASSWORD) {
-        res.status(401).json({error: 'Token expirou'})
-      } else {
-        jwt.verify(auth, PASSWORD, function (error, data) {
-          if (error) {
-            res.status(401).json({error: 'Sessão invalida'})
-            reject(error)
+      db.any('SELECT * FROM consultuser($1);', [req.dataToken.user])
+        .then(data => {
+          if (!data[0]) {
+            res.status(404).json({result: 'Nao encontrado'})
+            reject('Nao encontrado')
           } else {
-            db.any('SELECT * FROM consultuser($1);', [data.user])
-              .then(data => {
-                if (!data[0]) {
-                  res.status(404).json({result: 'Nao encontrado'})
-                } else {
-                  if (req.called === 1) {
-                    return resolve(data[0])
-                  }
-                  res.status(200).json(data[0])
-                }
-              })
+            if (req.called === 1) {
+              return resolve(data[0])
+            }
+            res.status(200).json(data[0])
           }
         })
-      }
     })
   }
 
-  //Manda email de confirmacao
+//Manda email de confirmacao
   exports.email = async function (req, res) {
     let nodemailer = require('nodemailer')
 
@@ -361,7 +322,7 @@
     })
   }
 
-  //Envia a mensagem para o email
+//Envia a mensagem para o email
   exports.emailPassword = async function (req, res) {
     let nodemailer = require('nodemailer')
 
@@ -412,7 +373,7 @@
     })
   }
 
-  //Gera token para mandar no email
+//Gera token para mandar no email
   exports.generatorTokken = async function (req, res) {
     return new Promise(function (resolve, reject) {
 
@@ -433,7 +394,7 @@
     })
   }
 
-  //Muda status da variavel booleana no banco
+//Muda status da variavel booleana no banco
   exports.authEmail = function (req, res) {
     try {
       db.any('SELECT * FROM verify_token($1);', [req.body.user])
@@ -450,33 +411,20 @@
     }
   }
 
-  //Valida token e muda variavel booleana no banco
+//Valida token e muda variavel booleana no banco
   exports.validaToken = function (req, res) {
-    let auth = req.headers.authorization
 
-    if ((!auth) || (!auth.startsWith('Bearer'))) {
-      res.status(401).json({error: 'Sessão Inválida'})
-    } else {
-      auth = auth.split('Bearer').pop().trim()
-    }
-    jwt.verify(auth, PASSWORD, function (error, data) {
-      if (error) {
-        res.status(404).send({error: 'Token Invalido'})
-      } else {
-        db.any('SELECT * FROM verify_token($1);', [data.user])
-          .then(data => {
-            if (!data[0]) {
-              res.status(208).json(data[0])
-            } else {
-              res.status(200).json(data[0])
-            }
-          })
-      }
-    })
-
+    db.any('SELECT * FROM verify_token($1);', [req.dataToken.user])
+      .then(data => {
+        if (!data[0]) {
+          res.status(208).json(data[0])
+        } else {
+          res.status(200).json(data[0])
+        }
+      })
   }
 
-  //Deleta o usuario
+//Deleta o usuario
   exports.deleteUser = function (req, res) {
     db.any('SELECT * FROM deleteuser($1);', [req.body.user])
       .then(data => {
@@ -488,7 +436,7 @@
       })
   }
 
-  //Verifica se o email é valido e envia o email
+//Verifica se o email é valido e envia o email
   exports.verifyEmail = function (req, res) {
     db.any('SELECT * FROM emailexists($1);', [req.body.email])
       .then(data => {
@@ -505,4 +453,5 @@
         }
       })
   }
-})()
+})
+()
