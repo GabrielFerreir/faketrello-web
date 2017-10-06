@@ -34,9 +34,19 @@ export class DadosDeUsuarioService {
     }
     return tokkenCookie;
   }
-  verificaUsuarioExiste(usuario) {
+
+ // LOGAR (USERINFO)
+  verificaUsuarioLogin(usuario) {
     var url = 'http://' + this.core.ipDaApi + '/userinfo?user=' + usuario;
     return this.http.get(url)
+      .map(res => res.json())
+  }
+  // ALTERAR USUARIO (USERINFO)
+  verificaUsuarioExiste(usuario) {
+    var url = 'http://' + this.core.ipDaApi + '/usernameInfo?user=' + usuario;
+    const headers = new Headers();
+    headers.append('Authorization', 'Bearer ' + this.getCookieTokken());
+    return this.http.get(url, {headers: headers})
       .map(res => res.json())
   }
   gerarTokken(user, pass) {

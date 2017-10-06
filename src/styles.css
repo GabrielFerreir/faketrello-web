@@ -138,4 +138,24 @@ a {
   float: right;
 }
 
+.floatingButton{
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #2979ff;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 12;
+  outline: none;
+  border: none;
+  box-shadow: 0 9px 12px rgba(0,0,0,.14),
+              0 3px 5px rgba(0,0,0,.12),
+              0 5px 6px rgba(0,0,0,.20);
+  cursor: pointer;
+  background-size: 24px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 

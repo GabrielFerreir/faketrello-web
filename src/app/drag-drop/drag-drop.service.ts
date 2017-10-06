@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import {CoreService} from '../Services/core.service';
+import {DadosDeUsuarioService} from "../Services/dados-de-usuario.service";
 
 @Injectable()
 export class DragDropService {
 
   constructor(private core: CoreService,
+              private usuarioService: DadosDeUsuarioService,
               private http: Http) { }
   container;
   idProjeto: number;
@@ -305,14 +307,12 @@ export class DragDropService {
       this.idBlock = null;
     }
   }
-
   onAddBloco(event) {
     this.addBloco = true;
     console.log('Mostra');
 
   }
   offAddBloco(event) {
-
   }
   addTarefa() {
     var url = 'http://' + this.core.ipDaApi + '/blocks/task/' + this.idBlock;
@@ -333,11 +333,10 @@ export class DragDropService {
         }
       );
     }
-
-
     var params = json;
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
 
     return this.http.post(url, params, {headers: headers})
 
