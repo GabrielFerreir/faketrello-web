@@ -71,7 +71,7 @@ verificaNome(nome){
 
   if(filtro.test(nome) || nome == '') {
 
-      if(nome.length > 2 && nome.length < 20) {
+      if(nome.length > 2 && nome.length < 80) {
       // console.log('Nome Valido!')
       this.codeSatusNome = '200';
       this.errorNome = '';
@@ -83,7 +83,7 @@ verificaNome(nome){
       } else {
         // console.log('O nome deve conter entre 3 á 12 caracteres!')
         this.codeSatusNome = '400';
-        this.errorNome = 'Deve conter entre 3 á 20 caracteres!';
+        this.errorNome = 'Deve conter entre 3 á 80 caracteres!';
         return false;
       }
 

@@ -1,42 +1,59 @@
-<section class="projeto" xmlns="http://www.w3.org/1999/html">
+<!--<section class="projeto" xmlns="http://www.w3.org/1999/html">-->
 
-  <div class="img">{{ projects?.project?.namep.charAt(0) | uppercase }}</div>
+  <!--<div class="img">{{ projects?.project?.namep.charAt(0) | uppercase }}</div>-->
 
-  <h1>{{ projects?.project?.namep | uppercase }}</h1>
-</section>
+  <!--<h1>{{ projects?.project?.namep | uppercase }}</h1>-->
+<!--</section>-->
 
 <section class="container" #container>
   <div id="dragDrop">
-
 
     <section class="caixa" *ngFor="let caixas of dragDropService.blocks; let i = index">
       <header>{{ caixas.nameblock }}
         <div class="more_horiz" [menu]="appmenu"></div>
         <div class="popup" #popup1></div>
       </header>
-
-      <article class="elemento" *ngFor="let elementos of dragDropService.blocks[i].tasks">
-        {{ elementos.name_task }}
-        <br/>
-        <span class="prazo">
+      <section class="body">
+        <article class="elemento" *ngFor="let elementos of dragDropService.blocks[i].tasks">
+          {{ elementos.name_task }}
+          <br/>
+          <span class="prazo" *ngIf="elementos.final_date">
         {{ elementos.final_date | date: 'dd/MM/yyyy' }}
       </span>
-        <div class="editElemento" (click)="teste()">
+          <div class="editElemento" (click)="teste()">
+          </div>
+        </article>
+        <article class="addElemento">
+          <div [hidden]="dragDropService.addElemento && dragDropService.idBlock == caixas.idblock" class="addEl" (click)="dragDropService.onAddElemento($event, caixas.idblock)">Adicionar Elemento</div>
+          <section [hidden]="!dragDropService.addElemento || dragDropService.idBlock != caixas.idblock" class="addInfoEl">
+            <div style='position: relative;'>
+              <input type='text' class='textFields' [(ngModel)]="dragDropService.nomeTarefa" (keyup.enter)="addTarefa()">
+              <label class='labelText'>Nome</label>
+              <div class='border'></div>
+            </div>
+            <div style="margin-top: 40px;">
+              <button class="denseButton float-right" (click)="addTarefa()">Adicionar</button>
+            </div>
+          </section>
+        </article>
+      </section>
+    </section>
+
+    <section class="caixa">
+        <article [hidden]="!!dragDropService.addBloco" class="elemento addBloco" (click)="dragDropService.onAddBloco($event)">
+         Adicionar Caixa
+        </article>
+      <section [hidden]="!dragDropService.addBloco" class="addBlocoInfo" style="padding: 0 16px;">
+        <div style='position: relative; margin-top: -40px;'>
+          <input type='text' class='textFields' [(ngModel)]="dragDropService.nomeAddBloco">
+          <!--<label class='labelText'>Nome</label>-->
+          <div class='border'></div>
         </div>
-      </article>
-      <article class="addElemento">
-        <div [hidden]="dragDropService.addElemento && dragDropService.idBlock == caixas.idblock" class="addEl" (click)="dragDropService.onAddElemento($event, caixas.idblock)">Adicionar Elemento</div>
-        <section [hidden]="!dragDropService.addElemento || dragDropService.idBlock != caixas.idblock" class="addInfoEl">
-          <div style='position: relative;'>
-            <input type='text' class='textFields' [(ngModel)]="dragDropService.nomeTarefa" (keyup.enter)="addTarefa()">
-            <label class='labelText'>Nome</label>
-            <div class='border'></div>
-          </div>
-          <div style="margin-top: 40px;">
-            <button class="denseButton float-right" (click)="addTarefa()">Adicionar</button>
-          </div>
-        </section>
-      </article>
+        <div style="margin-top: 40px;">
+          <button class="denseButton float-left" style="margin-top: 40px;">Adicionar</button>
+        </div>
+      </section>
+
 
     </section>
 

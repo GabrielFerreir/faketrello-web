@@ -18,6 +18,10 @@ export class DragDropComponent implements OnInit {
   }
 
   ngOnInit() {
+    window.addEventListener('resize', () => {
+      this.dragDropService.setTamanhos();
+    });
+
     this.dragDropService.idProjeto = this.route.snapshot.params['id'];
     this.projects.viewDetailProject(this.dragDropService.idProjeto);
     this.projects.searchBlocks(this.dragDropService.idProjeto)
@@ -29,10 +33,19 @@ export class DragDropComponent implements OnInit {
       }, () => {
       this.dragDropService.container = this.container;
       this.dragDropService.listenerInit();
+      /* ADD TAREFAS */
         document.addEventListener('mousedown', (e) => {
           this.dragDropService.offPopupAddElementos(e);
         });
+      /* ADD TAREFAS */
+        /* ADD BLOCOS */
+        document.addEventListener('mousedown', (e) => {
+          this.dragDropService.offAddBloco(e);
+        });
+        /* ADD ELEMENTOS */
+
       });
+
   }
 
   addTarefa() {
