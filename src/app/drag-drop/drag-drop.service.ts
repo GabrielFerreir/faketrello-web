@@ -32,8 +32,11 @@ export class DragDropService {
   intervalNext;
 
 
-  // addElemento: boolean;
   addElemento;
+
+  addBloco;
+  nomeAddBloco;
+
   addInfoEl;
   nomeBlock: string;
 
@@ -92,8 +95,6 @@ export class DragDropService {
       this.posInicialY = event.changedTouches['0'].clientY;
     }
     this.bloco = event.target;
-    // console.log(this.dragDropService.bloco);
-    console.log(this.bloco.className);
     if (this.bloco.className != 'elemento') {
       this.reset();
       this.recriaListener();
@@ -104,10 +105,7 @@ export class DragDropService {
       this.posicaoBlocoY = this.bloco.getBoundingClientRect().top;
     } catch (e) {
     }
-    console.log(this.posicaoBlocoX);
-    console.log(this.posicaoBlocoY);
     this.caixa = event.target.parentNode;
-    console.log(this.caixa);
     this.sombra = document.createElement('article');
     this.sombra.className = 'sombra';
     this.sombra.setAttribute('_ngcontent-c4', '');
@@ -132,7 +130,7 @@ export class DragDropService {
       } else {
         this.bloco.style.transform = 'translate(' + (event.clientX - this.posInicialX) + 'px, ' + this.diferencaY + 'px) rotate(7deg)';
       }
-      this.bloco.style.opacity = '0.5';
+      this.bloco.style.opacity = '0.7';
       this.bloco.style.position = 'absolute';
       this.bloco.style.width = (this.larguraDaCaixa - 10) + 'px';
       if (this.pegaLocalNaOrdem(event)) {
@@ -301,11 +299,20 @@ export class DragDropService {
     this.addInfoEl = event.target.parentNode;
     console.log(event.target.parentNode);
   }
-  offPopupAddElementos(e) {
-    if(this.addInfoEl != e.target.parentNode.parentNode.parentNode) {
+  offPopupAddElementos(event) {
+    if(this.addInfoEl != event.target.parentNode.parentNode.parentNode) {
       this.addElemento = false;
       this.idBlock = null;
     }
+  }
+
+  onAddBloco(event) {
+    this.addBloco = true;
+    console.log('Mostra');
+
+  }
+  offAddBloco(event) {
+
   }
   addTarefa() {
     var url = 'http://' + this.core.ipDaApi + '/blocks/task/' + this.idBlock;

@@ -9,7 +9,7 @@
   <div id="dragDrop">
 
     <section class="caixa" *ngFor="let caixas of dragDropService.blocks; let i = index">
-      <header [ngStyle]="{'width': dragDropService.larguraDaCaixa * 1.1 + 'px'}">{{ caixas.nameblock }}
+      <header>{{ caixas.nameblock }}
         <div class="more_horiz" [menu]="appmenu"></div>
         <div class="popup" #popup1></div>
       </header>
@@ -17,7 +17,7 @@
         <article class="elemento" *ngFor="let elementos of dragDropService.blocks[i].tasks">
           {{ elementos.name_task }}
           <br/>
-          <span class="prazo">
+          <span class="prazo" *ngIf="elementos.final_date">
         {{ elementos.final_date | date: 'dd/MM/yyyy' }}
       </span>
           <div class="editElemento" (click)="teste()">
@@ -40,12 +40,21 @@
     </section>
 
     <section class="caixa">
-      <!--<section class="body">-->
-        <article class="elemento addBloco">
+        <article [hidden]="!!dragDropService.addBloco" class="elemento addBloco" (click)="dragDropService.onAddBloco($event)">
          Adicionar Caixa
         </article>
+      <section [hidden]="!dragDropService.addBloco" class="addBlocoInfo" style="padding: 0 16px;">
+        <div style='position: relative; margin-top: -40px;'>
+          <input type='text' class='textFields' [(ngModel)]="dragDropService.nomeAddBloco">
+          <!--<label class='labelText'>Nome</label>-->
+          <div class='border'></div>
+        </div>
+        <div style="margin-top: 40px;">
+          <button class="denseButton float-left" style="margin-top: 40px;">Adicionar</button>
+        </div>
+      </section>
 
-      <!--</section>-->
+
     </section>
 
 

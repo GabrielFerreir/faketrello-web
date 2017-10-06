@@ -229,7 +229,7 @@ header .checkNav:checked ~ nav {
   background-color: #EEE;
   position: absolute;
   /*z-index: 0;*/
-  top: 56px;
+  top: 46px;
 }
 
 @media screen and (max-width: 480px) {
