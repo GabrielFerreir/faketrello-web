@@ -82,6 +82,7 @@
   app.get('/task/attachment/:id', blocksController.deleteAttachment)
   app.post('/task/checklist', blocksController.newChecklist)
   app.put('/task/move', blocksController.moveTask)
+  app.post('/position', blocksController.lastPosition)
 
   let filesPath
 

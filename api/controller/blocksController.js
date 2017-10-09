@@ -1,5 +1,6 @@
 let db = require('../db-config.js')
 let fs = require('fs')
+let io = require('socket.io')
 
 //Adiciona quadros nos projetos
 exports.newblock = function (req, res) {
@@ -51,8 +52,9 @@ exports.deleteBlock = function (req, res) {
 }
 
 //Cria uma nova tarefa
-exports.newtask = function (req, res) {
-  db.any('SELECT * FROM newtasks($1,$2,$3,$4,$5)', [req.body.nameTask, null, req.body.finalDate, req.body.description, req.params.id])
+exports.newtask = async function (req, res) {
+  let position = await exports.lastPosition(req, res)
+  db.any('SELECT * FROM newtasks($1,$2,$3,$4,$5,$6)', [req.body.nameTask, null, req.body.finalDate, req.body.description, req.params.id, position])
     .then(data => {
       if (!data || !data[0]) {
         res.status(404).json({error: 'Nao foi encontrado esse bloco no projeto'})
@@ -89,13 +91,14 @@ exports.changeTask = function (req, res) {
 }
 
 //Move a tarefa de bloco
-exports.moveTask = function (req, res) {
-  db.any('SELECT * FROM moveTask($1,$2)', [req.body.idTask, req.body.idBlock])
+exports.moveTask = async function (req, res) {
+  await db.any('SELECT * FROM moveTask($1,$2)', [req.body.idTask, req.body.idBlock])
     .then(data => {
       if (!data) {
         res.status(400).json({error: 'Erro ao mover tarefa'})
       } else {
-        res.status(200).json({result: 'Tarefa movida'})
+        res.status(200).json({result: 'Movido!'})
+        io.emit('list updated', 'list updated')
       }
     })
 }
@@ -171,7 +174,14 @@ exports.newComment = function (req, res) {
 
 //Altera comentario
 exports.changeComment = function (req, res) {
-  db.any('SELECT * FROM ')
+  db.any('SELECT * FROM changeComment($1,$2);', [req.body.idComment, req.body.comment])
+    .then(data => {
+      if (!data) {
+        res.status(404).json({error: 'Comentário não encontrado'})
+      } else {
+        res.status(200).json({result: 'Comentário alterado'})
+      }
+    })
 }
 
 //Deleta o attachment
@@ -196,6 +206,19 @@ exports.deleteAttachment = function (req, res) {
               })
           }
         })
+      }
+    })
+}
+
+//Pega a ultima posição
+exports.lastPosition = function (req, res) {
+  db.any('SELECT * FROM getLastPosition($1)', [req.body.idBlock])
+    .then(data => {
+      console.log(data)
+      if (!data || !data[0]) {
+        console.log(data)
+      } else {
+        req.lastPosition = data[0].position
       }
     })
 }

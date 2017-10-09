@@ -1,4 +1,4 @@
---SELECT * FROM tb_blocks;
+--SELECT * FROM tb_tasks;
 
 --INSERT INTO tb_blocks(name_blocks,project_owner) values('teste do teste', 163)
 --INSERT INTO tb_tasks(name_task, id_block, description, position) values('teste do teste', 2, 'teste', 1);
@@ -895,15 +895,59 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM newtasks('joao','21/09/2017',2)
 
+--SELECT * FROM getLastPosition(2)
+
+CREATE OR REPLACE FUNCTION getLastPosition(pIdBlock INTEGER)
+  RETURNS TABLE(
+    "position" INTEGER
+  ) AS $$
+DECLARE
+  reg           tb_tasks%ROWTYPE;
+  vLastPosition INTEGER := 0;
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_blocks
+            WHERE id_blocks = pIdBlock)
+  THEN
+    RAISE NOTICE '%', vLastPosition;
+
+    FOR reg IN
+    SELECT l.position
+    FROM tb_tasks l
+    LOOP
+      RAISE NOTICE 'ANTES %', vLastPosition;
+
+
+      IF (SELECT l.position
+          FROM tb_tasks l
+          WHERE l.position > vLastPosition
+          LIMIT 1) IS NOT NULL
+      THEN
+        SELECT l.position
+        INTO vLastPosition
+        FROM tb_tasks l
+        WHERE l.position > vLastPosition;
+      END IF;
+      RAISE NOTICE 'DEPOIS %', vLastPosition;
+    END LOOP;
+  END IF;
+
+  RETURN QUERY
+  SELECT vLastPosition;
+END;
+$$
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION newtasks(nametask CHARACTER VARYING, attachment CHARACTER VARYING, date TIMESTAMP,
                                     descrip  TEXT,
-                                    idblock  INTEGER)
+                                    idblock  INTEGER, pPosition INTEGER)
   RETURNS TABLE(
     idTask       INTEGER,
     nameTaskR    VARCHAR(20),
     dateR        TIMESTAMP,
     description  TEXT,
-    idBlockOwner INTEGER
+    idBlockOwner INTEGER,
+    "position"   INTEGER
   ) AS $$
 DECLARE
   vIdTask     INTEGER;
@@ -911,6 +955,7 @@ DECLARE
   vDate       TIMESTAMP;
   vDescript   TEXT;
   vBlockOwner INTEGER;
+  vPosition INTEGER;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_blocks
@@ -925,7 +970,8 @@ BEGIN
       vNameTask,
       vDate,
       vDescript,
-      vBlockOwner;
+      vBlockOwner,
+    vPosition;
   END IF;
 END;
 $$
