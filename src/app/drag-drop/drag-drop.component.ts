@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/
 import {ProjectsServiceService} from '../projects/projects-service.service';
 import {ActivatedRoute, Route, Router} from '@angular/router';
 import {DragDropService} from './drag-drop.service';
+import {DadosDeUsuarioService} from "../Services/dados-de-usuario.service";
 
 @Component({
   selector: 'app-drag-drop',
@@ -38,6 +39,7 @@ export class DragDropComponent implements OnInit {
           this.dragDropService.offPopupAddElementos(e);
         });
       /* ADD TAREFAS */
+
         /* ADD BLOCOS */
         document.addEventListener('mousedown', (e) => {
           this.dragDropService.offAddBloco(e);
@@ -68,6 +70,10 @@ export class DragDropComponent implements OnInit {
       }, error => {
         console.error(error);
       });
+  }
+  fechaAddElemento() {
+    this.dragDropService.addElemento = false;
+    this.dragDropService.idBlock = null;
   }
 
 }

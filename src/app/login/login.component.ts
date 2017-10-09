@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
   }
   verificaUsuario() {
     if (this.usuario) {
-        this.dadosService.verificaUsuarioExiste(this.usuario)
+        this.dadosService.verificaUsuarioLogin(this.usuario)
           .subscribe((res) => {
               this.codeStatusUsuario = '200'
               this.emailValido();

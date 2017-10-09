@@ -8,7 +8,7 @@
 header {
   width: 100vw;
   height: 56px;
-  background-color: #26C6DA;
+  background-color: #607D8B;
   box-shadow: 0px 0px 4px rgba(0,0,0,.14),
               0px 3px 4px rgba(0,0,0,.12),
               0px 1px 5px rgba(0,0,0,.20);
@@ -157,7 +157,7 @@ nav ul .titulo {
   height: 36px;
   margin-top: 5px;
   border-radius: 50%;
-  background-color: #006064;
+  background-color: #CFD8DC;
   color: #FFF;
   text-align: center;
   line-height: 36px;

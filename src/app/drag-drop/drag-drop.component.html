@@ -32,7 +32,8 @@
               <div class='border'></div>
             </div>
             <div style="margin-top: 40px;">
-              <button class="denseButton float-right" (click)="addTarefa()">Adicionar</button>
+              <img class="float-right" (click)="addTarefa()" src="../../assets/done.svg">
+              <img class="float-right" (click)="fechaAddElemento()" src="../../assets/clear.svg">
             </div>
           </section>
         </article>
@@ -54,10 +55,7 @@
         </div>
       </section>
 
-
     </section>
-
-
   </div>
 </section>
 <app-menu #appmenu>
@@ -70,3 +68,5 @@
     Remover Bloco
   </li>
 </app-menu>
+
+<button class="floatingButton addFloating"></button>

@@ -66,20 +66,17 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
   @ViewChild('HTMLEmail') HTMLEmail: ElementRef;
   @ViewChild('HTMLNovaSenha') HTMLNovaSenha: ElementRef;
   @ViewChild('HTMLConfirmaSenha') HTMLConfirmaSenha: ElementRef;
-  // @ViewChild('HTMLSenhaAtual') HTMLSenhaAtual:ElementRef;
   @ViewChild('HTMLCadastrar') HTMLCadastrar: ElementRef;
 
   chamaFile() {
     let el = document.getElementById('file');
     el.click();
   }
-
   chama() {
     this.alterar.name.length > 0 ? this.HTMLNome.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLNome.nativeElement.classList.remove('textFieldsPreenchido');
     this.alterar.username.length > 0 ? this.HTMLUsername.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLUsername.nativeElement.classList.remove('textFieldsPreenchido');
     this.alterar.email.length > 0 ? this.HTMLEmail.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLEmail.nativeElement.classList.remove('textFieldsPreenchido');
   }
-
   vericaNome() {
     const filtro = /^[A-Za-z ]+$/;
 
@@ -115,6 +112,7 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
           this.errorUsername = 'Esse usuario já está sendo usado';
           return false;
         }, error => {
+        console.log('Usuario não está em uso')
           this.codeSatusUsername = '200';
           this.errorUsername = '';
           return true;
@@ -161,10 +159,9 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
       this.CondVerificaEmail = false;
     }
   }
-
   altera() {
     this.verificaEmail();
-    if(this.CondVerificaEmail && this.vericaNome() && this.verificaUsername()) {
+    if(this.CondVerificaEmail && this.vericaNome() && this.codeSatusUsername == '200') {
       this.dadosDoUsuario.alterarDadosDeUsuario(this.alterar.name, this.alterar.username, this.img64, this.alterar.email)
         .subscribe(
           data => {
@@ -188,7 +185,6 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
 
 
   }
-
   previewFile(el) {
     console.log(el)
     const reader  = new FileReader();
