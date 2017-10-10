@@ -4,7 +4,6 @@ import {DragDropComponent} from './drag-drop.component';
 import {MenuModule} from '../components/menu/menu.module';
 import {DragDropService} from './drag-drop.service';
 import { FormsModule } from '@angular/forms';
-import { AddBlocosComponent } from './add-blocos/add-blocos.component';
 
 @NgModule({
   imports: [

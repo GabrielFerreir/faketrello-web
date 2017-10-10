@@ -46,6 +46,7 @@ export class DragDropComponent implements OnInit {
         /* ADD BLOCOS */
         document.addEventListener('mousedown', (event) => {
           this.dragDropService.offAddBloco(event);
+          this.dragDropService.desativaMenuBloco(event);
         });
         /* ADD ELEMENTOS */
 
@@ -96,6 +97,22 @@ export class DragDropComponent implements OnInit {
         console.log(error);
       }, () => {
 
+      });
+  }
+  deletarBloco(idblock) {
+    this.dragDropService.deletarBloco(idblock)
+      .subscribe((res) => {
+        console.log(res);
+        this.projects.searchBlocks(this.dragDropService.idProjeto)
+          .subscribe((res) => {
+            console.log(res);
+            this.dragDropService.blocks = res;
+          }, error => {
+            console.log(error);
+          });
+      }, error => {
+        console.log(error);
+      }, () => {
       });
   }
 
