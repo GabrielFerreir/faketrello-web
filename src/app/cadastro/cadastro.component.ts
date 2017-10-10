@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import 'rxjs/add/operator/map';
 import { DadosDeUsuarioService } from '../Services/dados-de-usuario.service';
 import { CoreService } from '../Services/core.service';
+import set = Reflect.set;
 
 @Component({
   selector: 'app-cadastro',
@@ -94,30 +95,30 @@ verificaNome(nome){
     return false;
   }
 }
-verificaEmail(email) {
-  var filtro = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+verificaEmail() {
+    const filtro = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    console.log(this.email);
+    if(this.email == '') {
+      this.codeSatusEmail = '400';
+      this.errorEmail = 'Campo necessario';
 
-  if(this.email == '') {
-    this.codeSatusEmail = '400';
-    this.errorEmail = 'Campo necessario';
-
-  }else if(filtro.test(email)) {
-    // this.verificaSeOUsuarioExiste();
-    this.dadosDoUsuario.verificaUsuarioExiste(this.email)
-      .subscribe((res) => {
+    }else if(filtro.test(this.email)) {
+      this.dadosDoUsuario.verificaEmailExiste(this.email)
+        .subscribe((res) => {
           // console.log(res)
-          this.codeSatusEmail = '409';
-          this.errorEmail = 'Esse email já está sendo usado';
-        }, error => {
           this.codeSatusEmail = '200';
           this.errorEmail = '';
-          console.log(error);
+        }, error => {
+          this.codeSatusEmail = '409';
+          this.errorEmail = 'Esse email já está sendo usado';
+          // console.log(error);
         });
 
-  }else {
-    this.codeSatusEmail = '400';
-    this.errorEmail = 'Email Invalido';
-    // console.log(false)
+    }else {
+      this.codeSatusEmail = '400';
+      this.errorEmail = 'Email Invalido';
+      console.log('Caiu aqui fdp')
+      // console.log(false)
     }
 }
 verificaSenha() {
@@ -160,14 +161,17 @@ habilitaBotao() {
   console.log(this.codeSatusSenha)
   console.log(this.codeSatusConfirmaSenha);
 
-  if(this.codeSatusNome == '200' && this.codeSatusEmail == '200' && this.codeSatusSenha == '200' && this.codeSatusConfirmaSenha == '200') {
+  setTimeout(() => {
+    if(this.codeSatusNome == '200' && this.codeSatusEmail == '200' && this.codeSatusSenha == '200' && this.codeSatusConfirmaSenha == '200') {
       console.log('Habilita botão')
       this.podeCriarUsuario = true;
       this.HTMLCadastrar.nativeElement.classList.remove('disabledButton');
-  } else {
-    this.podeCriarUsuario = false;
-    this.HTMLCadastrar.nativeElement.classList.add('disabledButton');
-  }
+    } else {
+      this.podeCriarUsuario = false;
+      this.HTMLCadastrar.nativeElement.classList.add('disabledButton');
+    }
+  }, 50);
+
 }
 criaUsuario() {
     if(this.podeCriarUsuario == true) {
