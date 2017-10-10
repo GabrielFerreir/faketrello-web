@@ -17,7 +17,7 @@
           >{{ errorNome }}</label>
         </div>
        <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
-          <input #HTMLEmail autocomplete="off" [(ngModel)]="email"  (blur)="chama(); verificaEmail(email); habilitaBotao()"type="text" id="email" class="textFields"/>
+          <input #HTMLEmail autocomplete="off" [(ngModel)]="email"  (blur)="chama(); verificaEmail();" (blur)="habilitaBotao()" type="text" id="email" class="textFields"/>
           <label class="labelText" for="email">Email</label>
           <div class="border"></div>
          <label class="helperText"

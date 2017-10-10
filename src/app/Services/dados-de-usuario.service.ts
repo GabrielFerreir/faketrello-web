@@ -92,6 +92,12 @@ export class DadosDeUsuarioService {
       return false;
     }
   }
+  verificaEmailExiste(email) {
+    var url = 'http://' + this.core.ipDaApi + '/emailExists/?user=' + email;
+    const headers = new Headers();
+    return this.http.get(url, {headers: headers})
+      .map(res => res.json())
+  }
   recuperarDadosDeUsuario() {
     const url = 'http://' + this.core.ipDaApi + '/user';
     const headers = new Headers();
