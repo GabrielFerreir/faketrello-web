@@ -1,6 +1,11 @@
 let db = require('../db-config.js')
 let fs = require('fs')
-let io = require('socket.io')
+let app = require('express')
+let socket = require('socket.io')
+let http = require('http')
+const server = http.Server(app)
+server.listen(3000)
+const io = socket(server)
 
 //Adiciona quadros nos projetos
 exports.newblock = function (req, res) {
@@ -41,7 +46,7 @@ exports.seachblocks = function (req, res) {
 
 //Deleta um bloco
 exports.deleteBlock = function (req, res) {
-  db.any('SELECT * FROM deleteBlock($1)', [req.body.idBlock])
+  db.any('SELECT * FROM deleteBlock($1)', [req.params.id])
     .then(data => {
       if (data) {
         res.status(200).json({result: 'Bloco deletado!'})
@@ -53,8 +58,8 @@ exports.deleteBlock = function (req, res) {
 
 //Cria uma nova tarefa
 exports.newtask = async function (req, res) {
-  let position = await exports.lastPosition(req, res)
-  db.any('SELECT * FROM newtasks($1,$2,$3,$4,$5,$6)', [req.body.nameTask, null, req.body.finalDate, req.body.description, req.params.id, position])
+  //let position = await exports.lastPosition(req, res)
+  db.any('SELECT * FROM newtasks($1,$2,$3,$4,$5)', [req.body.nameTask, null, req.body.finalDate, req.body.description, req.params.id])
     .then(data => {
       if (!data || !data[0]) {
         res.status(404).json({error: 'Nao foi encontrado esse bloco no projeto'})
@@ -98,7 +103,13 @@ exports.moveTask = async function (req, res) {
         res.status(400).json({error: 'Erro ao mover tarefa'})
       } else {
         res.status(200).json({result: 'Movido!'})
-        io.emit('list updated', 'list updated')
+
+        io.on('connection', function (socket) {
+          socket.emit('moved', {
+            greeting: 'list updated'
+          })
+        })
+
       }
     })
 }

@@ -74,7 +74,7 @@
   //Parte de blocos
   app.post('/blocks/:id', blocksController.newblock)
   app.put('/blocks', blocksController.changeBlockName)
-  app.delete('/blocks', blocksController.deleteBlock)
+  app.delete('/blocks/:id', blocksController.deleteBlock)
   app.get('/project/blocks/:id', blocksController.seachblocks)
   app.post('/blocks/task/:id', blocksController.newtask)
   app.put('/blocks/task', blocksController.changeTask)

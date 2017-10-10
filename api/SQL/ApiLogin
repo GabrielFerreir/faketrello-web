@@ -1,6 +1,6 @@
 --SELECT * FROM tb_tasks;
 
---INSERT INTO tb_blocks(name_blocks,project_owner) values('teste do teste', 163)
+--INSERT INTO tb_blocks(name_blocks,project_owner) values('teste do teste', 73)
 --INSERT INTO tb_tasks(name_task, id_block, description, position) values('teste do teste', 2, 'teste', 1);
 --UPDATE tb_login SET profile_img = '/imgsUser/default.png'
 
@@ -940,14 +940,13 @@ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION newtasks(nametask CHARACTER VARYING, attachment CHARACTER VARYING, date TIMESTAMP,
                                     descrip  TEXT,
-                                    idblock  INTEGER, pPosition INTEGER)
+                                    idblock  INTEGER)
   RETURNS TABLE(
     idTask       INTEGER,
     nameTaskR    VARCHAR(20),
     dateR        TIMESTAMP,
     description  TEXT,
-    idBlockOwner INTEGER,
-    "position"   INTEGER
+    idBlockOwner INTEGER
   ) AS $$
 DECLARE
   vIdTask     INTEGER;
@@ -955,7 +954,7 @@ DECLARE
   vDate       TIMESTAMP;
   vDescript   TEXT;
   vBlockOwner INTEGER;
-  vPosition INTEGER;
+
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_blocks
@@ -970,8 +969,7 @@ BEGIN
       vNameTask,
       vDate,
       vDescript,
-      vBlockOwner,
-    vPosition;
+      vBlockOwner;
   END IF;
 END;
 $$
