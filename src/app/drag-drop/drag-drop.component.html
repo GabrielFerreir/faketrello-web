@@ -1,17 +1,15 @@
-<!--<section class="projeto" xmlns="http://www.w3.org/1999/html">-->
-
-  <!--<div class="img">{{ projects?.project?.namep.charAt(0) | uppercase }}</div>-->
-
-  <!--<h1>{{ projects?.project?.namep | uppercase }}</h1>-->
-<!--</section>-->
-
 <section class="container" #container>
   <div id="dragDrop">
 
     <section class="caixa" *ngFor="let caixas of dragDropService.blocks; let i = index">
       <header>{{ caixas.nameblock }}
-        <div class="more_horiz" [menu]="appmenu"></div>
-        <div class="popup" #popup1></div>
+        <div class="more_horiz" (click)="dragDropService.ativaMenuBloco(caixas.idblock)"></div>
+        <div [hidden]="!dragDropService.menuBloco || caixas.idblock != dragDropService.referenciaMenuBloco " class="menuBloco">
+          <ul>
+            <li (click)="dragDropService.teste()">Alterar Bloco</li>
+            <li (mousedown)="deletarBloco(caixas.idblock)">Excluir Bloco</li>
+          </ul>
+        </div>
       </header>
       <section class="body">
         <article class="elemento" *ngFor="let elementos of dragDropService.blocks[i].tasks">
@@ -40,33 +38,24 @@
       </section>
     </section>
 
+    <!-- Adicionar Novas Caixas -->
     <section class="caixa">
-        <article [hidden]="!!dragDropService.addBloco" class="elemento addBloco" (click)="dragDropService.onAddBloco($event)">
+        <article [hidden]="!!dragDropService.situacaoAddBloco" class="elemento addBloco" (click)="dragDropService.onAddBloco($event)">
          Adicionar Caixa
         </article>
-      <section [hidden]="!dragDropService.addBloco" class="addBlocoInfo" style="padding: 0 16px;">
-        <div style='position: relative; margin-top: -40px;'>
-          <input type='text' class='textFields' [(ngModel)]="dragDropService.nomeAddBloco">
-          <!--<label class='labelText'>Nome</label>-->
+      <section [hidden]="!dragDropService.situacaoAddBloco" class="addBlocoInfo">
+        <div style='position: relative;'>
+          <input type='text' class='textFields' [(ngModel)]="dragDropService.nomeAddBloco" #nomeBloco (keyup.enter)="addBloco()">
           <div class='border'></div>
         </div>
-        <div style="margin-top: 40px;">
-          <button class="denseButton float-left" style="margin-top: 40px;">Adicionar</button>
+
+        <div style="float: left; width: 100%; margin-top: 45px;">
+          <img class="float-right" (click)="addBloco()" src="../../assets/done.svg">
+          <img class="float-right" (click)="fechaAddElemento()" src="../../assets/clear.svg">
         </div>
+
       </section>
 
     </section>
   </div>
 </section>
-<app-menu #appmenu>
-  <li
-    style="background-color: #FFF; height: auto; padding: 8px 16px 8px 24px; box-sizing: border-box; color: #444; height: 32px; line-height: 24px; cursor: pointer; overflow: hidden; font-size: 15px; font-family: Roboto">
-    Adicionar Nova Tarefa
-  </li>
-  <li
-    style="background-color: #FFF; height: auto; padding: 8px 16px 8px 24px; box-sizing: border-box; color: #444; height: 32px; line-height: 24px; cursor: pointer; overflow: hidden; font-size: 15px; font-family: Roboto">
-    Remover Bloco
-  </li>
-</app-menu>
-
-<button class="floatingButton addFloating"></button>

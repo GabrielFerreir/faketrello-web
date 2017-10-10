@@ -11,6 +11,7 @@ import {DadosDeUsuarioService} from "../Services/dados-de-usuario.service";
 })
 export class DragDropComponent implements OnInit {
   @ViewChild('container') container: ElementRef;
+  @ViewChild('nomeBloco') nomeBloco: ElementRef;
 
   constructor(private projects: ProjectsServiceService,
               private route: ActivatedRoute,
@@ -23,6 +24,7 @@ export class DragDropComponent implements OnInit {
       this.dragDropService.setTamanhos();
     });
 
+
     this.dragDropService.idProjeto = this.route.snapshot.params['id'];
     this.projects.viewDetailProject(this.dragDropService.idProjeto);
     this.projects.searchBlocks(this.dragDropService.idProjeto)
@@ -33,6 +35,7 @@ export class DragDropComponent implements OnInit {
         console.log(error);
       }, () => {
       this.dragDropService.container = this.container;
+      this.dragDropService.inputNomeBloco = this.nomeBloco;
       this.dragDropService.listenerInit();
       /* ADD TAREFAS */
         document.addEventListener('mousedown', (e) => {
@@ -41,15 +44,15 @@ export class DragDropComponent implements OnInit {
       /* ADD TAREFAS */
 
         /* ADD BLOCOS */
-        document.addEventListener('mousedown', (e) => {
-          this.dragDropService.offAddBloco(e);
+        document.addEventListener('mousedown', (event) => {
+          this.dragDropService.offAddBloco(event);
+          this.dragDropService.desativaMenuBloco(event);
         });
         /* ADD ELEMENTOS */
 
       });
 
   }
-
   addTarefa() {
     this.dragDropService.addTarefa()
       .subscribe((res) => {
@@ -74,6 +77,43 @@ export class DragDropComponent implements OnInit {
   fechaAddElemento() {
     this.dragDropService.addElemento = false;
     this.dragDropService.idBlock = null;
+  }
+  addBloco() {
+    this.dragDropService.addBloco()
+      .subscribe((res) => {
+        console.log(res);
+        // BUSCA OS BLOCOS NOVAMENTE
+        this.projectsService.searchBlocks(this.dragDropService.idProjeto)
+        .subscribe((res) => {
+            console.log(res);
+            this.dragDropService.blocks = res;
+            this.dragDropService.situacaoAddBloco = false;
+            this.dragDropService.nomeAddBloco = '';
+          }, error => {
+            console.error(error);
+          }, () => {
+          });
+      }, error => {
+        console.log(error);
+      }, () => {
+
+      });
+  }
+  deletarBloco(idblock) {
+    this.dragDropService.deletarBloco(idblock)
+      .subscribe((res) => {
+        console.log(res);
+        this.projects.searchBlocks(this.dragDropService.idProjeto)
+          .subscribe((res) => {
+            console.log(res);
+            this.dragDropService.blocks = res;
+          }, error => {
+            console.log(error);
+          });
+      }, error => {
+        console.log(error);
+      }, () => {
+      });
   }
 
 }

@@ -36,8 +36,9 @@ export class DragDropService {
 
   addElemento;
 
-  addBloco;
+  situacaoAddBloco = false;
   nomeAddBloco;
+  inputNomeBloco;
 
   addInfoEl;
   nomeBlock: string;
@@ -45,6 +46,8 @@ export class DragDropService {
   nomeTarefa;
   dataTarefa;
 
+  menuBloco = false;
+  referenciaMenuBloco;
 
   listenerInit() {
     setTimeout(() => {
@@ -308,11 +311,41 @@ export class DragDropService {
     }
   }
   onAddBloco(event) {
-    this.addBloco = true;
-    console.log('Mostra');
+    this.situacaoAddBloco = true;
 
+    /* NÂO FUNCIONA SEM O TIMEOUT*/
+    setTimeout(() => {
+      this.inputNomeBloco.nativeElement.focus();
+    }, 50);
+
+    let drag = <any>document.querySelector('#dragDrop');
+    console.log('pageoffSet')
+
+    // console.log(drag.scrollWidth - drag.getBoundingClientRect().width);
+    drag.scrollBy(drag.scrollWidth - drag.getBoundingClientRect().width, 0);
   }
   offAddBloco(event) {
+    if(event.target.className != 'addBlocoInfo' && event.target.parentNode.className != 'addBlocoInfo' && event.target.parentNode.parentNode.className != 'addBlocoInfo') {
+      this.situacaoAddBloco = false;
+    }
+  }
+
+  addBloco() {
+    const url = 'http://' + this.core.ipDaApi + '/blocks/' + this.idProjeto;
+
+    const json = JSON.stringify(
+      {
+        nameBlock: this.nomeAddBloco,
+      }
+    );
+
+    const params = json;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+
+    return this.http.post(url, params, {headers: headers})
+      .map(res => res.json());
   }
   addTarefa() {
     var url = 'http://' + this.core.ipDaApi + '/blocks/task/' + this.idBlock;
@@ -342,5 +375,30 @@ export class DragDropService {
 
   }
 
+  ativaMenuBloco(referencia) {
+    this.menuBloco = true;
+    this.referenciaMenuBloco = referencia;
+  }
+  desativaMenuBloco(event) {
+    if(event.target.className != 'menuBloco' && event.target.parentNode.parentNode.className != 'menuBloco') {
+      this.menuBloco = false;
+      this.referenciaMenuBloco = '';
+    } else {
+      setTimeout(() => {
+        this.menuBloco = false;
+        this.referenciaMenuBloco = '';
+      }, 50);
+    }
+  }
+  deletarBloco(idblock) {
+    var url = 'http://' + this.core.ipDaApi + '/blocks/' + idblock;
+
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+
+    return this.http.delete(url,{headers: headers})
+      .map(res => res.json())
+  }
 
 }

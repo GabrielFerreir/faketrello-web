@@ -1,7 +1,8 @@
 import {Component, ElementRef, Input, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
 import { DadosDeUsuarioService } from '../Services/dados-de-usuario.service';
-import {MenuComponent} from "../components/menu/menu.component";
-import {Router} from "@angular/router";
+import {MenuComponent} from '../components/menu/menu.component';
+import {Router} from '@angular/router';
+import * as socketIo from 'socket.io-client';
 
 @Component({
   selector: 'app-home',
@@ -18,9 +19,12 @@ export class HomeComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-    // this.dadosDeUsuarioService.getCookieTokken();
-    // this.dadosDeUsuarioService.logar();
-    //FAZ O LOGIN QUANDO O USUARIO JÁ ESTÁ AUTENTICADO
+    /* TESTE COM O SOCKET */
+    const socket = socketIo('http://192.168.52.75:3000');
+    socket.on('entrou', (data) => console.log(data));
+    /* TESTE COM O SOCKET */
+
+    // FAZ O LOGIN QUANDO O USUARIO JÁ ESTÁ AUTENTICADO
     if(this.dadosDeUsuarioService.getCookieTokken()) {
       this.dadosDeUsuarioService.logar()
         .subscribe((res) => {
