@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {DragDropComponent} from './drag-drop.component';
 import {MenuModule} from '../components/menu/menu.module';
-import { AddElementoComponent } from './add-elemento/add-elemento.component';
 import {DragDropService} from './drag-drop.service';
 import { FormsModule } from '@angular/forms';
+import { AddBlocosComponent } from './add-blocos/add-blocos.component';
 
 @NgModule({
   imports: [
@@ -17,7 +17,6 @@ import { FormsModule } from '@angular/forms';
   ],
   declarations: [
     DragDropComponent,
-    AddElementoComponent
   ],
   exports: [DragDropComponent]
 })

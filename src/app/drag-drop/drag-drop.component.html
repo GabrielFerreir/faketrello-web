@@ -1,10 +1,3 @@
-<!--<section class="projeto" xmlns="http://www.w3.org/1999/html">-->
-
-  <!--<div class="img">{{ projects?.project?.namep.charAt(0) | uppercase }}</div>-->
-
-  <!--<h1>{{ projects?.project?.namep | uppercase }}</h1>-->
-<!--</section>-->
-
 <section class="container" #container>
   <div id="dragDrop">
 
@@ -41,18 +34,21 @@
     </section>
 
     <section class="caixa">
-        <article [hidden]="!!dragDropService.addBloco" class="elemento addBloco" (click)="dragDropService.onAddBloco($event)">
+        <article [hidden]="!!dragDropService.situacaoAddBloco" class="elemento addBloco" (click)="dragDropService.onAddBloco($event)">
          Adicionar Caixa
         </article>
-      <section [hidden]="!dragDropService.addBloco" class="addBlocoInfo" style="padding: 0 16px;">
-        <div style='position: relative; margin-top: -40px;'>
-          <input type='text' class='textFields' [(ngModel)]="dragDropService.nomeAddBloco">
+      <section [hidden]="!dragDropService.situacaoAddBloco" class="addBlocoInfo" style="padding: 0 16px; height: 50px; margin-top: 5px;">
+        <div style='position: relative;'>
+          <input type='text' class='textFields' [(ngModel)]="dragDropService.nomeAddBloco" #nomeBloco>
           <!--<label class='labelText'>Nome</label>-->
           <div class='border'></div>
         </div>
-        <div style="margin-top: 40px;">
-          <button class="denseButton float-left" style="margin-top: 40px;">Adicionar</button>
+
+        <div style="float: left; width: 100%; margin-top: 40px;">
+          <img class="float-right" (click)="addBloco()" src="../../assets/done.svg">
+          <img class="float-right" (click)="fechaAddElemento()" src="../../assets/clear.svg">
         </div>
+
       </section>
 
     </section>
@@ -68,5 +64,3 @@
     Remover Bloco
   </li>
 </app-menu>
-
-<button class="floatingButton addFloating"></button>

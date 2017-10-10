@@ -51,7 +51,7 @@
 
 }
 .caixa {
-  min-width: 25vw;
+  min-width: 20vw;
   max-height: calc(100% - 20px);
   overflow:hidden;
   float: left;
