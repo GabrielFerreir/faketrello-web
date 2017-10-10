@@ -121,23 +121,22 @@ export class DragDropService {
       this.fazScroll(event);
       if(!this.isMobile) {
         this.diferencaX = (event.clientX + this.getScroll()) - this.posInicialX;
-        console.log('diferença X DESKTOP: ' + this.diferencaX);
         this.diferencaY = (event.clientY) - this.posInicialY;
       }
       if (this.isMobile) {
         this.diferencaX = (event.changedTouches['0'].clientX + this.getScroll()) - this.posInicialX;
-        console.log('diferença X MOBILE: ' + this.diferencaX);
         this.diferencaY = (event.changedTouches['0'].clientY) - this.posInicialY;
       }
       if (this.isMobile) {
         this.bloco.style.transform = 'translate(' + (event.changedTouches['0'].clientX - this.posInicialX) + 'px, ' + this.diferencaY + 'px) rotate(7deg)';
-        console.log('translate(' + (event.changedTouches['0'].clientX - this.posInicialX) + 'px, ' + this.diferencaY + 'px) rotate(7deg)');
+
       } else {
         this.bloco.style.transform = 'translate(' + (event.clientX - this.posInicialX) + 'px, ' + this.diferencaY + 'px) rotate(7deg)';
       }
       this.bloco.style.opacity = '0.7';
-      this.bloco.style.position = 'absolute';
-      this.bloco.style.width = (this.larguraDaCaixa - 10) + 'px';
+      this.bloco.style.position = 'fixed';
+      this.bloco.style.zIndex = '24';
+      this.bloco.style.width = (this.larguraDaCaixa) + 'px';
       if (this.pegaLocalNaOrdem(event)) {
         this.caixaDestino().insertBefore(this.sombra, this.pegaLocalNaOrdem(event));
       } else {

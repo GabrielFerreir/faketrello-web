@@ -58,6 +58,7 @@
   border-radius: 2px;
   margin: 10px;
   position: relative;
+
 }
 .caixa header {
   width: 100%;
@@ -140,7 +141,7 @@
 }
 .elemento {
   width: 90%;
-  margin-left: calc(5% - 10px);
+  margin: 0 5%;
   height: 60px;
   line-height: 25px;
   background-color: #FFFFFF;
@@ -160,6 +161,7 @@
   font-family: 'Roboto';
   font-weight: 600;
   text-transform: capitalize;
+  display: flex;
 }
 .elemento .prazo {
   float: left;
@@ -305,8 +307,10 @@
     font-size: 12px;
     /*overflow: hidden;*/
   }
+  .caixa .body {
+    width: calc(100%);
+  }
   .menuBloco {
     width: 90vw;
-
   }
 }
