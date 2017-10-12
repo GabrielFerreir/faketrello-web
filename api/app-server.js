@@ -16,7 +16,7 @@
       return res.status(204).end()
     if (req._parsedUrl.pathname === '/userinfo' || req._parsedUrl.pathname === '/login' || req._parsedUrl.pathname === '/newuser'
       || req.originalUrl.includes('/imgsProjects/') || req.originalUrl.includes('/imgsUser/')
-      || req.originalUrl.includes('/assets/')) {
+      || req.originalUrl.includes('/assets/') || req._parsedUrl.pathname === '/emailExists/') {
       next()
     } else {
       //console.log(req)
@@ -56,7 +56,7 @@
   app.post('/newpass', userController.verifyEmail)
   app.post('/resendEmail', userController.verifyEmail)
   app.delete('/deleteUser', userController.deleteUser)
-  app.post('/emailExists', userController.emailExists)
+  app.get('/emailExists', userController.emailExists)
 
   //Parte de projetos
   app.post('/project', projectsController.newProject)

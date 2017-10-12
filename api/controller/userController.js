@@ -40,12 +40,12 @@
 
   //Verifica se o email nao existe
   exports.emailExists = function (req, res) {
-    db.any('SELECT * FROM emailnewuser($1)', [req.body.email])
+    db.any('SELECT * FROM emailnewuser($1)', [req.query.email])
       .then(data => {
         if (!data) {
           res.status(409).json({error: 'Email existe'})
         } else {
-          res.status(200).json({error: 'Email nao existe'})
+          res.status(200).json({result: 'Email nao existe'})
         }
       })
   }
