@@ -271,8 +271,8 @@
   box-shadow: 0 2px 4px 0 rgba(0,0,0, 0.14), 0 4px 5px 0 rgba(0,0,0,0.12), 0 1px 10px 0 rgba(0, 0, 0, 0.20);
   z-index: 24;
   width: 20vw;
-  top: 0;
-  right: 0;
+  top: 5px;
+  right: 5px;
 }
 .menuBloco ul {
   list-style: none;

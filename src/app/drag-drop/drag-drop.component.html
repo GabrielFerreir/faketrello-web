@@ -40,7 +40,7 @@
 
     <!-- Adicionar Novas Caixas -->
     <section class="caixa">
-        <article [hidden]="!!dragDropService.situacaoAddBloco" class="elemento addBloco" (click)="dragDropService.onAddBloco($event)">
+        <article [hidden]="!!dragDropService.situacaoAddBloco" class="addBloco" (click)="dragDropService.onAddBloco($event)">
          Adicionar Caixa
         </article>
       <section [hidden]="!dragDropService.situacaoAddBloco" class="addBlocoInfo">
@@ -59,3 +59,5 @@
     </section>
   </div>
 </section>
+
+<app-options-tasks></app-options-tasks>
