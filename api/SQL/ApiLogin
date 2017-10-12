@@ -1,10 +1,10 @@
---SELECT * FROM tb_tasks;
+--SELECT * FROM tb_comments;
 
 --INSERT INTO tb_blocks(name_blocks,project_owner) values('teste do teste', 73)
 --INSERT INTO tb_tasks(name_task, id_block, description, position) values('teste do teste', 2, 'teste', 1);
 --UPDATE tb_login SET profile_img = '/imgsUser/default.png'
 
---INSERT INTO tb_comments(id_task,comment) values(3,'teste0'),(3,'teste1'),(3,'teste2'),(3,'teste3')
+--INSERT INTO tb_comments(id_task,comment) values(78,'teste0'),(78,'teste1'),(78,'teste2'),(78,'teste3')
 
 CREATE OR REPLACE FUNCTION emailNewUser(pEmail VARCHAR(50))
   RETURNS BOOLEAN AS $$
@@ -938,7 +938,8 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION newtasks(nametask CHARACTER VARYING, attachment CHARACTER VARYING, date TIMESTAMP,
+CREATE OR REPLACE FUNCTION newtasks(nametask CHARACTER VARYING,
+                                    date     TIMESTAMP,
                                     descrip  TEXT,
                                     idblock  INTEGER)
   RETURNS TABLE(
@@ -961,7 +962,7 @@ BEGIN
             WHERE id_blocks = idblock)
   THEN
     INSERT INTO tb_tasks (name_task, final_date, description, id_block) VALUES (nametask, date, descrip, idblock)
-    RETURNING id_task, name_task, final_date, descrip, id_block
+    RETURNING id_task, name_task, final_date, description, id_block
       INTO vIdTask, vNameTask, vDate, vDescript, vBlockOwner;
     RETURN QUERY
     SELECT
@@ -1061,18 +1062,47 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION buildAttachment(path CHARACTER VARYING, idtask INTEGER)
+--SELECT * FROM deleteTask(78)
+
+CREATE OR REPLACE FUNCTION deleteTask(pIdTask INTEGER)
   RETURNS BOOLEAN AS $$
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_tasks
-            WHERE id_task = idtask)
+            WHERE id_task = pIdTask)
   THEN
-    UPDATE tb_tasks
-    SET attachment = path
-    WHERE id_task = idtask;
+    DELETE FROM tb_comments
+    WHERE id_task = pIdTask;
+
+    DELETE FROM tb_checklist_tasks
+    WHERE id_task = pIdTask;
+
+    DELETE FROM tb_team_tasks
+    WHERE id_task = pIdTask;
+
+    DELETE FROM tb_tasks
+    WHERE id_task = pIdTask;
     RETURN TRUE;
   END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION buildAttachment(pFileName CHARACTER VARYING, pSize INTEGER, pIdTask INTEGER,
+                                           pPath     CHARACTER VARYING)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_tasks
+            WHERE id_task = pIdTask)
+  THEN
+    INSERT INTO tb_attachment (file_name, size, id_task, path)
+    VALUES (pFileName, pSize, pIdTask, pPath);
+
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
 END;
 $$
 LANGUAGE plpgsql;

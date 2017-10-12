@@ -59,7 +59,7 @@ exports.deleteBlock = function (req, res) {
 //Cria uma nova tarefa
 exports.newtask = async function (req, res) {
   //let position = await exports.lastPosition(req, res)
-  db.any('SELECT * FROM newtasks($1,$2,$3,$4,$5)', [req.body.nameTask, null, req.body.finalDate, req.body.description, req.params.id])
+  db.any('SELECT * FROM newtasks($1,$2,$3,$4)', [req.body.nameTask, req.body.finalDate, req.body.description, req.params.id])
     .then(data => {
       if (!data || !data[0]) {
         res.status(404).json({error: 'Nao foi encontrado esse bloco no projeto'})
@@ -68,7 +68,7 @@ exports.newtask = async function (req, res) {
           req.idtask = data[0].idtask
           let path = exports.buildAttachment(req, res)
 
-          db.any('SELECT * FROM buildAttachment($1,$2)', [req.idtask, path])
+          db.any('SELECT * FROM buildAttachment($1,$2,$3,$4)', [req.body.fileName, req.body.size, req.body.idTask, path])
             .then(data => {
               if (!data) {
                 res.status(404).json({error: 'Erro ao inserir o anexo porque nao encontrou tarefa criada'})
@@ -122,6 +122,18 @@ exports.showContentTask = function (req, res) {
         res.status(404).json({error: 'Tarefa nao existe ou vazia'})
       } else {
         res.status(200).json(data)
+      }
+    })
+}
+
+//Deleta a tarefa
+exports.deleteTask = function (req, res) {
+  db.any('SELECT * FROM deleteTask($1)', [req.params.id])
+    .then(data => {
+      if (!data || !data[0].deletetask) {
+        res.status(404).json({error: 'Tarefa nao encontrada'})
+      } else {
+        res.status(200).json({result: 'Deletado!'})
       }
     })
 }

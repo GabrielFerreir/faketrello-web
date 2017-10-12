@@ -79,6 +79,7 @@
   app.post('/blocks/task/:id', blocksController.newtask)
   app.put('/blocks/task', blocksController.changeTask)
   app.get('/blocks/task/:id', blocksController.showContentTask)
+  app.delete('/blocks/task/:id', blocksController.deleteTask)
   app.get('/task/attachment/:id', blocksController.deleteAttachment)
   app.post('/task/checklist', blocksController.newChecklist)
   app.put('/task/move', blocksController.moveTask)
@@ -90,7 +91,7 @@
 
   app.use(compression())
   app.use(express.static(filesPath))
-  app.set('views', filesPath)
+  app.set('files', filesPath)
 
   app.get('/*', (req, res) => {
     fs.readFile(`${filesPath}`, (err, text) => {
