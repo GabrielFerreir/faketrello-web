@@ -1,41 +1,42 @@
 <section class="container">
-  <div style="overflow-y: auto; height: 100%; width: 100%">
-    <div style="position: relative; margin-top: 10px;">
+  <div class="infoPrincipais">
+    <div style="position: relative">
       <input type="text" class="textFields">
-      <label class="labelText">Nome</label>
+      <div class="labelText">Nome</div>
       <div class="border"></div>
     </div>
-    <div style="position: relative; margin-top: 60px;">
+    <div style="position: relative; margin-top: 50px;">
       <input type="text" class="textFields">
-      <label class="labelText">Data</label>
+      <div class="labelText">Data</div>
       <div class="border"></div>
     </div>
-    <div style="position: relative; margin-top: 110px;">
-      <input type="text" class="textFields">
-      <label class="labelText">Descrição</label>
+    <div style="position: relative; margin-top: 100px">
+      <textarea class="textFieldsMult" style="min-height: 120px">Digite uma Descrição</textarea>
+      <!--<div class="labelTextMult">Descrição</div>-->
       <div class="border"></div>
     </div>
-    <div class="boxComentarios" style="position: relative; margin-top: 170px; border: 1px solid rgba(0,0,0, .42);">
-      <ul>
-        <li>Existe um comentario aqui!</li>
-        <li>Existe um comentario aqui!</li>
-      </ul>
-    </div>
-    <div style="position: relative; margin-top: 15px;">
-      <input type="text" class="textFields">
-      <label class="labelText">Comentario</label>
-      <div class="border"></div>
+  </div>
 
-      <button class="denseButton float-right" style="margin-top: 50px;">Adicionar</button>
-    </div>
+ <div class="comentarios">
+    <h1>Comentarios</h1>
+   <div class="scrollComentarios">
+     <ul>
+       <li>Secondary line text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam massa quam.</li>
+       <li>Secondary line text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam massa quam.</li>
+       <li>Secondary line text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam massa quam.</li>
+     </ul>
+   </div>
 
-    <div class="anexos">
-      <h1></h1>
-      <p></p>
-    </div>
+   <div style="position: relative; margin-top: 10px; width: 90%; margin-left: 5%;">
+     <input type="text" class="textFields">
+     <label class="labelText">Adicionar Comentario</label>
+     <div class="border"></div>
+   </div>
+ </div>
 
-    <div class="checkList">
-      <h1>Checklist</h1>
+  <div class="checklist">
+    <h1>Checklist</h1>
+    <div class="scrollChecklist">
       <ul>
         <li>
           <input type="checkbox" id="check1">
@@ -43,6 +44,20 @@
             <div class="img"></div>
           </label>
           Fase 1
+        </li>
+        <li>
+          <input type="checkbox" id="check2">
+          <label for="check2">
+            <div class="img"></div>
+          </label>
+          Fase 1
+        </li>
+        <li>
+          <input type="checkbox" id="check2">
+          <label for="check2">
+            <div class="img"></div>
+          </label>
+          Fase 1 da fase 3 do projeto do joaquim
         </li>
 
         <li>
@@ -56,4 +71,27 @@
       </ul>
     </div>
   </div>
+
+  <div class="upload">
+    <h1>Anexos</h1>
+
+    <div class="scrollUpload">
+      <ul>
+        <li>
+          <div class="icon"></div>
+          Documentação.txt
+        </li>
+        <li>Adicionar Anexo</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="botoes">
+    <button class="denseButton float-right">FECHAR</button>
+  </div>
+
+
+
+
 </section>
