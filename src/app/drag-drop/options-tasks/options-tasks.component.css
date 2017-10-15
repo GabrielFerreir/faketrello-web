@@ -1,13 +1,14 @@
 .container {
   position: absolute;
   z-index: 24;
-  width: 50vw;
+  width: 60vw;
   height: 530px;
   background-color: #FFF;
-  margin: 0px 25vw 0 25vw;
+  margin: 10vh 20vw 0 20vw;
   padding: 32px 16px;
   box-sizing: border-box;
   overflow: hidden;
+  border-radius: 2px;
   box-shadow: 0 0px 4px 0 rgba(0,0,0, 0.14), 0 3px 4px 0 rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.20);
 }
 .infoPrincipais {
@@ -32,6 +33,7 @@
   width: 100%;
   max-height: 200px;
   overflow: hidden;
+  margin-top: 50px;
 }
 .comentarios ul {
   list-style: none;
@@ -59,6 +61,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  margin-top: 50px;
 }
 .checklist h1 {
   font-family: 'Roboto Medium';
@@ -69,7 +72,7 @@
 }
 .checklist ul {
   width: 100%;
-  height: 170px;
+  height: 135px;
   overflow-y: auto;
   list-style: none;
 }
@@ -99,7 +102,6 @@
   background-position: center;
   cursor: pointer;
 }
-
 .upload {
   width: calc(50% - 16px);
   margin-left: 16px;
@@ -113,7 +115,6 @@
   font-size: 20px;
   cursor: pointer;
 }
-
 .upload ul {
   width: 100%;
   height: 170px;
@@ -130,7 +131,7 @@
   font-family: 'Roboto';
   font-size: 16px;
 }
-.upload ul li:nth-last-child(1) {
+.upload ul li:first-child {
   text-align: center;
 }
 .upload ul li .icon {
@@ -142,8 +143,6 @@
   background-repeat: no-repeat;
   float: left;
 }
-
-
 .botoes {
   float: left;
   width: 100%;
