@@ -76,12 +76,19 @@
   app.put('/blocks', blocksController.changeBlockName)
   app.delete('/blocks/:id', blocksController.deleteBlock)
   app.get('/project/blocks/:id', blocksController.seachblocks)
+
+  //Parte de tarefas
   app.post('/blocks/task/:id', blocksController.newtask)
   app.put('/blocks/task', blocksController.changeTask)
   app.get('/blocks/task/:id', blocksController.showContentTask)
   app.delete('/blocks/task/:id', blocksController.deleteTask)
-  app.get('/task/attachment/:id', blocksController.deleteAttachment)
+  app.post('/task/attachment', blocksController.newAttachment)
+  app.delete('/task/attachment/:id', blocksController.deleteAttachment)
+  app.post('/task/comment', blocksController.newComment)
+  app.put('/task/comment', blocksController.changeComment)
+  app.delete('/task/comment/:id', blocksController.deleteComment)
   app.post('/task/checklist', blocksController.newChecklist)
+  app.put('/task/checklistStatus', blocksController.changeStatusChecklist)
   app.put('/task/move', blocksController.moveTask)
   app.post('/position', blocksController.lastPosition)
 
