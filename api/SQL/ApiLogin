@@ -1,10 +1,10 @@
---SELECT * FROM tb_comments;
+--SELECT * FROM tb_checklist_tasks;
 
 --INSERT INTO tb_blocks(name_blocks,project_owner) values('teste do teste', 73)
 --INSERT INTO tb_tasks(name_task, id_block, description, position) values('teste do teste', 2, 'teste', 1);
 --UPDATE tb_login SET profile_img = '/imgsUser/default.png'
 
---INSERT INTO tb_comments(id_task,comment) values(78,'teste0'),(78,'teste1'),(78,'teste2'),(78,'teste3')
+--INSERT INTO tb_comments(id_task,comment) values(57,'teste0'),(57,'teste1'),(57,'teste2'),(57,'teste3')
 
 CREATE OR REPLACE FUNCTION emailNewUser(pEmail VARCHAR(50))
   RETURNS BOOLEAN AS $$
@@ -946,7 +946,7 @@ CREATE OR REPLACE FUNCTION newtasks(nametask CHARACTER VARYING,
     idTask       INTEGER,
     nameTaskR    VARCHAR(20),
     dateR        TIMESTAMP,
-    description  TEXT,
+    rDescription TEXT,
     idBlockOwner INTEGER
   ) AS $$
 DECLARE
@@ -1017,12 +1017,12 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION showContentTask(pIdTask INTEGER)
   RETURNS TABLE(
     nameTask    VARCHAR(50),
-    attachment  VARCHAR(50),
     finalDate   TIMESTAMP,
     description TEXT,
     team        JSON,
     comments    JSON,
-    checklists  JSON
+    checklists  JSON,
+    attachment  JSON
   ) AS $$
 BEGIN
   IF EXISTS(SELECT *
@@ -1032,7 +1032,6 @@ BEGIN
     RETURN QUERY
     SELECT
       l.name_task,
-      l.attachment,
       l.final_date,
       l.description,
       (SELECT coalesce(json_agg(teamTask), '[]')
@@ -1053,7 +1052,15 @@ BEGIN
                name_checklist,
                checked
              FROM tb_checklist_tasks
-             WHERE id_task = pIdTask) AS jsonChecklist)
+             WHERE id_task = pIdTask) AS jsonChecklist),
+      (SELECT coalesce(json_agg(jsonAttachment), '[]')
+       FROM (SELECT
+               id_attachment,
+               file_name,
+               size,
+               path
+             FROM tb_attachment
+             WHERE id_task = pIdTask) AS jsonAttachment)
     FROM tb_tasks l
     WHERE l.id_task = pIdTask;
 
@@ -1089,8 +1096,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION buildAttachment(pFileName CHARACTER VARYING, pSize INTEGER, pIdTask INTEGER,
-                                           pPath     CHARACTER VARYING)
+CREATE OR REPLACE FUNCTION buildAttachment(pJson JSON)
   RETURNS BOOLEAN AS $$
 BEGIN
   IF EXISTS(SELECT *
@@ -1107,9 +1113,11 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION getPathAttachment(pIdTask INTEGER)
+CREATE OR REPLACE FUNCTION getAttachment(pIdTask INTEGER)
   RETURNS TABLE(
-    path VARCHAR(20)
+    fileName VARCHAR(50),
+    size     INTEGER,
+    path     VARCHAR(50)
   ) AS $$
 BEGIN
   IF EXISTS(SELECT *
@@ -1117,8 +1125,11 @@ BEGIN
             WHERE id_task = pIdTask)
   THEN
     RETURN QUERY
-    SELECT attachment
-    FROM tb_tasks
+    SELECT
+      file_name,
+      size,
+      path
+    FROM tb_attachment
     WHERE id_task = pIdTask;
   END IF;
 END;
@@ -1132,8 +1143,7 @@ BEGIN
             FROM tb_tasks
             WHERE id_task = pIdTask)
   THEN
-    UPDATE tb_tasks
-    SET attachment = NULL
+    DELETE FROM tb_attachment
     WHERE id_task = pIdTask;
     RETURN TRUE;
   END IF;
@@ -1308,6 +1318,39 @@ BEGIN
     UPDATE tb_comments
     SET comment = pNewComment
     WHERE id_comment = pIdComment;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION deleteComment(pIdComment INTEGER)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_comments
+            WHERE id_comment = pIdComment)
+  THEN
+    DELETE FROM tb_comments
+    WHERE id_comment = pIdComment;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION ChangeStatusChecklist(pIdChecklist INTEGER)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_checklist_tasks
+            WHERE id_checklist = pIdChecklist)
+  THEN
+    UPDATE tb_checklist_tasks
+    SET checked = NOT checked
+    WHERE id_checklist = pIdChecklist;
     RETURN TRUE;
   END IF;
   RETURN FALSE;

@@ -65,10 +65,10 @@ exports.newtask = async function (req, res) {
         res.status(404).json({error: 'Nao foi encontrado esse bloco no projeto'})
       } else {
         if (req.body.attachment) {
-          req.idtask = data[0].idtask
+          req.idTask = data[0].idtask
           let path = exports.buildAttachment(req, res)
 
-          db.any('SELECT * FROM buildAttachment($1,$2,$3,$4)', [req.body.fileName, req.body.size, req.body.idTask, path])
+          db.any('SELECT * FROM buildAttachment($1,$2,$3,$4)', [req.body.fileName, req.body.size, req.idTask, path])
             .then(data => {
               if (!data) {
                 res.status(404).json({error: 'Erro ao inserir o anexo porque nao encontrou tarefa criada'})
@@ -121,7 +121,7 @@ exports.showContentTask = function (req, res) {
       if (!data || !data[0]) {
         res.status(404).json({error: 'Tarefa nao existe ou vazia'})
       } else {
-        res.status(200).json(data)
+        res.status(200).json(data[0])
       }
     })
 }
@@ -138,6 +138,21 @@ exports.deleteTask = function (req, res) {
     })
 }
 
+//Novo anexo
+exports.newAttachment = async function (req, res) {
+  req.idTask = req.body.idTask
+  let path = await exports.buildAttachment(req, res)
+
+  db.any('SELECT * FROM buildAttachment($1,$2,$3,$4)', [req.body.fileName, req.body.size, req.body.idTask, path])
+    .then(data => {
+      if (!data || !data[0]) {
+        res.status(404).json({error: 'Tarefa nao encontrada'})
+      } else {
+        res.status(200).json({result: 'Anexo criado'})
+      }
+    })
+}
+
 //Cria arquivo do anexo no servidor
 exports.buildAttachment = function (req, res) {
   return new Promise(async function (resolve, reject) {
@@ -145,15 +160,16 @@ exports.buildAttachment = function (req, res) {
     let file = req.body.file
     let matches = file.match(/^data:([A-Za-z-+/]+);base64,(.+)$/)
     let response = {}
+    let extensions = ['jpg', 'jpeg', 'png', 'gif', 'rar', 'zip', '7z', '3gp', 'm4a', 'mp3', 'ogg', 'wma', 'wmv', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'mp4', 'avi', 'mkv', 'mov', 'flv', 'mpg', 'mpeg', 'xd', 'psd', 'ai', 'txt', 'html', 'css']
 
     if (matches.length !== 3) {
       return new Error('Invalid input string')
     }
     response.type = matches[1]
-    if (response.type === 'application/x-zip-compressed') {
+    if (extensions.indexOf(req.body.fileType) !== -1) {
 
       response.data = new Buffer(matches[2], 'base64')
-      let caminhoBd = `./files/attachment/${req.idtask}.rar`
+      let caminhoBd = `./files/attachment/${req.idTask}.rar`
 
       let caminho = caminhoBd.replace('./files', '')
 
@@ -183,6 +199,18 @@ exports.newChecklist = function (req, res) {
     })
 }
 
+//Altera a booleana da checkList
+exports.changeStatusChecklist = function (req, res) {
+  db.any('SELECT * FROM ChangeStatusChecklist($1)', [req.body.idChecklist])
+    .then(data => {
+      if(!data) {
+        res.status(404).json({error: 'Checklist nao encontrada'})
+      } else {
+        res.status(200).json({result: 'Alterado'})
+      }
+    })
+}
+
 //Cria comentario nas tarefas
 exports.newComment = function (req, res) {
   db.any('SELECT * FROM newComment($1,$2)', [req.body.idTask, req.body.comment])
@@ -203,6 +231,18 @@ exports.changeComment = function (req, res) {
         res.status(404).json({error: 'Comentário não encontrado'})
       } else {
         res.status(200).json({result: 'Comentário alterado'})
+      }
+    })
+}
+
+//Deletar comentário
+exports.deleteComment = function (req, res) {
+  db.any('SELECT * FROM deleteComment($1)', [req.params.id])
+    .then(data => {
+      if(!data) {
+        res.status(404).json({error: 'Comentário nao encontrado'})
+      } else {
+        res.status(200).json({result: 'Comentário deletado'})
       }
     })
 }
