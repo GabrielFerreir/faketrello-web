@@ -131,14 +131,12 @@ a {
   background-color: transparent;
   outline: none;
 }
-
 .float-left {
   float: left;
 }
 .float-right {
   float: right;
 }
-
 .floatingButton{
   width: 56px;
   height: 56px;

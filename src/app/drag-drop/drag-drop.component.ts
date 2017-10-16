@@ -37,14 +37,10 @@ export class DragDropComponent implements OnInit {
       this.dragDropService.container = this.container;
       this.dragDropService.inputNomeBloco = this.nomeBloco;
       this.dragDropService.listenerInit();
-      /* ADD TAREFAS */
-        document.addEventListener('mousedown', (e) => {
-          this.dragDropService.offPopupAddElementos(e);
-        });
-      /* ADD TAREFAS */
 
         /* ADD BLOCOS */
         document.addEventListener('mousedown', (event) => {
+          this.dragDropService.offPopupAddElementos(event);
           this.dragDropService.offAddBloco(event);
           this.dragDropService.desativaMenuBloco(event);
         });

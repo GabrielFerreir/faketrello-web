@@ -49,6 +49,12 @@ export class DragDropService {
   menuBloco = false;
   referenciaMenuBloco;
 
+  optionsTasks: boolean;
+  idTask: number;
+  infoOptionTask;
+
+  addComment: string;
+
   listenerInit() {
     setTimeout(() => {
       this.setTamanhos();
@@ -328,7 +334,6 @@ export class DragDropService {
       this.situacaoAddBloco = false;
     }
   }
-
   addBloco() {
     const url = 'http://' + this.core.ipDaApi + '/blocks/' + this.idProjeto;
 
@@ -370,10 +375,9 @@ export class DragDropService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
 
-    return this.http.post(url, params, {headers: headers})
+    return this.http.post(url, params, {headers: headers});
 
   }
-
   ativaMenuBloco(referencia) {
     this.menuBloco = true;
     this.referenciaMenuBloco = referencia;
@@ -399,5 +403,103 @@ export class DragDropService {
     return this.http.delete(url,{headers: headers})
       .map(res => res.json())
   }
+
+  offOptionsTasks() {
+    this.optionsTasks = false;
+  }
+  onOptionsTasks(idTasks) {
+    this.optionsTasks = true;
+    this.idTask = idTasks;
+    console.log(idTasks);
+    this.getInfoOptionsTasks(idTasks)
+      .subscribe((res) => {
+      this.infoOptionTask = res;
+        console.log(res);
+      }, error => {
+        console.log(error);
+      });
+  }
+  getInfoOptionsTasks(idTasks) {
+    var url = 'http://' + this.core.ipDaApi + '/blocks/task/' + idTasks;
+
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+
+    return this.http.get(url, {headers: headers})
+      .map(res => res.json())
+  }
+  newCommentTask() {
+    var url = 'http://' + this.core.ipDaApi + '/task/comment/';
+      var json = JSON.stringify(
+        {
+          idTask: this.idTask,
+          comment: this.addComment
+        }
+      );
+
+    const params = json;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+    return this.http.post(url, params, {headers: headers})
+      .subscribe((res) => {
+        this.getInfoOptionsTasks(this.idTask)
+          .subscribe((res) => {
+            this.infoOptionTask = res;
+          }, error => {
+          });
+      }, error => {
+        console.log(error);
+      });
+  }
+  delCommentTask(idComment) {
+    var url = 'http://' + this.core.ipDaApi + '/task/comment/' + idComment;
+
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+
+    return this.http.delete(url,{headers: headers})
+      .map(res => res.json())
+      .subscribe((res) => {
+        console.log(res);
+        this.addComment = '';
+        this.getInfoOptionsTasks(this.idTask)
+          .subscribe((res) => {
+            this.infoOptionTask = res;
+          }, error => {
+          });
+      }, error => {
+        console.log(error);
+      });
+  }
+  changeTask(nameTask, finalDate, description) {
+      var url = 'http://' + this.core.ipDaApi + '/blocks/task/';
+      var json = JSON.stringify(
+        {
+          idTask: this.idTask,
+          nameTask: nameTask,
+          finalDate: finalDate,
+          description: description
+        }
+      );
+
+      const params = json;
+      const headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+      return this.http.post(url, params, {headers: headers})
+        .subscribe((res) => {
+          this.getInfoOptionsTasks(this.idTask)
+            .subscribe((res) => {
+              this.infoOptionTask = res;
+            }, error => {
+            });
+        }, error => {
+          console.log(error);
+        });
+  }
+
 
 }

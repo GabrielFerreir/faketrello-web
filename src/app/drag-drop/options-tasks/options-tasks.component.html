@@ -1,111 +1,158 @@
 <section class="container">
-  <div class="infoPrincipais">
-    <div style="position: relative">
-      <input type="text" class="textFields">
-      <div class="labelText">Nome</div>
-      <div class="border"></div>
+  <nav class="tab">
+    <ul>
+      <li (click)="navbasicos()">Basicas</li>
+      <li (click)="navComentarios()">Comentarios</li>
+      <li (click)="navChecklist()">Checklist</li>
+      <li (click)="navMembros()">Time</li>
+      <li (click)="navAnexos()">Anexos</li>
+    </ul>
+  </nav>
+  <section class="conteudo">
+    <div class="conteudoNav" #conteudoNav>
+
+      <div class="basicas">
+        <div style="position: relative">
+          <input type="text" class="textFields" #HTMLNameTask ([ngModel])="dragDropService?.infoOptionTask?.nametask" [value]="dragDropService?.infoOptionTask?.nametask" (blur)="verificaInputs()">
+          <div class="labelText">Nome</div>
+          <div class="border"></div>
+        </div>
+
+        <div style="position: relative; margin-top: 50px;">
+          <input type="text" class="textFields" #HTMLFinalDate ([ngModel])="dragDropService?.infoOptionTask?.finaldate" [value]="dragDropService?.infoOptionTask?.finaldate | date: 'dd/MM/yyyy'">
+          <div class="labelText">Data</div>
+          <div class="border"></div>
+        </div>
+        <div style="position: relative; margin-top: 100px">
+          <textarea class="textFieldsMult" #HTMLDescription style="min-height: 120px">{{ dragDropService?.infoOptionTask?.description }}</textarea>
+          <!--<div class="labelTextMult">Descrição</div>-->
+          <div class="border"></div>
+        </div>
+      </div>
+      <div class="comentarios">
+        <div style="position: relative; margin-top: 10px; width: 90%; margin-left: 5%; float: left">
+          <input type="text" class="textFields" id="addComentario" [(ngModel)]="dragDropService.addComment" (keyup.enter)="dragDropService.newCommentTask()">
+          <label class="labelText" for="addComentario">Adicionar Comentario</label>
+          <div class="border"></div>
+        </div>
+
+        <div class="scrollComentarios">
+          <ul>
+            <li *ngFor="let comentario of dragDropService?.infoOptionTask?.comments">
+
+              <span>{{ comentario.comment }}</span>
+            <div class="del" (click)="dragDropService.delCommentTask(comentario.id_comment)">
+
+            </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="checklist">
+        <div style="position: relative; margin-top: 10px; width: 90%; margin-left: 5%; float: left">
+          <input type="text" class="textFields">
+          <label class="labelText">Adicionar Checklist</label>
+          <div class="border"></div>
+        </div>
+        <div class="scrollChecklist">
+          <ul>
+            <li>
+              <input type="checkbox" id="check1">
+              <label for="check1">
+                <div class="img"></div>
+              </label>
+              Fase 1
+            </li>
+            <li>
+              <input type="checkbox" id="check2">
+              <label for="check2">
+                <div class="img"></div>
+              </label>
+              Fase 1
+            </li>
+            <li>
+              <input type="checkbox" id="check2">
+              <label for="check2">
+                <div class="img"></div>
+              </label>
+              Fase 1 da fase 3 do projeto do joaquim
+            </li>
+            <li>
+              <input type="checkbox" id="check2">
+              <label for="check2">
+                <div class="img"></div>
+              </label>
+              Fase 1
+            </li>
+            <li>
+              <input type="checkbox" id="check2">
+              <label for="check2">
+                <div class="img"></div>
+              </label>
+              Fase 1
+            </li>
+            <li>
+              <input type="checkbox" id="check2">
+              <label for="check2">
+                <div class="img"></div>
+              </label>
+              Fase 1
+            </li>
+            <li>
+              <input type="checkbox" id="check2">
+              <label for="check2">
+                <div class="img"></div>
+              </label>
+              Fase 1
+            </li>
+            <li>
+              <input type="checkbox" id="check2">
+              <label for="check2">
+                <div class="img"></div>
+              </label>
+              Fase 1
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="membros">
+
+      </div>
+      <div class="anexos">
+        <div class="scrollAnexos">
+          <ul>
+            <li>Adicionar Anexo</li>
+            <li>
+              <div class="icon"></div>
+              Documentação.txt
+            </li>
+            <li>
+              <div class="icon"></div>
+              Documentação.txt
+            </li>
+            <li>
+              <div class="icon"></div>
+              Documentação.txt
+            </li>
+            <li>
+              <div class="icon"></div>
+              Documentação.txt
+            </li>
+            <li>
+              <div class="icon"></div>
+              Documentação.txt
+            </li>
+            <li>
+              <div class="icon"></div>
+              Documentação.txt
+            </li>
+          </ul>
+
+        </div>
+      </div>
     </div>
-    <div style="position: relative; margin-top: 50px;">
-      <input type="text" class="textFields">
-      <div class="labelText">Data</div>
-      <div class="border"></div>
-    </div>
-    <div style="position: relative; margin-top: 100px">
-      <textarea class="textFieldsMult" style="min-height: 120px">Digite uma Descrição</textarea>
-      <!--<div class="labelTextMult">Descrição</div>-->
-      <div class="border"></div>
-    </div>
-  </div>
 
- <div class="comentarios">
-    <h1>Comentarios</h1>
-   <div style="position: relative; margin-top: 10px; width: 90%; margin-left: 5%; float: left">
-     <input type="text" class="textFields">
-     <label class="labelText">Adicionar Comentario</label>
-     <div class="border"></div>
-   </div>
-   <div class="scrollComentarios">
-     <ul>
-       <li>Secondary line text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam massa quam.</li>
-       <li>Secondary line text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam massa quam.</li>
-       <li>Secondary line text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam massa quam.</li>
-     </ul>
-   </div>
+    <button class="denseButton" style="position: absolute; right: 16px; bottom: 60px;" (click)="dragDropService.offOptionsTasks()"> FECHAR</button>
 
-
- </div>
-
-  <div class="checklist">
-    <h1>Checklist</h1>
-    <div style="position: relative; margin-top: 10px; width: 90%; margin-left: 5%; float: left">
-      <input type="text" class="textFields">
-      <label class="labelText">Adicionar Comentario</label>
-      <div class="border"></div>
-    </div>
-    <div class="scrollChecklist">
-      <ul>
-        <li>
-          <input type="checkbox" id="check1">
-          <label for="check1">
-            <div class="img"></div>
-          </label>
-          Fase 1
-        </li>
-        <li>
-          <input type="checkbox" id="check2">
-          <label for="check2">
-            <div class="img"></div>
-          </label>
-          Fase 1
-        </li>
-        <li>
-          <input type="checkbox" id="check2">
-          <label for="check2">
-            <div class="img"></div>
-          </label>
-          Fase 1 da fase 3 do projeto do joaquim
-        </li>
-
-        <li>
-          <input type="checkbox" id="check2">
-          <label for="check2">
-            <div class="img"></div>
-          </label>
-          Fase 1
-        </li>
-
-      </ul>
-    </div>
-  </div>
-
-  <div class="upload">
-    <h1>Anexos</h1>
-
-    <div class="scrollUpload">
-      <ul>
-        <li>Adicionar Anexo</li>
-        <li>
-          <div class="icon"></div>
-          Documentação.txt
-        </li>
-        <li>
-          <div class="icon"></div>
-          Documentação.txt
-        </li>
-        <li>
-          <div class="icon"></div>
-          Documentação.txt
-        </li>
-      </ul>
-    </div>
-
-  </div>
-
-  <div class="botoes">
-    <button class="denseButton float-right">FECHAR</button>
-  </div>
-
-
-
-
+  </section>
 </section>
