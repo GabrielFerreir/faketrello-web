@@ -54,6 +54,7 @@ export class DragDropService {
   infoOptionTask;
 
   addComment: string;
+  addNewChecklist: string;
 
   listenerInit() {
     setTimeout(() => {
@@ -403,7 +404,6 @@ export class DragDropService {
     return this.http.delete(url,{headers: headers})
       .map(res => res.json())
   }
-
   offOptionsTasks() {
     this.optionsTasks = false;
   }
@@ -451,6 +451,8 @@ export class DragDropService {
           });
       }, error => {
         console.log(error);
+      }, () => {
+        this.addComment = '';
       });
   }
   delCommentTask(idComment) {
@@ -475,31 +477,92 @@ export class DragDropService {
       });
   }
   changeTask(nameTask, finalDate, description) {
-      var url = 'http://' + this.core.ipDaApi + '/blocks/task/';
+      var url = 'http://' + this.core.ipDaApi + '/blocks/task/' + this.idTask;
       var json = JSON.stringify(
         {
-          idTask: this.idTask,
           nameTask: nameTask,
           finalDate: finalDate,
           description: description
         }
       );
+      console.log(json);
 
       const params = json;
       const headers = new Headers();
       headers.append('Content-Type', 'application/json');
       headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
-      return this.http.post(url, params, {headers: headers})
+      return this.http.put(url, params, {headers: headers})
         .subscribe((res) => {
-          this.getInfoOptionsTasks(this.idTask)
-            .subscribe((res) => {
-              this.infoOptionTask = res;
-            }, error => {
-            });
+        console.log(res);
         }, error => {
           console.log(error);
         });
   }
+  changeSituationCheckbox(idCheck) {
+    var url = 'http://' + this.core.ipDaApi + '/task/checklistStatus/' + idCheck;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+    return this.http.put(url, null,{headers: headers})
+      .subscribe((res) => {
+        console.log(res);
+      }, error => {
+        console.log(error);
+      });
+  }
+  newChecklist(nome) {
+    var url = 'http://' + this.core.ipDaApi + '/task/checklist/';
+    var json = JSON.stringify(
+      {
+        jsonChecklists: [
+          {
+            namechecklist: nome,
+            idTask: this.idTask,
+            checked: false
+          }
+        ]
+      }
+    );
+    const params = json;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+    return this.http.post(url, params, {headers: headers})
+      .subscribe((res) => {
+        console.log(res);
+        this.getInfoOptionsTasks(this.idTask)
+          .subscribe((res) => {
+            this.infoOptionTask = res;
+          }, error => {
+          }, () => {
+            this.addNewChecklist = '';
+          });
+      }, error => {
+      console.log(error);
+      });
+  }
+  delChecklist(idCheck) {
+    var url = 'http://' + this.core.ipDaApi + '/task/checklist/' + idCheck;
+
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+
+    return this.http.delete(url,{headers: headers})
+      .map(res => res.json())
+      .subscribe((res) => {
+        console.log(res);
+        this.addComment = '';
+        this.getInfoOptionsTasks(this.idTask)
+          .subscribe((res) => {
+            this.infoOptionTask = res;
+          }, error => {
+          });
+      }, error => {
+        console.log(error);
+      });
+  }
+
 
 
 }

@@ -103,6 +103,8 @@
 .checklist {
   min-width: 600px;
   min-height: 600px;
+  padding: 16px;
+  box-sizing: border-box;
 }
 .scrollChecklist {
   width: 100%;
@@ -125,6 +127,7 @@
   color: #444444;
   font-family: 'Roboto';
   font-size: 16px;
+  position: relative;
 }
 .checklist ul li input[type="checkbox"] {
   display: none;
@@ -141,6 +144,23 @@
   background-repeat: no-repeat;
   background-position: center;
   cursor: pointer;
+}
+.checklist ul li span {
+  max-width: calc(100% - 30px);
+  float: left;
+}
+.checklist ul li .del {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  right: 16px;
+  bottom: 8px;
+  background-image: url("../../../assets/delete.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  display: table-cell;
+  vertical-align: middle;
 }
 .membros {
   min-width: 600px;

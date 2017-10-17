@@ -13,25 +13,25 @@
 
       <div class="basicas">
         <div style="position: relative">
-          <input type="text" class="textFields" #HTMLNameTask ([ngModel])="dragDropService?.infoOptionTask?.nametask" [value]="dragDropService?.infoOptionTask?.nametask" (blur)="verificaInputs()">
+          <input type="text" class="textFields" #HTMLNameTask [(ngModel)]="nome" (blur)="verificaInputs(); alteraDadosBasicos();">
           <div class="labelText">Nome</div>
           <div class="border"></div>
         </div>
 
         <div style="position: relative; margin-top: 50px;">
-          <input type="text" class="textFields" #HTMLFinalDate ([ngModel])="dragDropService?.infoOptionTask?.finaldate" [value]="dragDropService?.infoOptionTask?.finaldate | date: 'dd/MM/yyyy'">
+          <input type="text" class="textFields" #HTMLFinalDate [(ngModel)]="data" (keyup)='formatarData()' (blur)="verificaInputs(); alteraDadosBasicos();">
           <div class="labelText">Data</div>
           <div class="border"></div>
         </div>
         <div style="position: relative; margin-top: 100px">
-          <textarea class="textFieldsMult" #HTMLDescription style="min-height: 120px">{{ dragDropService?.infoOptionTask?.description }}</textarea>
+          <textarea class="textFieldsMult" #HTMLDescription style="min-height: 120px" (blur)="alteraDadosBasicos()">{{ descricao }}</textarea>
           <!--<div class="labelTextMult">Descrição</div>-->
           <div class="border"></div>
         </div>
       </div>
       <div class="comentarios">
         <div style="position: relative; margin-top: 10px; width: 90%; margin-left: 5%; float: left">
-          <input type="text" class="textFields" id="addComentario" [(ngModel)]="dragDropService.addComment" (keyup.enter)="dragDropService.newCommentTask()">
+          <input type="text" class="textFields" id="addComentario" #HTMLInputComment [(ngModel)]="dragDropService.addComment" (keyup.enter)="dragDropService.newCommentTask()" (blur)="inputComment()">
           <label class="labelText" for="addComentario">Adicionar Comentario</label>
           <div class="border"></div>
         </div>
@@ -50,67 +50,19 @@
       </div>
       <div class="checklist">
         <div style="position: relative; margin-top: 10px; width: 90%; margin-left: 5%; float: left">
-          <input type="text" class="textFields">
+          <input type="text" class="textFields" #HTMLInputChecklist (blur)="inputChecklist()" [(ngModel)]="dragDropService.addNewChecklist" (keyup.enter)="dragDropService.newChecklist(dragDropService.addNewChecklist)">
           <label class="labelText">Adicionar Checklist</label>
           <div class="border"></div>
         </div>
         <div class="scrollChecklist">
           <ul>
-            <li>
-              <input type="checkbox" id="check1">
-              <label for="check1">
+            <li *ngFor="let checklist of dragDropService?.infoOptionTask?.checklists">
+              <input type="checkbox" id="{{ 'check' + checklist.id_checklist }}" [checked]="checklist.checked">
+              <label [for]="'check' + checklist.id_checklist" (click)="dragDropService.changeSituationCheckbox(checklist.id_checklist)">
                 <div class="img"></div>
               </label>
-              Fase 1
-            </li>
-            <li>
-              <input type="checkbox" id="check2">
-              <label for="check2">
-                <div class="img"></div>
-              </label>
-              Fase 1
-            </li>
-            <li>
-              <input type="checkbox" id="check2">
-              <label for="check2">
-                <div class="img"></div>
-              </label>
-              Fase 1 da fase 3 do projeto do joaquim
-            </li>
-            <li>
-              <input type="checkbox" id="check2">
-              <label for="check2">
-                <div class="img"></div>
-              </label>
-              Fase 1
-            </li>
-            <li>
-              <input type="checkbox" id="check2">
-              <label for="check2">
-                <div class="img"></div>
-              </label>
-              Fase 1
-            </li>
-            <li>
-              <input type="checkbox" id="check2">
-              <label for="check2">
-                <div class="img"></div>
-              </label>
-              Fase 1
-            </li>
-            <li>
-              <input type="checkbox" id="check2">
-              <label for="check2">
-                <div class="img"></div>
-              </label>
-              Fase 1
-            </li>
-            <li>
-              <input type="checkbox" id="check2">
-              <label for="check2">
-                <div class="img"></div>
-              </label>
-              Fase 1
+              <span>{{ checklist.name_checklist }}</span>
+              <div class="del" (click)="dragDropService.delChecklist(checklist.id_checklist)"></div>
             </li>
           </ul>
         </div>
