@@ -79,7 +79,7 @@
 
   //Parte de tarefas
   app.post('/blocks/task/:id', blocksController.newtask)
-  app.put('/blocks/task', blocksController.changeTask)
+  app.put('/blocks/task/:id', blocksController.changeTask)
   app.get('/blocks/task/:id', blocksController.showContentTask)
   app.delete('/blocks/task/:id', blocksController.deleteTask)
   app.post('/task/attachment', blocksController.newAttachment)
@@ -88,8 +88,9 @@
   app.put('/task/comment', blocksController.changeComment)
   app.delete('/task/comment/:id', blocksController.deleteComment)
   app.post('/task/checklist', blocksController.newChecklist)
-  app.put('/task/checklistStatus', blocksController.changeStatusChecklist)
-  app.put('/task/move', blocksController.moveTask)
+  app.put('/task/checklistStatus/:id', blocksController.changeStatusChecklist)
+  app.put('/task/move/:id', blocksController.moveTask)
+  app.put('/task/positions', blocksController.updatePositions)
   app.post('/position', blocksController.lastPosition)
 
   let filesPath

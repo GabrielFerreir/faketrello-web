@@ -58,8 +58,10 @@ exports.deleteBlock = function (req, res) {
 
 //Cria uma nova tarefa
 exports.newtask = async function (req, res) {
-  //let position = await exports.lastPosition(req, res)
-  db.any('SELECT * FROM newtasks($1,$2,$3,$4)', [req.body.nameTask, req.body.finalDate, req.body.description, req.params.id])
+  req.idBlock = req.params.id
+  await exports.lastPosition(req, res)
+  console.log(`depois ${req.lastPosition}`)
+  db.any('SELECT * FROM newtasks($1,$2,$3,$4,$5)', [req.body.nameTask, req.body.finalDate, req.body.description, req.params.id, req.lastPosition])
     .then(data => {
       if (!data || !data[0]) {
         res.status(404).json({error: 'Nao foi encontrado esse bloco no projeto'})
@@ -85,7 +87,7 @@ exports.newtask = async function (req, res) {
 
 //Altera tarefa
 exports.changeTask = function (req, res) {
-  db.any('SELECT * FROM changeTask($1,$2,$3,$4)', [req.body.idTask, req.body.nameTask, req.body.finalDate, req.body.description])
+  db.any('SELECT * FROM changeTask($1,$2,$3,$4)', [req.params.id, req.body.nameTask, req.body.finalDate, req.body.description])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Tarefa nao encontrada'})
@@ -97,7 +99,7 @@ exports.changeTask = function (req, res) {
 
 //Move a tarefa de bloco
 exports.moveTask = async function (req, res) {
-  await db.any('SELECT * FROM moveTask($1,$2)', [req.body.idTask, req.body.idBlock])
+  await db.any('SELECT * FROM moveTask($1,$2)', [req.params.id, req.body.idBlock])
     .then(data => {
       if (!data) {
         res.status(400).json({error: 'Erro ao mover tarefa'})
@@ -189,7 +191,7 @@ exports.buildAttachment = function (req, res) {
 //Cria as checklists no banco
 exports.newChecklist = function (req, res) {
   let json = req.body.jsonChecklists
-  db.any('SELECT * FROM buildChecklist($1,$2);', [req.body.idTask, JSON.stringify(json)])
+  db.any('SELECT * FROM buildChecklist($1);', [JSON.stringify(json)])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Tarefa inexistente'})
@@ -201,9 +203,9 @@ exports.newChecklist = function (req, res) {
 
 //Altera a booleana da checkList
 exports.changeStatusChecklist = function (req, res) {
-  db.any('SELECT * FROM ChangeStatusChecklist($1)', [req.body.idChecklist])
+  db.any('SELECT * FROM ChangeStatusChecklist($1)', [req.params.id])
     .then(data => {
-      if(!data) {
+      if (!data) {
         res.status(404).json({error: 'Checklist nao encontrada'})
       } else {
         res.status(200).json({result: 'Alterado'})
@@ -239,7 +241,7 @@ exports.changeComment = function (req, res) {
 exports.deleteComment = function (req, res) {
   db.any('SELECT * FROM deleteComment($1)', [req.params.id])
     .then(data => {
-      if(!data) {
+      if (!data) {
         res.status(404).json({error: 'Comentário nao encontrado'})
       } else {
         res.status(200).json({result: 'Comentário deletado'})
@@ -273,15 +275,25 @@ exports.deleteAttachment = function (req, res) {
     })
 }
 
-//Pega a ultima posição
-exports.lastPosition = function (req, res) {
-  db.any('SELECT * FROM getLastPosition($1)', [req.body.idBlock])
+//Atualiza posições
+exports.updatePositions = function (req, res) {
+  db.any('SELECT * FROM updatePositions($1)', [JSON.stringify(req.body.positions)])
     .then(data => {
-      console.log(data)
+      if (!data || !data[0]) {
+        console.log(data)
+      } else {
+        res.status(200).json({result: 'Posições alteradas'})
+      }
+    })
+}
+
+//Pega a ultima posição
+exports.lastPosition = async function (req, res) {
+  const data = await db.any('SELECT * FROM getLastPosition($1)', [req.idBlock])
+      console.log(data[0].position)
       if (!data || !data[0]) {
         console.log(data)
       } else {
         req.lastPosition = data[0].position
       }
-    })
 }
