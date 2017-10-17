@@ -1183,6 +1183,24 @@ END;
 $$
 LANGUAGE plpgsql;
 
+--SELECT * FROM deleteChecklist(46)
+
+CREATE OR REPLACE FUNCTION deleteChecklist(pIdChecklist INTEGER)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_checklist_tasks
+            WHERE id_checklist = pIdChecklist)
+  THEN
+    DELETE FROM tb_checklist_tasks
+    WHERE id_checklist = pIdChecklist;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
 --SELECT * FROM searchUsers('joao',107);
 
 CREATE OR REPLACE FUNCTION searchusers(puser CHARACTER VARYING, idproject INTEGER)

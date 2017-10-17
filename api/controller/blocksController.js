@@ -213,6 +213,18 @@ exports.changeStatusChecklist = function (req, res) {
     })
 }
 
+//Deletar checklists
+exports.deleteChecklist = function (req, res) {
+  db.any('SELECT * FROM deleteChecklist($1)', [req.params.id])
+    .then(data => {
+      if(!data) {
+        res.status(404).json({error: 'Checklist nao encontrada'})
+      } else {
+        res.status(200).json({result: 'Deletado'})
+      }
+    })
+}
+
 //Cria comentario nas tarefas
 exports.newComment = function (req, res) {
   db.any('SELECT * FROM newComment($1,$2)', [req.body.idTask, req.body.comment])

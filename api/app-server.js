@@ -89,6 +89,7 @@
   app.delete('/task/comment/:id', blocksController.deleteComment)
   app.post('/task/checklist', blocksController.newChecklist)
   app.put('/task/checklistStatus/:id', blocksController.changeStatusChecklist)
+  app.delete('/task/checklist/:id', blocksController.deleteChecklist)
   app.put('/task/move/:id', blocksController.moveTask)
   app.put('/task/positions', blocksController.updatePositions)
   app.post('/position', blocksController.lastPosition)
