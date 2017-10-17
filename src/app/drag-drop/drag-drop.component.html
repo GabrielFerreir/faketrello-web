@@ -18,7 +18,7 @@
           <span class="prazo" *ngIf="elementos.final_date">
         {{ elementos.final_date | date: 'dd/MM/yyyy' }}
       </span>
-          <div class="editElemento" (click)="teste()">
+          <div class="editElemento" (click)="dragDropService.onOptionsTasks(elementos.id_task)">
           </div>
         </article>
         <article class="addElemento">
@@ -60,4 +60,4 @@
   </div>
 </section>
 
-<app-options-tasks></app-options-tasks>
+<app-options-tasks *ngIf="dragDropService.optionsTasks"></app-options-tasks>

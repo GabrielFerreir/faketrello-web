@@ -1,78 +1,118 @@
 .container {
-  position: absolute;
+  width: 600px;
+  height: 400px;
+  background-color: #FAFAFA;
+  position: fixed;
+  left: calc(50vw - 300px);
+  top: calc(50vh - 200px);
   z-index: 24;
-  width: 60vw;
-  height: 530px;
-  background-color: #FFF;
-  margin: 10vh 20vw 0 20vw;
-  padding: 32px 16px;
-  box-sizing: border-box;
-  overflow: hidden;
   border-radius: 2px;
-  box-shadow: 0 0px 4px 0 rgba(0,0,0, 0.14), 0 3px 4px 0 rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.20);
+  overflow: hidden;
+  color: #FAFAFA;
+  box-shadow: 0px 24px 38px rgba(0,0,0,.14),
+              0px 9px 46px rgba(0,0,0,.12),
+              0px 11px 15px rgba(0,0,0,.20);
+  user-select: none;
 }
-.infoPrincipais {
-  min-width: calc(50% - 16px);
-  height: 220px;
+.tab {
+  min-width: 100%;
+}
+.tab ul {
+  list-style: none;
+}
+.tab ul li {
+  width: 20%;
+  text-align: center;
+  padding: 15px 0px;
   float: left;
+  background-color: #607D8B;
+  text-transform: uppercase;
+  font-family: 'Roboto Medium';
+  font-size: 14px;
+  border-bottom: solid 2px #FFF;
+  cursor: pointer;
+}
+.conteudo{
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+
+}
+.conteudoNav {
+  width: 100%;
+  height: 350px;
+  display: flex;
+  transition: All 480ms ease-out;
+  position: relative;
+}
+.basicas {
+  min-width: 600px;
+  max-height: 400px;
+  padding: 16px 50px;
+  box-sizing: border-box;
 }
 .comentarios {
-  width: calc(50% - 16px);
-  height: 230px;
-  margin-left: 16px;
-  float: left;
-}
-.comentarios h1 {
-  font-family: 'Roboto Medium';
-  color: #000;
-  font-weight: normal;
-  font-size: 20px;
-  cursor: pointer;
+  min-width: 600px;
+  min-height: 400px;
+  padding: 16px;
+  box-sizing: border-box;
+  color: rgba(0,0,0,.56);
 }
 .scrollComentarios {
   width: 100%;
-  max-height: 200px;
+  max-height: 220px;
   overflow: hidden;
   margin-top: 50px;
 }
 .comentarios ul {
   list-style: none;
   width: 100%;
-  max-height: 150px;
+  max-height: 220px;
   overflow-y: auto;
 }
 .comentarios ul li {
-  width: 100%;
+  float: left;
+  width: calc(100%);
   font-family: 'Roboto';
   font-size: 14px;
   color: rgba(0,0,0,.54);
   padding: 16px;
   box-sizing: border-box;
   text-align: justify;
+  line-height: 30px;
+  position: relative;
+}
+.comentarios ul li span {
+  max-width: calc(100% - 30px);
+  float: left;
+}
+.comentarios ul li .del {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  right: 0;
+  bottom: 16px;
+  background-image: url("../../../assets/delete.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  display: table-cell;
+  vertical-align: middle;
 }
 .checklist {
-  width: calc(50% - 16px);
-  height: 210px;
-  color: #FAFAFA;
-  float: left;
-  overflow: hidden;
+  min-width: 600px;
+  min-height: 600px;
 }
 .scrollChecklist {
   width: 100%;
-  height: 100%;
+  height: 230px;
   overflow: hidden;
   margin-top: 50px;
 }
-.checklist h1 {
-  font-family: 'Roboto Medium';
-  color: #000;
-  font-weight: normal;
-  font-size: 20px;
-  cursor: pointer;
-}
 .checklist ul {
   width: 100%;
-  height: 135px;
+  height: 100%;
   overflow-y: auto;
   list-style: none;
 }
@@ -102,26 +142,26 @@
   background-position: center;
   cursor: pointer;
 }
-.upload {
-  width: calc(50% - 16px);
-  margin-left: 16px;
-  height: 120px;
+.membros {
+  min-width: 600px;
+  min-height: 400px;
+}
+.anexos {
+  min-width: 600px;
+  min-height: 400px;
+}
+.scrollAnexos {
   float: left;
-}
-.upload h1 {
-  font-family: 'Roboto Medium';
-  color: #000;
-  font-weight: normal;
-  font-size: 20px;
-  cursor: pointer;
-}
-.upload ul {
   width: 100%;
-  height: 170px;
+  height: 290px;
+}
+.anexos ul {
+  width: 100%;
+  height: 100%;
   overflow-y: auto;
   list-style: none;
 }
-.upload ul li {
+.anexos ul li {
   padding: 0 16px;
   min-height: 48px;
   line-height: 48px;
@@ -131,10 +171,11 @@
   font-family: 'Roboto';
   font-size: 16px;
 }
-.upload ul li:first-child {
+.anexos ul li:first-child {
   text-align: center;
+  cursor: pointer;
 }
-.upload ul li .icon {
+.anexos ul li .icon {
   width: 48px;
   height: 48px;
   margin: 0;
@@ -143,14 +184,34 @@
   background-repeat: no-repeat;
   float: left;
 }
-.botoes {
-  float: left;
-  width: 100%;
-}
-.botoes .denseButton {
+.denseButton {
   background-color: #607D8B;
 }
-.botoes .denseButton:nth-child(2) {
-  margin-right: 16px;
-}
 
+@media screen and (max-width: 480px) {
+  .container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+  .tab ul li {
+    width: 100%;
+  }
+  .basicas {
+    min-width: 100vw;
+  }
+  .comentarios {
+    min-width: 100%;
+  }
+  .checklist {
+    min-width: 100%;
+  }
+  .membros {
+    min-width: 100%;
+  }
+  .anexos {
+    min-width: 100%;
+  }
+}
