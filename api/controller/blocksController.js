@@ -1,6 +1,7 @@
 let db = require('../db-config.js')
 let fs = require('fs')
 let app = require('express')
+let md5 = require('md5')
 let socket = require('socket.io')
 let http = require('http')
 const server = http.Server(app)
@@ -60,7 +61,6 @@ exports.deleteBlock = function (req, res) {
 exports.newtask = async function (req, res) {
   req.idBlock = req.params.id
   await exports.lastPosition(req, res)
-  console.log(`depois ${req.lastPosition}`)
   db.any('SELECT * FROM newtasks($1,$2,$3,$4,$5)', [req.body.nameTask, req.body.finalDate, req.body.description, req.params.id, req.lastPosition])
     .then(data => {
       if (!data || !data[0]) {
@@ -104,14 +104,13 @@ exports.moveTask = async function (req, res) {
       if (!data) {
         res.status(400).json({error: 'Erro ao mover tarefa'})
       } else {
-        res.status(200).json({result: 'Movido!'})
-
         io.on('connection', function (socket) {
           socket.emit('moved', {
             greeting: 'list updated'
           })
         })
 
+        exports.updatePositions(req, res)
       }
     })
 }
@@ -142,10 +141,11 @@ exports.deleteTask = function (req, res) {
 
 //Novo anexo
 exports.newAttachment = async function (req, res) {
-  req.idTask = req.body.idTask
+  req.idTask = req.params.id
+  req.fileName = req.body.fileName
   let path = await exports.buildAttachment(req, res)
 
-  db.any('SELECT * FROM buildAttachment($1,$2,$3,$4)', [req.body.fileName, req.body.size, req.body.idTask, path])
+  db.any('SELECT * FROM buildAttachment($1,$2,$3,$4)', [req.body.fileName, req.body.size, req.params.id, path])
     .then(data => {
       if (!data || !data[0]) {
         res.status(404).json({error: 'Tarefa nao encontrada'})
@@ -160,7 +160,7 @@ exports.buildAttachment = function (req, res) {
   return new Promise(async function (resolve, reject) {
     const fs = require('fs')
     let file = req.body.file
-    let matches = file.match(/^data:([A-Za-z-+/]+);base64,(.+)$/)
+    let matches = file.match(/^data:([A-Za-z-+./]+);base64,(.+)$/)
     let response = {}
     let extensions = ['jpg', 'jpeg', 'png', 'gif', 'rar', 'zip', '7z', '3gp', 'm4a', 'mp3', 'ogg', 'wma', 'wmv', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'mp4', 'avi', 'mkv', 'mov', 'flv', 'mpg', 'mpeg', 'xd', 'psd', 'ai', 'txt', 'html', 'css']
 
@@ -169,9 +169,13 @@ exports.buildAttachment = function (req, res) {
     }
     response.type = matches[1]
     if (extensions.indexOf(req.body.fileType) !== -1) {
+      let d = new Date();
+      let dateT = d.getTime();
 
+      let string = req.body.fileName + req.body.fileType + dateT
+      let encode = md5(string)
       response.data = new Buffer(matches[2], 'base64')
-      let caminhoBd = `./files/attachment/${req.idTask}.rar`
+      let caminhoBd = `./files/attachment/${encode}.${req.body.fileType}`
 
       let caminho = caminhoBd.replace('./files', '')
 
@@ -217,7 +221,7 @@ exports.changeStatusChecklist = function (req, res) {
 exports.deleteChecklist = function (req, res) {
   db.any('SELECT * FROM deleteChecklist($1)', [req.params.id])
     .then(data => {
-      if(!data) {
+      if (!data) {
         res.status(404).json({error: 'Checklist nao encontrada'})
       } else {
         res.status(200).json({result: 'Deletado'})
@@ -302,10 +306,9 @@ exports.updatePositions = function (req, res) {
 //Pega a ultima posição
 exports.lastPosition = async function (req, res) {
   const data = await db.any('SELECT * FROM getLastPosition($1)', [req.idBlock])
-      console.log(data[0].position)
-      if (!data || !data[0]) {
-        console.log(data)
-      } else {
-        req.lastPosition = data[0].position
-      }
+  if (!data || !data[0]) {
+    console.log(data)
+  } else {
+    req.lastPosition = data[0].position
+  }
 }

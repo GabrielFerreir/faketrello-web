@@ -6,6 +6,15 @@
 
 --INSERT INTO tb_comments(id_task,comment) values(57,'teste0'),(57,'teste1'),(57,'teste2'),(57,'teste3')
 
+/*
+NOTIFICAÇÔES
+Coluna Tipo:
+1 - Criação
+2 - Alteração
+3 - Deletar
+4 - Arrastar
+*/
+
 CREATE OR REPLACE FUNCTION emailNewUser(pEmail VARCHAR(50))
   RETURNS BOOLEAN AS $$
 BEGIN
@@ -904,40 +913,30 @@ CREATE OR REPLACE FUNCTION getLastPosition(pIdBlock INTEGER)
     "position" INTEGER
   ) AS $$
 DECLARE
-  reg           tb_tasks%ROWTYPE;
-  vLastPosition INTEGER := 0;
+  vLastPosition INTEGER := -1;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_blocks
             WHERE id_blocks = pIdBlock)
   THEN
-    RAISE NOTICE '%', vLastPosition;
 
-    FOR reg IN
-    SELECT l.position
-    FROM tb_tasks l
-    LOOP
-      RAISE NOTICE 'ANTES %', vLastPosition;
-
-
-      IF (SELECT l.position
-          FROM tb_tasks l
-          WHERE l.id_block = pIdBlock
-                AND l.position > vLastPosition
-          LIMIT 1) IS NOT NULL
-      THEN
-        SELECT l.position
-        INTO vLastPosition
+    IF (SELECT l.position
         FROM tb_tasks l
-        WHERE l.id_block = pIdBlock
-              AND l.position > vLastPosition;
-      END IF;
-      RAISE NOTICE 'DEPOIS %', vLastPosition;
-    END LOOP;
-  END IF;
+        WHERE l.position > vLastPosition AND l.id_block = pIdBlock
+        ORDER BY l.position DESC
+        LIMIT 1) IS NOT NULL
+    THEN
 
-  RETURN QUERY
-  SELECT vLastPosition;
+      SELECT l.position
+      INTO vLastPosition
+      FROM tb_tasks l
+      WHERE l.position > vLastPosition AND l.id_block = pIdBlock
+      ORDER BY l.position DESC
+      LIMIT 1;
+    END IF;
+    RETURN QUERY
+    SELECT (vLastPosition + 1);
+  END IF;
 END;
 $$
 LANGUAGE plpgsql;
@@ -1105,7 +1104,8 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION buildAttachment(pJson JSON)
+CREATE OR REPLACE FUNCTION buildAttachment(pFileName CHARACTER VARYING, pSize NUMERIC, pIdTask INTEGER,
+                                           pPath     CHARACTER VARYING)
   RETURNS BOOLEAN AS $$
 BEGIN
   IF EXISTS(SELECT *
@@ -1403,3 +1403,4 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql;
+

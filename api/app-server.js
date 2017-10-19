@@ -16,7 +16,8 @@
       return res.status(204).end()
     if (req._parsedUrl.pathname === '/userinfo' || req._parsedUrl.pathname === '/login' || req._parsedUrl.pathname === '/newuser'
       || req.originalUrl.includes('/imgsProjects/') || req.originalUrl.includes('/imgsUser/')
-      || req.originalUrl.includes('/assets/') || req._parsedUrl.pathname === '/emailExists/') {
+      || req.originalUrl.includes('/assets/') || req._parsedUrl.pathname === '/emailExists/'
+      || req.originalUrl.includes('/attachment/')) {
       next()
     } else {
       //console.log(req)
@@ -82,7 +83,7 @@
   app.put('/blocks/task/:id', blocksController.changeTask)
   app.get('/blocks/task/:id', blocksController.showContentTask)
   app.delete('/blocks/task/:id', blocksController.deleteTask)
-  app.post('/task/attachment', blocksController.newAttachment)
+  app.post('/task/attachment/:id', blocksController.newAttachment)
   app.delete('/task/attachment/:id', blocksController.deleteAttachment)
   app.post('/task/comment', blocksController.newComment)
   app.put('/task/comment', blocksController.changeComment)
