@@ -302,7 +302,8 @@ export class DragDropService {
     }
   }
   teste() {
-    alert('A');
+    // alert('A');
+    console.log('A')
   }
   onAddElemento(event, idBlock) {
     this.addElemento = true;

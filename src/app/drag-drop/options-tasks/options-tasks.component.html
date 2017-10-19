@@ -40,10 +40,18 @@
           <ul>
             <li *ngFor="let comentario of dragDropService?.infoOptionTask?.comments">
 
-              <span>{{ comentario.comment }}</span>
-            <div class="del" (click)="dragDropService.delCommentTask(comentario.id_comment)">
+              <span *ngIf="!modifyComment || idModifyComment != comentario.id_comment">{{ comentario.comment }}</span>
+              <input *ngIf="modifyComment && idModifyComment == comentario.id_comment" class="textFields modifyComments" style="width: calc(100% - 100px);" (blur)="dragDropService.teste()" [value]="comentario.comment">
+              <div class="more" (click)="onMoreOptionsComments(comentario.id_comment)"></div>
+              <div [hidden]="!moreOptionsComments || comentario.id_comment != idMoreOptionsComments" class="optionsMore">
+                <ul>
+                  <li (click)="onModifyComment(comentario.id_comment)">Alterar Comentario</li>
+                  <li (click)="dragDropService.delCommentTask(comentario.id_comment)">Excluir Comentario</li>
+                </ul>
+              </div>
+            <!--<div class="del" (click)="dragDropService.delCommentTask(comentario.id_comment)">-->
 
-            </div>
+            <!--</div>-->
             </li>
           </ul>
         </div>
@@ -73,31 +81,13 @@
       <div class="anexos">
         <div class="scrollAnexos">
           <ul>
-            <li>Adicionar Anexo</li>
-            <li>
+            <li (click)="openFileAnexo()">Adicionar Anexo</li>
+            <input type="file" id="addAnexo" (change)="getFile($event.target)">
+            <li *ngFor="let anexo of dragDropService?.infoOptionTask?.attachment">
               <div class="icon"></div>
-              Documentação.txt
+              <a [href]=" 'http://' + core.ipDaApi +  anexo.path" target="_blank"> {{ anexo.file_name + '.'  + anexo.path.split(".")[1]}}</a>
             </li>
-            <li>
-              <div class="icon"></div>
-              Documentação.txt
-            </li>
-            <li>
-              <div class="icon"></div>
-              Documentação.txt
-            </li>
-            <li>
-              <div class="icon"></div>
-              Documentação.txt
-            </li>
-            <li>
-              <div class="icon"></div>
-              Documentação.txt
-            </li>
-            <li>
-              <div class="icon"></div>
-              Documentação.txt
-            </li>
+
           </ul>
 
         </div>

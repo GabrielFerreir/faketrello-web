@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {DragDropService} from '../drag-drop.service';
+import {CoreService} from "../../Services/core.service";
 
 @Component({
   selector: 'app-options-tasks',
@@ -12,9 +13,18 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
   nome: string;
   descricao: string;
 
+  moreOptionsComments: boolean;
+  idMoreOptionsComments: number;
+
+  modifyComment: boolean;
+  idModifyComment: number;
+
+
+
   @ViewChild('conteudoNav') conteudoNav: ElementRef;
 
-  constructor(private dragDropService: DragDropService) {
+  constructor(private dragDropService: DragDropService,
+              private core: CoreService) {
   }
 
   @ViewChild('HTMLNameTask') HTMLNameTask: ElementRef;
@@ -26,7 +36,10 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
-
+    document.addEventListener('mouseup', (e) => {
+      this.hideMoreOptionsComments(e);
+      this.offModifyComment(e);
+    })
 
   }
 
@@ -115,6 +128,51 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
     if (this.dragDropService.addNewChecklist) {
       this.dragDropService.addNewChecklist.length > 0 ? this.HTMLInputChecklist.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLInputChecklist.nativeElement.classList.remove('textFieldsPreenchido');
     }
+  }
+  openFileAnexo() {
+    document.getElementById('addAnexo').click();
+  }
+  getFile(file) {
+    console.log(file.files[0].size);
+    const fSExt = new Array('Bytes', 'KB', 'MB', 'GB');
+    let fSize = file.files[0].size;
+    let i = 0;
+    while(fSize > 900){ fSize = fSize / 1024;   i++; }
+    fSize = (Math.round(fSize * 100) / 100) + ' ' + fSExt[i];
+    console.log(fSize);
+    var reader  = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file.files[0]);
+    }
+
+    reader.onloadend = (e) => {
+      let a = reader.result;
+      console.log(a);
+    }
+  }
+  abreArquivo(caminho) {
+    window.open('http://' + this.core.ipDaApi + caminho, "_blank");
+  }
+
+  onMoreOptionsComments(id) {
+    this.moreOptionsComments = true;
+    this.idMoreOptionsComments = id;
+  }
+  hideMoreOptionsComments(event) {
+    if(event.target.className != 'optionsMore' && event.target.parentNode.className != 'optionsMore') {
+      this.moreOptionsComments = false;
+    }
+  }
+  onModifyComment(id) {
+    this.modifyComment = true;
+    this.idModifyComment = id;
+  }
+  offModifyComment(event) {
+      if(event.target.classList[1] != 'modifyComments') {
+        this.modifyComment = false;
+      }
+
+
   }
 }
 
