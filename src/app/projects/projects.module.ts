@@ -5,8 +5,7 @@ import {ProjectsServiceService} from './projects-service.service';
 import { FormsModule } from '@angular/forms';
 import { SnackbarsModule } from '../components/snackbars/snackbars.module';
 import { AlterarProjectsComponent } from './alterar-projects/alterar-projects.component';
-import { PesquisaDeMembrosDoProjetoPipe } from './pesquisa-de-membros-do-projeto.pipe';
-import {ArrowBackModule} from "../components/arrow-back/arrow-back.module";
+import {ArrowBackModule} from '../components/arrow-back/arrow-back.module';
 
 @NgModule({
   imports: [
@@ -18,7 +17,6 @@ import {ArrowBackModule} from "../components/arrow-back/arrow-back.module";
   declarations: [
     AddProjectsComponent,
     AlterarProjectsComponent,
-    PesquisaDeMembrosDoProjetoPipe
   ],
   providers: [
     ProjectsServiceService

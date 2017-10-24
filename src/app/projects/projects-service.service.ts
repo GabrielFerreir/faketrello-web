@@ -129,7 +129,7 @@ export class ProjectsServiceService {
       if (this.dados.getCookieTokken()) {
         var url = 'http://' + this.core.ipDaApi + '/searchMembers/' + idproject;
         var headers = new Headers();
-        // headers.append('Authorization', 'Bearer ' + this.dados.getCookieTokken());
+        headers.append('Authorization', 'Bearer ' + this.dados.getCookieTokken());
         headers.append('Search', parm);
         return this.http.get(url, {headers: headers})
           .map(res => res.json())

@@ -1,13 +1,18 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {DragDropService} from '../drag-drop.service';
-import {CoreService} from "../../Services/core.service";
+import {CoreService} from '../../Services/core.service';
+import {ProjectsServiceService} from '../../projects/projects-service.service';
+import {PesquisaDeMembrosDoProjetoPipe} from '../pesquisa-de-membros-do-projeto.pipe';
 
 @Component({
   selector: 'app-options-tasks',
   templateUrl: './options-tasks.component.html',
-  styleUrls: ['./options-tasks.component.css']
+  styleUrls: ['./options-tasks.component.css'],
 })
 export class OptionsTasksComponent implements OnInit, AfterViewInit {
+
+  search: string;
+  searchMembros: boolean;
 
   data: string;
   nome: string;
@@ -15,15 +20,19 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
 
   moreOptionsComments: boolean;
   idMoreOptionsComments: number;
+  moreOptionsChecklist: boolean;
+  idMoreOptionsChecklist: number;
 
   modifyComment: boolean;
   idModifyComment: number;
-
+  modifyChecklist: boolean;
+  idModifyChecklist: number;
 
 
   @ViewChild('conteudoNav') conteudoNav: ElementRef;
 
   constructor(private dragDropService: DragDropService,
+              private projectService: ProjectsServiceService,
               private core: CoreService) {
   }
 
@@ -34,12 +43,13 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
   @ViewChild('HTMLInputChecklist') HTMLInputChecklist: ElementRef;
 
 
-
   ngOnInit() {
     document.addEventListener('mouseup', (e) => {
       this.hideMoreOptionsComments(e);
+      this.hideMoreOptionsChecklist(e);
       this.offModifyComment(e);
-    })
+      this.offModifyChecklist(e);
+    });
 
   }
 
@@ -71,21 +81,27 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
       this.data = this.data.substring(0, 5) + '/' + this.data.substring(5, 9);
     }
   }
+
   navbasicos() {
     this.conteudoNav.nativeElement.style = 'transform: translateX(0);';
   }
+
   navComentarios() {
     this.conteudoNav.nativeElement.style = 'transform: translateX(-100%);';
   }
+
   navChecklist() {
     this.conteudoNav.nativeElement.style = 'transform: translateX(-200%);';
   }
+
   navMembros() {
     this.conteudoNav.nativeElement.style = 'transform: translateX(-300%);';
   }
+
   navAnexos() {
     this.conteudoNav.nativeElement.style = 'transform: translateX(-400%);';
   }
+
   verificaInputs() {
     if (this.dragDropService.infoOptionTask.nametask) {
       this.dragDropService.infoOptionTask.nametask.length > 0 ? this.HTMLNameTask.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLNameTask.nativeElement.classList.remove('textFieldsPreenchido');
@@ -98,6 +114,7 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
     }
 
   }
+
   alteraDadosBasicos() {
     console.log('blur');
     let data;
@@ -119,60 +136,108 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
 
     }
   }
+
   inputComment() {
     if (this.dragDropService.addComment) {
       this.dragDropService.addComment.length > 0 ? this.HTMLInputComment.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLInputComment.nativeElement.classList.remove('textFieldsPreenchido');
     }
   }
+
   inputChecklist() {
     if (this.dragDropService.addNewChecklist) {
       this.dragDropService.addNewChecklist.length > 0 ? this.HTMLInputChecklist.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLInputChecklist.nativeElement.classList.remove('textFieldsPreenchido');
     }
   }
+
   openFileAnexo() {
     document.getElementById('addAnexo').click();
   }
+
   getFile(file) {
-    console.log(file.files[0].size);
-    const fSExt = new Array('Bytes', 'KB', 'MB', 'GB');
-    let fSize = file.files[0].size;
-    let i = 0;
-    while(fSize > 900){ fSize = fSize / 1024;   i++; }
-    fSize = (Math.round(fSize * 100) / 100) + ' ' + fSExt[i];
-    console.log(fSize);
-    var reader  = new FileReader();
+
+
+
+    // const fSExt = new Array('Bytes', 'KB', 'MB', 'GB');
+    // let fSize = file.files[0].size;
+    // let i = 0;
+    // while (fSize > 900) {
+    //   fSize = fSize / 1024;
+    //   i++;
+    // }
+    // fSize = (Math.round(fSize * 100) / 100) + ' ' + fSExt[i];
+    // console.log(fSize);
+    const reader = new FileReader();
     if (file) {
       reader.readAsDataURL(file.files[0]);
     }
 
     reader.onloadend = (e) => {
-      let a = reader.result;
-      console.log(a);
+      const name = file.files[0].name.split('.')[0];
+      const size = file.files[0].size;
+      const extensao = file.files[0].name.split('.')[1];
+      const base64 = reader.result;
+      if(name && size && extensao && base64) {
+        this.dragDropService.newAttachment(base64, name, size, extensao);
+      }
     }
   }
-  abreArquivo(caminho) {
-    window.open('http://' + this.core.ipDaApi + caminho, "_blank");
-  }
+
 
   onMoreOptionsComments(id) {
     this.moreOptionsComments = true;
     this.idMoreOptionsComments = id;
   }
+
   hideMoreOptionsComments(event) {
-    if(event.target.className != 'optionsMore' && event.target.parentNode.className != 'optionsMore') {
+    if (event.target.className != 'optionsMore' && event.target.parentNode.className != 'optionsMore') {
       this.moreOptionsComments = false;
     }
   }
+
+  onMoreOptionsChecklist(id) {
+    this.moreOptionsChecklist = true;
+    this.idMoreOptionsChecklist = id;
+  }
+
+  hideMoreOptionsChecklist(event) {
+    if (event.target.className != 'optionsMore' && event.target.parentNode.className != 'optionsMore') {
+      this.moreOptionsChecklist = false;
+    }
+  }
+
   onModifyComment(id) {
     this.modifyComment = true;
     this.idModifyComment = id;
   }
+
   offModifyComment(event) {
-      if(event.target.classList[1] != 'modifyComments') {
-        this.modifyComment = false;
-      }
+    if (event.target.classList[1] != 'modifyComments') {
+      this.modifyComment = false;
+    }
+  }
 
+  onModifyChecklist(id) {
+    console.log('a')
+    this.modifyChecklist = true;
+    this.idModifyChecklist = id;
+  }
 
+  offModifyChecklist(event) {
+    if (event.target.classList[1] != 'modifyChecklist') {
+      this.modifyChecklist = false;
+    }
+  }
+
+  pegaDadosProjeto() {
+
+    console.log(this.projectService.project.team);
+  }
+
+  showSearchMembros() {
+    this.searchMembros = true;
+  }
+  hideSearchMembros() {
+    this.searchMembros = false;
   }
 }
 

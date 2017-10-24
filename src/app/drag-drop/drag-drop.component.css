@@ -141,7 +141,7 @@
 .elemento {
   width: 90%;
   margin: 0 5%;
-  height: 60px;
+  height: auto;
   line-height: 25px;
   background-color: #FFFFFF;
   border-radius: 2px;
@@ -250,8 +250,8 @@
 
 }
 /deep/ .sombra {
-  width: 95%;
-  margin-left: 2.5%;
+  width: 90%;
+  margin-left: 5%;
   height: 60px;
   background-color: #CCC;
   border-radius: 4px;

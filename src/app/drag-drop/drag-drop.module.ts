@@ -5,6 +5,7 @@ import {MenuModule} from '../components/menu/menu.module';
 import {DragDropService} from './drag-drop.service';
 import { FormsModule } from '@angular/forms';
 import { OptionsTasksComponent } from './options-tasks/options-tasks.component';
+import { PesquisaDeMembrosDoProjetoPipe } from './pesquisa-de-membros-do-projeto.pipe';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { OptionsTasksComponent } from './options-tasks/options-tasks.component';
   declarations: [
     DragDropComponent,
     OptionsTasksComponent,
+    PesquisaDeMembrosDoProjetoPipe
   ],
   exports: [DragDropComponent]
 })
