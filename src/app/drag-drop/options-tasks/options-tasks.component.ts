@@ -34,6 +34,7 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
   constructor(private dragDropService: DragDropService,
               private projectService: ProjectsServiceService,
               private core: CoreService) {
+    this.search = '';
   }
 
   @ViewChild('HTMLNameTask') HTMLNameTask: ElementRef;
@@ -41,6 +42,7 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
   @ViewChild('HTMLFinalDate') HTMLFinalDate: ElementRef;
   @ViewChild('HTMLInputComment') HTMLInputComment: ElementRef;
   @ViewChild('HTMLInputChecklist') HTMLInputChecklist: ElementRef;
+  @ViewChild('HTMLSearch') HTMLSearch: ElementRef;
 
 
   ngOnInit() {
@@ -111,6 +113,9 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
     }
     if (this.data) {
       this.data.length > 0 ? this.HTMLFinalDate.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLFinalDate.nativeElement.classList.remove('textFieldsPreenchido');
+    }
+    if (this.search) {
+      this.search.length > 0 ? this.HTMLSearch.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLSearch.nativeElement.classList.remove('textFieldsPreenchido');
     }
 
   }
