@@ -474,6 +474,7 @@ BEGIN
     INSERT INTO tb_projects (name_project, id_user_owner, description, img_project) VALUES ($1, $2, $3, $4)
     RETURNING id_project
       INTO idprojectR;
+    INSERT INTO tb_notifications(id_user, id_project, type) VALUES (idDono,idprojectR, 1);
     RETURN QUERY
     SELECT idprojectR;
   END IF;
@@ -549,6 +550,7 @@ BEGIN
                 tb_team.id_user,
                 name,
                 profile_img,
+                email,
                 username,
                 permissions
               FROM tb_team
@@ -874,7 +876,9 @@ BEGIN
                tt.id_task,
                tt.name_task,
                tt.final_date,
-               tt.position
+               tt.position,
+              (SELECT count(id_attachment) FROM tb_attachment ta WHERE tt.id_task = ta.id_task) as attachments,
+              (SELECT count(id_comment) FROM tb_comments tc WHERE tt.id_task = tc.id_task) as comments
              FROM tb_tasks tt
              WHERE tt.id_block = tb.id_blocks
              ORDER BY position ASC) AS TasksJson
@@ -1043,8 +1047,14 @@ BEGIN
       l.final_date,
       l.description,
       (SELECT coalesce(json_agg(teamTask), '[]')
-       FROM (SELECT id_user
+       FROM (SELECT
+               tb_team_tasks.id_user,
+               tb_team_tasks.id_team_task,
+               tb_login.name,
+               tb_login.profile_img,
+               tb_login.email
              FROM tb_team_tasks
+               INNER JOIN tb_login ON tb_team_tasks.id_user = tb_login.id_user
              WHERE id_task = pIdTask) AS teamTask),
 
       (SELECT coalesce(json_agg(jsonComments), '[]')
@@ -1382,9 +1392,26 @@ END;
 $$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION changeNameChecklist(pIdChecklist INTEGER, pName CHARACTER VARYING)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_checklist_tasks
+            WHERE id_checklist = pIdChecklist)
+  THEN
+    UPDATE tb_checklist_tasks
+    SET name_checklist = pName
+    WHERE id_checklist = pIdChecklist;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
 --SELECT * FROM updatePositions('[58,59,60,61,62]' :: JSON)
 
-CREATE OR REPLACE FUNCTION updatePositions(pPositions JSON)
+CREATE OR REPLACE FUNCTION updatePositions(pPositions JSON, pOldPositions JSON)
   RETURNS BOOLEAN AS $$
 DECLARE
   vIdTarefa INTEGER;
@@ -1399,8 +1426,50 @@ BEGIN
     WHERE id_task = vIdTarefa;
     vIndex := vIndex + 1;
   END LOOP;
+  vIndex := 0;
+  FOR vIdTarefa IN SELECT *
+                   FROM json_array_elements(pOldPositions) LOOP
+    RAISE NOTICE '[%] %', vIdTarefa, vIndex;
+    UPDATE tb_tasks
+    SET position = vIndex
+    WHERE id_task = vIdTarefa;
+    vIndex := vIndex + 1;
+  END LOOP;
   RETURN TRUE;
 END;
 $$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION insertMembersTask(pIdTask INTEGER, pIdUser INTEGER)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_tasks
+            WHERE id_task = pIdTask)
+     AND NOT EXISTS(SELECT *
+                    FROM tb_team_tasks
+                    WHERE pIdTask = id_task AND pIdUser = id_user)
+  THEN
+    INSERT INTO tb_team_tasks (id_task, id_user) VALUES (pIdTask, pIdUser);
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION removeMemberTask(pIdRelation INTEGER)
+  RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT *
+            FROM tb_team_tasks
+            WHERE pIdRelation = id_team_task)
+  THEN
+    DELETE FROM tb_team_tasks
+    WHERE pIdRelation = id_team_task;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;

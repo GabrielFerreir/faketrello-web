@@ -60,29 +60,34 @@ exports.deleteBlock = function (req, res) {
 //Cria uma nova tarefa
 exports.newtask = async function (req, res) {
   req.idBlock = req.params.id
-  await exports.lastPosition(req, res)
-  db.any('SELECT * FROM newtasks($1,$2,$3,$4,$5)', [req.body.nameTask, req.body.finalDate, req.body.description, req.params.id, req.lastPosition])
-    .then(data => {
-      if (!data || !data[0]) {
-        res.status(404).json({error: 'Nao foi encontrado esse bloco no projeto'})
-      } else {
-        if (req.body.attachment) {
-          req.idTask = data[0].idtask
-          let path = exports.buildAttachment(req, res)
+  await lastPosition(req, res)
+  if (req.body.nameTask.length <= 20) {
 
-          db.any('SELECT * FROM buildAttachment($1,$2,$3,$4)', [req.body.fileName, req.body.size, req.idTask, path])
-            .then(data => {
-              if (!data) {
-                res.status(404).json({error: 'Erro ao inserir o anexo porque nao encontrou tarefa criada'})
-              } else {
-                res.status(200).json({result: 'Tafera criada'})
-              }
-            })
+    db.any('SELECT * FROM newtasks($1,$2,$3,$4,$5)', [req.body.nameTask, req.body.finalDate, req.body.description, req.params.id, req.lastPosition])
+      .then(data => {
+        if (!data || !data[0]) {
+          res.status(404).json({error: 'Nao foi encontrado esse bloco no projeto'})
         } else {
-          res.status(200).json({result: 'Tafera criada'})
+          if (req.body.attachment) {
+            req.idTask = data[0].idtask
+            let path = buildAttachment(req, res)
+
+            db.any('SELECT * FROM buildAttachment($1,$2,$3,$4)', [req.body.fileName, req.body.size, req.idTask, path])
+              .then(data => {
+                if (!data) {
+                  res.status(404).json({error: 'Erro ao inserir o anexo porque nao encontrou tarefa criada'})
+                } else {
+                  res.status(200).json({result: 'Tafera criada'})
+                }
+              })
+          } else {
+            res.status(200).json({result: 'Tafera criada'})
+          }
         }
-      }
-    })
+      })
+  } else {
+    res.json({code: 406, message: 'Nome da tarefa muito longo'})
+  }
 }
 
 //Altera tarefa
@@ -104,10 +109,15 @@ exports.moveTask = async function (req, res) {
       if (!data) {
         res.status(400).json({error: 'Erro ao mover tarefa'})
       } else {
+
         io.on('connection', function (socket) {
-          socket.emit('moved', {
-            greeting: 'list updated'
+          console.log('entrou connection')
+          socket.on('batata', function () {
+            socket.broadcast.emit('moved', {
+              greeting: 'list updated'
+            })
           })
+
         })
 
         exports.updatePositions(req, res)
@@ -156,7 +166,7 @@ exports.newAttachment = async function (req, res) {
 }
 
 //Cria arquivo do anexo no servidor
-exports.buildAttachment = function (req, res) {
+function buildAttachment (req) {
   return new Promise(async function (resolve, reject) {
     const fs = require('fs')
     let file = req.body.file
@@ -169,8 +179,8 @@ exports.buildAttachment = function (req, res) {
     }
     response.type = matches[1]
     if (extensions.indexOf(req.body.fileType) !== -1) {
-      let d = new Date();
-      let dateT = d.getTime();
+      let d = new Date()
+      let dateT = d.getTime()
 
       let string = req.body.fileName + req.body.fileType + dateT
       let encode = md5(string)
@@ -217,6 +227,18 @@ exports.changeStatusChecklist = function (req, res) {
     })
 }
 
+//Altera o nome da checklist
+exports.changeNameChecklist = function (req, res) {
+  db.any('SELECT * FROM changeNameChecklist($1,$2)', [req.params.id, req.body.name])
+    .then(data => {
+      if (!data) {
+        res.status(404).json({error: 'Id Inexistente'})
+      } else {
+        res.status(200).json({result: 'Alterado'})
+      }
+    })
+}
+
 //Deletar checklists
 exports.deleteChecklist = function (req, res) {
   db.any('SELECT * FROM deleteChecklist($1)', [req.params.id])
@@ -243,7 +265,7 @@ exports.newComment = function (req, res) {
 
 //Altera comentario
 exports.changeComment = function (req, res) {
-  db.any('SELECT * FROM changeComment($1,$2);', [req.body.idComment, req.body.comment])
+  db.any('SELECT * FROM changeComment($1,$2);', [req.params.id, req.body.comment])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Comentário não encontrado'})
@@ -293,7 +315,7 @@ exports.deleteAttachment = function (req, res) {
 
 //Atualiza posições
 exports.updatePositions = function (req, res) {
-  db.any('SELECT * FROM updatePositions($1)', [JSON.stringify(req.body.positions)])
+  db.any('SELECT * FROM updatePositions($1,$2)', [JSON.stringify(req.body.positions), JSON.stringify(req.body.oldPositions)])
     .then(data => {
       if (!data || !data[0]) {
         console.log(data)
@@ -304,11 +326,35 @@ exports.updatePositions = function (req, res) {
 }
 
 //Pega a ultima posição
-exports.lastPosition = async function (req, res) {
+async function lastPosition (req) {
   const data = await db.any('SELECT * FROM getLastPosition($1)', [req.idBlock])
   if (!data || !data[0]) {
     console.log(data)
   } else {
     req.lastPosition = data[0].position
   }
+}
+
+//Insere membros no projeto
+exports.insertMembersTask = function (req, res) {
+  db.any('SELECT * FROM insertMembersTask($1,$2)', [req.params.id, req.body.idUser])
+    .then(data => {
+      if (!data || !data[0].insertmemberstask) {
+        res.status(409).json({error: 'Tarefa nao encontrada ou usuario já inserido'})
+      } else {
+        res.status(200).json({result: 'Inserido'})
+      }
+    })
+}
+
+//Remove membro da tarefa
+exports.removeMemberTask = function (req, res) {
+  db.any('SELECT * FROM removeMemberTask($1)', [req.params.id])
+    .then(data => {
+      if (!data) {
+        res.status(404).json({error: 'Tarefa nao encontrada'})
+      } else {
+        res.status(200).json({result: 'Removido'})
+      }
+    })
 }
