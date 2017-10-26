@@ -86,14 +86,16 @@
   app.post('/task/attachment/:id', blocksController.newAttachment)
   app.delete('/task/attachment/:id', blocksController.deleteAttachment)
   app.post('/task/comment', blocksController.newComment)
-  app.put('/task/comment', blocksController.changeComment)
+  app.put('/task/comment/:id', blocksController.changeComment)
   app.delete('/task/comment/:id', blocksController.deleteComment)
   app.post('/task/checklist', blocksController.newChecklist)
   app.put('/task/checklistStatus/:id', blocksController.changeStatusChecklist)
+  app.put('/task/checklistName/:id', blocksController.changeNameChecklist)
   app.delete('/task/checklist/:id', blocksController.deleteChecklist)
   app.put('/task/move/:id', blocksController.moveTask)
   app.put('/task/positions', blocksController.updatePositions)
-  app.post('/position', blocksController.lastPosition)
+  app.post('/task/team/:id', blocksController.insertMembersTask)
+  app.delete('/task/team/:id', blocksController.removeMemberTask)
 
   let filesPath
 
