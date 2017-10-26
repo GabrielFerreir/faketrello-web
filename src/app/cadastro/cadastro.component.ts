@@ -231,21 +231,24 @@ fazerLogin() {
 }
 }
 previewFile(el) {
-    console.log(el)
+    console.log(el.files[0].size);
+  const fSExt = new Array('Bytes', 'KB', 'MB', 'GB');
+  let fSize = el.files[0].size;
+  let i = 0;
+      while(fSize > 900){ fSize = fSize / 1024;   i++; }
+      fSize = (Math.round(fSize * 100) / 100) + ' ' + fSExt[i];
+      console.log(fSize);
     var reader  = new FileReader();
+  if (el) {
+    reader.readAsDataURL(el.files[0]);
+  }
 
     reader.onloadend = (e) => {
-      // preview.src = reader.result;
-      console.log(reader.result);
       this.img64 = reader.result;
     }
 
 
-    if (el) {
-      reader.readAsDataURL(el.files[0]);
-    } else {
 
-    }
 
   }
 }

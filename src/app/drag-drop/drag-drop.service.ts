@@ -106,21 +106,31 @@ export class DragDropService {
       this.posInicialX = event.changedTouches['0'].clientX + this.getScroll();
       this.posInicialY = event.changedTouches['0'].clientY;
     }
-    this.bloco = event.target;
-    if (this.bloco.className != 'elemento') {
+
+    if(event.target.className == 'elemento') {
+      this.bloco = event.target;
+      this.caixa = event.target.parentNode;
+    } else if(event.target.parentNode.className == 'elemento') {
+      this.bloco = event.target.parentNode;
+      this.caixa = event.target.parentNode.parentNode;
+      console.log(this.bloco)
+    } else {
       this.reset();
       this.recriaListener();
     }
-    // SUPRIMIR O ERRO DE QUANDO O BLOCO È NULO
-    try {
+    // console.log(this.bloco);
+
+
+    if(this.bloco) {
       this.posicaoBlocoX = this.bloco.getBoundingClientRect().left;
       this.posicaoBlocoY = this.bloco.getBoundingClientRect().top;
-    } catch (e) {
+      this.sombra = document.createElement('article');
+      this.sombra.className = 'sombra';
+      this.sombra.setAttribute('_ngcontent-c4', '');
+
+      this.sombra.setAttribute('style', 'height:' + this.bloco.offsetHeight + 'px');
     }
-    this.caixa = event.target.parentNode;
-    this.sombra = document.createElement('article');
-    this.sombra.className = 'sombra';
-    this.sombra.setAttribute('_ngcontent-c4', '');
+
   }
   getMouseMove(event) {
     if (this.posInicialX) {
@@ -144,7 +154,9 @@ export class DragDropService {
       this.bloco.style.position = 'fixed';
       this.bloco.style.zIndex = '24';
       this.bloco.style.width = (this.larguraDaCaixa) + 'px';
+
       if (this.pegaLocalNaOrdem(event)) {
+        console.log(this.pegaLocalNaOrdem(event));
         this.caixaDestino().insertBefore(this.sombra, this.pegaLocalNaOrdem(event));
       } else {
         this.caixaDestino().insertBefore(this.sombra, this.caixaDestino().querySelector('.addElemento'));
@@ -223,19 +235,16 @@ export class DragDropService {
     }
   }
   pegaLocalNaOrdem(event) {
-    // console.log('LOCAL');
-    this.posFinalY = event.clientY - 40;
-
-    if (this.isMobile) {
-      this.posFinalY = event.changedTouches['0'].clientY - 40;
-    }
-
     let els = this.caixaDestino().querySelectorAll('.elemento');
     // console.log(els);
     let verificacao = false;
     let local = null;
     for (let i = 0; i < els.length; i++) {
       const PosicaoY = els[i].getBoundingClientRect().top;
+      this.posFinalY = event.clientY - els[i].offsetHeight;
+      if(this.isMobile) {
+        this.posFinalY = event.changedTouches['0'].clientY - els[i].offsetHeight;
+      }
       if (this.posFinalY < PosicaoY && this.bloco !== els[i]) {
         if (verificacao == false) {
           verificacao = true;
@@ -246,6 +255,8 @@ export class DragDropService {
     if (els && els.length == 0) {
       local = null;
     }
+    console.log('LOCAL');
+    console.log(local);
     return local;
   }
   caixaDestino() {
@@ -302,7 +313,8 @@ export class DragDropService {
     }
   }
   teste() {
-    alert('A');
+    // alert('A');
+    console.log('A')
   }
   onAddElemento(event, idBlock) {
     this.addElemento = true;
@@ -476,6 +488,26 @@ export class DragDropService {
         console.log(error);
       });
   }
+  changeCommentTask(comment) {
+    var url = 'http://' + this.core.ipDaApi + '/task/comment/' + this.idTask;
+    var json = JSON.stringify(
+      {
+        comment: comment,
+      }
+    );
+    console.log(json);
+
+    const params = json;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+    return this.http.put(url, params, {headers: headers})
+      .subscribe((res) => {
+        console.log(res);
+      }, error => {
+        console.log(error);
+      });
+  }
   changeTask(nameTask, finalDate, description) {
       var url = 'http://' + this.core.ipDaApi + '/blocks/task/' + this.idTask;
       var json = JSON.stringify(
@@ -562,6 +594,98 @@ export class DragDropService {
         console.log(error);
       });
   }
+  changeChecklistTask(checklist) {
+    var url = 'http://' + this.core.ipDaApi + '/task/checklistName/' + this.idTask;
+    var json = JSON.stringify(
+      {
+        name: checklist,
+      }
+    );
+    console.log(json);
+
+    const params = json;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+    return this.http.put(url, params, {headers: headers})
+      .subscribe((res) => {
+        console.log(res);
+      }, error => {
+        console.log(error);
+      });
+  }
+  newAttachment(base64, fileName, size, fileType) {
+    var url = 'http://' + this.core.ipDaApi + '/task/attachment/' + this.idTask;
+    var json = JSON.stringify(
+      {
+            file: base64,
+            fileName: fileName,
+            size: size,
+            fileType: fileType
+      }
+    );
+    const params = json;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+    return this.http.post(url, params, {headers: headers})
+      .subscribe((res) => {
+        console.log(res);
+        this.getInfoOptionsTasks(this.idTask)
+          .subscribe((res) => {
+            this.infoOptionTask = res;
+          }, error => {
+          });
+      }, error => {
+        console.log(error);
+      });
+  }
+  delMemberTask(idMemberTask) {
+    var url = 'http://' + this.core.ipDaApi + '/task/team/' + idMemberTask;
+
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+
+    return this.http.delete(url,{headers: headers})
+      .map(res => res.json())
+      .subscribe((res) => {
+        console.log(res);
+        this.getInfoOptionsTasks(this.idTask)
+          .subscribe((res) => {
+            this.infoOptionTask = res;
+          }, error => {
+          });
+      }, error => {
+        console.log(error);
+      });
+  }
+  addMemberTask(idMember) {
+    var url = 'http://' + this.core.ipDaApi + '/task/team/' + this.idTask;
+    var json = JSON.stringify(
+      {
+            idUser: idMember,
+          }
+    );
+    const params = json;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+    return this.http.post(url, params, {headers: headers})
+      .subscribe((res) => {
+        console.log(res);
+        this.getInfoOptionsTasks(this.idTask)
+          .subscribe((res) => {
+            this.infoOptionTask = res;
+          }, error => {
+          }, () => {
+            this.addNewChecklist = '';
+          });
+      }, error => {
+        console.log(error);
+      });
+  }
+
 
 
 

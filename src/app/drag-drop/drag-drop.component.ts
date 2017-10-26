@@ -25,6 +25,7 @@ export class DragDropComponent implements OnInit {
     });
 
 
+
     this.dragDropService.idProjeto = this.route.snapshot.params['id'];
     this.projects.viewDetailProject(this.dragDropService.idProjeto);
     this.projects.searchBlocks(this.dragDropService.idProjeto)
@@ -111,5 +112,7 @@ export class DragDropComponent implements OnInit {
       }, () => {
       });
   }
+
+
 
 }

@@ -3,7 +3,7 @@ import {SnackbarsService} from '../../components/snackbars/snackbars.service';
 import {ProjectsServiceService} from '../projects-service.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CoreService} from '../../Services/core.service';
-import { PesquisaDeMembrosDoProjetoPipe } from '../pesquisa-de-membros-do-projeto.pipe';
+import { PesquisaDeMembrosDoProjetoPipe } from '../../drag-drop/pesquisa-de-membros-do-projeto.pipe';
 import {DadosDeUsuarioService} from "../../Services/dados-de-usuario.service";
 
 @Component({

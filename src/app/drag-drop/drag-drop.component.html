@@ -4,7 +4,8 @@
     <section class="caixa" *ngFor="let caixas of dragDropService.blocks; let i = index">
       <header>{{ caixas.nameblock }}
         <div class="more_horiz" (click)="dragDropService.ativaMenuBloco(caixas.idblock)"></div>
-        <div [hidden]="!dragDropService.menuBloco || caixas.idblock != dragDropService.referenciaMenuBloco " class="menuBloco">
+        <div [hidden]="!dragDropService.menuBloco || caixas.idblock != dragDropService.referenciaMenuBloco "
+             class="menuBloco">
           <ul>
             <li (click)="dragDropService.teste()">Alterar Bloco</li>
             <li (mousedown)="deletarBloco(caixas.idblock)">Excluir Bloco</li>
@@ -13,19 +14,33 @@
       </header>
       <section class="body">
         <article class="elemento" *ngFor="let elementos of dragDropService.blocks[i].tasks">
-          {{ elementos.name_task }}
-          <br/>
-          <span class="prazo" *ngIf="elementos.final_date">
-        {{ elementos.final_date | date: 'dd/MM/yyyy' }}
-      </span>
+          <span class="nome">
+            {{ elementos.name_task }}
+          </span>
+          <section class="infoEl">
+              <span class="prazo" *ngIf="elementos.final_date">
+                {{ elementos.final_date | date: 'dd/MM/yyyy' }}
+              </span>
+              <span class="comentarios" *ngIf="elementos.comments">
+                {{ elementos.comments }}
+              </span>
+              <span class="anexos" *ngIf="elementos.attachments">
+                {{ elementos.attachments }}
+              </span>
+          </section>
+
           <div class="editElemento" (click)="dragDropService.onOptionsTasks(elementos.id_task)">
           </div>
         </article>
         <article class="addElemento">
-          <div [hidden]="dragDropService.addElemento && dragDropService.idBlock == caixas.idblock" class="addEl" (click)="dragDropService.onAddElemento($event, caixas.idblock)">Adicionar Elemento</div>
-          <section [hidden]="!dragDropService.addElemento || dragDropService.idBlock != caixas.idblock" class="addInfoEl">
+          <div [hidden]="dragDropService.addElemento && dragDropService.idBlock == caixas.idblock" class="addEl"
+               (click)="dragDropService.onAddElemento($event, caixas.idblock)">Adicionar Elemento
+          </div>
+          <section [hidden]="!dragDropService.addElemento || dragDropService.idBlock != caixas.idblock"
+                   class="addInfoEl">
             <div style='position: relative;'>
-              <input type='text' class='textFields' [(ngModel)]="dragDropService.nomeTarefa" (keyup.enter)="addTarefa()">
+              <input type='text' class='textFields' [(ngModel)]="dragDropService.nomeTarefa"
+                     (keyup.enter)="addTarefa()">
               <label class='labelText'>Nome</label>
               <div class='border'></div>
             </div>
@@ -40,12 +55,14 @@
 
     <!-- Adicionar Novas Caixas -->
     <section class="caixa">
-        <article [hidden]="!!dragDropService.situacaoAddBloco" class="addBloco" (click)="dragDropService.onAddBloco($event)">
-         Adicionar Caixa
-        </article>
+      <article [hidden]="!!dragDropService.situacaoAddBloco" class="addBloco"
+               (click)="dragDropService.onAddBloco($event)">
+        Adicionar Caixa
+      </article>
       <section [hidden]="!dragDropService.situacaoAddBloco" class="addBlocoInfo">
         <div style='position: relative;'>
-          <input type='text' class='textFields' [(ngModel)]="dragDropService.nomeAddBloco" #nomeBloco (keyup.enter)="addBloco()">
+          <input type='text' class='textFields' [(ngModel)]="dragDropService.nomeAddBloco" #nomeBloco
+                 (keyup.enter)="addBloco()">
           <div class='border'></div>
         </div>
 
