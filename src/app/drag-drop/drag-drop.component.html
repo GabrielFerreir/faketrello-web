@@ -1,7 +1,7 @@
 <section class="container" #container>
   <div id="dragDrop">
 
-    <section class="caixa" *ngFor="let caixas of dragDropService.blocks; let i = index">
+    <section class="caixa" *ngFor="let caixas of dragDropService.blocks; let i = index" data-id="{{caixas.idblock}}">
       <header>{{ caixas.nameblock }}
         <div class="more_horiz" (click)="dragDropService.ativaMenuBloco(caixas.idblock)"></div>
         <div [hidden]="!dragDropService.menuBloco || caixas.idblock != dragDropService.referenciaMenuBloco "
@@ -13,7 +13,7 @@
         </div>
       </header>
       <section class="body">
-        <article class="elemento" *ngFor="let elementos of dragDropService.blocks[i].tasks">
+        <article class="elemento" *ngFor="let elementos of dragDropService.blocks[i].tasks" data-id="{{elementos.id_task}}">
           <span class="nome">
             {{ elementos.name_task }}
           </span>

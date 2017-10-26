@@ -19,10 +19,6 @@ export class HomeComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-    /* TESTE COM O SOCKET */
-    const socket = socketIo('http://192.168.52.75:3000');
-    socket.on('entrou', (data) => console.log(data));
-    /* TESTE COM O SOCKET */
 
     // FAZ O LOGIN QUANDO O USUARIO JÁ ESTÁ AUTENTICADO
     if(this.dadosDeUsuarioService.getCookieTokken()) {

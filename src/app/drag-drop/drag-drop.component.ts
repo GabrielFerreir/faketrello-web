@@ -3,6 +3,8 @@ import {ProjectsServiceService} from '../projects/projects-service.service';
 import {ActivatedRoute, Route, Router} from '@angular/router';
 import {DragDropService} from './drag-drop.service';
 import {DadosDeUsuarioService} from "../Services/dados-de-usuario.service";
+import * as socketIo from 'socket.io-client';
+import {CoreService} from "../Services/core.service";
 
 @Component({
   selector: 'app-drag-drop',
@@ -16,16 +18,15 @@ export class DragDropComponent implements OnInit {
   constructor(private projects: ProjectsServiceService,
               private route: ActivatedRoute,
               private dragDropService: DragDropService,
-              private projectsService: ProjectsServiceService) {
+              private projectsService: ProjectsServiceService,
+              private core: CoreService) {
   }
 
   ngOnInit() {
+    // this.socket.connect();
     window.addEventListener('resize', () => {
       this.dragDropService.setTamanhos();
     });
-
-
-
     this.dragDropService.idProjeto = this.route.snapshot.params['id'];
     this.projects.viewDetailProject(this.dragDropService.idProjeto);
     this.projects.searchBlocks(this.dragDropService.idProjeto)
@@ -48,6 +49,8 @@ export class DragDropComponent implements OnInit {
         /* ADD ELEMENTOS */
 
       });
+
+
 
   }
   addTarefa() {

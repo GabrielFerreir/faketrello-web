@@ -2,13 +2,19 @@ import { Injectable } from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import {CoreService} from '../Services/core.service';
 import {DadosDeUsuarioService} from "../Services/dados-de-usuario.service";
+import * as socketIo from 'socket.io-client';
+// import { SocketService } from '../Services/socket.service';
+import { Socket } from 'ng-socket-io';
+
+
 
 @Injectable()
 export class DragDropService {
 
   constructor(private core: CoreService,
               private usuarioService: DadosDeUsuarioService,
-              private http: Http) { }
+              private http: Http,
+              private socket: Socket) { }
   container;
   idProjeto: number;
   idBlock: number;
@@ -174,7 +180,27 @@ export class DragDropService {
         this.caixaDestino().insertBefore(this.bloco, this.caixaDestino().querySelector('.addElemento'));
       }
       this.bloco.style = '';
+
+      const previous = [];
+      const current = [];
+
+      for(let i = 0; i < this.caixa.querySelectorAll('.elemento').length; i++) {
+        previous.push(parseInt(this.caixa.querySelectorAll('.elemento')[i].id));
+
+      }
+      console.log('-------------');
+      for(let i = 0; i < this.caixaDestino().querySelectorAll('.elemento').length; i++) {
+        current.push(parseInt(this.caixaDestino().querySelectorAll('.elemento')[i].id));
+      }
+      console.log(previous);
+      console.log(current);
+      console.log(this.bloco.id)
+      console.log(this.caixaDestino().parentNode.id);
+
+
+      this.changePositions(previous, current, this.bloco.id, this.caixaDestino().parentNode.id);
     }
+
     clearInterval(this.intervalPrev);
     clearInterval(this.intervalNext);
     this.reset();
@@ -262,9 +288,9 @@ export class DragDropService {
   caixaDestino() {
     if (this.diferencaX && this.diferencaX > this.larguraDaCaixa) {
       const quantidadeDeIrmaos = Math.floor(this.diferencaX / this.larguraDaCaixa);
-      console.log('qtd:' + quantidadeDeIrmaos);
+      // console.log('qtd:' + quantidadeDeIrmaos);
       this.cxDestino = this.caixa.parentNode.nextElementSibling.querySelector('.body');
-      console.log(this.cxDestino);
+      // console.log(this.cxDestino);
       for (let i = 1; i < quantidadeDeIrmaos; i++) {
         this.cxDestino = this.cxDestino.parentNode.nextElementSibling.querySelector('.body');
       }
@@ -681,6 +707,36 @@ export class DragDropService {
           }, () => {
             this.addNewChecklist = '';
           });
+      }, error => {
+        console.log(error);
+      });
+  }
+  changePositions(previous, current, idTask, idBlock) {
+    var url = 'http://' + this.core.ipDaApi + '/task/move/' + idTask;
+    var json = JSON.stringify(
+      {
+        idBlock: idBlock,
+        positions: current,
+        oldPositions: previous
+      }
+    );
+    console.log(json);
+
+    const params = json;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+    return this.http.put(url, params, {headers: headers})
+      .subscribe((res) => {
+        console.log(res);
+
+        // this.socketService.socketEmit();
+        // this.socketService.socketOn();
+
+        this.socket.emit('batata', {teste:'teste'});
+        this.socket.on('moved', (data) => console.log(data));
+        console.log('chamou');
+
       }, error => {
         console.log(error);
       });
