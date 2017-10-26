@@ -138,6 +138,7 @@
   transition: all ease 180ms;
   background-color: #111;
 }
+
 .elemento {
   width: 90%;
   margin: 0 5%;
@@ -148,32 +149,58 @@
   box-shadow: 0 2px 4px 0 rgba(0,0,0, 0.14),
               0 4px 5px 0 rgba(0,0,0,0.12),
               0 1px 10px 0 rgba(0, 0, 0, 0.20);
-  /*border: 3px solid #000;*/
   margin-top: 5px;
   cursor: move; user-select: none;
-  font-size: 14px;
   padding:  5px 5px 5px 15px;
-  /*border-left: 3px solid #03A9F4;*/
   box-sizing: border-box;
   overflow: hidden;
   position: relative;
-  font-family: 'Roboto';
-  font-weight: 600;
-  text-transform: capitalize;
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
-.elemento .prazo {
-  float: left;
-  background-image: url("../../assets/ic_date_range_black_24px.svg");
+.elemento .nome {
+  font-family: 'Roboto Medium';
+  text-transform: capitalize;
+  font-size: 14px;
+  width: 100%;
+}
+.elemento .infoEl {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  line-height: 32px;
+}
+.elemento .infoEl .prazo {
+  background-image: url("../../assets/watch_later.svg");
   background-repeat: no-repeat;
-  background-size: 16px 16px;
+  background-size: 14px 14px;
   background-position: left center;
-  padding-left: 20px;
+  padding-left: 16px;
   height: 30px;
-  width: auto;
-  line-height: 30px;
+  line-height: 32px;
   overflow: hidden;
-  font-weight: 400;
+  font-size: 14px;
+  font-family: 'Roboto';
+  margin: 0 2px;
+}
+.elemento .infoEl .comentarios {
+  background-image: url("../../assets/mode_comment.svg");
+  background-repeat: no-repeat;
+  background-size: 14px 14px;
+  background-position: left center;
+  padding-left: 16px;
+  margin: 0 2px;
+
+}
+.elemento .infoEl .anexos {
+  background-image: url("../../assets/attach_file.svg");
+  background-repeat: no-repeat;
+  background-size: 14px 14px;
+  background-position: left center;
+  padding-left: 16px;
+  margin: 0 2px;
 }
 .elemento .editElemento {
   float: right;
@@ -201,6 +228,7 @@
   /*display: block;*/
   opacity: 1;
 }
+
 .addElemento {
   width: 100%;
   height: auto;

@@ -106,19 +106,24 @@ export class DragDropService {
       this.posInicialX = event.changedTouches['0'].clientX + this.getScroll();
       this.posInicialY = event.changedTouches['0'].clientY;
     }
-    this.bloco = event.target;
-    if (this.bloco.className != 'elemento') {
+
+    if(event.target.className == 'elemento') {
+      this.bloco = event.target;
+      this.caixa = event.target.parentNode;
+    } else if(event.target.parentNode.className == 'elemento') {
+      this.bloco = event.target.parentNode;
+      this.caixa = event.target.parentNode.parentNode;
+      console.log(this.bloco)
+    } else {
       this.reset();
       this.recriaListener();
     }
-    // SUPRIMIR O ERRO DE QUANDO O BLOCO È NULO
-    try {
+    // console.log(this.bloco);
+
+
+    if(this.bloco) {
       this.posicaoBlocoX = this.bloco.getBoundingClientRect().left;
       this.posicaoBlocoY = this.bloco.getBoundingClientRect().top;
-    } catch (e) {
-    }
-    if(this.bloco) {
-      this.caixa = event.target.parentNode;
       this.sombra = document.createElement('article');
       this.sombra.className = 'sombra';
       this.sombra.setAttribute('_ngcontent-c4', '');
@@ -151,6 +156,7 @@ export class DragDropService {
       this.bloco.style.width = (this.larguraDaCaixa) + 'px';
 
       if (this.pegaLocalNaOrdem(event)) {
+        console.log(this.pegaLocalNaOrdem(event));
         this.caixaDestino().insertBefore(this.sombra, this.pegaLocalNaOrdem(event));
       } else {
         this.caixaDestino().insertBefore(this.sombra, this.caixaDestino().querySelector('.addElemento'));
@@ -249,6 +255,8 @@ export class DragDropService {
     if (els && els.length == 0) {
       local = null;
     }
+    console.log('LOCAL');
+    console.log(local);
     return local;
   }
   caixaDestino() {
