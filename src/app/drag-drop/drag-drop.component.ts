@@ -23,6 +23,7 @@ export class DragDropComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dragDropService.onInitSocket();
     // this.socket.connect();
     window.addEventListener('resize', () => {
       this.dragDropService.setTamanhos();

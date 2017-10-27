@@ -42,7 +42,7 @@ export class AddProjectsComponent implements OnInit {
 
     reader.onloadend = (e) => {
       // preview.src = reader.result;
-      console.log(reader.result);
+      // console.log(reader.result);
       this.img64 = reader.result;
     }
 

@@ -5,6 +5,7 @@ import {DadosDeUsuarioService} from "../Services/dados-de-usuario.service";
 import * as socketIo from 'socket.io-client';
 // import { SocketService } from '../Services/socket.service';
 import { Socket } from 'ng-socket-io';
+import {ProjectsServiceService} from "../projects/projects-service.service";
 
 
 
@@ -14,7 +15,8 @@ export class DragDropService {
   constructor(private core: CoreService,
               private usuarioService: DadosDeUsuarioService,
               private http: Http,
-              private socket: Socket) { }
+              private socket: Socket,
+              private projects: ProjectsServiceService) { }
   container;
   idProjeto: number;
   idBlock: number;
@@ -162,7 +164,7 @@ export class DragDropService {
       this.bloco.style.width = (this.larguraDaCaixa) + 'px';
 
       if (this.pegaLocalNaOrdem(event)) {
-        console.log(this.pegaLocalNaOrdem(event));
+        // console.log(this.pegaLocalNaOrdem(event));
         this.caixaDestino().insertBefore(this.sombra, this.pegaLocalNaOrdem(event));
       } else {
         this.caixaDestino().insertBefore(this.sombra, this.caixaDestino().querySelector('.addElemento'));
@@ -281,8 +283,6 @@ export class DragDropService {
     if (els && els.length == 0) {
       local = null;
     }
-    console.log('LOCAL');
-    console.log(local);
     return local;
   }
   caixaDestino() {
@@ -732,14 +732,29 @@ export class DragDropService {
 
         // this.socketService.socketEmit();
         // this.socketService.socketOn();
-
-        this.socket.emit('batata', {teste:'teste'});
-        this.socket.on('moved', (data) => console.log(data));
+        this.socket.emit('batata', {
+          idProject: this.idProjeto
+        });
+        // this.socket.on('moved', (data) => console.log(data));
         console.log('chamou');
 
       }, error => {
         console.log(error);
       });
+  }
+  onInitSocket() {
+    this.socket.on('moved', (data) => {
+      if(data.idProject === this.idProjeto) {
+        console.log('Pesquisa dnv');
+        this.projects.searchBlocks(this.idProjeto)
+          .subscribe((res) => {
+            console.log(res);
+            this.blocks = res;
+          }, error => {
+            console.log(error);
+          })
+      }
+    });
   }
 
 

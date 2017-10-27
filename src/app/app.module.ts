@@ -35,7 +35,7 @@ import {MenuInfoUserModule} from './components/menu-info-user/menu-info-user.mod
 import { MenuInfoUserDirective } from './components/menu-info-user/menu-info-user.directive';
 import { ArrowBackComponent } from './components/arrow-back/arrow-back.component';
 import {ArrowBackModule} from './components/arrow-back/arrow-back.module';
-import { SocketService } from './Services/socket.service';
+// import { SocketService } from './Services/socket.service';
 import { SocketIoModule, SocketIoConfig} from "ng-socket-io";
 
 const config: SocketIoConfig = {url: '192.168.52.75:3000', options: {}};

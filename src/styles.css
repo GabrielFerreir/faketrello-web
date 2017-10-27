@@ -57,8 +57,8 @@ a {
 }
 .textFields:hover ~ .border  { background-color: rgba(0,0,0, .42);}
 .labelText { cursor: text;}
-.textFields:focus ~ .border {background-color: #2979ff;}
-.textFields:focus ~ .labelText {font-size: 12px;top: -8px;color: #304ffe;}
+.textFields:focus ~ .border {background-color: #546E7A;}
+.textFields:focus ~ .labelText {font-size: 12px;top: -8px;color: #546E7A;}
 .textFieldsPreenchido ~ .labelText {  /*color: #304ffe;*/font-size: 12px;  top: -8px;}
 .defaultButton {height: 36px;padding-left: 16px;padding-right: 16px;border-radius: 2px;font-family: 'Roboto';font-size: 16px;background-color: #2196F3;border: 0;color: #FFF;cursor: pointer;transition: all 375ms cubic-bezier(0.4, 0.0, 0.2, 1);
 }
@@ -73,7 +73,7 @@ a {
   border-radius: 2px;
   font-family: 'Roboto';
   font-size: 13px;
-  background-color: #03A9F4;
+  background-color: #607D8B;
   border: 0;
   color: #FFF;
   cursor: pointer;
@@ -81,7 +81,7 @@ a {
   outline: none;
 }
 .denseButton:hover {
-  background-color: #0288D1;
+  background-color: #546E7A;
 }
 .denseButton:active {
   box-shadow: 0 0 4px   rgba(0,0,0,0.14),
