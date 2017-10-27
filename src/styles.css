@@ -73,7 +73,7 @@ a {
   border-radius: 2px;
   font-family: 'Roboto';
   font-size: 13px;
-  background-color: #607D8B;
+  background-color: #0097A7;
   border: 0;
   color: #FFF;
   cursor: pointer;
@@ -81,7 +81,7 @@ a {
   outline: none;
 }
 .denseButton:hover {
-  background-color: #546E7A;
+  background-color: #00838F;
 }
 .denseButton:active {
   box-shadow: 0 0 4px   rgba(0,0,0,0.14),

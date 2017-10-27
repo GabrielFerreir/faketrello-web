@@ -4,16 +4,16 @@
   position: fixed;
   top: 0;
   left: 0;
-  /*background-color: rgba(255,255,255,0.42);*/
-  /*box-shadow: 0px 0px 4px rgba(0,0,0,.14),*/
-              /*0px 3px 4px rgba(0,0,0,.12),*/
-              /*0px 1px 5px rgba(0,0,0,.20);*/
+  background-color: #006064;
+  box-shadow: 0px 0px 4px rgba(0,0,0,.14),
+              0px 3px 4px rgba(0,0,0,.12),
+              0px 1px 5px rgba(0,0,0,.20);
   /*text-shadow: 1px 1px rgba(0,0,0,.14);*/
   color: #FAFAFA;
 
 }
 .cadastrese {
-  float:right; margin-top: 12px; margin-right: 15px; background-color: #607D8B; color: #FAFAFA; line-height: 32px;
+  float:right; margin-top: 12px; margin-right: 15px; background-color: #0097A7; color: #FAFAFA; line-height: 32px;
 }
 .login {
   float:right; margin-top: 12px; margin-right: 15px; background-color: transparent; color: #FAFAFA; line-height: 32px;
@@ -21,11 +21,13 @@
 .meio1 {
   width: 100%;
   height: 100vh;
-  background-color: #03A9F4;
-  background-image: url("./../../assets/pexels.jpg");
+  background-color: #0097A7;
+  /*background-image: url("./../../assets/pexels.jpg");*/
   background-size: 100% 100%;
   text-align: center;
 }
+h1 { font-size: 42px; margin: 40px 0 16px 0;}
+
 @media screen and (max-width: 1440px) {
   .meio1 {
     background-size: 1642px 1088px;
@@ -44,19 +46,18 @@
 
 }
 .meio1 .sub {
-  min-width: 300px;
-  max-width: 800px;
-  width: 70%;
+
   float: left;
   margin-top: 70px;
-  color: #212121;
+  color: #EEEEEE;
   font-family: 'Roboto';
-  padding: 20px;
+  padding: 50px 20px;
   font-size:23px;
   cursor: default;
   /*background-color: rgba(0,0,0,0.12);*/
 }
-h1 { font-size: 32px; margin-bottom: 16px;}
+h1 { font-size: 58px; margin-bottom: 16px;}
+/*p { max-width: 900px; text-align: center}*/
 .divisoria {
   width: 100%;
   height: 50vh;
