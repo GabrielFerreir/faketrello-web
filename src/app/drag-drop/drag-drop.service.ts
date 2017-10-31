@@ -369,9 +369,13 @@ export class DragDropService {
     drag.scrollBy(drag.scrollWidth - drag.getBoundingClientRect().width, 0);
   }
   offAddBloco(event) {
-    if(event.target.className != 'addBlocoInfo' && event.target.parentNode.className != 'addBlocoInfo' && event.target.parentNode.parentNode.className != 'addBlocoInfo') {
+    if(event == null) {
       this.situacaoAddBloco = false;
-    }
+      return
+    }else if(event.target.className != 'addBlocoInfo' && event.target.parentNode.className != 'addBlocoInfo' && event.target.parentNode.parentNode.className != 'addBlocoInfo') {
+        this.situacaoAddBloco = false;
+      }
+
   }
   addBloco() {
     const url = 'http://' + this.core.ipDaApi + '/blocks/' + this.idProjeto;
@@ -755,6 +759,30 @@ export class DragDropService {
           })
       }
     });
+  }
+  delTask() {
+    var url = 'http://' + this.core.ipDaApi + '/blocks/task/' + this.idTask;
+
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+
+    return this.http.delete(url,{headers: headers})
+      .map(res => res.json())
+      .subscribe((res) => {
+        console.log(res);
+        this.projects.searchBlocks(this.idProjeto)
+          .subscribe((res) => {
+            console.log(res);
+            this.blocks = res;
+            this.offOptionsTasks();
+          }, error => {
+            console.log(error);
+          });
+
+      }, error => {
+        console.log(error);
+      });
   }
 
 

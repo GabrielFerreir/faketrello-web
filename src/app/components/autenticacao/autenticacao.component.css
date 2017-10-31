@@ -1,17 +1,27 @@
 aside {
-  height: 20px;
   padding: 5px;
   width: calc(100vw - 10px);
-  background-color: #03A9F4;
+  background-color: #212121;
   line-height: 20px;
   display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
   position: relative;
   user-select: none;
   cursor: pointer;
   color: #f4f4f4;
 }
-aside section { width: 100%; text-align: center;}
-aside .fecha { width: 20px; height: 20px; text-align: center; line-height: 20px; border-radius: 50%; font-size: 14px; position: absolute; right: 30px;}
+aside section {width: calc(100% - 50px); text-align: center;}
+aside section span:nth-of-type(2) {
+  text-decoration: underline;
+}
+aside .fecha { width: 20px; height: 20px; text-align: center; line-height: 20px; border-radius: 50%; font-size: 18px; position: absolute; right: 30px;}
 aside .fecha:hover {
   background-color: rgba(255,255,255,0.23);
+}
+@media screen and (max-width: 700px) {
+  aside {
+    font-size: 14px;
+  }
 }
