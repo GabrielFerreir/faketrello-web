@@ -13,7 +13,7 @@
         </div>
       </header>
       <section class="body">
-        <article class="elemento" *ngFor="let elementos of dragDropService.blocks[i].tasks" data-id="{{elementos.id_task}}">
+        <article class="elemento" *ngFor="let elementos of dragDropService.blocks[i].tasks; let e = index" data-id="{{elementos.id_task}}">
           <span class="nome">
             {{ elementos.name_task }}
           </span>
@@ -27,6 +27,18 @@
               <span class="anexos" *ngIf="elementos.attachments">
                 {{ elementos.attachments }}
               </span>
+          </section>
+          <!--<section class="infoMembers">-->
+          <section class="infoMembers" >
+            <!--profile_img: "/imgsUser/picture_25.png"-->
+            <section class="img more" *ngIf="dragDropService.blocks[i].tasks[e].teamtask.length > 3"></section>
+            <section class="membro" *ngFor="let membrosDaTarefa of dragDropService.blocks[i].tasks[e].teamtask">
+              <section class="img" *ngIf="membrosDaTarefa.profile_img == '/imgsUser/default.png'">{{ membrosDaTarefa.name.charAt(0) | uppercase }}</section>
+              <section *ngIf="membrosDaTarefa.profile_img != '/imgsUser/default.png'" [style.background-image]="'url('+ 'http://' + core.ipDaApi + membrosDaTarefa.profile_img +')'" class="img"></section>
+            </section>
+
+            <!--<section class="img" *ngIf="elementos.profile_img == '/imgsUser/default.png'">{{ elementos.name.charAt(0) | uppercase }}</section>-->
+            <!--<section *ngIf="elementos.profile_img != '/imgsUser/default.png'" [style.background-image]="'url('+ 'http://' + core.ipDaApi + elementos.profile_img +')'" class="img"></section>-->
           </section>
 
           <div class="editElemento" (click)="dragDropService.onOptionsTasks(elementos.id_task)">
