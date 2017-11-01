@@ -85,8 +85,8 @@ exports.deleteproject = function (req, res) {
 
   db.any('SELECT * FROM deactivateProject($1,$2);', [id, req.dataToken.id])
     .then(data => {
-      if (!data) {
-        res.status(404).json({error: 'Projeto nao encontrado no banco'})
+      if (!data || !data[0].deactivateproject) {
+        res.status(401).json({error: 'Nao tem permissao'})
       } else {
         res.status(200).json({result: 'Projeto deletado'})
       }

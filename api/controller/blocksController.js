@@ -2,16 +2,12 @@ let db = require('../db-config.js')
 let fs = require('fs')
 let app = require('express')
 let md5 = require('md5')
-let socket = require('socket.io')
-let http = require('http')
-const server = http.Server(app)
-server.listen(3000)
-const io = socket(server)
+let socket = require('./socket.js')
 
 //Adiciona quadros nos projetos
 exports.newblock = function (req, res) {
   let idProject = req.params.id
-  db.any('SELECT * FROM newblocks($1,$2)', [req.body.nameBlock, idProject])
+  db.any('SELECT * FROM newblocks($1,$2,$3)', [req.body.nameBlock, idProject, req.dataToken.id])
     .then(data => {
       if (data) {
         res.status(200).json({result: 'Quadro criado'})
@@ -23,7 +19,7 @@ exports.newblock = function (req, res) {
 
 //Muda o nome do bloco
 exports.changeBlockName = function (req, res) {
-  db.any('SELECT * FROM changeBlockName($1,$2)', [req.body.newName, req.body.idBlock])
+  db.any('SELECT * FROM changeBlockName($1,$2,$3)', [req.body.newName, req.params.id, req.dataToken.id])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Nao foi possivel encontrar o bloco desejado'})
@@ -47,7 +43,7 @@ exports.seachblocks = function (req, res) {
 
 //Deleta um bloco
 exports.deleteBlock = function (req, res) {
-  db.any('SELECT * FROM deleteBlock($1)', [req.params.id])
+  db.any('SELECT * FROM deleteBlock($1,$2)', [req.params.id, req.dataToken.id])
     .then(data => {
       if (data) {
         res.status(200).json({result: 'Bloco deletado!'})
@@ -61,32 +57,18 @@ exports.deleteBlock = function (req, res) {
 exports.newtask = async function (req, res) {
   req.idBlock = req.params.id
   await lastPosition(req, res)
-  if (req.body.nameTask.length <= 20) {
+  if (req.body.nameTask && req.body.nameTask.length <= 100) {
 
-    db.any('SELECT * FROM newtasks($1,$2,$3,$4,$5)', [req.body.nameTask, req.body.finalDate, req.body.description, req.params.id, req.lastPosition])
+    db.any('SELECT * FROM newtasks($1,$2,$3,$4,$5,$6)', [req.body.nameTask, req.body.finalDate, req.body.description, req.params.id, req.lastPosition, req.dataToken.id])
       .then(data => {
         if (!data || !data[0]) {
           res.status(404).json({error: 'Nao foi encontrado esse bloco no projeto'})
         } else {
-          if (req.body.attachment) {
-            req.idTask = data[0].idtask
-            let path = buildAttachment(req, res)
-
-            db.any('SELECT * FROM buildAttachment($1,$2,$3,$4)', [req.body.fileName, req.body.size, req.idTask, path])
-              .then(data => {
-                if (!data) {
-                  res.status(404).json({error: 'Erro ao inserir o anexo porque nao encontrou tarefa criada'})
-                } else {
-                  res.status(200).json({result: 'Tafera criada'})
-                }
-              })
-          } else {
-            res.status(200).json({result: 'Tafera criada'})
-          }
+          res.status(200).json({result: 'Tafera criada'})
         }
       })
   } else {
-    res.json({code: 406, message: 'Nome da tarefa muito longo'})
+    res.json({code: 406, message: 'Nome da tarefa muito longo ou muito curto'})
   }
 }
 
@@ -104,21 +86,11 @@ exports.changeTask = function (req, res) {
 
 //Move a tarefa de bloco
 exports.moveTask = async function (req, res) {
-  await db.any('SELECT * FROM moveTask($1,$2)', [req.params.id, req.body.idBlock])
+  await db.any('SELECT * FROM moveTask($1,$2,$3)', [req.params.id, req.body.idBlock, req.dataToken.id])
     .then(data => {
       if (!data) {
         res.status(400).json({error: 'Erro ao mover tarefa'})
       } else {
-
-        io.on('connection', function (socket) {
-          console.log('entrou connection')
-          socket.on('batata', function () {
-            socket.broadcast.emit('moved', {
-              greeting: 'list updated'
-            })
-          })
-
-        })
 
         exports.updatePositions(req, res)
       }
@@ -139,7 +111,7 @@ exports.showContentTask = function (req, res) {
 
 //Deleta a tarefa
 exports.deleteTask = function (req, res) {
-  db.any('SELECT * FROM deleteTask($1)', [req.params.id])
+  db.any('SELECT * FROM deleteTask($1,$2)', [req.params.id, req.dataToken.id])
     .then(data => {
       if (!data || !data[0].deletetask) {
         res.status(404).json({error: 'Tarefa nao encontrada'})
@@ -153,7 +125,7 @@ exports.deleteTask = function (req, res) {
 exports.newAttachment = async function (req, res) {
   req.idTask = req.params.id
   req.fileName = req.body.fileName
-  let path = await exports.buildAttachment(req, res)
+  let path = await buildAttachment(req, res)
 
   db.any('SELECT * FROM buildAttachment($1,$2,$3,$4)', [req.body.fileName, req.body.size, req.params.id, path])
     .then(data => {
@@ -205,7 +177,7 @@ function buildAttachment (req) {
 //Cria as checklists no banco
 exports.newChecklist = function (req, res) {
   let json = req.body.jsonChecklists
-  db.any('SELECT * FROM buildChecklist($1);', [JSON.stringify(json)])
+  db.any('SELECT * FROM buildChecklist($1,$2);', [JSON.stringify(json), req.dataToken.id])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Tarefa inexistente'})
@@ -289,24 +261,16 @@ exports.deleteComment = function (req, res) {
 
 //Deleta o attachment
 exports.deleteAttachment = function (req, res) {
-  db.any('SELECT * FROM getPathAttachment($1)', [req.params.id])
+  db.any('SELECT * FROM deleteAttachment($1)', [req.params.id])
     .then(data => {
       if (!data || !data[0]) {
-        res.status(404).json({error: ' Tarefa inexistente'})
+        res.status(404).json({error: 'Erro ao remover'})
       } else {
         fs.unlink('./files' + data[0].path, function (error) {
           if (error) {
             console.log(error)
-          }
-          else {
-            db.any('SELECT * FROM removePathAttachment($1)', [req.params.id])
-              .then(data => {
-                if (!data) {
-                  res.status(404).json({error: ' Tarefa inexistente'})
-                } else {
-                  res.status(200).json({result: 'Anexo removido'})
-                }
-              })
+          } else {
+            res.status(200).json({result: 'Anexo removido'})
           }
         })
       }
