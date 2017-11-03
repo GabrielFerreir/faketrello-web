@@ -39,6 +39,7 @@ export class AlterarProjectsComponent implements OnInit {
     this.dadossDeUsuario.recuperarDadosDeUsuario()
       .then(res => {
         this.idUser = res.json();
+        console.log(this.idUser)
         this.idUser = this.idUser.id_user;
       })
       .catch();

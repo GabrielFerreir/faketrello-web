@@ -2,7 +2,8 @@
   <div id="dragDrop">
 
     <section class="caixa" *ngFor="let caixas of dragDropService.blocks; let i = index" data-id="{{caixas.idblock}}">
-      <header>{{ caixas.nameblock }}
+      <header>
+        <input type="text" class="nome" [value]="caixas.nameblock" (blur)="dragDropService.changeBlock($event)">
         <div class="more_horiz" (click)="dragDropService.ativaMenuBloco(caixas.idblock)"></div>
         <div [hidden]="!dragDropService.menuBloco || caixas.idblock != dragDropService.referenciaMenuBloco "
              class="menuBloco">
@@ -74,12 +75,12 @@
       <section [hidden]="!dragDropService.situacaoAddBloco" class="addBlocoInfo">
         <div style='position: relative;'>
           <input type='text' class='textFields' [(ngModel)]="dragDropService.nomeAddBloco" #nomeBloco
-                 (keyup.enter)="addBloco()">
+                 (keyup.enter)="dragDropService.addBloco()">
           <div class='border'></div>
         </div>
 
         <div style="float: left; width: 100%; margin-top: 45px;">
-          <img class="float-right" (click)="addBloco()" src="../../assets/done.svg">
+          <img class="float-right" (click)="dragDropService.addBloco()()" src="../../assets/done.svg">
           <img class="float-right" (click)="dragDropService.offAddBloco(null)" src="../../assets/clear.svg">
         </div>
 

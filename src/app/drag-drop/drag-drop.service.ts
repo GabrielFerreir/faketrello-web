@@ -1,12 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import {CoreService} from '../Services/core.service';
-import {DadosDeUsuarioService} from "../Services/dados-de-usuario.service";
-import * as socketIo from 'socket.io-client';
-// import { SocketService } from '../Services/socket.service';
-import { Socket } from 'ng-socket-io';
-import {ProjectsServiceService} from "../projects/projects-service.service";
-
+import {DadosDeUsuarioService} from '../Services/dados-de-usuario.service';
+import {Socket} from 'ng-socket-io';
+import {ProjectsServiceService} from '../projects/projects-service.service';
 
 
 @Injectable()
@@ -16,7 +13,9 @@ export class DragDropService {
               private usuarioService: DadosDeUsuarioService,
               private http: Http,
               private socket: Socket,
-              private projects: ProjectsServiceService) { }
+              private projects: ProjectsServiceService) {
+  }
+
   container;
   idProjeto: number;
   idBlock: number;
@@ -99,14 +98,16 @@ export class DragDropService {
       /* TOUCH */
     }, 100);
   }
+
   setTamanhos() {
     this.larguraDaCaixa = document.querySelectorAll('.caixa')[0].clientWidth;
     this.larguraDaCaixa = this.larguraDaCaixa - (this.larguraDaCaixa * 0.1);
 
     this.tamanhoDaTela = document.querySelector('#dragDrop').clientWidth;
   }
+
   getPosInicial(event) {
-    if(!this.isMobile) {
+    if (!this.isMobile) {
       this.posInicialX = event.clientX + this.getScroll();
       this.posInicialY = event.clientY;
     }
@@ -115,10 +116,10 @@ export class DragDropService {
       this.posInicialY = event.changedTouches['0'].clientY;
     }
 
-    if(event.target.className == 'elemento') {
+    if (event.target.className == 'elemento') {
       this.bloco = event.target;
       this.caixa = event.target.parentNode;
-    } else if(event.target.parentNode.className == 'elemento') {
+    } else if (event.target.parentNode.className == 'elemento') {
       this.bloco = event.target.parentNode;
       this.caixa = event.target.parentNode.parentNode;
       console.log(this.bloco)
@@ -129,7 +130,7 @@ export class DragDropService {
     // console.log(this.bloco);
 
 
-    if(this.bloco) {
+    if (this.bloco) {
       this.posicaoBlocoX = this.bloco.getBoundingClientRect().left;
       this.posicaoBlocoY = this.bloco.getBoundingClientRect().top;
       this.sombra = document.createElement('article');
@@ -140,11 +141,12 @@ export class DragDropService {
     }
 
   }
+
   getMouseMove(event) {
     if (this.posInicialX) {
       event.preventDefault();
       this.fazScroll(event);
-      if(!this.isMobile) {
+      if (!this.isMobile) {
         this.diferencaX = (event.clientX + this.getScroll()) - this.posInicialX;
         this.diferencaY = (event.clientY) - this.posInicialY;
       }
@@ -172,6 +174,7 @@ export class DragDropService {
       this.mouseStart = true;
     }
   }
+
   getPosFinal(event) {
     if (this.mouseStart) {
       this.caixaDestino().removeChild(this.sombra);
@@ -186,12 +189,12 @@ export class DragDropService {
       const previous = [];
       const current = [];
 
-      for(let i = 0; i < this.caixa.querySelectorAll('.elemento').length; i++) {
+      for (let i = 0; i < this.caixa.querySelectorAll('.elemento').length; i++) {
         previous.push(parseInt(this.caixa.querySelectorAll('.elemento')[i].id));
 
       }
       console.log('-------------');
-      for(let i = 0; i < this.caixaDestino().querySelectorAll('.elemento').length; i++) {
+      for (let i = 0; i < this.caixaDestino().querySelectorAll('.elemento').length; i++) {
         current.push(parseInt(this.caixaDestino().querySelectorAll('.elemento')[i].id));
       }
       console.log(previous);
@@ -208,16 +211,18 @@ export class DragDropService {
     this.reset();
     this.recriaListener();
   }
+
   getScroll() {
     let scroll = document.querySelector('#dragDrop').scrollLeft;
     return scroll;
   }
+
   fazScroll(mouse) {
     clearInterval(this.intervalNext);
     clearInterval(this.intervalPrev);
     if (this.posInicialX) {
       this.areaDeScroll = this.tamanhoDaTela * 0.2;
-      if(!this.isMobile) {
+      if (!this.isMobile) {
         if (mouse.clientX > this.tamanhoDaTela - this.areaDeScroll) {
           document.querySelector('#dragDrop').scrollBy(5, 0);
           clearInterval(this.intervalPrev);
@@ -238,8 +243,8 @@ export class DragDropService {
           }, 35);
         }
       }
-      if(this.isMobile) {
-        if(mouse.changedTouches['0'].clientX > this.tamanhoDaTela - this.areaDeScroll) {
+      if (this.isMobile) {
+        if (mouse.changedTouches['0'].clientX > this.tamanhoDaTela - this.areaDeScroll) {
           document.querySelector('#dragDrop').scrollBy(5, 0);
           clearInterval(this.intervalPrev);
           this.intervalNext = setInterval(() => {
@@ -249,7 +254,7 @@ export class DragDropService {
             }
           }, 35);
         }
-        else if(this.areaDeScroll > mouse.changedTouches['0'].clientX) {
+        else if (this.areaDeScroll > mouse.changedTouches['0'].clientX) {
           document.querySelector('#dragDrop').scrollBy(-5, 0);
           clearInterval(this.intervalNext);
           this.intervalPrev = setInterval(() => {
@@ -262,6 +267,7 @@ export class DragDropService {
       }
     }
   }
+
   pegaLocalNaOrdem(event) {
     let els = this.caixaDestino().querySelectorAll('.elemento');
     // console.log(els);
@@ -270,7 +276,7 @@ export class DragDropService {
     for (let i = 0; i < els.length; i++) {
       const PosicaoY = els[i].getBoundingClientRect().top;
       this.posFinalY = event.clientY - els[i].offsetHeight;
-      if(this.isMobile) {
+      if (this.isMobile) {
         this.posFinalY = event.changedTouches['0'].clientY - els[i].offsetHeight;
       }
       if (this.posFinalY < PosicaoY && this.bloco !== els[i]) {
@@ -285,6 +291,7 @@ export class DragDropService {
     }
     return local;
   }
+
   caixaDestino() {
     if (this.diferencaX && this.diferencaX > this.larguraDaCaixa) {
       const quantidadeDeIrmaos = Math.floor(this.diferencaX / this.larguraDaCaixa);
@@ -305,6 +312,7 @@ export class DragDropService {
     }
     return this.cxDestino;
   }
+
   reset() {
     this.posInicialX = 0;
     this.posInicialY = 0;
@@ -321,16 +329,17 @@ export class DragDropService {
     this.sombra = null;
     this.mouseStart = false;
   }
+
   recriaListener() {
     const elemento = document.querySelectorAll('.elemento');
     for (let i = 0; i < elemento.length; i++) {
-      if(!this.isMobile) {
+      if (!this.isMobile) {
         elemento[i].addEventListener('mousedown', (e) => {
           this.getPosInicial(e);
         });
       }
       /* TOUCH */
-      if(this.isMobile) {
+      if (this.isMobile) {
         elemento[i].addEventListener('touchstart', (e) => {
           this.getPosInicial(e);
         });
@@ -338,22 +347,30 @@ export class DragDropService {
       /* FIM TOUCH */
     }
   }
+
   teste() {
     // alert('A');
     console.log('A')
   }
+
   onAddElemento(event, idBlock) {
     this.addElemento = true;
     this.idBlock = idBlock;
     this.addInfoEl = event.target.parentNode;
-    console.log(event.target.parentNode);
+    setTimeout(() => {
+      event.target.parentNode.querySelector('input').focus();
+    }, 50)
+
+    console.log(event.target.parentNode.querySelector('input'));
   }
+
   offPopupAddElementos(event) {
-    if(this.addInfoEl != event.target.parentNode.parentNode.parentNode) {
+    if (this.addInfoEl != event.target.parentNode.parentNode.parentNode) {
       this.addElemento = false;
       this.idBlock = null;
     }
   }
+
   onAddBloco(event) {
     this.situacaoAddBloco = true;
 
@@ -368,15 +385,17 @@ export class DragDropService {
     // console.log(drag.scrollWidth - drag.getBoundingClientRect().width);
     drag.scrollBy(drag.scrollWidth - drag.getBoundingClientRect().width, 0);
   }
+
   offAddBloco(event) {
-    if(event == null) {
+    if (event == null) {
       this.situacaoAddBloco = false;
       return
-    }else if(event.target.className != 'addBlocoInfo' && event.target.parentNode.className != 'addBlocoInfo' && event.target.parentNode.parentNode.className != 'addBlocoInfo') {
-        this.situacaoAddBloco = false;
-      }
+    } else if (event.target.className != 'addBlocoInfo' && event.target.parentNode.className != 'addBlocoInfo' && event.target.parentNode.parentNode.className != 'addBlocoInfo') {
+      this.situacaoAddBloco = false;
+    }
 
   }
+
   addBloco() {
     const url = 'http://' + this.core.ipDaApi + '/blocks/' + this.idProjeto;
 
@@ -392,11 +411,55 @@ export class DragDropService {
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
 
     return this.http.post(url, params, {headers: headers})
-      .map(res => res.json());
+      .map(res => res.json())
+      .subscribe((res) => {
+          console.log(res);
+          // BUSCA OS BLOCOS NOVAMENTE
+          this.projects.searchBlocks(this.idProjeto)
+            .subscribe((res) => {
+              console.log(res);
+              this.blocks = res;
+              this.situacaoAddBloco = false;
+              this.nomeAddBloco = '';
+              this.socket.emit('changeTask', {
+                idProject: this.idProjeto
+              });
+            }, error => {
+              console.error(error);
+            });
+      }, error => {
+        console.log(error);
+      });
   }
+  changeBlock(event) {
+    const idBlock = event.target.parentNode.parentNode.id;
+    const name = event.target.value;
+    var url = 'http://' + this.core.ipDaApi + '/blocks/' + idBlock;
+    var json = JSON.stringify(
+      {
+        newName: name,
+      }
+    );
+    console.log(json);
+
+    const params = json;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+    return this.http.put(url, params, {headers: headers})
+      .subscribe((res) => {
+        console.log(res);
+        this.socket.emit('changeTask', {
+          idProject: this.idProjeto
+        });
+      }, error => {
+        console.log(error);
+      });
+  }
+
   addTarefa() {
     var url = 'http://' + this.core.ipDaApi + '/blocks/task/' + this.idBlock;
-    if(this.dataTarefa) {
+    if (this.dataTarefa) {
       let date = this.dataTarefa.split('/');
       date = date[2] + '-' + date[1] + '-' + date[0];
       var json = JSON.stringify(
@@ -421,12 +484,14 @@ export class DragDropService {
     return this.http.post(url, params, {headers: headers});
 
   }
+
   ativaMenuBloco(referencia) {
     this.menuBloco = true;
     this.referenciaMenuBloco = referencia;
   }
+
   desativaMenuBloco(event) {
-    if(event.target.className != 'menuBloco' && event.target.parentNode.parentNode.className != 'menuBloco') {
+    if (event.target.className != 'menuBloco' && event.target.parentNode.parentNode.className != 'menuBloco') {
       this.menuBloco = false;
       this.referenciaMenuBloco = '';
     } else {
@@ -436,6 +501,7 @@ export class DragDropService {
       }, 50);
     }
   }
+
   deletarBloco(idblock) {
     var url = 'http://' + this.core.ipDaApi + '/blocks/' + idblock;
 
@@ -443,24 +509,42 @@ export class DragDropService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
 
-    return this.http.delete(url,{headers: headers})
+    return this.http.delete(url, {headers: headers})
       .map(res => res.json())
+      .subscribe((res) => {
+        console.log(res);
+        this.projects.searchBlocks(this.idProjeto)
+          .subscribe((res) => {
+            console.log(res);
+            this.blocks = res;
+            this.socket.emit('changeTask', {
+              idProject: this.idProjeto
+            });
+          }, error => {
+            console.log(error);
+          });
+      }, error => {
+        console.log(error);
+      });
   }
+
   offOptionsTasks() {
     this.optionsTasks = false;
   }
+
   onOptionsTasks(idTasks) {
     this.optionsTasks = true;
     this.idTask = idTasks;
     console.log(idTasks);
     this.getInfoOptionsTasks(idTasks)
       .subscribe((res) => {
-      this.infoOptionTask = res;
+        this.infoOptionTask = res;
         console.log(res);
       }, error => {
         console.log(error);
       });
   }
+
   getInfoOptionsTasks(idTasks) {
     var url = 'http://' + this.core.ipDaApi + '/blocks/task/' + idTasks;
 
@@ -471,14 +555,15 @@ export class DragDropService {
     return this.http.get(url, {headers: headers})
       .map(res => res.json())
   }
+
   newCommentTask() {
     var url = 'http://' + this.core.ipDaApi + '/task/comment/';
-      var json = JSON.stringify(
-        {
-          idTask: this.idTask,
-          comment: this.addComment
-        }
-      );
+    var json = JSON.stringify(
+      {
+        idTask: this.idTask,
+        comment: this.addComment
+      }
+    );
 
     const params = json;
     const headers = new Headers();
@@ -489,6 +574,16 @@ export class DragDropService {
         this.getInfoOptionsTasks(this.idTask)
           .subscribe((res) => {
             this.infoOptionTask = res;
+            this.projects.searchBlocks(this.idProjeto)
+              .subscribe((res) => {
+                console.log(res);
+                this.blocks = res;
+              }, error => {
+                console.log(error);
+              })
+            this.socket.emit('changeTask', {
+              idProject: this.idProjeto
+            });
           }, error => {
           });
       }, error => {
@@ -497,6 +592,7 @@ export class DragDropService {
         this.addComment = '';
       });
   }
+
   delCommentTask(idComment) {
     var url = 'http://' + this.core.ipDaApi + '/task/comment/' + idComment;
 
@@ -504,7 +600,7 @@ export class DragDropService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
 
-    return this.http.delete(url,{headers: headers})
+    return this.http.delete(url, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
         console.log(res);
@@ -512,12 +608,23 @@ export class DragDropService {
         this.getInfoOptionsTasks(this.idTask)
           .subscribe((res) => {
             this.infoOptionTask = res;
+            this.projects.searchBlocks(this.idProjeto)
+              .subscribe((res) => {
+                console.log(res);
+                this.blocks = res;
+              }, error => {
+                console.log(error);
+              })
+            this.socket.emit('changeTask', {
+              idProject: this.idProjeto
+            });
           }, error => {
           });
       }, error => {
         console.log(error);
       });
   }
+
   changeCommentTask(comment) {
     var url = 'http://' + this.core.ipDaApi + '/task/comment/' + this.idTask;
     var json = JSON.stringify(
@@ -534,44 +641,60 @@ export class DragDropService {
     return this.http.put(url, params, {headers: headers})
       .subscribe((res) => {
         console.log(res);
+        this.socket.emit('changeTask', {
+          idProject: this.idProjeto
+        });
       }, error => {
         console.log(error);
       });
   }
-  changeTask(nameTask, finalDate, description) {
-      var url = 'http://' + this.core.ipDaApi + '/blocks/task/' + this.idTask;
-      var json = JSON.stringify(
-        {
-          nameTask: nameTask,
-          finalDate: finalDate,
-          description: description
-        }
-      );
-      console.log(json);
 
-      const params = json;
-      const headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
-      return this.http.put(url, params, {headers: headers})
-        .subscribe((res) => {
+  changeTask(nameTask, finalDate, description) {
+    var url = 'http://' + this.core.ipDaApi + '/blocks/task/' + this.idTask;
+    var json = JSON.stringify(
+      {
+        nameTask: nameTask,
+        finalDate: finalDate,
+        description: description
+      }
+    );
+    console.log(json);
+
+    const params = json;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+    return this.http.put(url, params, {headers: headers})
+      .subscribe((res) => {
         console.log(res);
-        }, error => {
-          console.log(error);
+        this.projects.searchBlocks(this.idProjeto)
+          .subscribe((res) => {
+            console.log(res);
+            this.blocks = res;
+          }, error => {
+            console.log(error);
+          })
+        this.socket.emit('changeTask', {
+          idProject: this.idProjeto
         });
+      }, error => {
+        console.log(error);
+      });
   }
+
   changeSituationCheckbox(idCheck) {
     var url = 'http://' + this.core.ipDaApi + '/task/checklistStatus/' + idCheck;
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
-    return this.http.put(url, null,{headers: headers})
+    return this.http.put(url, null, {headers: headers})
       .subscribe((res) => {
         console.log(res);
       }, error => {
         console.log(error);
       });
   }
+
   newChecklist(nome) {
     var url = 'http://' + this.core.ipDaApi + '/task/checklist/';
     var json = JSON.stringify(
@@ -594,15 +717,17 @@ export class DragDropService {
         console.log(res);
         this.getInfoOptionsTasks(this.idTask)
           .subscribe((res) => {
+          console.log(res);
             this.infoOptionTask = res;
           }, error => {
           }, () => {
             this.addNewChecklist = '';
           });
       }, error => {
-      console.log(error);
+        console.log(error);
       });
   }
+
   delChecklist(idCheck) {
     var url = 'http://' + this.core.ipDaApi + '/task/checklist/' + idCheck;
 
@@ -610,7 +735,7 @@ export class DragDropService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
 
-    return this.http.delete(url,{headers: headers})
+    return this.http.delete(url, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
         console.log(res);
@@ -624,6 +749,7 @@ export class DragDropService {
         console.log(error);
       });
   }
+
   changeChecklistTask(checklist) {
     var url = 'http://' + this.core.ipDaApi + '/task/checklistName/' + this.idTask;
     var json = JSON.stringify(
@@ -644,14 +770,15 @@ export class DragDropService {
         console.log(error);
       });
   }
+
   newAttachment(base64, fileName, size, fileType) {
     var url = 'http://' + this.core.ipDaApi + '/task/attachment/' + this.idTask;
     var json = JSON.stringify(
       {
-            file: base64,
-            fileName: fileName,
-            size: size,
-            fileType: fileType
+        file: base64,
+        fileName: fileName,
+        size: size,
+        fileType: fileType
       }
     );
     const params = json;
@@ -670,6 +797,7 @@ export class DragDropService {
         console.log(error);
       });
   }
+
   delMemberTask(idMemberTask) {
     var url = 'http://' + this.core.ipDaApi + '/task/team/' + idMemberTask;
 
@@ -677,25 +805,36 @@ export class DragDropService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
 
-    return this.http.delete(url,{headers: headers})
+    return this.http.delete(url, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
         console.log(res);
         this.getInfoOptionsTasks(this.idTask)
           .subscribe((res) => {
             this.infoOptionTask = res;
+            this.projects.searchBlocks(this.idProjeto)
+              .subscribe((res) => {
+                console.log(res);
+                this.blocks = res;
+              }, error => {
+                console.log(error);
+              })
+            this.socket.emit('changeTask', {
+              idProject: this.idProjeto
+            });
           }, error => {
           });
       }, error => {
         console.log(error);
       });
   }
+
   addMemberTask(idMember) {
     var url = 'http://' + this.core.ipDaApi + '/task/team/' + this.idTask;
     var json = JSON.stringify(
       {
-            idUser: idMember,
-          }
+        idUser: idMember,
+      }
     );
     const params = json;
     const headers = new Headers();
@@ -707,6 +846,16 @@ export class DragDropService {
         this.getInfoOptionsTasks(this.idTask)
           .subscribe((res) => {
             this.infoOptionTask = res;
+            this.projects.searchBlocks(this.idProjeto)
+              .subscribe((res) => {
+                console.log(res);
+                this.blocks = res;
+              }, error => {
+                console.log(error);
+              })
+            this.socket.emit('changeTask', {
+              idProject: this.idProjeto
+            });
           }, error => {
           }, () => {
             this.addNewChecklist = '';
@@ -715,6 +864,7 @@ export class DragDropService {
         console.log(error);
       });
   }
+
   changePositions(previous, current, idTask, idBlock) {
     var url = 'http://' + this.core.ipDaApi + '/task/move/' + idTask;
     var json = JSON.stringify(
@@ -733,22 +883,17 @@ export class DragDropService {
     return this.http.put(url, params, {headers: headers})
       .subscribe((res) => {
         console.log(res);
-
-        // this.socketService.socketEmit();
-        // this.socketService.socketOn();
-        this.socket.emit('batata', {
+        this.socket.emit('changeTask', {
           idProject: this.idProjeto
         });
-        // this.socket.on('moved', (data) => console.log(data));
-        console.log('chamou');
-
       }, error => {
         console.log(error);
       });
   }
+
   onInitSocket() {
-    this.socket.on('moved', (data) => {
-      if(data.idProject === this.idProjeto) {
+    this.socket.on('updateTask', (data) => {
+      if (data.idProject === this.idProjeto) {
         console.log('Pesquisa dnv');
         this.projects.searchBlocks(this.idProjeto)
           .subscribe((res) => {
@@ -760,6 +905,7 @@ export class DragDropService {
       }
     });
   }
+
   delTask() {
     var url = 'http://' + this.core.ipDaApi + '/blocks/task/' + this.idTask;
 
@@ -767,7 +913,7 @@ export class DragDropService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
 
-    return this.http.delete(url,{headers: headers})
+    return this.http.delete(url, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
         console.log(res);
@@ -784,8 +930,6 @@ export class DragDropService {
         console.log(error);
       });
   }
-
-
 
 
 }

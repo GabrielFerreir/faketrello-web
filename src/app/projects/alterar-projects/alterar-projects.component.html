@@ -69,13 +69,13 @@
             <h1>{{ membro.name }}</h1>
             <h2 *ngIf="membro.permissions" >{{ membro.username + '(Administrador)' }}</h2>
             <h2 *ngIf="!membro.permissions">{{ membro.username + '(Membro)' }}</h2>
-            <div class="more"></div>
+            <div *ngIf="!projects?.project?.loggeduserpermission && membro.id_user == idUser" class="more"></div>
             <div class="opMoreOff">
-              <span *ngIf="membro.permissions && membro.id_user != idUser" (click)="projects.permissaoUserProject(id, membro.id_user)">Rebaixar Membro</span>
-              <span *ngIf="!membro.permissions && membro.id_user != idUser" (click)="projects.permissaoUserProject(id, membro.id_user)">Promover Membro</span>
+              <span *ngIf="membro.permissions && membro.id_user != idUser && projects?.project?.loggeduserpermission" (click)="projects.permissaoUserProject(id, membro.id_user)">Rebaixar Membro</span>
+              <span *ngIf="!membro.permissions && membro.id_user != idUser && projects?.project?.loggeduserpermission" (click)="projects.permissaoUserProject(id, membro.id_user)">Promover Membro</span>
 
               <span *ngIf="membro.id_user == idUser" (click)="projects.sairUserProject(id)">Sair</span>
-              <span *ngIf="membro.id_user != idUser" (click)="projects.delUserProject(id, membro.id_user)">Deletar Membro</span>
+              <span *ngIf="membro.id_user != idUser && projects?.project?.loggeduserpermission" (click)="projects.delUserProject(id, membro.id_user)">Deletar Membro</span>
             </div>
 
           </article>

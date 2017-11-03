@@ -6,12 +6,14 @@ import {DragDropService} from './drag-drop.service';
 import { FormsModule } from '@angular/forms';
 import { OptionsTasksComponent } from './options-tasks/options-tasks.component';
 import { PesquisaDeMembrosDoProjetoPipe } from './pesquisa-de-membros-do-projeto.pipe';
+import {ArrowBackModule} from "../components/arrow-back/arrow-back.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    MenuModule
+    MenuModule,
+    ArrowBackModule
   ],
   providers: [
     DragDropService

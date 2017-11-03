@@ -27,7 +27,8 @@
   float: left;
   background-color: #607D8B;
   text-transform: uppercase;
-  font-family: 'Roboto Medium';
+  font-family: "Roboto";
+  font-weight: 500;
   font-size: 14px;
   border-bottom: solid 2px #FFF;
   cursor: pointer;
@@ -250,7 +251,8 @@
   float: left;
   font-size: 16px;
   padding: 8px 0;
-  font-family: 'Roboto Medium';
+  font-family: "Roboto";
+  font-weight: 500;
   font-weight: normal;
   color: rgba(0,0,0, .54);
 }
@@ -317,7 +319,8 @@
 .membros .chipFocus h1 {
   color: rgba(0,0,0,.65);
   font-size: 16px;
-  font-family: 'Roboto Medium';
+  font-family: "Roboto";
+  font-weight: 500;
 }
 .membros .chipFocus h2 {
   font-size: 14px;
@@ -372,10 +375,17 @@
   background-color: #607D8B;
 }
 
+app-arrow-back {
+  display: none;
+}
+
 /* TESTE */
 
 
 @media screen and (max-width: 480px) {
+  app-arrow-back {
+    display: block;
+  }
   .container {
     position: fixed;
     top: 0;

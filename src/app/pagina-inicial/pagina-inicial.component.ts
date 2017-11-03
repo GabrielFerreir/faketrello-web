@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PopupConfirmacaoService } from '../components/popup-confirmacao/popup-confirmacao.service';
 import {ProjectsServiceService} from '../projects/projects-service.service';
-import {CoreService} from "../Services/core.service";
+import {CoreService} from '../Services/core.service';
 
 
 @Component({
