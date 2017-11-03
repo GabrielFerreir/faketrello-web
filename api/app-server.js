@@ -17,7 +17,7 @@
     if (req._parsedUrl.pathname === '/userinfo' || req._parsedUrl.pathname === '/login' || req._parsedUrl.pathname === '/newuser'
       || req.originalUrl.includes('/imgsProjects/') || req.originalUrl.includes('/imgsUser/')
       || req.originalUrl.includes('/assets/') || req._parsedUrl.pathname === '/emailExists/'
-      || req.originalUrl.includes('/attachment/')) {
+      || req.originalUrl.includes('/attachment/') || req.originalUrl.includes('/newpass')) {
       next()
     } else {
       //console.log(req)
@@ -74,7 +74,7 @@
 
   //Parte de blocos
   app.post('/blocks/:id', blocksController.newblock)
-  app.put('/blocks', blocksController.changeBlockName)
+  app.put('/blocks/:id', blocksController.changeBlockName)
   app.delete('/blocks/:id', blocksController.deleteBlock)
   app.get('/project/blocks/:id', blocksController.seachblocks)
 

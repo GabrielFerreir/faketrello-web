@@ -133,17 +133,7 @@
 
   //Altera senha do usuario
   exports.changepass = function (req, res) {
-    let whocall = false
-    let oldpass
-
-    if (req.body.oldpass) {
-      whocall = true
-      oldpass = md5(req.body.oldpass)
-    } else {
-      whocall = false
-      oldpass = null
-    }
-    db.any('SELECT * FROM changepass($1,$2,$3,$4);', [req.dataToken.user, oldpass, md5(req.body.newpass), whocall])
+    db.any('SELECT * FROM changepass($1,$2,$3);', [req.dataToken.user, md5(req.body.oldpass), md5(req.body.newpass)])
       .then(data => {
         if (!data[0].changepass) {
           res.status(401).json({error: 'Senha atual não confere'})
@@ -153,6 +143,17 @@
       })
   }
 
+  //Altera senha do usuario pelo esqueceu senha
+exports.forgotPass = function (req, res) {
+  db.any('SELECT * FROM forgotPass($1,$2)', [req.body.user, md5(req.body.newPass)])
+    .then(data => {
+      if(!data || !data[0]) {
+        res.status(404).json({error: 'Erro ao alterar senha'})
+      } else {
+        res.status(200).json({result: 'Senha alterada com sucesso'})
+      }
+    })
+}
 //Cadastro de usuario novo
   exports.newUser = async function (req, res) {
 
@@ -338,31 +339,7 @@
       from: 'Fake Trello',
       to: req.body.email,
       subject: 'Redefinição de senha!',
-      html: `<table align="center" border="0" cellspacing="0" style='width:600px'>
-  <tr>
-    <td align="center" valign="top">
-      <img src='http://192.168.52.105:8080/assets/asset1.png'/>
-    </td>
-  </tr>
-
-  <tr height="150">
-    <td align="center" valign="middle" style='font-size: 36px; color:#333333; font-family: Roboto, Arial '>
-      Para confirmar seu email <br/>
-      clique no botão abaixo:</td>
-  </tr>
-
-  <tr height="150">
-    <td align="center" valign="middle">
-      <a href="http://192.168.52.3:4200/newpass/${token}"><img id="buttonClick" src='http://192.168.52.105:8080/assets/Asset3.png' style='cursor: pointer;'/></a>
-    </td>
-  </tr>
-
-  <tr>
-    <td align="center" valign="top">
-      <img src='http://192.168.52.105:8080/assets/Asset4.png'/>
-    </td>
-  </tr>
-</table>`
+      html: ``
     }
     transporter.sendMail(mailOptions, function (error, result) {
       if (error) {
