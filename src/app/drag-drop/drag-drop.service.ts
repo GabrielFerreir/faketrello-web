@@ -276,6 +276,8 @@ export class DragDropService {
     for (let i = 0; i < els.length; i++) {
       const PosicaoY = els[i].getBoundingClientRect().top;
       this.posFinalY = event.clientY - els[i].offsetHeight;
+
+
       if (this.isMobile) {
         this.posFinalY = event.changedTouches['0'].clientY - els[i].offsetHeight;
       }

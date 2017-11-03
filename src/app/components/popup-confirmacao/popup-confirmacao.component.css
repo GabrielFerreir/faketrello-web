@@ -1,5 +1,5 @@
 section {
-  position: absolute;
+  position: fixed;
   z-index: 24;
   width: 280px;
   /*height: 112px;*/

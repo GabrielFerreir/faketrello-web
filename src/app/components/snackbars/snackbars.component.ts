@@ -13,7 +13,6 @@ export class SnackbarsComponent implements AfterViewInit {
   constructor(private snackbarsService: SnackbarsService) { }
 
   ngAfterViewInit() {
-    // console.log(this.HTMLsnackbar)
     this.snackbarsService.snackbar = this.HTMLsnackbar;
   }
 

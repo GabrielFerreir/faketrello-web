@@ -25,5 +25,6 @@
   color: #f4f4f4;
   float: right;
   user-select: none;
+  transition: all 480ms ease-in; position:fixed; bottom:-48px;
 
 }
