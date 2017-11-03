@@ -4,6 +4,7 @@ import {CoreService} from '../Services/core.service';
 import {DadosDeUsuarioService} from '../Services/dados-de-usuario.service';
 import {Socket} from 'ng-socket-io';
 import {ProjectsServiceService} from '../projects/projects-service.service';
+import {SnackbarsService} from "../components/snackbars/snackbars.service";
 
 
 @Injectable()
@@ -13,7 +14,8 @@ export class DragDropService {
               private usuarioService: DadosDeUsuarioService,
               private http: Http,
               private socket: Socket,
-              private projects: ProjectsServiceService) {
+              private projects: ProjectsServiceService,
+              private snackbar: SnackbarsService) {
   }
 
   container;
@@ -888,6 +890,8 @@ export class DragDropService {
         this.socket.emit('changeTask', {
           idProject: this.idProjeto
         });
+        this.snackbar.chamaSnackbar('Tarefa movida com sucesso!');
+
       }, error => {
         console.log(error);
       });

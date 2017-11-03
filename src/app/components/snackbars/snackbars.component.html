@@ -1,5 +1,7 @@
-  <div class="containerSnackbars">
-    <div class="snackbars" #HTMLsnackbar >
-      {{ snackbarsService.texto }}
+  <div class="containerSnackbars" #HTMLSnack>
+
+    <div [@mostra]="snackbarsService.estado" class="snackbars" #HTMLsnackbar *ngIf="snackbarsService.notificacoes[0]">
+      {{ snackbarsService.notificacoes[0].text }}
     </div>
+
   </div>

@@ -1,12 +1,14 @@
 .containerSnackbars {
   position: fixed;
-  bottom: -48px;
+  bottom: 0px;
   left: 0;
   width: 100vw;
+  /*height: 50px;*/
   display: flex;
-  flex-direction: row;
+  flex-direction: column-reverse;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   transition: all 480ms ease;
   z-index: 25;
 }
@@ -23,8 +25,9 @@
   padding-left: 24px;
   line-height: 48px;
   color: #f4f4f4;
-  float: right;
   user-select: none;
-  transition: all 480ms ease-in; position:fixed; bottom:-48px;
-
+  margin: 5px 0;
+  cursor: default;
+  /*transition: all 480ms ease-in; position:fixed; bottom:0px;*/
 }
+
