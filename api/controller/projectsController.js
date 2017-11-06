@@ -104,7 +104,7 @@ exports.changeProject = async function (req, res) {
   req.body.idproject = id
   let permission = await exports.verifyPermission(req, res)
 
-  db.any('SELECT * FROM changeproject($1,$2,$3,$4,$5);', [id, req.body.nameProject, req.body.description, caminho, permission[0].permission])
+  db.any('SELECT * FROM changeproject($1,$2,$3,$4,$5,$6);', [id, req.body.nameProject, req.body.description, caminho, permission[0].permission,req.dataToken.id])
     .then(async data => {
       if (!data) {
         res.status(400).json({error: 'Projeto nao encontrado ou pertence a outras pessoas'})
