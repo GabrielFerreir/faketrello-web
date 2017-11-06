@@ -161,7 +161,7 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
   }
   altera() {
     this.verificaEmail();
-    if(this.CondVerificaEmail && this.vericaNome() && this.codeSatusUsername == '200') {
+    if(this.CondVerificaEmail && this.vericaNome() && this.verificaUsername()) {
       this.dadosDoUsuario.alterarDadosDeUsuario(this.alterar.name, this.alterar.username, this.img64, this.alterar.email)
         .subscribe(
           data => {
@@ -176,11 +176,7 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
           }
         );
     } else {
-
-      console.log(this.CondVerificaEmail);
-      console.log(this.verificaUsername());
-      console.log(this.vericaNome());
-      console.log('Ops, tem algo errado!');
+        console.log(this.CondVerificaEmail && this.vericaNome() && this.verificaUsername());
     }
 
 

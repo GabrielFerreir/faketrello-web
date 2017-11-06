@@ -1,8 +1,7 @@
 <div class="container">
   <div class="login">
     <input type="file" (change)="previewFile($event.target)" id="file" style="display: none;">
-
-    <img *ngIf="img64" src="{{img64}}" class="imageUser" id="preview"/>
+    <img *ngIf="img64" [style.background-image]="'url('+ img64 +')'" [style.background-size]="'cover'" class="imageUser" id="preview"/>
     <div *ngIf="!img64" class="imageUser"></div>
     <div class="addImageUser" (click)="chamaFile()">+</div>
       <div style="width:300px; height: 100%; padding-top:10px; overflow-x: hidden;">
@@ -34,7 +33,11 @@
           >{{ errorSenha }}</label>
         </div>
           <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top: 60px;">
-            <input #HTMLConfirmaSenha [(ngModel)]="confirmaSenha" (keyup.enter)="criaUsuario()" (blur)="senhasConferem()" (blur)="chama()" (blur)="habilitaBotao()" type="password" id="confirmaSenha" class="textFields"/>
+            <input #HTMLConfirmaSenha [(ngModel)]="confirmaSenha"
+                   (keyup.enter)="criaUsuario()"
+                   (blur)="senhasConferem(); chama(); habilitaBotao()"
+                   (keyup)="senhasConferem(); habilitaBotao()"
+                   type="password" id="confirmaSenha" class="textFields"/>
             <label class="labelText" for="confirmaSenha">Confirme sua senha</label>
             <div class="border"></div>
             <label class="helperText"

@@ -79,43 +79,7 @@ export class DragDropComponent implements OnInit {
     this.dragDropService.addElemento = false;
     this.dragDropService.idBlock = null;
   }
-  addBloco() {
-    this.dragDropService.addBloco()
-      .subscribe((res) => {
-        console.log(res);
-        // BUSCA OS BLOCOS NOVAMENTE
-        this.projectsService.searchBlocks(this.dragDropService.idProjeto)
-        .subscribe((res) => {
-            console.log(res);
-            this.dragDropService.blocks = res;
-            this.dragDropService.situacaoAddBloco = false;
-            this.dragDropService.nomeAddBloco = '';
-          }, error => {
-            console.error(error);
-          }, () => {
-          });
-      }, error => {
-        console.log(error);
-      }, () => {
 
-      });
-  }
-  deletarBloco(idblock) {
-    this.dragDropService.deletarBloco(idblock)
-      .subscribe((res) => {
-        console.log(res);
-        this.projects.searchBlocks(this.dragDropService.idProjeto)
-          .subscribe((res) => {
-            console.log(res);
-            this.dragDropService.blocks = res;
-          }, error => {
-            console.log(error);
-          });
-      }, error => {
-        console.log(error);
-      }, () => {
-      });
-  }
 
 
 

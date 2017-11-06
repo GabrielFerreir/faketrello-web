@@ -233,14 +233,10 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
     }
   }
 
-  pegaDadosProjeto() {
-
-    console.log(this.projectService.project.team);
-  }
-
   showSearchMembros() {
     this.searchMembros = true;
   }
+
   hideSearchMembros() {
     this.searchMembros = false;
   }
