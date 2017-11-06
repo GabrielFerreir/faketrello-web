@@ -6,8 +6,8 @@ server.listen(3000)
 const io = socket(server)
 
 io.on('connection', function (socket) {
-  socket.on('batata', function (res) {
-    socket.broadcast.emit('moved', {
+  socket.on('changeTask', function (res) {
+    socket.broadcast.emit('updateTask', {
       idProject: res.idProject
     })
   })

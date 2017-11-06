@@ -209,7 +209,7 @@ exports.removeUserTeam = async function (req, res) {
 exports.promoteUser = async function (req, res) {
   req.body.idproject = req.params.id
   let permission = await exports.verifyPermission(req, res)
-  db.any('SELECT * FROM changePermissionMember($1,$2,$3)', [req.params.id, req.body.idusertarget, permission[0].permission])
+  db.any('SELECT * FROM changePermissionMember($1,$2,$3,$4)', [req.params.id, req.body.idusertarget, permission[0].permission,req.dataToken.id])
     .then(data => {
       if (data[0].status === 0) {
         res.status(401).json({error: 'Deu merda'})
