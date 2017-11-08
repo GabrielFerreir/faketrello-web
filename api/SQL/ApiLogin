@@ -4,7 +4,6 @@
 --INSERT INTO tb_tasks(name_task, id_block, description, position) values('teste do teste', 2, 'teste', 1);
 --UPDATE tb_login SET profile_img = '/imgsUser/default.png'
 
---INSERT INTO tb_comments(id_task,comment) values(57,'teste0'),(57,'teste1'),(57,'teste2'),(57,'teste3')
 
 /*
 NOTIFICAÇÔES
@@ -13,6 +12,21 @@ Coluna Tipo:
 2 - Alteração
 3 - Deletar
 4 - Mover
+5 - Marcar
+6 - Desmarcar
+7 - Adicionar
+8 - Sair
+9 - Promover
+10 - Rebaixar
+11 - Remover
+
+Coluna Tipo-Alvo:
+1 - Bloco
+2 - Tarefa
+3 - Comentário
+4 - CheckList
+5 - Anexo
+6 - Projeto
 */
 
 CREATE OR REPLACE FUNCTION emailNewUser(pEmail VARCHAR(50))
@@ -504,19 +518,23 @@ CREATE OR REPLACE FUNCTION getproject(usern INTEGER)
     id_project INTEGER,
     namep      VARCHAR(50),
     descrip    TEXT,
-    img        VARCHAR(50)
+    img        VARCHAR(50),
+    permission BOOLEAN
   ) AS $$
 BEGIN
   RETURN QUERY
   SELECT
-    tb_projects.id_project,
+    tp.id_project,
     name_project,
     description,
-    img_project
-  FROM tb_projects
-  WHERE tb_projects.id_project IN (SELECT tb_team.id_project
-                                   FROM tb_team
-                                   WHERE usern = id_user) AND active <> FALSE;
+    img_project,
+    (SELECT permissions
+     FROM tb_team tt
+     WHERE id_user = usern AND tt.id_project = tp.id_project)
+  FROM tb_projects tp
+  WHERE tp.id_project IN (SELECT tb_team.id_project
+                          FROM tb_team
+                          WHERE usern = id_user) AND active <> FALSE;
 END;
 $$
 LANGUAGE plpgsql;
@@ -525,10 +543,11 @@ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION getprojectsearch(idpro INTEGER, iduser INTEGER)
   RETURNS TABLE(
-    namep   VARCHAR(50),
-    descrip TEXT,
-    img     VARCHAR(50),
-    team    JSON
+    namep                VARCHAR(50),
+    descrip              TEXT,
+    img                  VARCHAR(50),
+    loggedUserPermission BOOLEAN,
+    team                 JSON
   ) AS $$
 BEGIN
   IF EXISTS(SELECT id_project
@@ -540,6 +559,9 @@ BEGIN
       name_project,
       description,
       img_project,
+      (SELECT permissions
+       FROM tb_team
+       WHERE id_project = idpro AND id_user = iduser),
       (
         SELECT COALESCE(json_agg(teamJson), '[]')
         FROM (SELECT
@@ -563,18 +585,25 @@ $$
 LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION changeproject(idproj INTEGER, namep CHARACTER VARYING, descrip CHARACTER VARYING,
-                                         imgp   CHARACTER VARYING, permission BOOLEAN)
+                                         imgp   CHARACTER VARYING, permission BOOLEAN, idUser INTEGER)
   RETURNS TABLE(
     idprojectR INTEGER
   ) AS $$
 DECLARE
   idproject INTEGER;
+  vOldName  VARCHAR(100);
 BEGIN
   IF permission <> FALSE AND
      EXISTS(SELECT *
             FROM tb_projects
             WHERE id_project = idproj)
   THEN
+
+    SELECT name_project
+    INTO vOldName
+    FROM tb_projects
+    WHERE id_project = idproj;
+
     UPDATE tb_projects
     SET
       name_project = namep,
@@ -584,6 +613,22 @@ BEGIN
     WHERE id_project = idproj
     RETURNING id_project
       INTO idproject;
+
+    IF ((SELECT name_project
+         FROM tb_projects
+         WHERE id_project = idproj) <> vOldName)
+    THEN
+
+      INSERT INTO tb_notifications (id_user, type, target_type, id_project, old_name, new_name)
+      VALUES (idUser, 2, 6, idproj, vOldName, (SELECT name_project
+                                               FROM tb_projects
+                                               WHERE id_project = idproj));
+    ELSE
+      INSERT INTO tb_notifications (id_user, type, target_type, id_project)
+      VALUES (idUser, 2, 6, idproj);
+
+    END IF;
+
     RETURN QUERY
     SELECT idproject;
   END IF;
@@ -621,8 +666,6 @@ END;
 $$
 LANGUAGE plpgsql;
 
---SELECT * FROM timeproject(73,22,false,
-
 CREATE OR REPLACE FUNCTION timeproject(pIdProject INTEGER, pIdUser INTEGER, permission BOOLEAN, pIdAdmin INTEGER)
   RETURNS BOOLEAN AS $$
 BEGIN
@@ -632,6 +675,10 @@ BEGIN
   THEN
     INSERT
     INTO tb_team (id_project, id_user, permissions) VALUES (pIdProject, pIdUser, permission);
+
+    INSERT INTO tb_notifications (id_user, type, id_new_user, target_type, id_project)
+    VALUES (pIdAdmin, 7, pIdUser, 6, pIdProject);
+
     RETURN TRUE;
   END IF;
   RETURN FALSE;
@@ -693,6 +740,10 @@ BEGIN
   THEN
     DELETE FROM tb_team
     WHERE id_user = pIdUser AND id_project = pIdProject;
+
+    INSERT INTO tb_notifications (id_user, type, target_type, id_project)
+    VALUES (pIdUser, 8, 6, pIdProject);
+
     RETURN QUERY
     SELECT 1;
   END IF;
@@ -720,6 +771,10 @@ BEGIN
 
     DELETE FROM tb_team
     WHERE id_user = pIdUser AND id_project = pIdProject;
+
+    INSERT INTO tb_notifications (id_user, type, target_type, id_project)
+    VALUES (pIdUser, 8, 6, pIdProject);
+
     RETURN QUERY
     SELECT 2;
   ELSEIF vQntdAdmins > 1 AND vQntdMembers > 0
@@ -762,6 +817,10 @@ BEGIN
       RETURNING 200
         INTO
           vStatus;
+
+      INSERT INTO tb_notifications (id_user, type, id_new_user, target_type)
+      VALUES (idusert, 11, iduseralvo, 6);
+
       RETURN QUERY
       SELECT vStatus;
     ELSE
@@ -776,10 +835,13 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION changePermissionMember(pIdProject INTEGER, pIdUserTarget INTEGER, permission BOOLEAN)
+CREATE OR REPLACE FUNCTION changePermissionMember(pIdProject INTEGER, pIdUserTarget INTEGER, permission BOOLEAN,
+                                                  pIdUser    INTEGER)
   RETURNS TABLE(
     status INTEGER
   ) AS $$
+DECLARE
+  vOldPermission BOOLEAN;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_team
@@ -787,10 +849,28 @@ BEGIN
                   id_user = pIdUserTarget) AND permission = TRUE
   THEN
 
+    SELECT permissions
+    INTO vOldPermission
+    FROM tb_team
+    WHERE id_project = pIdProject AND
+          id_user = pIdUserTarget;
+
     UPDATE tb_team
     SET permissions = NOT permissions
     WHERE id_project = pIdProject AND
           id_user = pIdUserTarget;
+
+    IF vOldPermission = TRUE
+    THEN
+
+      INSERT INTO tb_notifications (id_user, id_new_user, type, target_type)
+      VALUES (pIdUser, pIdUserTarget, 9, 6);
+
+    ELSE
+      INSERT INTO tb_notifications (id_user, id_new_user, type, target_type)
+      VALUES (pIdUser, pIdUserTarget, 10, 6);
+    END IF;
+
     RETURN QUERY
     SELECT 1;
   END IF;
@@ -831,8 +911,8 @@ BEGIN
     RETURNING id_blocks
       INTO vIdBlock;
 
-    INSERT INTO tb_notifications (id_block, id_user, id_project, new_name, type)
-    VALUES (vIdBlock, idUser, idproj, nameq, 1);
+    INSERT INTO tb_notifications (id_block, id_user, id_project, new_name, type, target_type)
+    VALUES (vIdBlock, idUser, idproj, nameq, 1, 1);
     RETURN TRUE;
   END IF;
   RETURN FALSE;
@@ -858,12 +938,12 @@ BEGIN
     SET name_blocks = pNewName
     WHERE id_blocks = pIdBlock;
 
-    INSERT INTO tb_notifications (id_user, id_block, type, old_name, new_name, id_project)
+    INSERT INTO tb_notifications (id_user, id_block, type, old_name, new_name, id_project, target_type)
     VALUES (pIdUser, pIdBlock, 2, oldName, (SELECT name_blocks
                                             FROM tb_blocks
                                             WHERE id_blocks = pIdBlock), (SELECT project_owner
                                                                           FROM tb_blocks
-                                                                          WHERE id_blocks = pIdBlock));
+                                                                          WHERE id_blocks = pIdBlock), 1);
     RETURN TRUE;
   END IF;
   RETURN FALSE;
@@ -924,7 +1004,8 @@ BEGIN
              ORDER BY position ASC) AS TasksJson
       ) tasks
     FROM tb_blocks tb
-    WHERE tb.id_blocks = ANY (vIdBlocks);
+    WHERE tb.id_blocks = ANY (vIdBlocks)
+    ORDER BY id_blocks ASC;
   END IF;
 END;
 $$
@@ -940,12 +1021,12 @@ BEGIN
     DELETE FROM tb_tasks
     WHERE id_block = pIdBlock;
 
-    INSERT INTO tb_notifications (id_project, type, id_user, old_name)
+    INSERT INTO tb_notifications (id_project, type, id_user, old_name, target_type)
     VALUES ((SELECT project_owner
              FROM tb_blocks
              WHERE id_blocks = pIdBlock), 3, pIdUser, (SELECT name_blocks
                                                        FROM tb_blocks
-                                                       WHERE id_blocks = pIdBlock));
+                                                       WHERE id_blocks = pIdBlock), 1);
 
     DELETE FROM tb_notifications
     WHERE id_block = pIdBlock;
@@ -1029,10 +1110,10 @@ BEGIN
     RETURNING id_task, name_task, final_date, description, id_block, position
       INTO vIdTask, vNameTask, vDate, vDescript, vBlockOwner, vPosition;
 
-    INSERT INTO tb_notifications (id_user, id_project, id_block, id_task, type, new_name)
-    VALUES (pIdUser, (SELECT project_owner
-                      FROM tb_blocks
-                      WHERE id_blocks = idblock), idblock, vIdTask, 1, vNameTask);
+    INSERT INTO tb_notifications (id_user, id_block, id_project, id_task, type, new_name, target_type)
+    VALUES (pIdUser, idblock, (SELECT project_owner
+                               FROM tb_blocks
+                               WHERE id_blocks = idblock), vIdTask, 1, vNameTask, 2);
 
     RETURN QUERY
     SELECT
@@ -1047,19 +1128,62 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION changeTask(pIdTask INTEGER, pNameTask CHARACTER VARYING, pDate TIMESTAMP, pDescription TEXT)
+CREATE OR REPLACE FUNCTION changeTask(pIdTask INTEGER, pNameTask CHARACTER VARYING, pDate TIMESTAMP, pDescription TEXT,
+                                      pIdUser INTEGER)
   RETURNS BOOLEAN AS $$
+DECLARE
+  vOldName VARCHAR(100);
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_tasks
             WHERE id_task = pIdTask)
   THEN
+    SELECT name_task
+    INTO vOldName
+    FROM tb_tasks
+    WHERE id_task = pIdTask;
+
     UPDATE tb_tasks
     SET name_task = pNameTask,
       final_date  = pDate,
       description = pDescription
     WHERE id_task = pIdTask;
+
+    IF vOldName = (SELECT name_task
+                   FROM tb_tasks
+                   WHERE id_task = pIdTask)
+    THEN
+      INSERT INTO tb_notifications (id_task, type, id_user, target_type, id_block, id_project)
+      VALUES (pIdTask,
+              2,
+              pIdUser, 2, (SELECT id_block
+                           FROM tb_tasks
+                           WHERE id_task = pIdTask), (SELECT project_owner
+                                                      FROM tb_blocks
+                                                      WHERE id_blocks = (SELECT id_block
+                                                                         FROM tb_tasks
+                                                                         WHERE id_task = pIdTask)));
+    ELSE
+      INSERT INTO tb_notifications (id_task, type, id_user, old_name, new_name, target_type, id_block, id_project)
+      VALUES (pIdTask,
+              2,
+              pIdUser,
+              vOldName,
+              (SELECT name_task
+               FROM tb_tasks
+               WHERE tb_tasks.id_task = pIdTask),
+              2,
+              (SELECT id_block
+               FROM tb_tasks
+               WHERE id_task = pIdTask),
+              (SELECT project_owner
+               FROM tb_blocks
+               WHERE id_blocks = (SELECT id_block
+                                  FROM tb_tasks
+                                  WHERE id_task = pIdTask)));
+    END IF;
     RETURN TRUE;
+
   END IF;
   RETURN FALSE;
 END;
@@ -1086,10 +1210,10 @@ BEGIN
     SET id_block = pIdBlock
     WHERE id_task = pIdTask;
 
-    INSERT INTO tb_notifications (id_user, id_block, id_block_final, id_task, type, id_project)
-    VALUES (pIdUser, vOldBlock, pIdBlock, pIdTask, 4, (SELECT project_owner
-                                                       FROM tb_blocks
-                                                       WHERE id_blocks = vOldBlock));
+    INSERT INTO tb_notifications (id_user, id_block, id_block_final, id_task, type, target_type, id_project)
+    VALUES (pIdUser, vOldBlock, pIdBlock, pIdTask, 4, 2, (SELECT project_owner
+                                                          FROM tb_blocks
+                                                          WHERE id_blocks = vOldBlock));
     RETURN TRUE;
   END IF;
   RETURN FALSE;
@@ -1163,8 +1287,9 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION deleteTask(pIdTask INTEGER, pIdUser INTEGER)
   RETURNS BOOLEAN AS $$
 DECLARE
-  vNameTask VARCHAR(100);
-  vIdBlock  INTEGER;
+  vNameTask  VARCHAR(100);
+  vIdBlock   INTEGER;
+  vIdProject INTEGER;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_tasks
@@ -1186,19 +1311,20 @@ BEGIN
     WHERE id_task = pIdTask;
 
     SELECT
-      name_task,
-      id_block
-    INTO vNameTask, vIdBlock
-    FROM tb_tasks
+      tt.name_task,
+      tt.id_block,
+      (SELECT project_owner
+       FROM tb_blocks tb
+       WHERE tt.id_block = tb.id_blocks)
+    INTO vNameTask, vIdBlock, vIdProject
+    FROM tb_tasks tt
     WHERE id_task = pIdTask;
 
     DELETE FROM tb_tasks
     WHERE id_task = pIdTask;
 
-    INSERT INTO tb_notifications (id_user, type, old_name, id_block, id_project)
-    VALUES (pIdUser, 3, vNameTask, vIdBlock, (SELECT project_owner
-                                              FROM tb_blocks
-                                              WHERE vIdBlock = id_blocks));
+    INSERT INTO tb_notifications (id_user, type, old_name, id_block, id_project, target_type)
+    VALUES (pIdUser, 3, vNameTask, vIdBlock, vIdProject, 2);
 
     RETURN TRUE;
   END IF;
@@ -1210,13 +1336,31 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION buildAttachment(pFileName CHARACTER VARYING, pSize NUMERIC, pIdTask INTEGER,
                                            pPath     CHARACTER VARYING)
   RETURNS BOOLEAN AS $$
+DECLARE
+  vIdAttachment INTEGER;
+  vIdBlock      INTEGER;
+  vIdProject    INTEGER;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_tasks
             WHERE id_task = pIdTask)
   THEN
     INSERT INTO tb_attachment (file_name, size, id_task, path)
-    VALUES (pFileName, pSize, pIdTask, pPath);
+    VALUES (pFileName, pSize, pIdTask, pPath)
+    RETURNING id_attachment
+      INTO vIdAttachment;
+
+    SELECT
+      id_block,
+      (SELECT project_owner
+       FROM tb_blocks
+       WHERE id_blocks = vIdBlock)
+    INTO vIdBlock, vIdProject
+    FROM tb_tasks
+    WHERE id_task = pIdTask;
+
+    INSERT INTO tb_notifications (id_attachment, type, target_type, old_name, id_block, id_project, id_task)
+    VALUES (vIdAttachment, 1, 5, pFileName, vIdBlock, vIdProject, pIdTask);
 
     RETURN TRUE;
   END IF;
@@ -1248,44 +1392,52 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION deleteAttachment(pIdAttachment INTEGER)
+CREATE OR REPLACE FUNCTION deleteAttachment(pIdAttachment INTEGER, pIdUser INTEGER)
   RETURNS TABLE(
     path VARCHAR(50)
   ) AS $$
+
 DECLARE
-  vPath VARCHAR(50);
+  vPath    VARCHAR(50);
+  vOldName VARCHAR(100);
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_attachment
             WHERE id_attachment = pIdAttachment)
   THEN
-    SELECT l.path
-    INTO vPath
+    SELECT
+      l.path,
+      file_name
+    INTO vPath, vOldName
     FROM tb_attachment l
     WHERE id_attachment = pIdAttachment;
 
     DELETE FROM tb_attachment
     WHERE id_attachment = pIdAttachment;
+
+    INSERT INTO tb_notifications (id_task, target_type, id_user, old_name, type, id_block, id_project)
+    VALUES ((SELECT id_task
+             FROM tb_attachment
+             WHERE id_attachment = pIdAttachment),
+            5,
+            pIdUser,
+            vOldName,
+            3,
+            (SELECT id_block
+             FROM tb_tasks
+             WHERE id_task = (SELECT id_task
+                              FROM tb_attachment
+                              WHERE id_attachment = pIdAttachment)),
+            (SELECT project_owner
+             FROM tb_blocks
+             WHERE id_block = (SELECT id_block
+                               FROM tb_tasks
+                               WHERE id_task = (SELECT id_task
+                                                FROM tb_attachment
+                                                WHERE id_attachment = pIdAttachment))));
+
     RETURN QUERY
     SELECT vPath;
-  END IF;
-END;
-$$
-LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION getPathAttachment(pIdAttachment INTEGER)
-  RETURNS TABLE(
-    path VARCHAR(50)
-  ) AS $$
-BEGIN
-  IF EXISTS(SELECT l.path
-            FROM tb_attachment l
-            WHERE id_attachment = pIdAttachment)
-  THEN
-    RETURN QUERY
-    SELECT l.path
-    FROM tb_attachment l
-    WHERE id_attachment = pIdAttachment;
   END IF;
 END;
 $$
@@ -1300,20 +1452,30 @@ DECLARE
   vIdProject   INTEGER;
   vIdChecklist INTEGER;
 BEGIN
+  IF (SELECT "namechecklist"
+      FROM json_to_recordset(pChecklist)
+        AS x(
+           "namechecklist" VARCHAR(100),
+           "idTask" INTEGER,
+           checked BOOLEAN
+           )) IS NOT NULL
+  THEN
 
-  INSERT INTO tb_checklist_tasks (name_checklist, id_task, checked)
-    SELECT
-      "namechecklist",
-      "idTask",
-      checked
-    FROM json_to_recordset(pChecklist)
-      AS x(
-         "namechecklist" VARCHAR(100),
-         "idTask" INTEGER,
-         checked BOOLEAN
-         )
-  RETURNING id_checklist
-    INTO vIdChecklist;
+    INSERT INTO tb_checklist_tasks (name_checklist, id_task, checked)
+      SELECT
+        "namechecklist",
+        "idTask",
+        checked
+      FROM json_to_recordset(pChecklist)
+        AS x(
+           "namechecklist" VARCHAR(100),
+           "idTask" INTEGER,
+           checked BOOLEAN
+           )
+    RETURNING id_checklist
+      INTO vIdChecklist;
+
+  END IF;
 
   SELECT id_block
   INTO vIdBlock
@@ -1331,10 +1493,8 @@ BEGIN
   FROM tb_blocks
   WHERE id_blocks = vIdBlock;
 
-  INSERT INTO tb_notifications (id_project, id_block, id_task, id_checklist, type, old_name, id_user)
-  VALUES (vIdProject,
-          vIdBlock,
-          (SELECT "idTask"
+  INSERT INTO tb_notifications (id_task, id_checklist, type, old_name, id_user, id_block, id_project, target_type)
+  VALUES ((SELECT "idTask"
            FROM json_to_recordset(pChecklist)
              AS x(
                 "namechecklist" VARCHAR(100),
@@ -1350,7 +1510,28 @@ BEGIN
                 "idTask" INTEGER,
                 checked BOOLEAN
                 )),
-          pIdUser);
+          pIdUser,
+          (SELECT id_block
+           FROM tb_tasks
+           WHERE id_task = (SELECT "idTask"
+                            FROM json_to_recordset(pChecklist)
+                              AS x(
+                                 "namechecklist" VARCHAR(100),
+                                 "idTask" INTEGER,
+                                 checked BOOLEAN
+                                 ))),
+          (SELECT project_owner
+           FROM tb_blocks
+           WHERE id_blocks = (SELECT id_block
+                              FROM tb_tasks
+                              WHERE id_task = (SELECT "idTask"
+                                               FROM json_to_recordset(pChecklist)
+                                                 AS x(
+                                                    "namechecklist" VARCHAR(100),
+                                                    "idTask" INTEGER,
+                                                    checked BOOLEAN
+                                                    )))),
+          4);
 
   RETURN TRUE;
 END;
@@ -1359,8 +1540,13 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM deleteChecklist(46)
 
-CREATE OR REPLACE FUNCTION deleteChecklist(pIdChecklist INTEGER)
+CREATE OR REPLACE FUNCTION deleteChecklist(pIdChecklist INTEGER, pIdUser INTEGER)
   RETURNS BOOLEAN AS $$
+DECLARE
+  vOldName   VARCHAR(100);
+  vIdTask    INTEGER;
+  vIdBlock   INTEGER;
+  vIdProject INTEGER;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_checklist_tasks
@@ -1368,6 +1554,28 @@ BEGIN
   THEN
     DELETE FROM tb_notifications
     WHERE id_checklist = pIdChecklist;
+
+    SELECT name_checklist
+    INTO vOldName
+    FROM tb_checklist_tasks
+    WHERE id_checklist = pIdChecklist;
+
+    SELECT
+      id_task,
+      (SELECT tt.id_block
+       FROM tb_tasks tt
+       WHERE tt.id_task = tct.id_task)
+    INTO vIdTask, vIdBlock
+    FROM tb_checklist_tasks tct
+    WHERE id_checklist = pIdChecklist;
+
+    SELECT project_owner
+    INTO vIdProject
+    FROM tb_blocks
+    WHERE id_blocks = vIdBlock;
+
+    INSERT INTO tb_notifications (id_user, type, target_type, id_task, old_name, id_block, id_project)
+    VALUES (pIdUser, 3, 5, vIdTask, vOldName, vIdBlock, vIdProject);
 
     DELETE FROM tb_checklist_tasks
     WHERE id_checklist = pIdChecklist;
@@ -1486,20 +1694,36 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION newComment(pIdTask INTEGER, pComment TEXT)
+CREATE OR REPLACE FUNCTION newComment(pIdTask INTEGER, pComment TEXT, pIdUser INTEGER)
   RETURNS TABLE(
     idComment INTEGER
   ) AS $$
 DECLARE
   vIdComment INTEGER;
+  vIdBlock   INTEGER;
+  vIdProject INTEGER;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_tasks
             WHERE id_task = pIdTask)
   THEN
-    INSERT INTO tb_comments (id_task, comment) VALUES (pIdTask, pComment)
+    INSERT INTO tb_comments (id_task, comment)
+    VALUES (pIdTask, pComment)
     RETURNING id_comment
       INTO vIdComment;
+
+    SELECT
+      tt.id_block,
+      (SELECT project_owner
+       FROM tb_blocks
+       WHERE id_blocks = tt.id_block)
+    INTO vIdBlock, vIdProject
+    FROM tb_tasks tt
+    WHERE id_task = pIdTask;
+
+    INSERT INTO tb_notifications (id_comment, type, target_type, id_user, id_task, id_block, id_project)
+    VALUES (vIdComment, 1, 3, pIdUser, pIdTask, vIdBlock, vIdProject);
+
     RETURN QUERY
     SELECT vIdComment;
   END IF;
@@ -1509,8 +1733,12 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM changeComment(2, 'joao1234')
 
-CREATE OR REPLACE FUNCTION changeComment(pIdComment INTEGER, pNewComment CHARACTER VARYING)
+CREATE OR REPLACE FUNCTION changeComment(pIdComment INTEGER, pNewComment CHARACTER VARYING, pIdUser INTEGER)
   RETURNS BOOLEAN AS $$
+DECLARE
+  vIdTask    INTEGER;
+  vIdBlock   INTEGER;
+  vIdProject INTEGER;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_comments
@@ -1519,6 +1747,24 @@ BEGIN
     UPDATE tb_comments
     SET comment = pNewComment
     WHERE id_comment = pIdComment;
+
+    SELECT
+      tc.id_task,
+      (SELECT id_block
+       FROM tb_tasks tt
+       WHERE tt.id_task = tc.id_task)
+    INTO vIdTask, vIdBlock
+    FROM tb_comments tc
+    WHERE id_comment = pIdComment;
+
+    SELECT project_owner
+    INTO vIdProject
+    FROM tb_blocks
+    WHERE id_blocks = vIdBlock;
+
+    INSERT INTO tb_notifications (id_user, type, target_type, id_comment, id_task, id_block, id_project)
+    VALUES (pIdUser, 2, 3, pIdComment, vIdTask, vIdBlock, vIdProject);
+
     RETURN TRUE;
   END IF;
   RETURN FALSE;
@@ -1526,15 +1772,41 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION deleteComment(pIdComment INTEGER)
+CREATE OR REPLACE FUNCTION deleteComment(pIdComment INTEGER, pIdUser INTEGER)
   RETURNS BOOLEAN AS $$
+DECLARE
+  vIdTask    INTEGER;
+  vIdBlock   INTEGER;
+  vIdProject INTEGER;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_comments
             WHERE id_comment = pIdComment)
   THEN
-    DELETE FROM tb_comments
+    DELETE FROM tb_notifications
     WHERE id_comment = pIdComment;
+
+    DELETE
+    FROM tb_comments
+    WHERE id_comment = pIdComment;
+
+    SELECT
+      tc.id_task,
+      (SELECT id_block
+       FROM tb_tasks tt
+       WHERE tt.id_task = tc.id_task)
+    INTO vIdTask, vIdBlock
+    FROM tb_comments tc
+    WHERE id_comment = pIdComment;
+
+    SELECT project_owner
+    INTO vIdProject
+    FROM tb_blocks
+    WHERE id_blocks = vIdBlock;
+
+    INSERT INTO tb_notifications (id_user, type, target_type, id_task, id_block, id_project)
+    VALUES (pIdUser, 3, 3, vIdTask, vIdBlock, vIdProject);
+
     RETURN TRUE;
   END IF;
   RETURN FALSE;
@@ -1542,16 +1814,53 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION ChangeStatusChecklist(pIdChecklist INTEGER)
+CREATE OR REPLACE FUNCTION ChangeStatusChecklist(pIdChecklist INTEGER, pIdUser INTEGER)
   RETURNS BOOLEAN AS $$
+DECLARE
+  vStatus    BOOLEAN;
+  vIdTask    INTEGER;
+  vIdBlock   INTEGER;
+  vIdProject INTEGER;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_checklist_tasks
             WHERE id_checklist = pIdChecklist)
   THEN
+
+    SELECT checked
+    INTO vStatus
+    FROM tb_checklist_tasks
+    WHERE id_checklist = pIdChecklist;
+
     UPDATE tb_checklist_tasks
     SET checked = NOT checked
     WHERE id_checklist = pIdChecklist;
+
+    SELECT
+      id_task,
+      (SELECT id_block
+       FROM tb_tasks
+       WHERE tct.id_task = tb_tasks.id_task)
+    INTO vIdTask, vIdBlock
+    FROM tb_checklist_tasks tct
+    WHERE id_checklist = pIdChecklist;
+
+    SELECT project_owner
+    INTO vIdProject
+    FROM tb_blocks
+    WHERE id_blocks = vIdBlock;
+
+    IF vStatus = TRUE
+    THEN
+
+      INSERT INTO tb_notifications (id_checklist, type, target_type, id_user, id_task, id_block, id_project)
+      VALUES (pIdChecklist, 6, 4, pIdUser, vIdTask, vIdBlock, vIdProject);
+
+    ELSE
+      INSERT INTO tb_notifications (id_checklist, type, target_type, id_user, id_task, id_block, id_project)
+      VALUES (pIdChecklist, 5, 4, pIdUser, vIdTask, vIdBlock, vIdProject);
+    END IF;
+
     RETURN TRUE;
   END IF;
   RETURN FALSE;
@@ -1559,8 +1868,13 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION changeNameChecklist(pIdChecklist INTEGER, pName CHARACTER VARYING)
+CREATE OR REPLACE FUNCTION changeNameChecklist(pIdChecklist INTEGER, pName CHARACTER VARYING, pIdUser INTEGER)
   RETURNS BOOLEAN AS $$
+DECLARE
+  vOldName   VARCHAR(100);
+  vIdTask    INTEGER;
+  vIdBlock   INTEGER;
+  vIdProject INTEGER;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_checklist_tasks
@@ -1569,6 +1883,24 @@ BEGIN
     UPDATE tb_checklist_tasks
     SET name_checklist = pName
     WHERE id_checklist = pIdChecklist;
+
+    SELECT
+      id_task,
+      (SELECT id_block
+       FROM tb_tasks
+       WHERE tct.id_task = tb_tasks.id_task)
+    INTO vIdTask, vIdBlock
+    FROM tb_checklist_tasks tct
+    WHERE id_checklist = pIdChecklist;
+
+    SELECT project_owner
+    INTO vIdProject
+    FROM tb_blocks
+    WHERE id_blocks = vIdBlock;
+
+    INSERT INTO tb_notifications (id_checklist, type, target_type, id_user, old_name, new_name, id_task, id_block, id_project)
+    VALUES (pIdChecklist, 2, 4, pIdUser, vOldName, pName, vIdTask, vIdBlock, vIdProject);
+
     RETURN TRUE;
   END IF;
   RETURN FALSE;
@@ -1607,7 +1939,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION insertMembersTask(pIdTask INTEGER, pIdUser INTEGER)
+CREATE OR REPLACE FUNCTION insertMembersTask(pIdTask INTEGER, pIdUser INTEGER, pIdOldUser INTEGER)
   RETURNS BOOLEAN AS $$
 BEGIN
   IF EXISTS(SELECT *
@@ -1618,6 +1950,17 @@ BEGIN
                     WHERE pIdTask = id_task AND pIdUser = id_user)
   THEN
     INSERT INTO tb_team_tasks (id_task, id_user) VALUES (pIdTask, pIdUser);
+
+    INSERT INTO tb_notifications (id_task, id_block, id_project, type, target_type, id_user, id_new_user)
+    VALUES (pIdTask,
+            (SELECT id_block
+             FROM tb_tasks
+             WHERE id_task = pIdTask),
+            (SELECT project_owner
+             FROM tb_blocks
+             WHERE id_blocks = (SELECT id_block
+                                FROM tb_tasks
+                                WHERE id_task = pIdTask)), 7, 2, pIdOldUser, pIdUser);
     RETURN TRUE;
   END IF;
   RETURN FALSE;
@@ -1625,15 +1968,42 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION removeMemberTask(pIdRelation INTEGER)
+CREATE OR REPLACE FUNCTION removeMemberTask(pIdRelation INTEGER, pIdUser INTEGER)
   RETURNS BOOLEAN AS $$
+DECLARE
+  vIdTask        INTEGER;
+  vIdUserRemoved INTEGER;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_team_tasks
             WHERE pIdRelation = id_team_task)
   THEN
+
+    SELECT
+      id_task,
+      id_user
+    INTO vIdTask, vIdUserRemoved
+    FROM tb_team_tasks
+    WHERE id_team_task = pIdRelation;
+
     DELETE FROM tb_team_tasks
     WHERE pIdRelation = id_team_task;
+
+    INSERT INTO tb_notifications (id_task, id_block, id_project, type, target_type, id_user, id_new_user)
+    VALUES (vIdTask,
+            (SELECT id_block
+             FROM tb_tasks
+             WHERE id_task = vIdTask),
+            (SELECT project_owner
+             FROM tb_blocks
+             WHERE id_blocks = (SELECT id_block
+                                FROM tb_tasks
+                                WHERE id_task = vIdTask)),
+            7,
+            2,
+            pIdUser,
+            vIdUserRemoved);
+
     RETURN TRUE;
   END IF;
   RETURN FALSE;

@@ -74,7 +74,7 @@ exports.newtask = async function (req, res) {
 
 //Altera tarefa
 exports.changeTask = function (req, res) {
-  db.any('SELECT * FROM changeTask($1,$2,$3,$4)', [req.params.id, req.body.nameTask, req.body.finalDate, req.body.description])
+  db.any('SELECT * FROM changeTask($1,$2,$3,$4,$5)', [req.params.id, req.body.nameTask, req.body.finalDate, req.body.description, req.dataToken.id])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Tarefa nao encontrada'})
@@ -201,7 +201,7 @@ exports.changeStatusChecklist = function (req, res) {
 
 //Altera o nome da checklist
 exports.changeNameChecklist = function (req, res) {
-  db.any('SELECT * FROM changeNameChecklist($1,$2)', [req.params.id, req.body.name])
+  db.any('SELECT * FROM changeNameChecklist($1,$2,$3)', [req.params.id, req.body.name, req.dataToken.id])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Id Inexistente'})
@@ -225,7 +225,7 @@ exports.deleteChecklist = function (req, res) {
 
 //Cria comentario nas tarefas
 exports.newComment = function (req, res) {
-  db.any('SELECT * FROM newComment($1,$2)', [req.body.idTask, req.body.comment])
+  db.any('SELECT * FROM newComment($1,$2,$3)', [req.body.idTask, req.body.comment, req.dataToken.id])
     .then(data => {
       if (data) {
         res.status(200).json({result: 'Comentário adicionado a tarefa'})
@@ -249,7 +249,7 @@ exports.changeComment = function (req, res) {
 
 //Deletar comentário
 exports.deleteComment = function (req, res) {
-  db.any('SELECT * FROM deleteComment($1)', [req.params.id])
+  db.any('SELECT * FROM deleteComment($1,$2)', [req.params.id, req.dataToken.id])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Comentário nao encontrado'})
@@ -301,7 +301,7 @@ async function lastPosition (req) {
 
 //Insere membros no projeto
 exports.insertMembersTask = function (req, res) {
-  db.any('SELECT * FROM insertMembersTask($1,$2)', [req.params.id, req.body.idUser])
+  db.any('SELECT * FROM insertMembersTask($1,$2)', [req.params.id, req.body.idUser, req.dataToken.id])
     .then(data => {
       if (!data || !data[0].insertmemberstask) {
         res.status(409).json({error: 'Tarefa nao encontrada ou usuario já inserido'})
@@ -313,7 +313,7 @@ exports.insertMembersTask = function (req, res) {
 
 //Remove membro da tarefa
 exports.removeMemberTask = function (req, res) {
-  db.any('SELECT * FROM removeMemberTask($1)', [req.params.id])
+  db.any('SELECT * FROM removeMemberTask($1,$2)', [req.params.id,req.dataToken.id])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Tarefa nao encontrada'})
