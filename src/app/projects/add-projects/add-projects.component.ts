@@ -59,7 +59,7 @@ export class AddProjectsComponent implements OnInit {
       .subscribe((res) => {
         console.log(res)
         this.projects.fechaAddProjets();
-        this.snackbar.chamaSnackbar('Projeto Criado Com Sucesso!');
+        this.snackbar.inserirSnackbar('Projeto Criado Com Sucesso!');
         // console.log('Cadastrou');
         this.projects.searchProjects();
 

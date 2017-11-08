@@ -95,7 +95,7 @@ export class AlterarSenhaDeUsuarioComponent implements OnInit {
     this.dadosDoUsuario.alterarSenhaDeUsuario(this.senhaAtual, this.novaSenha)
         .subscribe(
           data => {
-            this.snackbarService.chamaSnackbar('Senha modificada com sucesso!')
+            this.snackbarService.inserirSnackbar('Senha modificada com sucesso!')
             console.log('Alterou');
           },
           error => {

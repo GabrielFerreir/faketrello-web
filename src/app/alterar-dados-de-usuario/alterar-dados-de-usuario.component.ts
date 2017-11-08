@@ -165,7 +165,7 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
       this.dadosDoUsuario.alterarDadosDeUsuario(this.alterar.name, this.alterar.username, this.img64, this.alterar.email)
         .subscribe(
           data => {
-            this.snackbarService.chamaSnackbar('Dados modificados com sucesso!');
+            this.snackbarService.inserirSnackbar('Dados modificados com sucesso!');
             console.log('Faça o login novamente');
             console.log(data.token);
             this.dadosDoUsuario.criarCookie(data.token);
