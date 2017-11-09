@@ -123,11 +123,10 @@ exports.deleteTask = function (req, res) {
 
 //Novo anexo
 exports.newAttachment = async function (req, res) {
-  req.idTask = req.params.id
   req.fileName = req.body.fileName
   let path = await buildAttachment(req, res)
 
-  db.any('SELECT * FROM buildAttachment($1,$2,$3,$4)', [req.body.fileName, req.body.size, req.params.id, path])
+  db.any('SELECT * FROM buildAttachment($1,$2,$3,$4,$5)', [req.body.fileName, req.body.size, req.params.id, path, req.dataToken.id])
     .then(data => {
       if (!data || !data[0]) {
         res.status(404).json({error: 'Tarefa nao encontrada'})
@@ -189,12 +188,12 @@ exports.newChecklist = function (req, res) {
 
 //Altera a booleana da checkList
 exports.changeStatusChecklist = function (req, res) {
-  db.any('SELECT * FROM ChangeStatusChecklist($1)', [req.params.id])
+  db.any('SELECT * FROM ChangeStatusChecklist($1,$2)', [req.params.id,req.dataToken.id])
     .then(data => {
-      if (!data) {
+      if (!data || !data[0].rstatus) {
         res.status(404).json({error: 'Checklist nao encontrada'})
       } else {
-        res.status(200).json({result: 'Alterado'})
+        res.status(200).json({result: data[0].rstatus})
       }
     })
 }
@@ -203,7 +202,8 @@ exports.changeStatusChecklist = function (req, res) {
 exports.changeNameChecklist = function (req, res) {
   db.any('SELECT * FROM changeNameChecklist($1,$2,$3)', [req.params.id, req.body.name, req.dataToken.id])
     .then(data => {
-      if (!data) {
+      console.log(req.params.id)
+      if (!data || !data[0].changenamechecklist) {
         res.status(404).json({error: 'Id Inexistente'})
       } else {
         res.status(200).json({result: 'Alterado'})
@@ -213,7 +213,7 @@ exports.changeNameChecklist = function (req, res) {
 
 //Deletar checklists
 exports.deleteChecklist = function (req, res) {
-  db.any('SELECT * FROM deleteChecklist($1)', [req.params.id])
+  db.any('SELECT * FROM deleteChecklist($1,$2)', [req.params.id,req.dataToken.id])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Checklist nao encontrada'})
@@ -237,9 +237,9 @@ exports.newComment = function (req, res) {
 
 //Altera comentario
 exports.changeComment = function (req, res) {
-  db.any('SELECT * FROM changeComment($1,$2);', [req.params.id, req.body.comment])
+  db.any('SELECT * FROM changeComment($1,$2,$3);', [req.params.id, req.body.comment, req.dataToken.id])
     .then(data => {
-      if (!data) {
+      if (!data || !data[0].changecomment) {
         res.status(404).json({error: 'Comentário não encontrado'})
       } else {
         res.status(200).json({result: 'Comentário alterado'})
@@ -277,7 +277,7 @@ exports.deleteAttachment = function (req, res) {
     })
 }
 
-//Atualiza posições
+//Atualiza posições das tarefas
 exports.updatePositions = function (req, res) {
   db.any('SELECT * FROM updatePositions($1,$2)', [JSON.stringify(req.body.positions), JSON.stringify(req.body.oldPositions)])
     .then(data => {
@@ -289,7 +289,7 @@ exports.updatePositions = function (req, res) {
     })
 }
 
-//Pega a ultima posição
+//Pega a ultima posição do bloco
 async function lastPosition (req) {
   const data = await db.any('SELECT * FROM getLastPosition($1)', [req.idBlock])
   if (!data || !data[0]) {
@@ -301,7 +301,7 @@ async function lastPosition (req) {
 
 //Insere membros no projeto
 exports.insertMembersTask = function (req, res) {
-  db.any('SELECT * FROM insertMembersTask($1,$2)', [req.params.id, req.body.idUser, req.dataToken.id])
+  db.any('SELECT * FROM insertMembersTask($1,$2,$3)', [req.params.id, req.body.idUser, req.dataToken.id])
     .then(data => {
       if (!data || !data[0].insertmemberstask) {
         res.status(409).json({error: 'Tarefa nao encontrada ou usuario já inserido'})
