@@ -4,19 +4,17 @@ a {
 .container {
   width: 100vw;
   margin: 0 auto;
-  /*height: 100%  ;*/
+  padding-top: 20px;
   overflow-x: hidden;
   box-sizing: border-box;
   background-color: #EEEEEE;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-
+  font-family: 'Roboto';
 }
 .project-card {
-  width: 20%;
-  height: 250px;
-  /*margin: 10px 50px;*/
+  width: 15%;
   margin:  20px 2.5%;
   box-shadow: 0px 0px 4px rgba(0,0,0,.14),
               0px 3px 4px rgba(0,0,0,.12),
@@ -24,14 +22,14 @@ a {
   border-radius: 2px;
   overflow: hidden;
   /*float: left;*/
-  background-color: #E0E0E0;
+  background-color: #FAFAFA;
   cursor: pointer;
   transition: All 180ms ease-in;
 }
 .project-card:hover {
   box-shadow: 0px 8px 10px rgba(0,0,0,.14),
-  0px 3px 14px rgba(0,0,0,.12),
-  0px 4px 15px rgba(0,0,0,.20);
+              0px 3px 14px rgba(0,0,0,.12),
+              0px 4px 15px rgba(0,0,0,.20);
 }
 .project-card .img {
   width: 100%;
@@ -39,7 +37,6 @@ a {
   height: 196px;
   background-color: #CCC;
   text-align: center;
-  padding: 5px;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -51,32 +48,51 @@ a {
   line-height: 196px;
   float: left;
   box-sizing: border-box;
-  color: #26C6DA;
+  color: #FAFAFA;
+  background-color: #006064;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 
 }
-.project-card .acoes {
-    width: 100%;
-    height: 50px;
-    background-color: #FFFFFF;
-    padding: 8px;
-    text-align: center;
-    line-height: 30px;
-    color: #444;
-    box-sizing: border-box;
+.project-card .info {
+  display: flex;
+  flex-wrap: wrap;
 }
-.project-card .acoes .icon {
-  padding: 5px;
-  float: right;
-  cursor: pointer;
-  transition: All 80ms ease-in;
+.project-card .info .title {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px 10px 0px 10px;
+  font-weight: 400;
+  font-size: 22px;
 }
-.project-card .acoes .icon:hover {
-  transform: scale(1.1);
-  transition: All 80ms ease-out;
+.project-card .info .descrip {
+  width: 100%;
+  height: 40px;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  font-size: 14px;
 }
+.project-card .buttons {
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 5px 10px;
+  box-sizing: border-box;
+}
+.project-card .buttons img {
+  margin: auto 2px;
+}
+.add-project {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.add-project i {
+  font-size: 125px;
+  color: #006064;
+
+}
+
 
 @media screen and (max-width: 768px) {
   .project-card {
@@ -87,5 +103,28 @@ a {
     min-width: auto;
   }
 }
+
+
+/*.project-card .acoes {*/
+    /*width: 100%;*/
+    /*height: 50px;*/
+    /*background-color: #FFFFFF;*/
+    /*padding: 8px;*/
+    /*text-align: center;*/
+    /*line-height: 30px;*/
+    /*color: #444;*/
+    /*box-sizing: border-box;*/
+/*}*/
+/*.project-card .acoes .icon {*/
+  /*padding: 5px;*/
+  /*float: right;*/
+  /*cursor: pointer;*/
+  /*transition: All 80ms ease-in;*/
+/*}*/
+/*.project-card .acoes .icon:hover {*/
+  /*transform: scale(1.1);*/
+  /*transition: All 80ms ease-out;*/
+/*}*/
+
 
 

@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import { DadosDeUsuarioService } from '../Services/dados-de-usuario.service';
 import { CoreService } from '../Services/core.service';
 import {ProjectsServiceService} from "../projects/projects-service.service";
+import {NotificationService} from "../notification/notification.service";
 
 @Component({
   selector: 'app-main',
@@ -23,7 +24,8 @@ export class MainComponent implements OnInit {
               private http: Http,
               private dadosDoUsuario: DadosDeUsuarioService,
               private core: CoreService,
-              private projects: ProjectsServiceService) {
+              private projects: ProjectsServiceService,
+              private notificacao: NotificationService) {
   }
 
   ngOnInit() {

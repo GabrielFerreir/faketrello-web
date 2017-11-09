@@ -111,7 +111,7 @@ export class ProjectsServiceService {
         .subscribe((res) => {
           this.popupConfirmacao.fechaPopUpConfirmacao();
           this.searchProjects();
-          this.snackbar.chamaSnackbar('Excluido com sucesso!')
+          this.snackbar.inserirSnackbar('Excluido com sucesso!')
           console.log(res);
         }, error => {
           console.log(error);
@@ -162,7 +162,7 @@ export class ProjectsServiceService {
       .map(res => res.json())
       .subscribe((res) => {
         console.log(res)
-        this.snackbar.chamaSnackbar('Usuario Adicionado Com Sucesso!');
+        this.snackbar.inserirSnackbar('Usuario Adicionado Com Sucesso!');
         this.campoDePesquisa = '';
 
         const membros = document.querySelector('.membros');

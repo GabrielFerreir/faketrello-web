@@ -46,7 +46,7 @@
 
 </div>
 
-  <div class="notificacoes">
+  <div class="notificacoes" (click)="notificacao.changeVisibility()">
     <img src="../../assets/notificacoes.svg">
     <div class="qtdNotificacoes"></div>
   </div>
@@ -71,3 +71,6 @@
   <span >Logout</span>
   </li>
 </app-menu-info-user>
+
+<app-notification></app-notification>
+

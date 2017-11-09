@@ -55,25 +55,7 @@ export class DragDropComponent implements OnInit {
 
   }
   addTarefa() {
-    this.dragDropService.addTarefa()
-      .subscribe((res) => {
-        console.log(res);
-        this.dragDropService.addElemento = false;
-        // BUSCA OS BLOCOS NOVAMENTE
-        this.projectsService.searchBlocks(this.dragDropService.idProjeto)
-          .subscribe((res) => {
-            console.log(res);
-            this.dragDropService.blocks = res;
-            this.dragDropService.nomeTarefa = '';
-            this.dragDropService.dataTarefa = '';
-          }, error => {
-            console.error(error);
-          }, () => {
-          });
-
-      }, error => {
-        console.error(error);
-      });
+    this.dragDropService.addTarefa();
   }
   fechaAddElemento() {
     this.dragDropService.addElemento = false;

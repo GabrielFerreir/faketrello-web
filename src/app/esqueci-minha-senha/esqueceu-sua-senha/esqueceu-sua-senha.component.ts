@@ -67,7 +67,7 @@ export class EsqueceuSuaSenhaComponent implements OnInit {
 
   emailValido() {
       console.log('A')
-      this.snackbarsService.chamaSnackbar('Aguarde');
+      this.snackbarsService.inserirSnackbar('Aguarde');
 
     var url = 'http://' + this.core.ipDaApi + '/newpass';
     var json = JSON.stringify(
@@ -83,7 +83,7 @@ export class EsqueceuSuaSenhaComponent implements OnInit {
       .map(res => res.json())
       .subscribe(
         data => {
-          this.snackbarsService.chamaSnackbar('Email Enviado');
+          this.snackbarsService.inserirSnackbar('Email Enviado');
           console.log(JSON.stringify(data));
           console.log('Sucesso')
         }),

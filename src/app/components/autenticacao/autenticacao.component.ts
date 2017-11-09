@@ -37,7 +37,7 @@ export class AutenticacaoComponent implements OnInit {
   }
 
   reenvia(email) {
-    this.snackbarService.chamaSnackbar('Aguarde...');
+    this.snackbarService.inserirSnackbar('Aguarde...');
 
     var url = 'http://' + this.core.ipDaApi + '/resendEmail';
     var json = JSON.stringify(
@@ -55,7 +55,7 @@ export class AutenticacaoComponent implements OnInit {
       .map(res => res.json())
       .subscribe(
         data => {
-          this.snackbarService.chamaSnackbar('Email enviado com sucesso!');
+          this.snackbarService.inserirSnackbar('Email enviado com sucesso!');
         },
         error => {
           console.log(error);

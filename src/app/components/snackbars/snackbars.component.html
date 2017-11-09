@@ -1,7 +1,11 @@
   <div class="containerSnackbars" #HTMLSnack>
 
-    <div [@mostra]="snackbarsService.estado" class="snackbars" #HTMLsnackbar *ngIf="snackbarsService.notificacoes[0]">
-      {{ snackbarsService.notificacoes[0].text }}
+    <div *ngFor="let snack of snackbarsService.notificacoes; let index = index">
+      <!--<div [@mostra]="snackbarsService.situacao" class="snackbars" #HTMLsnackbar>-->
+      <div class="snackbars" #HTMLsnackbar>
+        {{ snack.text }}
+      </div>
     </div>
+
 
   </div>

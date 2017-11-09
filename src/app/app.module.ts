@@ -37,6 +37,8 @@ import { ArrowBackComponent } from './components/arrow-back/arrow-back.component
 import {ArrowBackModule} from './components/arrow-back/arrow-back.module';
 // import { SocketService } from './Services/socket.service';
 import { SocketIoModule, SocketIoConfig} from "ng-socket-io";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {NotificationModule} from "./notification/notification.module";
 
 const config: SocketIoConfig = {url: '192.168.52.75:3000', options: {}};
 
@@ -56,6 +58,7 @@ const config: SocketIoConfig = {url: '192.168.52.75:3000', options: {}};
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpModule,
     AppRoutingModule,
@@ -68,6 +71,7 @@ const config: SocketIoConfig = {url: '192.168.52.75:3000', options: {}};
     MenuModule,
     MenuInfoUserModule,
     ArrowBackModule,
+    NotificationModule,
     SocketIoModule.forRoot(config),
   ],
   providers: [DadosDeUsuarioService,
