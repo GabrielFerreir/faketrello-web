@@ -44,7 +44,7 @@
             <li *ngFor="let comentario of dragDropService?.infoOptionTask?.comments">
               <span *ngIf="!modifyComment || idModifyComment != comentario.id_comment">{{ comentario.comment }}</span>
               <input *ngIf="modifyComment && idModifyComment == comentario.id_comment" class="textFields modifyComments"
-                     style="width: calc(100% - 100px);" (blur)="dragDropService.changeCommentTask(comentario.comment)" [(ngModel)]="comentario.comment">
+                     style="width: calc(100% - 100px);" (blur)="dragDropService.changeCommentTask(comentario.comment, comentario.id_comment)" [(ngModel)]="comentario.comment">
               <div class="more" (click)="onMoreOptionsComments(comentario.id_comment)"></div>
               <div [hidden]="!moreOptionsComments || comentario.id_comment != idMoreOptionsComments"
                    class="optionsMore">
@@ -75,7 +75,7 @@
               </label>
               <span *ngIf="!modifyChecklist || idModifyChecklist != checklist.id_checklist">{{ checklist.name_checklist }}</span>
               <input *ngIf="modifyChecklist && idModifyChecklist == checklist.id_checklist" class="textFields modifyChecklist"
-                     style="width: calc(100% - 100px);" (blur)="dragDropService.changeChecklistTask(checklist.name_checklist)" [(ngModel)]="checklist.name_checklist">
+                     style="width: calc(100% - 100px);" (blur)="dragDropService.changeChecklistTask(checklist.name_checklist, checklist.id_checklist)" [(ngModel)]="checklist.name_checklist">
 
               <div class="more moreCheckbox" (click)="onMoreOptionsChecklist(checklist.id_checklist)"></div>
               <div [hidden]="!moreOptionsChecklist || checklist.id_checklist != idMoreOptionsChecklist"

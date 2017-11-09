@@ -28,15 +28,16 @@
   user-select: none;
   margin: 5px 0;
   cursor: default;
-  position: fixed;
-  bottom: -60px;
-  transition: all 480ms ease;
+  /*position: fixed;*/
+  /*bottom: -60px;*/
+  transform: translateY(60px);
+  transition: all 800ms ease;
 }
 .climb {
-  transform: translateY(-60px);
+  transform: translateY(0px);
 
 }
 .leave {
-  transform: translateY(0px);
+  transform: translateY(60px);
 }
 

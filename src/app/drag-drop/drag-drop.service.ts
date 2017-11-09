@@ -432,6 +432,7 @@ export class DragDropService {
         console.log(error);
       });
   }
+
   changeBlock(event) {
     const idBlock = event.target.parentNode.parentNode.id;
     const name = event.target.value;
@@ -496,6 +497,9 @@ export class DragDropService {
             this.nomeTarefa = '';
             this.dataTarefa = '';
             this.snackbar.inserirSnackbar('Tarefa adicionada com sucesso!');
+            this.socket.emit('changeTask', {
+              idProject: this.idProjeto
+            });
           }, error => {
             console.error(error);
           });
@@ -649,8 +653,8 @@ export class DragDropService {
       });
   }
 
-  changeCommentTask(comment) {
-    var url = 'http://' + this.core.ipDaApi + '/task/comment/' + this.idTask;
+  changeCommentTask(comment, idComent) {
+    var url = 'http://' + this.core.ipDaApi + '/task/comment/' + idComent;
     var json = JSON.stringify(
       {
         comment: comment,
@@ -781,8 +785,8 @@ export class DragDropService {
       });
   }
 
-  changeChecklistTask(checklist) {
-    var url = 'http://' + this.core.ipDaApi + '/task/checklistName/' + this.idTask;
+  changeChecklistTask(checklist, idChecklist) {
+    var url = 'http://' + this.core.ipDaApi + '/task/checklistName/' + idChecklist;
     var json = JSON.stringify(
       {
         name: checklist,
@@ -963,6 +967,9 @@ export class DragDropService {
             this.blocks = res;
             this.offOptionsTasks();
             this.snackbar.inserirSnackbar('Tarefa deletada com sucesso!');
+            this.socket.emit('changeTask', {
+              idProject: this.idProjeto
+            });
           }, error => {
             console.log(error);
           });

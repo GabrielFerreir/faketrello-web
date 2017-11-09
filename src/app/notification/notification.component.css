@@ -1,0 +1,86 @@
+.notificacoes {
+  width: 300px;
+  background-color: #FAFAFA;
+  position: fixed;
+  top: 47px;
+  right: 16px;
+  z-index: 26;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 2px;
+  box-shadow: 0px 16px 24px rgba(0,0,0,.14),
+              12px 0px 6px rgba(0,0,0,.12),
+              0px 8px 10px rgba(0,0,0,.12);
+  transform: scale(0);
+  transform-origin: left top;
+  transition: All 220ms ease;
+}
+.visibility {
+  transform: scale(1);
+}
+
+.notificacoes header {
+  height: 40px;
+  width: 100%;
+  text-align: center;
+  line-height: 40px;
+  font-size: 16px;
+  color: #006064;
+  font-family: 'Roboto';
+  font-weight: 400;
+  user-select: none;
+  cursor: default;
+  border-bottom: 1px solid  #9E9E9E;
+}
+.notificacoes .vejaMais {
+  height: 40px;
+  width: 100%;
+  text-align: center;
+  line-height: 40px;
+  font-size: 14px;
+  color: #006064;
+  font-family: 'Roboto';
+  font-weight: 400;
+  user-select: none;
+  cursor: pointer;
+}
+.notificacao {
+  width: 100%;
+  min-height: 100px;
+  padding: 5px 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  cursor: pointer;
+  border-bottom: 1px solid  #9E9E9E;
+}
+
+.notificacao .img {
+  width: 42px;
+  height: 42px;
+  background-color: #006064;
+  border-radius: 50%;
+  color: #FAFAFA;
+  text-align: center;
+  line-height: 42px;
+  font-family: 'Roboto';
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.notificacao .text {
+  width: 214px;
+  padding: 12px;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  /*text-align: justify;*/
+  font-size: 14px;
+}
+.notificacao .data {
+  width: 100%;
+  color: #006064;
+  text-align: right;
+  font-size: 12px;
+}
