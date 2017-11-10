@@ -24,7 +24,7 @@ export class NotificationComponent implements OnInit {
     document.addEventListener('mousedown', (event) => {
       this.hiddenNotification(event);
     });
-    this.searchNotification();
+    this.service.searchNotification();
   }
 
   hiddenNotification(event) {
@@ -35,19 +35,7 @@ export class NotificationComponent implements OnInit {
     }
   }
 
-  searchNotification() {
-    var url = 'http://' + this.core.ipDaApi + '/user/notifications';
-    var headers = new Headers();
-    headers.append('Authorization', 'Bearer ' + this.dados.getCookieTokken());
-    return this.http.get(url, {headers: headers})
-      .map(res => res.json())
-      .subscribe((res) => {
-        console.log(res);
-        this.service.userNotification = res;
-      }, error => {
-        console.log(error);
-      });
-  }
+
 
 
 }

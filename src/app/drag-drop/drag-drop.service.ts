@@ -5,6 +5,7 @@ import {DadosDeUsuarioService} from '../Services/dados-de-usuario.service';
 import {Socket} from 'ng-socket-io';
 import {ProjectsServiceService} from '../projects/projects-service.service';
 import {SnackbarsService} from "../components/snackbars/snackbars.service";
+import {NotificationService} from "../notification/notification.service";
 
 
 @Injectable()
@@ -15,7 +16,8 @@ export class DragDropService {
               private http: Http,
               private socket: Socket,
               private projects: ProjectsServiceService,
-              private snackbar: SnackbarsService) {
+              private snackbar: SnackbarsService,
+              private notificationService: NotificationService) {
   }
 
   container;
@@ -425,6 +427,7 @@ export class DragDropService {
                 idProject: this.idProjeto
               });
               this.snackbar.inserirSnackbar('Bloco adicionada com sucesso!');
+              this.notificationService.searchNotification();
             }, error => {
               console.error(error);
             });
@@ -455,7 +458,7 @@ export class DragDropService {
           idProject: this.idProjeto
         });
         this.snackbar.inserirSnackbar('Bloco alterado com sucesso!');
-
+        this.notificationService.searchNotification();
       }, error => {
         console.log(error);
       });
@@ -497,6 +500,7 @@ export class DragDropService {
             this.nomeTarefa = '';
             this.dataTarefa = '';
             this.snackbar.inserirSnackbar('Tarefa adicionada com sucesso!');
+            this.notificationService.searchNotification();
             this.socket.emit('changeTask', {
               idProject: this.idProjeto
             });
@@ -546,6 +550,7 @@ export class DragDropService {
               idProject: this.idProjeto
             });
             this.snackbar.inserirSnackbar('Bloco deletado com sucesso!');
+            this.notificationService.searchNotification();
           }, error => {
             console.log(error);
           });
@@ -605,6 +610,7 @@ export class DragDropService {
                 console.log(res);
                 this.blocks = res;
                 this.snackbar.inserirSnackbar('Comentario adicionado com sucesso!');
+                this.notificationService.searchNotification();
               }, error => {
                 console.log(error);
               })
@@ -640,6 +646,7 @@ export class DragDropService {
                 console.log(res);
                 this.blocks = res;
                 this.snackbar.inserirSnackbar('Comentario deletado com sucesso!');
+                this.notificationService.searchNotification();
               }, error => {
                 console.log(error);
               })
@@ -673,7 +680,7 @@ export class DragDropService {
           idProject: this.idProjeto
         });
         this.snackbar.inserirSnackbar('Comentario alterado com sucesso!');
-
+        this.notificationService.searchNotification();
       }, error => {
         console.log(error);
       });
@@ -702,7 +709,7 @@ export class DragDropService {
             console.log(res);
             this.blocks = res;
             this.snackbar.inserirSnackbar('Tarefa alterada com sucesso!');
-
+            this.notificationService.searchNotification();
           }, error => {
             console.log(error);
           })
@@ -723,6 +730,7 @@ export class DragDropService {
       .subscribe((res) => {
         console.log(res.json());
         this.snackbar.inserirSnackbar('Checklist foi ' + res.json().result + ' com sucesso!');
+        this.notificationService.searchNotification();
       }, error => {
         console.log(error);
       });
@@ -753,6 +761,7 @@ export class DragDropService {
           console.log(res);
             this.infoOptionTask = res;
             this.snackbar.inserirSnackbar('Checklist criada com sucesso!');
+            this.notificationService.searchNotification();
           }, error => {
           }, () => {
             this.addNewChecklist = '';
@@ -778,6 +787,7 @@ export class DragDropService {
           .subscribe((res) => {
             this.infoOptionTask = res;
             this.snackbar.inserirSnackbar('Checklist deletada com sucesso!');
+            this.notificationService.searchNotification();
           }, error => {
           });
       }, error => {
@@ -802,6 +812,7 @@ export class DragDropService {
       .subscribe((res) => {
         console.log(res);
         this.snackbar.inserirSnackbar('Checklist alterada com sucesso!');
+        this.notificationService.searchNotification();
       }, error => {
         console.log(error);
       });
@@ -828,6 +839,7 @@ export class DragDropService {
           .subscribe((res) => {
             this.infoOptionTask = res;
             this.snackbar.inserirSnackbar('Anexo adicionado com sucesso!');
+            this.notificationService.searchNotification();
 
           }, error => {
           });
@@ -855,6 +867,7 @@ export class DragDropService {
                 console.log(res);
                 this.blocks = res;
                 this.snackbar.inserirSnackbar('Membro deletado com sucesso!');
+                this.notificationService.searchNotification();
 
               }, error => {
                 console.log(error);
@@ -891,6 +904,7 @@ export class DragDropService {
                 console.log(res);
                 this.blocks = res;
                 this.snackbar.inserirSnackbar('Membro adicionado com sucesso!');
+                this.notificationService.searchNotification();
 
               }, error => {
                 console.log(error);
@@ -929,6 +943,7 @@ export class DragDropService {
           idProject: this.idProjeto
         });
         this.snackbar.inserirSnackbar('Tarefa movida com sucesso!');
+        this.notificationService.searchNotification();
 
       }, error => {
         console.log(error);
@@ -967,6 +982,7 @@ export class DragDropService {
             this.blocks = res;
             this.offOptionsTasks();
             this.snackbar.inserirSnackbar('Tarefa deletada com sucesso!');
+            this.notificationService.searchNotification();
             this.socket.emit('changeTask', {
               idProject: this.idProjeto
             });

@@ -68,8 +68,6 @@ export class AlterarProjectsComponent implements OnInit {
     console.log(el)
     const reader  = new FileReader();
     reader.onloadend = (e) => {
-      // preview.src = reader.result;
-      // console.log(reader.result);
       this.img64 = reader.result;
       console.log(this.img64);
     }
@@ -81,13 +79,9 @@ export class AlterarProjectsComponent implements OnInit {
   /* IMAGEM  IMAGEM */
 
   focus(el) {
-    // console.log(el);
     const elem = el.target;
     elem.focus();
-
-    // const header = document.querySelector('header').clientHeight + 16;
     const pai = document.querySelector('.all');
-
     const posEl = elem.getBoundingClientRect().y + pai.scrollTop;
     console.log(elem.getBoundingClientRect().y);
     console.log(pai.scrollTop);

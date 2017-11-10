@@ -349,6 +349,9 @@ input[type="checkbox"]:not(:checked) ~ .checkboxNameOn {
   font-family: 'Roboto';
   background-color: #009587;
   float: left;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 /deep/ .resSearch h1 {
   margin-left: 16px;

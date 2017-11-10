@@ -182,16 +182,12 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
 
   }
   previewFile(el) {
-    console.log(el)
     const reader  = new FileReader();
     reader.onloadend = (e) => {
-      // preview.src = reader.result;
-      // console.log(reader.result);
       this.img64 = reader.result;
     }
     if (el) {
       reader.readAsDataURL(el.files[0]);
-    } else {
     }
   }
 }
