@@ -17,7 +17,8 @@
     if (req._parsedUrl.pathname === '/userinfo' || req._parsedUrl.pathname === '/login' || req._parsedUrl.pathname === '/newuser'
       || req.originalUrl.includes('/imgsProjects/') || req.originalUrl.includes('/imgsUser/')
       || req.originalUrl.includes('/assets/') || req._parsedUrl.pathname === '/emailExists/'
-      || req.originalUrl.includes('/attachment/') || req.originalUrl.includes('/newpass')) {
+      || req.originalUrl.indexOf('/attachment/') === 0 || req.originalUrl.includes('/newpass')) {
+
       next()
     } else {
       //console.log(req)
@@ -58,6 +59,7 @@
   app.post('/resendEmail', userController.verifyEmail)
   app.delete('/deleteUser', userController.deleteUser)
   app.get('/emailExists', userController.emailExists)
+  app.get('/user/notifications', projectsController.getNotifications)
 
   //Parte de projetos
   app.post('/project', projectsController.newProject)
@@ -71,6 +73,7 @@
   app.put('/promoteUser/:id', projectsController.promoteUser)
   app.delete('/exitProject/:id', projectsController.exitProject)
   app.post('/project/verifyPermission', projectsController.verifyPermission)
+  app.post('/project/notifications/:id', projectsController.sawNotification)
 
   //Parte de blocos
   app.post('/blocks/:id', blocksController.newblock)

@@ -104,7 +104,7 @@ exports.changeProject = async function (req, res) {
   req.body.idproject = id
   let permission = await exports.verifyPermission(req, res)
 
-  db.any('SELECT * FROM changeproject($1,$2,$3,$4,$5,$6);', [id, req.body.nameProject, req.body.description, caminho, permission[0].permission,req.dataToken.id])
+  db.any('SELECT * FROM changeproject($1,$2,$3,$4,$5,$6);', [id, req.body.nameProject, req.body.description, caminho, permission[0].permission, req.dataToken.id])
     .then(async data => {
       if (!data) {
         res.status(400).json({error: 'Projeto nao encontrado ou pertence a outras pessoas'})
@@ -209,7 +209,7 @@ exports.removeUserTeam = async function (req, res) {
 exports.promoteUser = async function (req, res) {
   req.body.idproject = req.params.id
   let permission = await exports.verifyPermission(req, res)
-  db.any('SELECT * FROM changePermissionMember($1,$2,$3,$4)', [req.params.id, req.body.idusertarget, permission[0].permission,req.dataToken.id])
+  db.any('SELECT * FROM changePermissionMember($1,$2,$3,$4)', [req.params.id, req.body.idusertarget, permission[0].permission, req.dataToken.id])
     .then(data => {
       if (data[0].status === 0) {
         res.status(401).json({error: 'Deu merda'})
@@ -243,3 +243,45 @@ exports.defaultBlocks = function (req, res) {
       }
     })
 }
+
+//Mostra as notificações
+exports.getNotifications = function (req, res) {
+  db.any('SELECT * FROM getNotifications($1)', [req.dataToken.id])
+    .then(data => {
+      let cleanObject = []
+      if (!data || !data[0]) {
+        res.status(404).json({result: 'Esse projeto nao possui notificações'})
+      } else {
+        data.forEach((item) => {
+          cleanObject.push(clearObject(item))
+        })
+        res.status(200).json(cleanObject)
+      }
+    })
+
+  function clearObject (o) {
+    if (typeof o === 'object') {
+      const properties = Object.keys(o)
+      properties.forEach((item) => {
+        if (!o[item]) {
+          delete o[item]
+        }
+      })
+    }
+    return o
+  }
+}
+
+//Confirma que o usuario viu a notificação
+exports.sawNotification = function (req, res) {
+  db.any('SELECT * FROM sawNotification($1,$2)', [req.params.id, req.body.idUser])
+    .then(data => {
+      if (!data) {
+        res.status(404).json({error: 'Usuário não encontrado no projeto'})
+      } else {
+        res.status(200).json({result: 'Deu certo'})
+      }
+    })
+}
+
+
