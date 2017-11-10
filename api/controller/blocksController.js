@@ -7,26 +7,38 @@ let socket = require('./socket.js')
 //Adiciona quadros nos projetos
 exports.newblock = function (req, res) {
   let idProject = req.params.id
-  db.any('SELECT * FROM newblocks($1,$2,$3)', [req.body.nameBlock, idProject, req.dataToken.id])
-    .then(data => {
-      if (data) {
-        res.status(200).json({result: 'Quadro criado'})
-      } else {
-        res.status(404).json({error: 'Projeto nao foi encontrado'})
-      }
-    })
+
+  if (req.body.nameBlock && req.body.nameBlock.length > 0 && req.body.nameBlock.length < 50) {
+
+    db.any('SELECT * FROM newblocks($1,$2,$3)', [req.body.nameBlock, idProject, req.dataToken.id])
+      .then(data => {
+        if (data) {
+          res.status(200).json({result: 'Quadro criado'})
+        } else {
+          res.status(404).json({error: 'Projeto nao foi encontrado'})
+        }
+      })
+  } else {
+    res.status(406).json({error: 'Nome do bloco muito longo ou muito curto'})
+  }
 }
 
 //Muda o nome do bloco
 exports.changeBlockName = function (req, res) {
-  db.any('SELECT * FROM changeBlockName($1,$2,$3)', [req.body.newName, req.params.id, req.dataToken.id])
-    .then(data => {
-      if (!data) {
-        res.status(404).json({error: 'Nao foi possivel encontrar o bloco desejado'})
-      } else {
-        res.status(200).json({result: 'Alterado com sucesso'})
-      }
-    })
+  if (req.body.newName && req.body.newName.length > 0 && req.body.newName.length <= 50) {
+
+    db.any('SELECT * FROM changeBlockName($1,$2,$3)', [req.body.newName, req.params.id, req.dataToken.id])
+      .then(data => {
+        console.log(data)
+        if (!data || !data[0].changeblockname) {
+          res.status(404).json({error: 'Nao foi possivel encontrar o bloco desejado'})
+        } else {
+          res.status(200).json({result: 'Alterado com sucesso'})
+        }
+      })
+  } else {
+    res.status(406).json({error: 'Nome do bloco muito longo ou muito curto'})
+  }
 }
 
 //Mostra os blocos do projeto
@@ -57,7 +69,7 @@ exports.deleteBlock = function (req, res) {
 exports.newtask = async function (req, res) {
   req.idBlock = req.params.id
   await lastPosition(req, res)
-  if (req.body.nameTask && req.body.nameTask.length <= 100) {
+  if (req.body.nameTask && req.body.nameTask.length > 0 && req.body.nameTask.length <= 100) {
 
     db.any('SELECT * FROM newtasks($1,$2,$3,$4,$5,$6)', [req.body.nameTask, req.body.finalDate, req.body.description, req.params.id, req.lastPosition, req.dataToken.id])
       .then(data => {
@@ -68,20 +80,25 @@ exports.newtask = async function (req, res) {
         }
       })
   } else {
-    res.json({code: 406, message: 'Nome da tarefa muito longo ou muito curto'})
+    res.status(406).json({code: 406, message: 'Nome da tarefa muito longo ou muito curto'})
   }
 }
 
 //Altera tarefa
 exports.changeTask = function (req, res) {
-  db.any('SELECT * FROM changeTask($1,$2,$3,$4,$5)', [req.params.id, req.body.nameTask, req.body.finalDate, req.body.description, req.dataToken.id])
-    .then(data => {
-      if (!data) {
-        res.status(404).json({error: 'Tarefa nao encontrada'})
-      } else {
-        res.status(200).json({result: 'Alterado com sucesso'})
-      }
-    })
+  if (req.body.nameTask && req.body.nameTask.length > 0 && req.body.nameTask.length <= 100) {
+
+    db.any('SELECT * FROM changeTask($1,$2,$3,$4,$5)', [req.params.id, req.body.nameTask, req.body.finalDate, req.body.description, req.dataToken.id])
+      .then(data => {
+        if (!data) {
+          res.status(404).json({error: 'Tarefa nao encontrada'})
+        } else {
+          res.status(200).json({result: 'Alterado com sucesso'})
+        }
+      })
+  } else {
+    res.status(406).json({code: 406, message: 'Nome da tarefa muito longo ou muito curto'})
+  }
 }
 
 //Move a tarefa de bloco
@@ -176,19 +193,24 @@ function buildAttachment (req) {
 //Cria as checklists no banco
 exports.newChecklist = function (req, res) {
   let json = req.body.jsonChecklists
-  db.any('SELECT * FROM buildChecklist($1,$2);', [JSON.stringify(json), req.dataToken.id])
-    .then(data => {
-      if (!data) {
-        res.status(404).json({error: 'Tarefa inexistente'})
-      } else {
-        res.status(200).json({result: 'Checklist criada com sucesso'})
-      }
-    })
+  if (json[0].namechecklist && json[0].namechecklist.length > 0 && json[0].namechecklist.length <= 100) {
+
+    db.any('SELECT * FROM buildChecklist($1,$2);', [JSON.stringify(json), req.dataToken.id])
+      .then(data => {
+        if (!data) {
+          res.status(404).json({error: 'Tarefa inexistente'})
+        } else {
+          res.status(200).json({result: 'Checklist criada com sucesso'})
+        }
+      })
+  } else {
+    res.status(406).json({error: 'Nome da checklist muito longo ou muito curto'})
+  }
 }
 
 //Altera a booleana da checkList
 exports.changeStatusChecklist = function (req, res) {
-  db.any('SELECT * FROM ChangeStatusChecklist($1,$2)', [req.params.id,req.dataToken.id])
+  db.any('SELECT * FROM ChangeStatusChecklist($1,$2)', [req.params.id, req.dataToken.id])
     .then(data => {
       if (!data || !data[0].rstatus) {
         res.status(404).json({error: 'Checklist nao encontrada'})
@@ -213,7 +235,7 @@ exports.changeNameChecklist = function (req, res) {
 
 //Deletar checklists
 exports.deleteChecklist = function (req, res) {
-  db.any('SELECT * FROM deleteChecklist($1,$2)', [req.params.id,req.dataToken.id])
+  db.any('SELECT * FROM deleteChecklist($1,$2)', [req.params.id, req.dataToken.id])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Checklist nao encontrada'})
@@ -313,7 +335,8 @@ exports.insertMembersTask = function (req, res) {
 
 //Remove membro da tarefa
 exports.removeMemberTask = function (req, res) {
-  db.any('SELECT * FROM removeMemberTask($1,$2)', [req.params.id,req.dataToken.id])
+
+  db.any('SELECT * FROM removeMemberTask($1,$2)', [req.params.id, req.dataToken.id])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Tarefa nao encontrada'})
