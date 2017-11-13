@@ -937,6 +937,18 @@ export class DragDropService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
     return this.http.put(url, params, {headers: headers})
+
+
+
+
+
+
+
+
+
+
+
+
       .subscribe((res) => {
         console.log(res);
         this.socket.emit('changeTask', {

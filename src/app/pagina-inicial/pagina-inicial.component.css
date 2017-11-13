@@ -4,7 +4,7 @@ a {
 .container {
   width: 100vw;
   margin: 0 auto;
-  padding-top: 20px;
+  padding: 20px 0;
   overflow-x: hidden;
   box-sizing: border-box;
   background-color: #EEEEEE;
@@ -14,7 +14,7 @@ a {
   font-family: 'Roboto';
 }
 .project-card {
-  width: 15%;
+  width: 20%;
   margin:  20px 2.5%;
   box-shadow: 0px 0px 4px rgba(0,0,0,.14),
               0px 3px 4px rgba(0,0,0,.12),
@@ -39,6 +39,7 @@ a {
   text-align: center;
   box-sizing: border-box;
   overflow: hidden;
+  position: relative;
 }
 .project-card .img div {
   /*margin: 0 auto;*/
@@ -53,8 +54,8 @@ a {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-
 }
+
 .project-card .info {
   display: flex;
   flex-wrap: wrap;
@@ -76,33 +77,49 @@ a {
 .project-card .buttons {
   display: flex;
   flex-direction: row-reverse;
-  padding: 5px 10px;
+  height: 50px;
+  padding: 8px;
+  margin: auto 8px;
   box-sizing: border-box;
 }
 .project-card .buttons img {
   margin: auto 2px;
+  width: 24px;
+  height: 24px;
 }
 .add-project {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: transparent;
+  box-shadow: none;
+}
+.add-project:hover {
+  box-shadow: none;
 }
 .add-project i {
   font-size: 125px;
-  color: #006064;
+  color: #757575;
 
 }
 
+@media screen and (max-width: 1024px) {
+  .project-card {
+    width: 25%;
+    margin: 0 4.1%;
+  }
+}
 
 @media screen and (max-width: 768px) {
   .project-card {
     /*margin-left: calc(50vw - 110px);*/
     /*width: 220px;*/
     width: 90%;
-    margin-left: 5%;
+    margin: 10px 5% 0 5%;
     min-width: auto;
   }
 }
+
 
 
 /*.project-card .acoes {*/

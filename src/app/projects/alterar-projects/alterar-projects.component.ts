@@ -1,9 +1,9 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import {Component, OnInit, AfterViewInit, ViewChild} from '@angular/core';
 import {SnackbarsService} from '../../components/snackbars/snackbars.service';
 import {ProjectsServiceService} from '../projects-service.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CoreService} from '../../Services/core.service';
-import { PesquisaDeMembrosDoProjetoPipe } from '../../drag-drop/pesquisa-de-membros-do-projeto.pipe';
+import {PesquisaDeMembrosDoProjetoPipe} from '../../drag-drop/pesquisa-de-membros-do-projeto.pipe';
 import {DadosDeUsuarioService} from "../../Services/dados-de-usuario.service";
 
 @Component({
@@ -16,48 +16,45 @@ export class AlterarProjectsComponent implements OnInit {
   id;
   img64;
 
-
-  situacaoMembro = false;
-  situacaoOpMore = false;
+  menuUser: boolean;
+  positionMenu;
 
   // PEGA O ID DO USUARIO LOGADO PARA VERIFICAR AS OPÇÔES DOS MEMBROS DO GRUPO
   idUser;
+  @ViewChild('HTMLSearch') HTMLSearch;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
               private projects: ProjectsServiceService,
               private snackbar: SnackbarsService,
               private core: CoreService,
-              private dadossDeUsuario: DadosDeUsuarioService) { }
+              private dadossDeUsuario: DadosDeUsuarioService) {
+  }
 
 
   ngOnInit() {
+    setTimeout(() => {
+      this.positionMenu = {
+        top: document.querySelector('.optionsUserOff').getBoundingClientRect().top,
+        left: document.querySelector('.optionsUserOff').getBoundingClientRect().left
+      }
+    }, 200);
+
+
     this.id = this.route.snapshot.params['id'];
     this.projects.detailProject(this.id);
-    console.log(this.id);
-    this.OnResSearch();
     this.dadossDeUsuario.recuperarDadosDeUsuario()
       .then(res => {
         this.idUser = res.json();
-        console.log(this.idUser)
         this.idUser = this.idUser.id_user;
       })
       .catch();
 
-    // ESTADO DEFAULT DOS MEMBROS
-    document.addEventListener('click', ($event) => {
-      this.focusMembro($event);
+    document.addEventListener('mousedown', (e) => {
+      this.closeMenuUser();
     });
-    // MENU DE OPÇÕES DOS MEMBROS
-    document.addEventListener('click', ($event) => {
-      this.menuMembros($event);
-    });
-
   }
 
-  AfterViewInit() {
-    this.situacaoMembro = false;
-  }
 
   /* IMAGEM  IMAGEM */
   chamaFile() {
@@ -66,7 +63,7 @@ export class AlterarProjectsComponent implements OnInit {
   }
   previewFile(el) {
     console.log(el)
-    const reader  = new FileReader();
+    const reader = new FileReader();
     reader.onloadend = (e) => {
       this.img64 = reader.result;
       console.log(this.img64);
@@ -78,83 +75,63 @@ export class AlterarProjectsComponent implements OnInit {
   }
   /* IMAGEM  IMAGEM */
 
-  focus(el) {
-    const elem = el.target;
-    elem.focus();
-    const pai = document.querySelector('.all');
-    const posEl = elem.getBoundingClientRect().y + pai.scrollTop;
-    console.log(elem.getBoundingClientRect().y);
-    console.log(pai.scrollTop);
-      pai.scrollTo(0, posEl);
+  // focus(el) {
+  //   const elem = el.target;
+  //   elem.focus();
+  //   const pai = document.querySelector('.all');
+  //   const posEl = elem.getBoundingClientRect().y + pai.scrollTop;
+  //   console.log(elem.getBoundingClientRect().y);
+  //   console.log(pai.scrollTop);
+  //   pai.scrollTo(0, posEl);
+  //
+  //   // console.log(header);
+  //   // console.log(posEl);
+  // }
 
-    // console.log(header);
-    // console.log(posEl);
-  }
-  OnResSearch() {
-    const value = this.projects.campoDePesquisa;
-    const membros = document.querySelector('.membros');
-    const resSearch = document.querySelector('#resSearch');
-  if (value.length > 0) {
-    //   console.log(offResSearch);
-      resSearch.setAttribute('style', 'display: block');
-      membros.setAttribute('style', 'display: none');
-      console.log(resSearch);
-
-  } else {
-    resSearch.setAttribute('style', 'display: none');
-    membros.setAttribute('style', 'display: block');
+  input() {
+    this.projects.campoDePesquisa.length > 0 ? this.HTMLSearch.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLSearch.nativeElement.classList.remove('textFieldsPreenchido');
   }
 
+  // OnResSearch() {
+  //   const value = this.projects.campoDePesquisa;
+  //   const membros = document.querySelector('.membros');
+  //   const resSearch = document.querySelector('#resSearch');
+  // if (value.length > 0) {
+  //   //   console.log(offResSearch);
+  //     resSearch.setAttribute('style', 'display: block');
+  //     membros.setAttribute('style', 'display: none');
+  //     console.log(resSearch);
+  //
+  // } else {
+  //   resSearch.setAttribute('style', 'display: none');
+  //   membros.setAttribute('style', 'display: block');
+  // }
+  //
+  // }
+
+  openMenuUser(event) {
+    this.positionMenu = {
+      top: event.clientY,
+      left: event.clientX - 120 // 120 == Tamanho do menu
+    };
+
+    this.menuUser = true;
+    const membro = event.target.parentNode;
+    membro.querySelector('.optionsUserOff').className = 'optionsUser';
   }
-  focusMembro(event) {
-    if(event.target.className == 'membro' && !this.situacaoMembro) {
-          console.log('focus');
-          console.log(event.target);
-          const membro = document.querySelectorAll('.right .scroll .membro');
-            for(let i = 0; i < membro.length; i++) {
-              membro[i].className = 'hide';
-            }
-          this.situacaoMembro = true;
-          event.target.className = 'openMembro';
-    } else if(event.target.parentNode.className == 'membro' && !this.situacaoMembro){
-            console.log('focus');
-            console.log(event.target);
-            const membro = document.querySelectorAll('.right .scroll .membro');
-              for(let i = 0; i < membro.length; i++) {
-                membro[i].className = 'hide';
-              }
-            this.situacaoMembro = true;
-            event.target.parentNode.className = 'openMembro';
-    }else if(event.target.className != 'more' && this.situacaoMembro) {
-            // event.target.className = 'membro';
-            const openMembro = document.querySelector('.openMembro');
-            if(openMembro) {
-              openMembro.className = 'membro';
-            }
-            const membro = document.querySelectorAll('.right .scroll .hide');
-            for(let i = 0; i < membro.length; i++) {
-              membro[i].className = 'membro';
-            }
-            this.situacaoMembro = false;
-    }
-  }
-  menuMembros(event) {
-    // const menu = document.querySelectorAll('.opMoreOff');
-    // console.log(menu)
-    if(event.target.className == 'more' && !this.situacaoOpMore) {
-      console.log(event.target.nextElementSibling)
-      event.target.nextElementSibling.className = 'opMore';
-      console.log('Abre');
-      this.situacaoOpMore = true;
-    } else if(this.situacaoOpMore) {
-      const offOpMenu = document.querySelector('.opMore');
-      if(offOpMenu) {
-        offOpMenu.className = 'opMoreOff';
-        this.situacaoOpMore = false;
+
+  closeMenuUser() {
+    if (this.menuUser) {
+      this.menuUser = false;
+      const menus = document.querySelectorAll('.optionsUser');
+      for (let i = 0; i < menus.length; i++) {
+        menus[i].className = 'optionsUser optionsUserOff';
       }
-      console.log('fecha');
     }
   }
 
+  teste() {
+    console.log('TESTE');
+  }
 
 }
