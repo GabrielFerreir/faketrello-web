@@ -49,7 +49,6 @@
   app.put('/session/change', userController.change)
   app.put('/session/changepassword', userController.changepass)
   app.post('/newuser', userController.newUser)
-  app.get('/users', userController.db)
   app.post('/uploadImg', userController.imgs)
   app.delete('/imgUser/:id', userController.removeImg)
   app.get('/user', userController.infoUser)
@@ -73,7 +72,7 @@
   app.put('/promoteUser/:id', projectsController.promoteUser)
   app.delete('/exitProject/:id', projectsController.exitProject)
   app.post('/project/verifyPermission', projectsController.verifyPermission)
-  app.post('/project/notifications/:id', projectsController.sawNotification)
+  app.put('/project/notifications/:id', projectsController.sawNotification)
 
   //Parte de blocos
   app.post('/blocks/:id', blocksController.newblock)

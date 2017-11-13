@@ -80,53 +80,72 @@ LANGUAGE plpgsql;
 
 --SELECT * FROM deleteuser('joao1');
 
-CREATE OR REPLACE FUNCTION changeuser(pass   CHARACTER VARYING, usern CHARACTER VARYING, usertoken CHARACTER VARYING,
-                                      emailp CHARACTER VARYING, nomep CHARACTER VARYING)
+--SELECT * FROM returnDataUser(700)
+
+CREATE OR REPLACE FUNCTION returnDataUser(pIdUser INTEGER)
   RETURNS TABLE(
-    idUser    INTEGER,
-    emaild    CHARACTER VARYING,
-    namep     CHARACTER VARYING,
-    usernamer CHARACTER VARYING,
-    imageuser CHARACTER VARYING)
-LANGUAGE plpgsql
-AS $$
-DECLARE
-  vIdUser INTEGER;
+    username VARCHAR(50),
+    email    VARCHAR(100)
+  ) AS $$
 BEGIN
-  IF NOT EXISTS(SELECT
-                  l.username,
-                  l.email
-                FROM tb_login l
-                WHERE l.username = $2 OR l.email = $4
-                EXCEPT (SELECT
-                          l.username,
-                          l.email
-                        FROM tb_login l
-                        WHERE l.username = $3 OR l.email = $3))
+  RETURN QUERY
+  SELECT
+    tl.username,
+    tl.email
+  FROM tb_login tl
+  WHERE tl.id_user = pIdUser;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION changeUsername(pNewUsername CHARACTER VARYING, pOldUsername CHARACTER VARYING)
+  RETURNS BOOLEAN AS $$
+BEGIN
+
+  IF NOT EXISTS(SELECT username
+                FROM tb_login
+                WHERE username ILIKE pNewUsername)
   THEN
-
-    SELECT id_user
-    INTO vIdUser
-    FROM tb_login l
-    WHERE l.username = $3 OR l.email = $3;
-
-    UPDATE tb_login l
-    SET username = $2,
-      email      = $4,
-      name       = $5
-    WHERE l.username = $3 OR l.email = $3;
-
-    RETURN QUERY
-    SELECT
-      vIdUser,
-      $4,
-      $5,
-      $2,
-      tb_login.profile_img
-    FROM tb_login;
+    UPDATE tb_login
+    SET username = pNewUsername
+    WHERE username = pOldUsername;
+    RETURN TRUE;
   END IF;
+  RETURN FALSE;
 END
-$$;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION changeEmail(pNewEmail CHARACTER VARYING, pOldEmail CHARACTER VARYING)
+  RETURNS BOOLEAN AS $$
+BEGIN
+
+  IF NOT EXISTS(SELECT email
+                FROM tb_login
+                WHERE email ILIKE pNewEmail)
+  THEN
+    UPDATE tb_login
+    SET email = pNewEmail
+    WHERE email = pOldEmail;
+    RETURN TRUE;
+  END IF;
+  RETURN FALSE;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION changeName(pNewName CHARACTER VARYING, pUsername CHARACTER VARYING)
+  RETURNS BOOLEAN AS $$
+BEGIN
+
+  UPDATE tb_login
+  SET name = pNewName
+  WHERE username = pUsername;
+  RETURN TRUE;
+
+END
+$$
+LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION changepass(usern CHARACTER VARYING, oldpass CHARACTER VARYING, newpass CHARACTER VARYING)
   RETURNS BOOLEAN AS $$
@@ -1723,9 +1742,11 @@ CREATE OR REPLACE FUNCTION searchusers(puser CHARACTER VARYING, idproject INTEGE
   )
 AS $$
 DECLARE
-  vIdUser   INTEGER [];
-  reg       tb_team%ROWTYPE;
-  vIdUnique INTEGER;
+  vIdUser         INTEGER [];
+  reg             tb_team%ROWTYPE;
+  vIdUnique       INTEGER;
+  vErrorProcedure TEXT;
+  vErrorMessage   TEXT;
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_login
@@ -1734,9 +1755,6 @@ BEGIN
     vIdUser :=  ARRAY(SELECT id_user
                       FROM tb_login
                       WHERE tb_login.username LIKE puser OR tb_login.email LIKE puser OR tb_login.name LIKE puser);
-    vIdUnique := (SELECT id_user
-                  FROM tb_login
-                  WHERE tb_login.username LIKE puser OR tb_login.email LIKE puser OR tb_login.name LIKE puser);
 
     FOR reg IN
     SELECT id_user
@@ -1797,8 +1815,14 @@ BEGIN
       profile_img
     FROM tb_login
     WHERE tb_login.id_user = ANY (vIdUser)
+
     LIMIT 10;
   END IF;
+  EXCEPTION WHEN OTHERS
+  THEN
+    GET STACKED DIAGNOSTICS vErrorProcedure = MESSAGE_TEXT;
+    GET STACKED DIAGNOSTICS vErrorMessage = PG_EXCEPTION_CONTEXT;
+    RAISE EXCEPTION 'Internal Error: (%) %', vErrorProcedure, vErrorMessage;
 END;
 $$
 LANGUAGE plpgsql;
@@ -2231,7 +2255,7 @@ BEGIN
   RETURN TRUE;
 END;
 $$
-LANGUAGE plgpsql;
+LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION getNotifications(pIdUser INTEGER)
   RETURNS TABLE(

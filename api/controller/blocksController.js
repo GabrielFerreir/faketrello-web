@@ -29,7 +29,6 @@ exports.changeBlockName = function (req, res) {
 
     db.any('SELECT * FROM changeBlockName($1,$2,$3)', [req.body.newName, req.params.id, req.dataToken.id])
       .then(data => {
-        console.log(data)
         if (!data || !data[0].changeblockname) {
           res.status(404).json({error: 'Nao foi possivel encontrar o bloco desejado'})
         } else {
