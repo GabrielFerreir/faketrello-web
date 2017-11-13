@@ -15,6 +15,8 @@ import {DadosDeUsuarioService} from "../../Services/dados-de-usuario.service";
 export class AlterarProjectsComponent implements OnInit {
   id;
   img64;
+  name: string;
+  descri: string;
 
   menuUser: boolean;
   positionMenu;
@@ -43,12 +45,21 @@ export class AlterarProjectsComponent implements OnInit {
 
     this.id = this.route.snapshot.params['id'];
     this.projects.detailProject(this.id);
+
     this.dadossDeUsuario.recuperarDadosDeUsuario()
       .then(res => {
         this.idUser = res.json();
+        console.log(this.idUser)
         this.idUser = this.idUser.id_user;
       })
       .catch();
+
+    setTimeout(() => {
+      this.name = this.projects.project.namep;
+      this.descri = this.projects.project.descrip;
+      console.log(this.name)
+      console.log(this.descri)
+    }, 100);
 
     document.addEventListener('mousedown', (e) => {
       this.closeMenuUser();
@@ -61,6 +72,7 @@ export class AlterarProjectsComponent implements OnInit {
     let el = document.getElementById('file');
     el.click();
   }
+
   previewFile(el) {
     console.log(el)
     const reader = new FileReader();
@@ -73,20 +85,21 @@ export class AlterarProjectsComponent implements OnInit {
     } else {
     }
   }
+
   /* IMAGEM  IMAGEM */
 
-  // focus(el) {
-  //   const elem = el.target;
-  //   elem.focus();
-  //   const pai = document.querySelector('.all');
-  //   const posEl = elem.getBoundingClientRect().y + pai.scrollTop;
-  //   console.log(elem.getBoundingClientRect().y);
-  //   console.log(pai.scrollTop);
-  //   pai.scrollTo(0, posEl);
-  //
-  //   // console.log(header);
-  //   // console.log(posEl);
-  // }
+  focus(el) {
+    const elem = el.target;
+    elem.focus();
+    const pai = document.querySelector('.all');
+    const posEl = elem.getBoundingClientRect().y + pai.scrollTop;
+    console.log(elem.getBoundingClientRect().y);
+    console.log(pai.scrollTop);
+    pai.scrollTo(0, posEl);
+
+    // console.log(header);
+    // console.log(posEl);
+  }
 
   input() {
     this.projects.campoDePesquisa.length > 0 ? this.HTMLSearch.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLSearch.nativeElement.classList.remove('textFieldsPreenchido');
