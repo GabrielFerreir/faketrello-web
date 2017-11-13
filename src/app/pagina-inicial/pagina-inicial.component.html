@@ -4,25 +4,11 @@
       <div *ngIf="projeto.img != '/imgsProjects/default.png'" [style.background-image]="'url('+ 'http://' + core.ipDaApi + '/' + projeto.img + ')'"></div>
       <div *ngIf="projeto.img == '/imgsProjects/default.png'">{{ projeto.namep.charAt(0) + projeto.namep.charAt(1) | uppercase }}</div>
     </div>
-    <!--<section class="info" [routerLink]="['/project' ,projeto.id_project]">-->
-      <!--<section class="title">{{ projeto.namep }}</section>-->
-      <!--&lt;!&ndash;<section class="descrip">{{ projeto.descrip }}</section>&ndash;&gt;-->
-    <!--</section>-->
     <section class="buttons">
       <img class="icon" (click)="projects.detailProject(projeto.id_project)" src="../../assets/settings.svg">
       <img class="icon" *ngIf="projeto.permission" (click)="popupConfirmacao.ativaPopUpConfirmacao('Alerta', 'Tem certeza que deseja Excluir?', projeto.id_project)" src="../../assets/delete.svg">
     </section>
-    <!--<div class="acoes">-->
-      <!--<a [routerLink]="['/project' ,projeto.id_project]">{{ projeto.namep }}</a>-->
-      <!--<img class="icon" (click)="projects.detailProject(projeto.id_project)" src="../../assets/settings.svg">-->
-      <!--<img class="icon" *ngIf="projeto.permission" (click)="popupConfirmacao.ativaPopUpConfirmacao('Alerta', 'Tem certeza que deseja Excluir?', projeto.id_project)" src="../../assets/delete.svg">-->
-    <!--</div>-->
-  <!--</section>-->
-  <!--<section class="project-card" style="cursor: pointer" (click)="projects.ativaAddProjets()" >-->
-    <!--<div class="img" style="background-color: #CCC"></div>-->
-    <!--<div class="acoes" style="background-color: #DDD">-->
-      <!--Adicionar Projeto-->
-    <!--</div>-->
+
   </section>
 
 

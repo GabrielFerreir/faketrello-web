@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { CoreService } from '../Services/core.service';
-import { DadosDeUsuarioService } from '../Services/dados-de-usuario.service';
+import {Injectable} from '@angular/core';
+import {CoreService} from '../Services/core.service';
+import {DadosDeUsuarioService} from '../Services/dados-de-usuario.service';
 import {Http, Headers, RequestOptions} from '@angular/http';
 import {Router} from "@angular/router";
 import {PopupConfirmacaoService} from "../components/popup-confirmacao/popup-confirmacao.service";
@@ -31,11 +31,13 @@ export class ProjectsServiceService {
       this.situacaoAddProjects = !this.situacaoAddProjects;
     }
   }
+
   fechaAddProjets() {
     if (this.situacaoAddProjects == true) {
       this.situacaoAddProjects = !this.situacaoAddProjects;
     }
   }
+
   criaProject(nome, descricao, img64) {
     var url = 'http://' + this.core.ipDaApi + '/project';
     var json = JSON.stringify(
@@ -53,6 +55,7 @@ export class ProjectsServiceService {
     return this.http.post(url, params, {headers: headers})
       .map(res => res.json())
   }
+
   searchProjects() {
     if (this.dados.getCookieTokken()) {
       var url = 'http://' + this.core.ipDaApi + '/project';
@@ -61,13 +64,14 @@ export class ProjectsServiceService {
       return this.http.get(url, {headers: headers})
         .map(res => res.json())
         .subscribe((res) => {
-        this.projects = res;
+          this.projects = res;
           console.log(res);
         }, error => {
-        console.log(error);
+          console.log(error);
         });
     }
   }
+
   detailProject(id) {
     this.situacaoDetailProject = true;
     this.router.navigate(['main/alterarProject/' + id]);
@@ -86,6 +90,7 @@ export class ProjectsServiceService {
         });
     }
   }
+
   viewDetailProject(id) {
     if (this.dados.getCookieTokken()) {
       var url = 'http://' + this.core.ipDaApi + '/project/' + id;
@@ -101,6 +106,7 @@ export class ProjectsServiceService {
         });
     }
   }
+
   delProject(id) {
     if (this.dados.getCookieTokken()) {
       var url = 'http://' + this.core.ipDaApi + '/project/' + id;
@@ -118,14 +124,15 @@ export class ProjectsServiceService {
         });
     }
   }
+
   fechaDetailProject() {
     this.situacaoDetailProject = false;
     this.router.navigate(['main']);
   }
+
   pesquisarMembros(idproject) {
     const parm = this.campoDePesquisa;
-    console.log(idproject);
-    if(parm.length > 0) {
+    if (parm.length > 0) {
       if (this.dados.getCookieTokken()) {
         var url = 'http://' + this.core.ipDaApi + '/searchMembers/' + idproject;
         var headers = new Headers();
@@ -134,7 +141,7 @@ export class ProjectsServiceService {
         return this.http.get(url, {headers: headers})
           .map(res => res.json())
           .subscribe((res) => {
-          this.pesquisaMembros = res;
+            this.pesquisaMembros = res;
             console.log(res);
           }, error => {
             this.pesquisaMembros = null;
@@ -145,6 +152,7 @@ export class ProjectsServiceService {
       this.pesquisaMembros = null;
     }
   }
+
   addMembrosProject(idUser, idProject) {
     var url = 'http://' + this.core.ipDaApi + '/insertUser/' + idProject;
     var json = JSON.stringify(
@@ -165,11 +173,6 @@ export class ProjectsServiceService {
         this.snackbar.inserirSnackbar('Usuario Adicionado Com Sucesso!');
         this.campoDePesquisa = '';
 
-        const membros = document.querySelector('.membros');
-        const resSearch = document.querySelector('#resSearch');
-
-        resSearch.setAttribute('style', 'display: none');
-        membros.setAttribute('style', 'display: block');
         // document.getElementById('pesquisa').setAttribute('value', '');
         this.detailProject(idProject);
       }, error => {
@@ -178,6 +181,7 @@ export class ProjectsServiceService {
 
       });
   }
+
   delUserProject(idProject, idUser) {
     if (this.dados.getCookieTokken()) {
       let url = 'http://' + this.core.ipDaApi + '/userTeam/' + idProject;
@@ -188,9 +192,12 @@ export class ProjectsServiceService {
       );
       let params = json;
 
-      let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.dados.getCookieTokken() });
+      let headers = new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.dados.getCookieTokken()
+      });
 
-      let options = new RequestOptions({ headers: headers, body: params });
+      let options = new RequestOptions({headers: headers, body: params});
       return this.http.delete(url, options)
         .map(res => res.json())
         .subscribe((res) => {
@@ -201,6 +208,7 @@ export class ProjectsServiceService {
         });
     }
   }
+
   permissaoUserProject(idProject, idUser) {
     var url = 'http://' + this.core.ipDaApi + '/promoteUser/' + idProject;
     var json = JSON.stringify(
@@ -216,20 +224,24 @@ export class ProjectsServiceService {
     return this.http.put(url, params, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
-      this.detailProject(idProject)
+        this.detailProject(idProject)
         console.log(res)
       }, error => {
         console.log(error);
 
       });
   }
+
   sairUserProject(idProject) {
     if (this.dados.getCookieTokken()) {
       let url = 'http://' + this.core.ipDaApi + '/exitProject/' + idProject;
 
-      let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.dados.getCookieTokken() });
+      let headers = new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.dados.getCookieTokken()
+      });
 
-      let options = new RequestOptions({ headers: headers });
+      let options = new RequestOptions({headers: headers});
       return this.http.delete(url, options)
         .map(res => res.json())
         .subscribe((res) => {
@@ -241,6 +253,7 @@ export class ProjectsServiceService {
         });
     }
   }
+
   searchBlocks(id) {
     if (this.dados.getCookieTokken()) {
       var url = 'http://' + this.core.ipDaApi + '/project/blocks/' + id;
