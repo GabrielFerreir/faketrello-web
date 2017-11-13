@@ -102,13 +102,13 @@ exports.changeProject = async function (req, res) {
   let id = req.params.id
   req.called = 1
   req.idproj = 0
-  let caminho = '/imgsProjects/default.png'
+  let imgPath = '/imgsProjects/default.png'
 
   req.body.iduser = req.dataToken.id
   req.body.idproject = id
   let permission = await exports.verifyPermission(req, res)
 
-  db.any('SELECT * FROM changeproject($1,$2,$3,$4,$5,$6);', [id, req.body.nameProject, req.body.description, caminho, permission[0].permission, req.dataToken.id])
+  db.any('SELECT * FROM changeproject($1,$2,$3,$4,$5,$6);', [id, req.body.nameProject, req.body.description, imgPath, permission[0].permission, req.dataToken.id])
     .then(async data => {
       if (!data) {
         res.status(400).json({error: 'Projeto nao encontrado ou pertence a outras pessoas'})
@@ -179,7 +179,7 @@ exports.exitProject = function (req, res) {
 }
 
 //Verifica se a permissao do usuario no projeto permite alterações
-exports.verifyPermission = async function (req, res) {
+exports.verifyPermission = async function (req) {
   return new Promise(function (resolve, reject) {
 
     db.any('SELECT * FROM verify_permission($1,$2)', [req.body.idproject, req.dataToken.id])
@@ -283,7 +283,7 @@ exports.sawNotification = function (req, res) {
       if (!data) {
         res.status(404).json({error: 'Usuário não encontrado no projeto'})
       } else {
-        res.status(200).json({result: 'Deu certo'})
+        res.status(200).json({result: 'Visualizou'})
       }
     })
 }
