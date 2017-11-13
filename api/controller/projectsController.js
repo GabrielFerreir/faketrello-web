@@ -9,6 +9,7 @@ exports.newProject = async function (req, res) {
   req.idproj = 0
 
   caminho = '/imgsProjects/default.png'
+  if(req.body.nameProject && req.body.nameProject.length > 0 && req.body.nameProject.length < 20) {
 
   db.any('SELECT * FROM newproject($1,$2,$3,$4);', [req.body.nameProject, newuser.id_user, req.body.description, caminho])
     .then(async data => {
@@ -48,6 +49,9 @@ exports.newProject = async function (req, res) {
         }
       }
     })
+  } else {
+    res.status(406).json({error: 'Nome da checklist muito longo ou muito curto'})
+  }
 }
 
 //Mostra os projetos do usuario na tela home

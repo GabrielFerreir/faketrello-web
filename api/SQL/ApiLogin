@@ -737,12 +737,15 @@ CREATE OR REPLACE FUNCTION exitProject(pIdUser INTEGER, pIdProject INTEGER)
 DECLARE
   vQntdAdmins  INTEGER;
   vQntdMembers INTEGER;
+  vArrayBlocks INTEGER [];
+  vArrayTasks  INTEGER [];
 BEGIN
 
   IF EXISTS(SELECT *
             FROM tb_team
             WHERE id_user = pIdUser AND id_project = pIdProject AND permissions = FALSE)
   THEN
+
     DELETE FROM tb_team
     WHERE id_user = pIdUser AND id_project = pIdProject;
 
@@ -783,6 +786,17 @@ BEGIN
 
     INSERT INTO tb_notifications (id_user, type, target_type, id_project)
     VALUES (pIdUser, 8, 6, pIdProject);
+
+    vArrayBlocks := ARRAY(SELECT id_blocks
+                          FROM tb_blocks
+                          WHERE project_owner = pIdProject);
+
+    vArrayTasks := ARRAY(SELECT id_task
+                         FROM tb_tasks
+                         WHERE id_block = ANY (vArrayBlocks));
+
+    DELETE FROM tb_team_tasks
+    WHERE id_user = pIdUser AND id_task = ANY (vArrayTasks);
 
     RETURN QUERY
     SELECT 2;
@@ -877,7 +891,7 @@ BEGIN
     THEN
 
       INSERT INTO tb_notifications (id_user, id_new_user, type, target_type, id_project)
-      VALUES (pIdUser, pIdUserTarget, 9, 6, pIdProject);
+      VALUES (pIdUser, pIdUserTarget, 10, 6, pIdProject);
 
       UPDATE tb_team
       SET notifications = TRUE
@@ -886,7 +900,7 @@ BEGIN
     ELSE
 
       INSERT INTO tb_notifications (id_user, id_new_user, type, target_type, id_project)
-      VALUES (pIdUser, pIdUserTarget, 10, 6, pIdProject);
+      VALUES (pIdUser, pIdUserTarget, 9, 6, pIdProject);
 
       UPDATE tb_team
       SET notifications = TRUE
@@ -961,23 +975,28 @@ BEGIN
     FROM tb_blocks
     WHERE id_blocks = pIdBlock;
 
-    UPDATE tb_blocks
-    SET name_blocks = pNewName
-    WHERE id_blocks = pIdBlock;
+    IF (pNewName <> oldName)
+    THEN
 
-    INSERT INTO tb_notifications (id_user, id_block, type, old_name, new_name, id_project, target_type)
-    VALUES (pIdUser, pIdBlock, 2, oldName, (SELECT name_blocks
-                                            FROM tb_blocks
-                                            WHERE id_blocks = pIdBlock), (SELECT project_owner
-                                                                          FROM tb_blocks
-                                                                          WHERE id_blocks = pIdBlock), 1);
+      UPDATE tb_blocks
+      SET name_blocks = pNewName
+      WHERE id_blocks = pIdBlock;
 
-    UPDATE tb_team
-    SET notifications = TRUE
-    WHERE id_project = (SELECT project_owner
-                        FROM tb_blocks
-                        WHERE id_blocks = pIdBlock) AND id_user <> pIdUser;
-    RETURN TRUE;
+
+      INSERT INTO tb_notifications (id_user, id_block, type, old_name, new_name, id_project, target_type)
+      VALUES (pIdUser, pIdBlock, 2, oldName, (SELECT name_blocks
+                                              FROM tb_blocks
+                                              WHERE id_blocks = pIdBlock), (SELECT project_owner
+                                                                            FROM tb_blocks
+                                                                            WHERE id_blocks = pIdBlock), 1);
+
+      UPDATE tb_team
+      SET notifications = TRUE
+      WHERE id_project = (SELECT project_owner
+                          FROM tb_blocks
+                          WHERE id_blocks = pIdBlock) AND id_user <> pIdUser;
+      RETURN TRUE;
+    END IF;
   END IF;
   RETURN FALSE;
 END;
@@ -1975,6 +1994,18 @@ BEGIN
     THEN
 
       INSERT INTO tb_notifications (id_checklist, type, target_type, id_user, id_task, id_block, id_project)
+      VALUES (pIdChecklist, 6, 4, pIdUser, vIdTask, vIdBlock, vIdProject);
+
+      UPDATE tb_team
+      SET notifications = TRUE
+      WHERE id_project = vIdProject AND id_user <> pIdUser;
+
+      RETURN QUERY
+      SELECT 'desmarcada' :: TEXT;
+
+    ELSE
+
+      INSERT INTO tb_notifications (id_checklist, type, target_type, id_user, id_task, id_block, id_project)
       VALUES (pIdChecklist, 5, 4, pIdUser, vIdTask, vIdBlock, vIdProject);
 
       UPDATE tb_team
@@ -1984,17 +2015,6 @@ BEGIN
       RETURN QUERY
       SELECT 'marcada' :: TEXT;
 
-    ELSE
-
-      INSERT INTO tb_notifications (id_checklist, type, target_type, id_user, id_task, id_block, id_project)
-      VALUES (pIdChecklist, 6, 4, pIdUser, vIdTask, vIdBlock, vIdProject);
-
-      UPDATE tb_team
-      SET notifications = TRUE
-      WHERE id_project = vIdProject AND id_user <> pIdUser;
-
-      RETURN QUERY
-      SELECT 'desmarcada' :: TEXT;
 
     END IF;
   ELSE
@@ -2018,7 +2038,10 @@ BEGIN
             WHERE id_checklist = pIdChecklist)
   THEN
 
-    SELECT name_checklist INTO vOldName FROM tb_checklist_tasks WHERE id_checklist = pIdChecklist;
+    SELECT name_checklist
+    INTO vOldName
+    FROM tb_checklist_tasks
+    WHERE id_checklist = pIdChecklist;
 
     UPDATE tb_checklist_tasks
     SET name_checklist = pName
@@ -2142,30 +2165,56 @@ BEGIN
     DELETE FROM tb_team_tasks
     WHERE pIdRelation = id_team_task;
 
-    INSERT INTO tb_notifications (id_task, id_block, id_project, type, target_type, id_user, id_new_user)
-    VALUES (vIdTask,
-            (SELECT id_block
-             FROM tb_tasks
-             WHERE id_task = vIdTask),
-            (SELECT project_owner
-             FROM tb_blocks
-             WHERE id_blocks = (SELECT id_block
-                                FROM tb_tasks
-                                WHERE id_task = vIdTask)),
-            7,
-            2,
-            pIdUser,
-            vIdUserRemoved);
+    IF pIdUser = vIdUserRemoved
+    THEN
+      INSERT INTO tb_notifications (id_task, id_block, id_project, type, target_type, id_user)
+      VALUES (vIdTask,
+              (SELECT id_block
+               FROM tb_tasks
+               WHERE id_task = vIdTask),
+              (SELECT project_owner
+               FROM tb_blocks
+               WHERE id_blocks = (SELECT id_block
+                                  FROM tb_tasks
+                                  WHERE id_task = vIdTask)),
+              8,
+              2,
+              pIdUser);
 
-    UPDATE tb_team
-    SET notifications = TRUE
-    WHERE id_project = (SELECT project_owner
-                        FROM tb_blocks
-                        WHERE id_blocks = (SELECT id_block
-                                           FROM tb_tasks
-                                           WHERE id_task = vIdTask)) AND id_user <> pIdUser;
+      UPDATE tb_team
+      SET notifications = TRUE
+      WHERE id_project = (SELECT project_owner
+                          FROM tb_blocks
+                          WHERE id_blocks = (SELECT id_block
+                                             FROM tb_tasks
+                                             WHERE id_task = vIdTask)) AND id_user <> pIdUser;
+      RETURN TRUE;
+    ELSE
+      INSERT INTO tb_notifications (id_task, id_block, id_project, type, target_type, id_user, id_new_user)
+      VALUES (vIdTask,
+              (SELECT id_block
+               FROM tb_tasks
+               WHERE id_task = vIdTask),
+              (SELECT project_owner
+               FROM tb_blocks
+               WHERE id_blocks = (SELECT id_block
+                                  FROM tb_tasks
+                                  WHERE id_task = vIdTask)),
+              11,
+              2,
+              pIdUser,
+              vIdUserRemoved);
 
-    RETURN TRUE;
+      UPDATE tb_team
+      SET notifications = TRUE
+      WHERE id_project = (SELECT project_owner
+                          FROM tb_blocks
+                          WHERE id_blocks = (SELECT id_block
+                                             FROM tb_tasks
+                                             WHERE id_task = vIdTask)) AND id_user <> pIdUser;
+
+      RETURN TRUE;
+    END IF;
   END IF;
   RETURN FALSE;
 END;
@@ -2186,27 +2235,28 @@ LANGUAGE plgpsql;
 
 CREATE OR REPLACE FUNCTION getNotifications(pIdUser INTEGER)
   RETURNS TABLE(
-    idTask       INTEGER,
-    nameTask     VARCHAR(100),
-    idBlock      INTEGER,
-    nameBlock    VARCHAR(100),
-    idProject    INTEGER,
-    nameProject  VARCHAR(100),
-    idUser       INTEGER,
-    nameUser     VARCHAR(100),
-    imgUser      VARCHAR(100),
-    idAttachment INTEGER,
-    idComment    INTEGER,
-    idChecklist  INTEGER,
-    type         INTEGER,
-    idBlockFinal INTEGER,
-    oldName      VARCHAR(100),
-    newName      VARCHAR(100),
-    targetType   INTEGER,
-    idNewUser    INTEGER,
-    nameNewUser  VARCHAR(100),
-    imgNewUser   VARCHAR(100),
-    date         TIMESTAMP
+    idTask         INTEGER,
+    nameTask       VARCHAR(100),
+    idBlock        INTEGER,
+    nameBlock      VARCHAR(100),
+    idProject      INTEGER,
+    nameProject    VARCHAR(100),
+    idUser         INTEGER,
+    nameUser       VARCHAR(100),
+    imgUser        VARCHAR(100),
+    idAttachment   INTEGER,
+    idComment      INTEGER,
+    idChecklist    INTEGER,
+    type           INTEGER,
+    idBlockFinal   INTEGER,
+    nameBlockFinal VARCHAR(100),
+    oldName        VARCHAR(100),
+    newName        VARCHAR(100),
+    targetType     INTEGER,
+    idNewUser      INTEGER,
+    nameNewUser    VARCHAR(100),
+    imgNewUser     VARCHAR(100),
+    date           TIMESTAMP
   ) AS $$
 DECLARE
   vArrayProjects INTEGER [];
@@ -2217,7 +2267,9 @@ BEGIN
   RETURN QUERY
   SELECT
     tn.id_task,
-    (SELECT name_task FROM tb_tasks WHERE tn.id_task = tb_tasks.id_task),
+    (SELECT name_task
+     FROM tb_tasks
+     WHERE tn.id_task = tb_tasks.id_task),
     tn.id_block,
     (SELECT name_blocks
      FROM tb_blocks
@@ -2238,6 +2290,9 @@ BEGIN
     tn.id_checklist,
     tn.type,
     tn.id_block_final,
+    (SELECT name_blocks
+     FROM tb_blocks
+     WHERE id_blocks = tn.id_block_final),
     tn.old_name,
     tn.new_name,
     tn.target_type,
@@ -2252,9 +2307,8 @@ BEGIN
   FROM tb_notifications tn
   WHERE (id_project = ANY (vArrayProjects)) AND ((SELECT active
                                                   FROM tb_projects
-                                                  WHERE tn.id_project = tb_projects.id_project) = TRUE);
+                                                  WHERE tn.id_project = tb_projects.id_project) = TRUE)
+  ORDER BY date DESC;
 END;
 $$
 LANGUAGE plpgsql;
-
-SELECT current_timestamp
