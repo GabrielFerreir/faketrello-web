@@ -76,9 +76,13 @@ export class ProjectsServiceService {
 
   detailProject(id) {
     this.situacaoDetailProject = true;
-    let page = document.querySelector('.container[_ngcontent-c6]');
-    page.classList.remove('overflowAuto');
-    page.classList.add('overflowHidden');
+    try {
+      let page = document.querySelector('.container[_ngcontent-c6]');
+      page.classList.remove('overflowAuto');
+      page.classList.add('overflowHidden');
+    } catch (e) {
+    }
+
     this.router.navigate(['main/alterarProject/' + id]);
     if (this.dados.getCookieTokken()) {
       var url = 'http://' + this.core.ipDaApi + '/project/' + id;
@@ -132,9 +136,14 @@ export class ProjectsServiceService {
   fechaDetailProject() {
     this.situacaoDetailProject = false;
     this.router.navigate(['main']);
-    let page = document.querySelector('.container[_ngcontent-c6]');
-    page.classList.add('overflowAuto');
-    page.classList.remove('overflowHidden');
+    try{
+      const page = document.querySelector('.container[_ngcontent-c6]');
+      page.classList.add('overflowAuto');
+      page.classList.remove('overflowHidden');
+    }catch (e) {
+
+    }
+
 
   }
 

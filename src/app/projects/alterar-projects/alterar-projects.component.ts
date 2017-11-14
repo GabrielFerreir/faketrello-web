@@ -64,6 +64,11 @@ export class AlterarProjectsComponent implements OnInit {
     document.addEventListener('mousedown', (e) => {
       this.closeMenuUser();
     });
+
+    window.addEventListener('resize', (e) => {
+      this.closeMenuUser();
+      console.log('resize')
+    });
   }
 
 

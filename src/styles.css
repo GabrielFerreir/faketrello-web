@@ -277,8 +277,17 @@ a {
 .overflowAuto {
   overflow: auto;
 }
+
 .overflowHidden {
   overflow: hidden;
+}
+
+.displayNone {
+  display: none;
+}
+
+.displayBlock {
+  display: block;
 }
 
 

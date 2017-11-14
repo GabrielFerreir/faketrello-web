@@ -1,53 +1,111 @@
 <section class="notificacoes" #notificacoes>
 
-  <header>Notificações</header>
+  <header>
+    <i class="material-icons">arrow_back</i>
+    <h1>Notificações</h1>
+    <i></i>
+  </header>
 
-  <section class="notificacao"*ngFor="let notification of (service.userNotification ? service.userNotification.slice(0,5): []); let i=index">
-      <section class="img" *ngIf="notification.imguser == '/imgsUser/default.png'">{{ notification.nameuser.charAt(0) | uppercase }}</section>
-      <section *ngIf="notification.imguser != '/imgsUser/default.png'" [style.background-image]="'url('+ 'http://' + core.ipDaApi + notification.imguser +')'" class="img"></section>
+  <section class="notificacao"
+           *ngFor="let notification of (service.userNotification ? service.userNotification.slice(0,5): []); let i=index">
+    <section class="img" *ngIf="notification.imguser == '/imgsUser/default.png'">{{ notification.nameuser.charAt(0) |
+      uppercase }}
+    </section>
+    <section *ngIf="notification.imguser != '/imgsUser/default.png'"
+             [style.background-image]="'url('+ 'http://' + core.ipDaApi + notification.imguser +')'"
+             class="img"></section>
 
-      <!-- TYPE 01 -->
-      <section class="text" *ngIf="notification.type == 1 && notification.targettype == 1">{{ notification.nameuser }} criou o bloco <b>{{ notification.nameblock }}</b> em <b>{{notification.nameproject}}</b> </section>
-      <section class="text" *ngIf="notification.type == 1 && notification.targettype == 2">{{ notification.nameuser }} criou <b>{{ notification.nametask }}</b> no bloco <b>{{ notification.nameblock }}</b> em <b>{{notification.nameproject}}</b> </section>
-      <section class="text" *ngIf="notification.type == 1 && notification.targettype == 3">{{ notification.nameuser }} criou um comentario em  <b>{{ notification.nametask }}</b> no bloco <b>{{ notification.nameblock }}</b> em <b>{{notification.nameproject}}</b> </section>
-      <section class="text" *ngIf="notification.type == 1 && notification.targettype == 4">{{ notification.nameuser }} criou uma lista em  <b>{{ notification.nametask }}</b> no bloco <b>{{ notification.nameblock }}</b> em <b>{{notification.nameproject}}</b> </section>
-      <section class="text" *ngIf="notification.type == 1 && notification.targettype == 5">{{ notification.nameuser }} criou um anexo em  <b>{{ notification.nametask }}</b> no bloco <b>{{ notification.nameblock }}</b> em <b>{{notification.nameproject}}</b> </section>
-      <!-- TYPE 02 -->
-      <section class="text" *ngIf="notification.type == 2 && notification.targettype == 1">{{ notification.nameuser }} alterou o nome do projeto de <b>{{ notification.oldname}}</b> para <b>{{ notification.newname}}</b> em <b>{{notification.nameproject}}</b> </section>
-      <section class="text" *ngIf="notification.type == 2 && notification.targettype == 2 && notification.newname">{{ notification.nameuser }} alterou a tarefa <b>{{ notification.oldname}}</b> para <b>{{ notification.newname}}</b> em <b>{{notification.nameproject}}</b> </section>
-      <section class="text" *ngIf="notification.type == 2 && notification.targettype == 2 && !notification.newname">{{ notification.nameuser }} alterou a tarefa <b>{{ notification.oldname}}</b> em <b>{{notification.nameproject}}</b> </section>
-      <section class="text" *ngIf="notification.type == 2 && notification.targettype == 3">{{ notification.nameuser }} alterou um comentario na tarefa <b>{{ notification.nametask}}</b> em <b>{{notification.nameproject}}</b> </section>
-      <section class="text" *ngIf="notification.type == 2 && notification.targettype == 4">{{ notification.nameuser }} alterou uma lista na tarefa <b>{{ notification.nametask}}</b> em <b>{{notification.nameproject}}</b> </section>
-      <section class="text" *ngIf="notification.type == 2 && notification.targettype == 5">{{ notification.nameuser }} alterou um anexo na tarefa <b>{{ notification.nametask}}</b> em <b>{{notification.nameproject}}</b> </section>
-      <section class="text" *ngIf="notification.type == 2 && notification.targettype == 6 && notification.newname">{{ notification.nameuser }} alterou o nome do projeto de <b>{{ notification.oldname}}</b> para <b>{{notification.newname}}</b> </section>
-      <section class="text" *ngIf="notification.type == 2 && notification.targettype == 6 && !notification.newname">{{ notification.nameuser }} alterou o projeto <b>{{ notification.oldname}}</b></section>
+    <!-- TYPE 01 -->
+    <section class="text" *ngIf="notification.type == 1 && notification.targettype == 1">{{ notification.nameuser }}
+      criou o bloco <b>{{ notification.nameblock }}</b> em <b>{{notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 1 && notification.targettype == 2">{{ notification.nameuser }}
+      criou <b>{{ notification.nametask }}</b> no bloco <b>{{ notification.nameblock }}</b> em <b>{{notification.nameproject}}</b>
+    </section>
+    <section class="text" *ngIf="notification.type == 1 && notification.targettype == 3">{{ notification.nameuser }}
+      criou um comentario em <b>{{ notification.nametask }}</b> no bloco <b>{{ notification.nameblock }}</b> em <b>{{notification.nameproject}}</b>
+    </section>
+    <section class="text" *ngIf="notification.type == 1 && notification.targettype == 4">{{ notification.nameuser }}
+      criou uma lista em <b>{{ notification.nametask }}</b> no bloco <b>{{ notification.nameblock }}</b> em <b>{{notification.nameproject}}</b>
+    </section>
+    <section class="text" *ngIf="notification.type == 1 && notification.targettype == 5">{{ notification.nameuser }}
+      criou um anexo em <b>{{ notification.nametask }}</b> no bloco <b>{{ notification.nameblock }}</b> em <b>{{notification.nameproject}}</b>
+    </section>
+    <!-- TYPE 02 -->
+    <section class="text" *ngIf="notification.type == 2 && notification.targettype == 1">{{ notification.nameuser }}
+      alterou o nome do projeto de <b>{{ notification.oldname}}</b> para <b>{{ notification.newname}}</b> em <b>{{notification.nameproject}}</b>
+    </section>
+    <section class="text" *ngIf="notification.type == 2 && notification.targettype == 2 && notification.newname">{{
+      notification.nameuser }} alterou a tarefa <b>{{ notification.oldname}}</b> para <b>{{ notification.newname}}</b>
+      em <b>{{notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 2 && notification.targettype == 2 && !notification.newname">{{
+      notification.nameuser }} alterou a tarefa <b>{{ notification.oldname}}</b> em <b>{{notification.nameproject}}</b>
+    </section>
+    <section class="text" *ngIf="notification.type == 2 && notification.targettype == 3">{{ notification.nameuser }}
+      alterou um comentario na tarefa <b>{{ notification.nametask}}</b> em <b>{{notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 2 && notification.targettype == 4">{{ notification.nameuser }}
+      alterou uma lista na tarefa <b>{{ notification.nametask}}</b> em <b>{{notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 2 && notification.targettype == 5">{{ notification.nameuser }}
+      alterou um anexo na tarefa <b>{{ notification.nametask}}</b> em <b>{{notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 2 && notification.targettype == 6 && notification.newname">{{
+      notification.nameuser }} alterou o nome do projeto de <b>{{ notification.oldname}}</b> para <b>{{notification.newname}}</b>
+    </section>
+    <section class="text" *ngIf="notification.type == 2 && notification.targettype == 6 && !notification.newname">{{
+      notification.nameuser }} alterou o projeto <b>{{ notification.oldname}}</b></section>
 
-      <section class="text" *ngIf="notification.type == 3 && notification.targettype == 1">{{ notification.nameuser }} deletou o bloco <b>{{ notification.oldname}}</b> em <b>{{ notification.nameproject}}</b></section>
-      <section class="text" *ngIf="notification.type == 3 && notification.targettype == 2">{{ notification.nameuser }} deletou a tarefa <b>{{ notification.oldname}}</b> em <b>{{ notification.nameblock}}</b> no <b>{{ notification.nameproject}}</b></section>
-      <section class="text" *ngIf="notification.type == 3 && notification.targettype == 3">{{ notification.nameuser }} deletou um comentario na <b>{{ notification.nametask}}</b> no bloco <b>{{ notification.nameblock}}</b> em <b>{{ notification.nameproject}}</b></section>
-      <section class="text" *ngIf="notification.type == 3 && notification.targettype == 4">{{ notification.nameuser }} deletou uma lista na <b>{{ notification.nametask}}</b> no bloco <b>{{ notification.nameblock}}</b> em <b>{{ notification.nameproject}}</b></section>
-      <section class="text" *ngIf="notification.type == 3 && notification.targettype == 4">{{ notification.nameuser }} deletou um anexo na <b>{{ notification.nametask}}</b> no bloco <b>{{ notification.nameblock}}</b> em <b>{{ notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 3 && notification.targettype == 1">{{ notification.nameuser }}
+      deletou o bloco <b>{{ notification.oldname}}</b> em <b>{{ notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 3 && notification.targettype == 2">{{ notification.nameuser }}
+      deletou a tarefa <b>{{ notification.oldname}}</b> em <b>{{ notification.nameblock}}</b> no <b>{{
+        notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 3 && notification.targettype == 3">{{ notification.nameuser }}
+      deletou um comentario na <b>{{ notification.nametask}}</b> no bloco <b>{{ notification.nameblock}}</b> em <b>{{
+        notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 3 && notification.targettype == 4">{{ notification.nameuser }}
+      deletou uma lista na <b>{{ notification.nametask}}</b> no bloco <b>{{ notification.nameblock}}</b> em <b>{{
+        notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 3 && notification.targettype == 4">{{ notification.nameuser }}
+      deletou um anexo na <b>{{ notification.nametask}}</b> no bloco <b>{{ notification.nameblock}}</b> em <b>{{
+        notification.nameproject}}</b></section>
 
-      <section class="text" *ngIf="notification.type == 4 && notification.targettype == 2">{{ notification.nameuser }} moveu a tarefa <b>{{ notification.nametask}}</b> do bloco <b>{{ notification.nameblock}}</b> para <b>{{ notification.nameblockfinal }}</b> em <b>{{ notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 4 && notification.targettype == 2">{{ notification.nameuser }}
+      moveu a tarefa <b>{{ notification.nametask}}</b> do bloco <b>{{ notification.nameblock}}</b> para <b>{{
+        notification.nameblockfinal }}</b> em <b>{{ notification.nameproject}}</b></section>
 
-      <section class="text" *ngIf="notification.type == 5 && notification.targettype == 4">{{ notification.nameuser }} marcou uma lista em  <b>{{ notification.nametask}}</b> do bloco <b>{{ notification.nameblock}}</b> em <b>{{ notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 5 && notification.targettype == 4">{{ notification.nameuser }}
+      marcou uma lista em <b>{{ notification.nametask}}</b> do bloco <b>{{ notification.nameblock}}</b> em <b>{{
+        notification.nameproject}}</b></section>
 
-    <section class="text" *ngIf="notification.type == 6 && notification.targettype == 4">{{ notification.nameuser }} desmarcou uma lista em  <b>{{ notification.nametask}}</b> do bloco <b>{{ notification.nameblock}}</b> em <b>{{ notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 6 && notification.targettype == 4">{{ notification.nameuser }}
+      desmarcou uma lista em <b>{{ notification.nametask}}</b> do bloco <b>{{ notification.nameblock}}</b> em <b>{{
+        notification.nameproject}}</b></section>
 
-    <section class="text" *ngIf="notification.type == 7 && notification.targettype == 2"><b>{{ notification.nameuser }}</b> adicionou <b>{{ notification.namenewuser }}</b> a tarefa  <b>{{ notification.nametask}}</b> do bloco <b>{{ notification.nameblock}}</b> em <b>{{ notification.nameproject}}</b></section>
-    <section class="text" *ngIf="notification.type == 7 && notification.targettype == 6"><b>{{ notification.nameuser }}</b> adicionou <b>{{ notification.namenewuser }}</b> ao projeto</section>
+    <section class="text" *ngIf="notification.type == 7 && notification.targettype == 2"><b>{{ notification.nameuser
+      }}</b> adicionou <b>{{ notification.namenewuser }}</b> a tarefa <b>{{ notification.nametask}}</b> do bloco <b>{{
+      notification.nameblock}}</b> em <b>{{ notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 7 && notification.targettype == 6"><b>{{ notification.nameuser
+      }}</b> adicionou <b>{{ notification.namenewuser }}</b> ao projeto
+    </section>
 
-    <section class="text" *ngIf="notification.type == 8 && notification.targettype == 2"><b>{{ notification.nameuser }}</b> saiu da tareda <b>{{ notification.nametask}}</b> do bloco <b>{{ notification.nameblock}}</b> em <b>{{ notification.nameproject}}</b></section>
-    <section class="text" *ngIf="notification.type == 8 && notification.targettype == 6"><b>{{ notification.nameuser }}</b> saiu do projeto</section>
+    <section class="text" *ngIf="notification.type == 8 && notification.targettype == 2"><b>{{ notification.nameuser
+      }}</b> saiu da tareda <b>{{ notification.nametask}}</b> do bloco <b>{{ notification.nameblock}}</b> em <b>{{
+      notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 8 && notification.targettype == 6"><b>{{ notification.nameuser
+      }}</b> saiu do projeto
+    </section>
 
 
-    <section class="text" *ngIf="notification.type == 9 && notification.targettype == 6"><b>{{ notification.nameuser }}</b> promoveu <b>{{ notification.namenewuser }}</b>  em <b>{{ notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 9 && notification.targettype == 6"><b>{{ notification.nameuser
+      }}</b> promoveu <b>{{ notification.namenewuser }}</b> em <b>{{ notification.nameproject}}</b></section>
 
-    <section class="text" *ngIf="notification.type == 10 && notification.targettype == 6"><b>{{ notification.nameuser }}</b> rebaixou <b>{{ notification.namenewuser }}</b>  em <b>{{ notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 10 && notification.targettype == 6"><b>{{ notification.nameuser
+      }}</b> rebaixou <b>{{ notification.namenewuser }}</b> em <b>{{ notification.nameproject}}</b></section>
 
-    <section class="text" *ngIf="notification.type == 11 && notification.targettype == 2"><b>{{ notification.nameuser }}</b> removeu <b>{{ notification.namenewuser }}</b> da tarefa <b>{{ notification.nametask }}</b> em <b>{{ notification.nameproject}}</b></section>
+    <section class="text" *ngIf="notification.type == 11 && notification.targettype == 2"><b>{{ notification.nameuser
+      }}</b> removeu <b>{{ notification.namenewuser }}</b> da tarefa <b>{{ notification.nametask }}</b> em <b>{{
+      notification.nameproject}}</b></section>
 
-      <section class="data">{{ notification.date | date: 'dd/MM/yyyy' }} ás {{ notification.date | date: 'HH:mm:ss'}}</section>
+    <section class="data">{{ notification.date | date: 'dd/MM/yyyy' }} ás {{ notification.date | date: 'HH:mm:ss'}}
+    </section>
 
   </section>
 

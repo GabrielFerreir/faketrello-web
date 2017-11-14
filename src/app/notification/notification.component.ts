@@ -12,6 +12,7 @@ import { DatePipe } from '@angular/common';
 })
 export class NotificationComponent implements OnInit {
   @ViewChild('notificacoes') notificacoes: ElementRef;
+  @ViewChild('arrowBack') arrowBack: ElementRef;
 
   constructor(private http: Http,
               private dados: DadosDeUsuarioService,
@@ -20,6 +21,7 @@ export class NotificationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.service.arrowBack = this.arrowBack;
     this.service.notification = this.notificacoes;
     document.addEventListener('mousedown', (event) => {
       this.hiddenNotification(event);
@@ -28,8 +30,7 @@ export class NotificationComponent implements OnInit {
   }
 
   hiddenNotification(event) {
-    if (event.target.className == 'notificacoes' || event.target.parentNode.className == 'notificacoes') {
-    } else {
+    if (event.target.className != 'notificacao' && event.target.parentNode.className != 'notificacao') {
       this.service.visibility = false;
       this.service.hiddenVisibility();
     }

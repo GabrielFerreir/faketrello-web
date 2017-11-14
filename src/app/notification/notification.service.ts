@@ -8,6 +8,7 @@ export class NotificationService {
   visibility: boolean;
   notification: ElementRef;
   userNotification;
+  arrowBack: ElementRef
 
   constructor(private http: Http,
               private dados: DadosDeUsuarioService,
@@ -20,8 +21,22 @@ export class NotificationService {
   hiddenVisibility() {
     if(this.visibility) {
       this.notification.nativeElement.className = 'notificacoes visibility';
+      try {
+        document.querySelector('.container[_ngcontent-c1]').classList.add('overflowHidden');
+        document.querySelector('.container[_ngcontent-c1]').classList.remove('overflowAuto');
+      } catch (e) {
+
+      }
+
     } else {
       this.notification.nativeElement.className = 'notificacoes';
+      try{
+        document.querySelector('.container[_ngcontent-c1]').classList.remove('overflowHidden');
+        document.querySelector('.container[_ngcontent-c1]').classList.add('overflowAuto');
+      } catch (e) {
+
+      }
+
     }
   }
   searchNotification() {
