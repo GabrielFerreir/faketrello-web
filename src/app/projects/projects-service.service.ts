@@ -5,6 +5,7 @@ import {Http, Headers, RequestOptions} from '@angular/http';
 import {Router} from "@angular/router";
 import {PopupConfirmacaoService} from "../components/popup-confirmacao/popup-confirmacao.service";
 import {SnackbarsService} from "../components/snackbars/snackbars.service";
+import {NotificationService} from "../notification/notification.service";
 
 @Injectable()
 export class ProjectsServiceService {
@@ -14,7 +15,8 @@ export class ProjectsServiceService {
               private core: CoreService,
               private dados: DadosDeUsuarioService,
               private popupConfirmacao: PopupConfirmacaoService,
-              private snackbar: SnackbarsService) {
+              private snackbar: SnackbarsService,
+              private notificationService: NotificationService) {
   }
 
   situacaoAddProjects = false;
@@ -84,7 +86,6 @@ export class ProjectsServiceService {
         .subscribe((res) => {
           this.project = res;
           console.log(res);
-          // console.log(res);
         }, error => {
           console.log(error);
         });
@@ -172,13 +173,10 @@ export class ProjectsServiceService {
         console.log(res)
         this.snackbar.inserirSnackbar('Usuario Adicionado Com Sucesso!');
         this.campoDePesquisa = '';
-
-        // document.getElementById('pesquisa').setAttribute('value', '');
         this.detailProject(idProject);
       }, error => {
         console.log(error);
-        // this.pesquisaMembros = '';
-
+        this.pesquisaMembros = '';
       });
   }
 
@@ -262,6 +260,31 @@ export class ProjectsServiceService {
       return this.http.get(url, {headers: headers})
         .map(res => res.json())
     }
+  }
+
+  changeProject(idProject, name, descrip, base64) {
+    var url = 'http://' + this.core.ipDaApi + '/project/' + idProject;
+    var json = JSON.stringify(
+      {
+        nameProject: name,
+        description: descrip,
+        imgBase64: base64
+      }
+    );
+    console.log(json);
+
+    const params = json;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.dados.getCookieTokken());
+    return this.http.put(url, params, {headers: headers})
+      .subscribe((res) => {
+        console.log(res.json());
+        this.snackbar.inserirSnackbar('Projeto alterado com sucesso!');
+        this.notificationService.searchNotification();
+      }, error => {
+        console.log(error);
+      });
   }
 
 

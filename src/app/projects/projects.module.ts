@@ -12,7 +12,7 @@ import {ArrowBackModule} from '../components/arrow-back/arrow-back.module';
     CommonModule,
     FormsModule,
     SnackbarsModule,
-    ArrowBackModule
+    ArrowBackModule,
   ],
   declarations: [
     AddProjectsComponent,

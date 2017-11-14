@@ -137,13 +137,13 @@
     <div class="addImg" (click)="chamaFile()">+</div>
   </section>
   <section class="nome">
-    <input class="textFields" type="text" id="nome" value="{{ projects?.project?.namep }}"/>
+    <input class="textFields" type="text" id="nome" [(ngModel)]="name"/>
     <!--<label class="labelText" for="nome" >{{ projects?.project?.namep }}</label>-->
     <div class="border"></div>
     <label class="helperText"></label>
   </section>
   <section class="descricao">
-    <textarea class="textFieldsMult" id="descricao">{{ projects?.project?.descrip }}</textarea>
+    <textarea class="textFieldsMult" id="descricao" [(ngModel)]="descri">{{ descri }}</textarea>
     <!--<label class="labelTextMult" for="descricao">{{ projects?.project?.descrip }}</label>-->
   </section>
 
@@ -199,7 +199,7 @@
   </section>
 
   <section class="buttons">
-    <button class="floatingButton" (click)="projects.fechaDetailProject()"><i class="material-icons">save</i></button>
+    <button class="floatingButton" (click)="projects.changeProject(id, name, descri, img64)"><i class="material-icons">save</i></button>
   </section>
 
 </section>
