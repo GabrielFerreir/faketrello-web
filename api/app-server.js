@@ -59,6 +59,7 @@
   app.delete('/deleteUser', userController.deleteUser)
   app.get('/emailExists', userController.emailExists)
   app.get('/user/notifications', projectsController.getNotifications)
+  app.put('/user/notifications', projectsController.sawNotification)
 
   //Parte de projetos
   app.post('/project', projectsController.newProject)
@@ -72,7 +73,6 @@
   app.put('/promoteUser/:id', projectsController.promoteUser)
   app.delete('/exitProject/:id', projectsController.exitProject)
   app.post('/project/verifyPermission', projectsController.verifyPermission)
-  app.put('/project/notifications/:id', projectsController.sawNotification)
 
   //Parte de blocos
   app.post('/blocks/:id', blocksController.newblock)
