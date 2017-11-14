@@ -120,7 +120,6 @@
 <!--</button>-->
 <!--</div>-->
 
-<!--<app-arrow-back (click)="projects.fechaDetailProject()"></app-arrow-back>-->
 <!--</section>-->
 
 <section class="container">
@@ -199,10 +198,13 @@
   </section>
 
   <section class="buttons">
-    <button class="floatingButton" (click)="projects.changeProject(id, name, descri, img64)"><i class="material-icons">save</i></button>
+    <button class="denseButton buttonTransparent" (click)="projects.changeProject(id, name, descri, img64)">SALVAR</button>
+    <button class="denseButton buttonTransparent" (click)="projects.fechaDetailProject()">CANCELAR</button>
   </section>
 
 </section>
+<app-arrow-back (click)="projects.fechaDetailProject()"></app-arrow-back>
+
 
 
 

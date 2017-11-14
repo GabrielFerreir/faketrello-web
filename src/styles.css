@@ -274,4 +274,11 @@ a {
   background-position: center;
 }
 
+.overflowAuto {
+  overflow: auto;
+}
+.overflowHidden {
+  overflow: hidden;
+}
+
 

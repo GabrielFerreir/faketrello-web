@@ -76,6 +76,9 @@ export class ProjectsServiceService {
 
   detailProject(id) {
     this.situacaoDetailProject = true;
+    let page = document.querySelector('.container[_ngcontent-c6]');
+    page.classList.remove('overflowAuto');
+    page.classList.add('overflowHidden');
     this.router.navigate(['main/alterarProject/' + id]);
     if (this.dados.getCookieTokken()) {
       var url = 'http://' + this.core.ipDaApi + '/project/' + id;
@@ -129,6 +132,10 @@ export class ProjectsServiceService {
   fechaDetailProject() {
     this.situacaoDetailProject = false;
     this.router.navigate(['main']);
+    let page = document.querySelector('.container[_ngcontent-c6]');
+    page.classList.add('overflowAuto');
+    page.classList.remove('overflowHidden');
+
   }
 
   pesquisarMembros(idproject) {
