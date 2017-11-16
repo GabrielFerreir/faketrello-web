@@ -2344,7 +2344,7 @@ BEGIN
   FROM tb_notifications tn
   WHERE (id_project = ANY (vArrayProjects)) AND ((SELECT active
                                                   FROM tb_projects
-                                                  WHERE tn.id_project = tb_projects.id_project) = TRUE)
+                                                  WHERE tn.id_project = tb_projects.id_project) = TRUE) AND id_user <> pIdUser
   ORDER BY date DESC
   LIMIT 5;
 END;

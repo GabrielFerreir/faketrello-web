@@ -14,7 +14,7 @@
     </database>
     <schema id="4" parent="2" name="public">
       <ObjectId>2200</ObjectId>
-      <IntrospectionTimestamp>2017-11-14.17:38:26.237</IntrospectionTimestamp>
+      <IntrospectionTimestamp>2017-11-16.10:01:08.104</IntrospectionTimestamp>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -35,8 +35,8 @@
     </schema>
     <schema id="10" parent="3" name="public">
       <ObjectId>2200</ObjectId>
-      <IntrospectionTimestamp>2017-11-14.17:38:25.942</IntrospectionTimestamp>
-      <IntrospectionStateNumber>8986</IntrospectionStateNumber>
+      <IntrospectionTimestamp>2017-11-16.10:01:07.154</IntrospectionTimestamp>
+      <IntrospectionStateNumber>9046</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -454,7 +454,7 @@
     </routine>
     <routine id="68" parent="10" name="getnotifications">
       <ObjectId>33170</ObjectId>
-      <StateNumber>8811</StateNumber>
+      <StateNumber>9046</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
       <ArgumentsDefinition>piduser integer</ArgumentsDefinition>
       <ResultsDefinition>TABLE(idtask integer, nametask character varying, idblock integer, nameblock character varying, idproject integer, nameproject character varying, iduser integer, nameuser character varying, imguser character varying, idattachment integer, idcomment integer, idchecklist integer, type integer, idblockfinal integer, nameblockfinal character varying, oldname character varying, newname character varying, targettype integer, idnewuser integer, namenewuser character varying, imgnewuser character varying, date timestamp without time zone)</ResultsDefinition>
@@ -568,7 +568,7 @@
     </routine>
     <routine id="80" parent="10" name="newnotifications">
       <ObjectId>33191</ObjectId>
-      <StateNumber>8933</StateNumber>
+      <StateNumber>8992</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
       <ArgumentsDefinition>piduser integer</ArgumentsDefinition>
       <ResultsDefinition>boolean</ResultsDefinition>
