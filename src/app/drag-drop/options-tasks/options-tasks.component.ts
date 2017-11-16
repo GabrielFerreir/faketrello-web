@@ -28,8 +28,15 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
   modifyChecklist: boolean;
   idModifyChecklist: number;
 
-
   @ViewChild('conteudoNav') conteudoNav: ElementRef;
+  @ViewChild('HTMLNameTask') HTMLNameTask: ElementRef;
+  @ViewChild('HTMLDescription') HTMLDescription: ElementRef;
+  @ViewChild('HTMLFinalDate') HTMLFinalDate: ElementRef;
+  @ViewChild('HTMLInputComment') HTMLInputComment: ElementRef;
+  @ViewChild('HTMLInputChecklist') HTMLInputChecklist: ElementRef;
+  @ViewChild('HTMLSearch') HTMLSearch: ElementRef;
+
+
 
   constructor(private dragDropService: DragDropService,
               private projectService: ProjectsServiceService,
@@ -37,12 +44,7 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
     this.search = '';
   }
 
-  @ViewChild('HTMLNameTask') HTMLNameTask: ElementRef;
-  @ViewChild('HTMLDescription') HTMLDescription: ElementRef;
-  @ViewChild('HTMLFinalDate') HTMLFinalDate: ElementRef;
-  @ViewChild('HTMLInputComment') HTMLInputComment: ElementRef;
-  @ViewChild('HTMLInputChecklist') HTMLInputChecklist: ElementRef;
-  @ViewChild('HTMLSearch') HTMLSearch: ElementRef;
+
 
 
   ngOnInit() {
@@ -52,6 +54,7 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
       this.offModifyComment(e);
       this.offModifyChecklist(e);
     });
+
 
   }
 
@@ -85,31 +88,32 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
   }
 
   navbasicos() {
-    this.conteudoNav.nativeElement.style = 'transform: translateX(0);';
+    this.conteudoNav.nativeElement.style = 'transform: translateY(0);';
   }
 
   navComentarios() {
-    this.conteudoNav.nativeElement.style = 'transform: translateX(-100%);';
+    this.conteudoNav.nativeElement.style = 'transform: translateY(-100%);';
   }
 
   navChecklist() {
-    this.conteudoNav.nativeElement.style = 'transform: translateX(-200%);';
+    this.conteudoNav.nativeElement.style = 'transform: translateY(-200%);';
+  }
+  navAnexos() {
+    this.conteudoNav.nativeElement.style = 'transform: translateY(-300%);';
   }
 
   navMembros() {
-    this.conteudoNav.nativeElement.style = 'transform: translateX(-300%);';
+    this.conteudoNav.nativeElement.style = 'transform: translateY(-400%);';
   }
 
-  navAnexos() {
-    this.conteudoNav.nativeElement.style = 'transform: translateX(-400%);';
-  }
+
 
   verificaInputs() {
     if (this.dragDropService.infoOptionTask.nametask) {
       this.dragDropService.infoOptionTask.nametask.length > 0 ? this.HTMLNameTask.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLNameTask.nativeElement.classList.remove('textFieldsPreenchido');
     }
-    if (this.dragDropService.infoOptionTask.description) {
-      this.dragDropService.infoOptionTask.description.length > 0 ? this.HTMLDescription.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLDescription.nativeElement.classList.remove('textFieldsPreenchido');
+    if (this.descricao) {
+      this.descricao.length > 0 ? this.HTMLDescription.nativeElement.classList.add('textFieldsMultPreenchido') : this.HTMLDescription.nativeElement.classList.remove('textFieldsMultPreenchido');
     }
     if (this.data) {
       this.data.length > 0 ? this.HTMLFinalDate.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLFinalDate.nativeElement.classList.remove('textFieldsPreenchido');
@@ -119,6 +123,8 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
     }
 
   }
+
+
 
   alteraDadosBasicos() {
     console.log('blur');

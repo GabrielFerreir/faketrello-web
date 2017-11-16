@@ -220,6 +220,7 @@ export class DragDropService {
   fazScroll(mouse) {
     clearInterval(this.intervalNext);
     clearInterval(this.intervalPrev);
+
     if (this.posInicialX) {
       this.areaDeScroll = this.tamanhoDaTela * 0.2;
       if (!this.isMobile) {
@@ -243,6 +244,9 @@ export class DragDropService {
           }, 35);
         }
       }
+
+
+
       if (this.isMobile) {
         if (mouse.changedTouches['0'].clientX > this.tamanhoDaTela - this.areaDeScroll) {
           document.querySelector('#dragDrop').scrollBy(5, 0);
@@ -571,8 +575,17 @@ export class DragDropService {
       .subscribe((res) => {
         this.infoOptionTask = res;
         console.log(res);
+
       }, error => {
         console.log(error);
+      }, () => {
+        setTimeout(() => {
+          const textarea = document.querySelectorAll('textarea');
+          for(let i = 0; i < textarea.length; i++) {
+            this.autoHeight(textarea[i])
+            console.log(textarea[i]);
+          }
+        }, 50);
       });
   }
 
@@ -623,6 +636,13 @@ export class DragDropService {
         console.log(error);
       }, () => {
         this.addComment = '';
+        setTimeout(() => {
+          const textarea = document.querySelectorAll('textarea');
+          for(let i = 0; i < textarea.length; i++) {
+            this.autoHeight(textarea[i])
+            console.log(textarea[i]);
+          }
+        }, 50);
       });
   }
 
@@ -657,6 +677,14 @@ export class DragDropService {
           });
       }, error => {
         console.log(error);
+      }, () => {
+        setTimeout(() => {
+          const textarea = document.querySelectorAll('textarea');
+          for(let i = 0; i < textarea.length; i++) {
+            this.autoHeight(textarea[i])
+            console.log(textarea[i]);
+          }
+        }, 50);
       });
   }
 
@@ -1006,6 +1034,12 @@ export class DragDropService {
       }, error => {
         console.log(error);
       });
+  }
+
+  autoHeight(el) {
+    console.log('AUTOHEIGHT')
+    el.style.height = 'auto';
+    el.style.height = (el.scrollHeight) + 'px';
   }
 
 
