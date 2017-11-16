@@ -60,6 +60,7 @@ export class NotificationService {
       .map(res => res.json())
       .subscribe((res) => {
         console.log(res);
+        this.searchNotification();
       }, error => {
         console.log(error);
       });

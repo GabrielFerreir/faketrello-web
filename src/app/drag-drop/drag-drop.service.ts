@@ -972,7 +972,8 @@ export class DragDropService {
             this.blocks = res;
           }, error => {
             console.log(error);
-          })
+          });
+        this.notificationService.searchNotification();
       }
     });
   }
