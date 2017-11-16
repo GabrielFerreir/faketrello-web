@@ -504,6 +504,9 @@
 .relative {
   position: relative;
 }
+app-arrow-back {
+  display: none;
+}
 
 .container {
   width: 500px;
@@ -516,7 +519,7 @@
   0px 9px 46px rgba(0, 0, 0, .12),
   0px 11px 15px rgba(0, 0, 0, .20);
   z-index: 24;
-  padding: 16px 16px 0 16px;
+  padding: 16px 16px 8px 16px;
   box-sizing: border-box;
 }
 
@@ -691,21 +694,25 @@
 }
 
 @media screen and (max-width: 480px) {
+  app-arrow-back {
+    display: block;
+  }
   .container {
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
-    padding: 0;
+    padding: 0 0 16px 0;
+    overflow-y: auto;
   }
   .images .img {
-    height: 170px;
+    height: 200px;
     line-height: 170px;
     border-radius: 0;
     width: 100%;
   }
   .images .addImg {
-    top: 145px;
+    top: 175px;
     left: auto;
     right: 16px;
   }
@@ -721,7 +728,16 @@
     width: calc(100% - 20px);
     margin-left: 10px;
   }
-  
+  .membros .listMembers .scroll {
+    height: 120px;
+    overflow-y: auto;
+  }
+  .buttons {
+    margin-top: 8px;
+  }
+
+
+
 }
 
 

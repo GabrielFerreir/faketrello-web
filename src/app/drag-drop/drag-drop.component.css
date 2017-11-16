@@ -87,22 +87,23 @@
   font-family: "Roboto";
   font-weight: 500;
 }
-.caixa header .more_horiz {
+.caixa header .delete {
+  height: 100%;
   cursor: pointer;
   float: right;
-  width: 34px;
-  height: 100%;
-  background-color: transparent;
-  background-image: url("../../assets/more_vert.svg");
-  background-position: center;
-  background-repeat: no-repeat;
+  font-size: 8px;
+  color: #FAFAFA;
+  line-height: 35px;
   overflow-x: hidden;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   transition: All ease 480ms;
-  border-radius: 2px;
 }
-.caixa header .more_horiz:hover {
-  background-color: #CCC;
+.caixa header .delete i {
+  color: rgba(0,0,0,.42);
+  font-size: 22px;
 }
 .caixa .body {
   width: calc(100% + 20px);
