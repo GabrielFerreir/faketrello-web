@@ -9,46 +9,46 @@ exports.newProject = async function (req, res) {
   req.idproj = 0
 
   caminho = '/imgsProjects/default.png'
-  if(req.body.nameProject && req.body.nameProject.length > 0 && req.body.nameProject.length < 20) {
+  if (req.body.nameProject && req.body.nameProject.length > 0 && req.body.nameProject.length < 20) {
 
-  db.any('SELECT * FROM newproject($1,$2,$3,$4);', [req.body.nameProject, newuser.id_user, req.body.description, caminho])
-    .then(async data => {
-      if (!data || !data[0]) {
-        res.status(404).json({error: 'Nao foi possivel encontrar esse usuário'})
-      } else {
-        req.idproj = data[0].idproject
-
-        //Inserindo img no banco
-        if (req.body.imgBase64) {
-          caminho = await userController.imgs(req, res)
-          db.any('SELECT * FROM verify_imgproject($1,$2)', [caminho, req.idproj])
-            .then(data => {
-              if (!data) {
-                res.status(404).json({error: 'Projeto nao encontrado'})
-              } else {
-                res.status(200).json({id: req.idproj})
-              }
-            })
+    db.any('SELECT * FROM newproject($1,$2,$3,$4);', [req.body.nameProject, newuser.id_user, req.body.description, caminho])
+      .then(async data => {
+        if (!data || !data[0]) {
+          res.status(404).json({error: 'Nao foi possivel encontrar esse usuário'})
         } else {
-          res.status(200).json({id: req.idproj})
-        }
+          req.idproj = data[0].idproject
 
-        //Inserindo owner no team
-        req.idOwner = newuser.id_user
-        req.permission = true
-        exports.insertOwner(req, res)
-        exports.defaultBlocks(req, res)
-        if (req.body.teamJson) {
+          //Inserindo img no banco
+          if (req.body.imgBase64) {
+            caminho = await userController.imgs(req, res)
+            db.any('SELECT * FROM verify_imgproject($1,$2)', [caminho, req.idproj])
+              .then(data => {
+                if (!data) {
+                  res.status(404).json({error: 'Projeto nao encontrado'})
+                } else {
+                  res.status(200).json({id: req.idproj})
+                }
+              })
+          } else {
+            res.status(200).json({id: req.idproj})
+          }
 
-          db.any('SELECT * FROM insertTeamNewProject($1)', [req.body.teamJson])
-            .then(data => {
-              if (!data) {
-                res.json({error: 'Falha ao inserir time de criação do projeto'})
-              }
-            })
+          //Inserindo owner no team
+          req.idOwner = newuser.id_user
+          req.permission = true
+          exports.insertOwner(req, res)
+          exports.defaultBlocks(req, res)
+          if (req.body.teamJson) {
+
+            db.any('SELECT * FROM insertTeamNewProject($1)', [req.body.teamJson])
+              .then(data => {
+                if (!data) {
+                  res.json({error: 'Falha ao inserir time de criação do projeto'})
+                }
+              })
+          }
         }
-      }
-    })
+      })
   } else {
     res.status(406).json({error: 'Nome da checklist muito longo ou muito curto'})
   }
@@ -104,30 +104,42 @@ exports.changeProject = async function (req, res) {
   req.idproj = 0
   let imgPath = '/imgsProjects/default.png'
 
+  db.any('SELECT * FROM getPathImg($1)', [id])
+    .then(data => {
+      if(data[0].path)
+        imgPath = data[0].path
+    })
+
   req.body.iduser = req.dataToken.id
   req.body.idproject = id
   let permission = await exports.verifyPermission(req, res)
 
-  db.any('SELECT * FROM changeproject($1,$2,$3,$4,$5,$6);', [id, req.body.nameProject, req.body.description, imgPath, permission[0].permission, req.dataToken.id])
-    .then(async data => {
-      if (!data) {
-        res.status(400).json({error: 'Projeto nao encontrado ou pertence a outras pessoas'})
-      } else {
-        res.status(200).json({result: 'Alterado com sucesso'})
-        req.idproj = data[0].idprojectr
+  if (req.body.nameProject && req.body.nameProject.length > 0 && req.body.nameProject.length <= 20) {
 
-        //Inserindo img no banco
-        if (req.body.imgBase64) {
-          caminho = await userController.imgs(req, res)
-          db.any('SELECT * FROM verify_imgproject($1,$2)', [caminho, req.idproj])
-            .then(data => {
-              if (!data) {
-                res.status(404).json({error: 'Projeto nao encontrado'})
-              }
-            })
+    db.any('SELECT * FROM changeproject($1,$2,$3,$4,$5,$6);', [id, req.body.nameProject, req.body.description, imgPath, permission[0].permission, req.dataToken.id])
+      .then(async data => {
+        if (!data || data[0].idprojectr === 0) {
+          res.status(400).json({error: 'Projeto nao encontrado ou permissao insuficiente'})
+        } else {
+          res.status(200).json({result: 'Alterado com sucesso'})
+          req.idproj = data[0].idprojectr
+
+          //Inserindo img no banco
+          if (req.body.imgBase64) {
+            console.log(req.body.imgBase64)
+            caminho = await userController.imgs(req, res)
+            db.any('SELECT * FROM verify_imgproject($1,$2)', [caminho, req.idproj])
+              .then(data => {
+                if (!data) {
+                  res.status(404).json({error: 'Projeto nao encontrado'})
+                }
+              })
+          }
         }
-      }
-    })
+      })
+  } else {
+    res.status(406).json({error: 'Nome da checklist muito longo ou muito curto'})
+  }
 }
 
 //Insere o time do projeto
@@ -259,7 +271,13 @@ exports.getNotifications = function (req, res) {
         data.forEach((item) => {
           cleanObject.push(clearObject(item))
         })
-        res.status(200).json(cleanObject)
+        db.any('SELECT * FROM newNotifications($1)', [req.dataToken.id])
+          .then(data => {
+            if (!data)
+              res.status(404).json({result: 'Usuario nao encontrado'})
+            else
+              res.status(200).json({newNotifications: data[0].newnotifications,notifications: cleanObject})
+          })
       }
     })
 
@@ -278,7 +296,7 @@ exports.getNotifications = function (req, res) {
 
 //Confirma que o usuario viu a notificação
 exports.sawNotification = function (req, res) {
-  db.any('SELECT * FROM sawNotification($1,$2)', [req.params.id, req.body.idUser])
+  db.any('SELECT * FROM sawNotification($1)', [req.dataToken.id])
     .then(data => {
       if (!data) {
         res.status(404).json({error: 'Usuário não encontrado no projeto'})

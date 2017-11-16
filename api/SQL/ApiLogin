@@ -602,8 +602,7 @@ CREATE OR REPLACE FUNCTION changeproject(idproj INTEGER, namep CHARACTER VARYING
     idprojectR INTEGER
   ) AS $$
 DECLARE
-  idproject INTEGER;
-  vOldName  VARCHAR(100);
+  vOldName VARCHAR(100);
 BEGIN
   IF permission <> FALSE AND
      EXISTS(SELECT *
@@ -622,9 +621,7 @@ BEGIN
       description  = descrip,
       img_project  = imgp,
       active       = TRUE
-    WHERE id_project = idproj
-    RETURNING id_project
-      INTO idproject;
+    WHERE id_project = idproj;
 
     IF ((SELECT name_project
          FROM tb_projects
@@ -650,8 +647,10 @@ BEGIN
     END IF;
 
     RETURN QUERY
-    SELECT idproject;
+    SELECT idproj;
   END IF;
+  RETURN QUERY
+  SELECT 0;
 END;
 $$
 LANGUAGE plpgsql;
@@ -682,6 +681,19 @@ BEGIN
     RETURN FALSE;
   END IF;
   RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION getPathImg(pIdProject INTEGER)
+  RETURNS TABLE(
+    path VARCHAR(20)
+  ) AS $$
+BEGIN
+  RETURN QUERY
+  SELECT img_project
+  FROM tb_projects
+  WHERE id_project = pIdProject;
 END;
 $$
 LANGUAGE plpgsql;
@@ -2245,12 +2257,13 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION sawNotification(pIdProject INTEGER, pIdUser INTEGER)
+CREATE OR REPLACE FUNCTION sawNotification(pIdUser INTEGER)
   RETURNS BOOLEAN AS $$
 BEGIN
+
   UPDATE tb_team
   SET notifications = FALSE
-  WHERE id_project = pIdProject AND id_user = pIdUser;
+  WHERE id_user = pIdUser;
 
   RETURN TRUE;
 END;
@@ -2332,7 +2345,30 @@ BEGIN
   WHERE (id_project = ANY (vArrayProjects)) AND ((SELECT active
                                                   FROM tb_projects
                                                   WHERE tn.id_project = tb_projects.id_project) = TRUE)
-  ORDER BY date DESC;
+  ORDER BY date DESC
+  LIMIT 5;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION newNotifications(pIdUser INTEGER)
+  RETURNS BOOLEAN AS $$
+DECLARE
+  vNotifications   BOOLEAN [];
+  newNotifications BOOLEAN;
+BEGIN
+
+  vNotifications := ARRAY(SELECT notifications
+                          FROM tb_team
+                          WHERE id_user = pIdUser);
+
+  IF TRUE = ANY (vNotifications)
+  THEN
+    newNotifications = TRUE;
+  ELSE
+    newNotifications = FALSE;
+  END IF;
+  RETURN newNotifications;
 END;
 $$
 LANGUAGE plpgsql;
