@@ -56,19 +56,7 @@ export class NotificationService {
     const url = 'http://' + this.core.ipDaApi + '/user/notifications';
     const headers = new Headers();
     headers.append('Authorization', 'Bearer ' + this.dados.getCookieTokken());
-    return this.http.put(url, {headers: headers})
-      .map(res => res.json())
-      .subscribe((res) => {
-        console.log(res);
-      }, error => {
-        console.log(error);
-      });
-  }
-  getBooleanNotification() {
-    const url = 'http://' + this.core.ipDaApi + '/user/booleanNotifications';
-    const headers = new Headers();
-    headers.append('Authorization', 'Bearer ' + this.dados.getCookieTokken());
-    return this.http.put(url, {headers: headers})
+    return this.http.put(url,null, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
         console.log(res);

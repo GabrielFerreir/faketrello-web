@@ -46,9 +46,9 @@
 
 </div>
 
-  <div class="notificacoes" (click)="notificacao.changeVisibility()">
+  <div class="notificacoes" (click)="notificacao.changeVisibility(); notificacao.changeBooleanNotification()">
     <img src="../../assets/notificacoes.svg">
-    <div class="qtdNotificacoes"></div>
+    <div class="qtdNotificacoes" *ngIf="notificacao?.userNotification?.newNotifications"></div>
   </div>
   <app-autenticacao *ngIf="!dados?.statusauth"></app-autenticacao>
 </header>

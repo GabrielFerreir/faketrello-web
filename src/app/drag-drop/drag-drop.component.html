@@ -4,7 +4,9 @@
     <section class="caixa" *ngFor="let caixas of dragDropService.blocks; let i = index" data-id="{{caixas.idblock}}">
       <header>
         <input type="text" class="nome" [value]="caixas.nameblock" (blur)="dragDropService.changeBlock($event)">
-        <div class="more_horiz" (click)="dragDropService.ativaMenuBloco(caixas.idblock)"></div>
+        <!--<div class="more_horiz" (click)="dragDropService.ativaMenuBloco(caixas.idblock)"></div>-->
+        <div class="delete"><i class="material-icons">delete</i></div>
+
         <div [hidden]="!dragDropService.menuBloco || caixas.idblock != dragDropService.referenciaMenuBloco "
              class="menuBloco">
           <ul>
