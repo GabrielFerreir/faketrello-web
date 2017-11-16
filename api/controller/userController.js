@@ -180,7 +180,7 @@ exports.newUser = async function (req, res) {
       if (!data || !data[0]) {
         res.status(409).json({error: 'Erro ao cadastrar: Usuário ou email já cadastrado'})
       } else {
-        res.status(200).json({result: 'Usuário cadastrado com sucesso'})
+        res.status(201).json({result: 'Usuário cadastrado com sucesso'})
         req.idNewUser = data[0].idnewuser
         req.called = 2
       }
