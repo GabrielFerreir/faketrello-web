@@ -266,12 +266,16 @@ a {
   outline: none;
   border: none;
   box-shadow: 0 9px 12px rgba(0, 0, 0, .14),
-  0 3px 5px rgba(0, 0, 0, .12),
-  0 5px 6px rgba(0, 0, 0, .20);
+              0 3px 5px rgba(0, 0, 0, .12),
+              0 5px 6px rgba(0, 0, 0, .20);
   cursor: pointer;
-  background-size: 24px;
-  background-repeat: no-repeat;
-  background-position: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.floatingButton i {
+  color: #FAFAFA;
 }
 
 .overflowAuto {
