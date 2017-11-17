@@ -15,7 +15,7 @@ header {
   user-select: none;
   box-sizing: border-box;
   position: absolute;
-  z-index: 8;
+  z-index: 24;
 }
 .hamburger, .inverseHamburger {
   float: left;

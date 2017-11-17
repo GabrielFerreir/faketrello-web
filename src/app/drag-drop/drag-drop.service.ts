@@ -246,7 +246,6 @@ export class DragDropService {
       }
 
 
-
       if (this.isMobile) {
         if (mouse.changedTouches['0'].clientX > this.tamanhoDaTela - this.areaDeScroll) {
           document.querySelector('#dragDrop').scrollBy(5, 0);
@@ -419,22 +418,22 @@ export class DragDropService {
     return this.http.post(url, params, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
-          console.log(res);
-          // BUSCA OS BLOCOS NOVAMENTE
-          this.projects.searchBlocks(this.idProjeto)
-            .subscribe((res) => {
-              console.log(res);
-              this.blocks = res;
-              this.situacaoAddBloco = false;
-              this.nomeAddBloco = '';
-              this.socket.emit('changeTask', {
-                idProject: this.idProjeto
-              });
-              this.snackbar.inserirSnackbar('Bloco adicionada com sucesso!');
-              this.notificationService.searchNotification();
-            }, error => {
-              console.error(error);
+        console.log(res);
+        // BUSCA OS BLOCOS NOVAMENTE
+        this.projects.searchBlocks(this.idProjeto)
+          .subscribe((res) => {
+            console.log(res);
+            this.blocks = res;
+            this.situacaoAddBloco = false;
+            this.nomeAddBloco = '';
+            this.socket.emit('changeTask', {
+              idProject: this.idProjeto
             });
+            this.snackbar.inserirSnackbar('Bloco adicionada com sucesso!');
+            this.notificationService.searchNotification();
+          }, error => {
+            console.error(error);
+          });
       }, error => {
         console.log(error);
       });
@@ -493,7 +492,7 @@ export class DragDropService {
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
 
     return this.http.post(url, params, {headers: headers})
-    .subscribe((res) => {
+      .subscribe((res) => {
         console.log(res);
         this.addElemento = false;
         // BUSCA OS BLOCOS NOVAMENTE
@@ -581,7 +580,7 @@ export class DragDropService {
       }, () => {
         setTimeout(() => {
           const textarea = document.querySelectorAll('textarea');
-          for(let i = 0; i < textarea.length; i++) {
+          for (let i = 0; i < textarea.length; i++) {
             this.autoHeight(textarea[i])
             console.log(textarea[i]);
           }
@@ -638,7 +637,7 @@ export class DragDropService {
         this.addComment = '';
         setTimeout(() => {
           const textarea = document.querySelectorAll('textarea');
-          for(let i = 0; i < textarea.length; i++) {
+          for (let i = 0; i < textarea.length; i++) {
             this.autoHeight(textarea[i])
             console.log(textarea[i]);
           }
@@ -680,7 +679,7 @@ export class DragDropService {
       }, () => {
         setTimeout(() => {
           const textarea = document.querySelectorAll('textarea');
-          for(let i = 0; i < textarea.length; i++) {
+          for (let i = 0; i < textarea.length; i++) {
             this.autoHeight(textarea[i])
             console.log(textarea[i]);
           }
@@ -786,7 +785,7 @@ export class DragDropService {
         console.log(res);
         this.getInfoOptionsTasks(this.idTask)
           .subscribe((res) => {
-          console.log(res);
+            console.log(res);
             this.infoOptionTask = res;
             this.snackbar.inserirSnackbar('Checklist criada com sucesso!');
             this.notificationService.searchNotification();
@@ -856,6 +855,7 @@ export class DragDropService {
         fileType: fileType
       }
     );
+    console.log(json)
     const params = json;
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -870,6 +870,8 @@ export class DragDropService {
             this.notificationService.searchNotification();
 
           }, error => {
+          console.log('Deu ruim')
+          console.log(error);
           });
       }, error => {
         console.log(error);
@@ -967,16 +969,6 @@ export class DragDropService {
     return this.http.put(url, params, {headers: headers})
 
 
-
-
-
-
-
-
-
-
-
-
       .subscribe((res) => {
         console.log(res);
         this.socket.emit('changeTask', {
@@ -1040,6 +1032,30 @@ export class DragDropService {
     console.log('AUTOHEIGHT')
     el.style.height = 'auto';
     el.style.height = (el.scrollHeight) + 'px';
+  }
+
+  delAttachment(id) {
+    var url = 'http://' + this.core.ipDaApi + '/task/attachment/' + id;
+
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+
+    return this.http.delete(url, {headers: headers})
+      .map(res => res.json())
+      .subscribe((res) => {
+        console.log(res);
+        this.getInfoOptionsTasks(this.idTask)
+          .subscribe((res) => {
+            this.infoOptionTask = res;
+            this.snackbar.inserirSnackbar('Anexo deletado com sucesso!');
+            this.notificationService.searchNotification();
+          }, error => {
+            console.log(error);
+          });
+      }, error => {
+        console.log(error);
+      });
   }
 
 

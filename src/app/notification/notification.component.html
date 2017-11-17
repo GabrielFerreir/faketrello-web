@@ -38,7 +38,7 @@
       notification.nameuser }} alterou a tarefa <b>{{ notification.oldname}}</b> para <b>{{ notification.newname}}</b>
       em <b>{{notification.nameproject}}</b></section>
     <section class="text" *ngIf="notification.type == 2 && notification.targettype == 2 && !notification.newname">{{
-      notification.nameuser }} alterou a tarefa <b>{{ notification.oldname}}</b> em <b>{{notification.nameproject}}</b>
+      notification.nameuser }} alterou a tarefa <b>{{ notification.nametask}}</b> em <b>{{notification.nameproject}}</b>
     </section>
     <section class="text" *ngIf="notification.type == 2 && notification.targettype == 3">{{ notification.nameuser }}
       alterou um comentario na tarefa <b>{{ notification.nametask}}</b> em <b>{{notification.nameproject}}</b></section>

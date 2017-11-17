@@ -32,32 +32,32 @@
 <!--<p class="excluirTarefa" (click)="dragDropService.delTask()">Excluir Tarefa</p>-->
 <!--&lt;!&ndash;</div>&ndash;&gt;-->
 <!--<div class="comentarios">-->
-  <!--<div style="position: relative; margin-top: 10px; width: 90%; margin-left: 5%; float: left">-->
-    <!--<input type="text" class="textFields" id="addComentario" #HTMLInputComment-->
-           <!--[(ngModel)]="dragDropService.addComment" (keyup.enter)="dragDropService.newCommentTask()"-->
-           <!--(blur)="inputComment()">-->
-    <!--<label class="labelText" for="addComentario">Adicionar Comentario</label>-->
-    <!--<div class="border"></div>-->
-  <!--</div>-->
-  <!--<div class="scrollComentarios">-->
-    <!--<ul>-->
-      <!--<li *ngFor="let comentario of dragDropService?.infoOptionTask?.comments">-->
-        <!--<span *ngIf="!modifyComment || idModifyComment != comentario.id_comment">{{ comentario.comment }}</span>-->
-        <!--<input *ngIf="modifyComment && idModifyComment == comentario.id_comment" class="textFields modifyComments"-->
-               <!--style="width: calc(100% - 100px);"-->
-               <!--(blur)="dragDropService.changeCommentTask(comentario.comment, comentario.id_comment)"-->
-               <!--[(ngModel)]="comentario.comment">-->
-        <!--<div class="more" (click)="onMoreOptionsComments(comentario.id_comment)"></div>-->
-        <!--<div [hidden]="!moreOptionsComments || comentario.id_comment != idMoreOptionsComments"-->
-             <!--class="optionsMore">-->
-          <!--<ul>-->
-            <!--<li (click)="onModifyComment(comentario.id_comment)">Alterar Comentario</li>-->
-            <!--<li (click)="dragDropService.delCommentTask(comentario.id_comment)">Excluir Comentario</li>-->
-          <!--</ul>-->
-        <!--</div>-->
-      <!--</li>-->
-    <!--</ul>-->
-  <!--</div>-->
+<!--<div style="position: relative; margin-top: 10px; width: 90%; margin-left: 5%; float: left">-->
+<!--<input type="text" class="textFields" id="addComentario" #HTMLInputComment-->
+<!--[(ngModel)]="dragDropService.addComment" (keyup.enter)="dragDropService.newCommentTask()"-->
+<!--(blur)="inputComment()">-->
+<!--<label class="labelText" for="addComentario">Adicionar Comentario</label>-->
+<!--<div class="border"></div>-->
+<!--</div>-->
+<!--<div class="scrollComentarios">-->
+<!--<ul>-->
+<!--<li *ngFor="let comentario of dragDropService?.infoOptionTask?.comments">-->
+<!--<span *ngIf="!modifyComment || idModifyComment != comentario.id_comment">{{ comentario.comment }}</span>-->
+<!--<input *ngIf="modifyComment && idModifyComment == comentario.id_comment" class="textFields modifyComments"-->
+<!--style="width: calc(100% - 100px);"-->
+<!--(blur)="dragDropService.changeCommentTask(comentario.comment, comentario.id_comment)"-->
+<!--[(ngModel)]="comentario.comment">-->
+<!--<div class="more" (click)="onMoreOptionsComments(comentario.id_comment)"></div>-->
+<!--<div [hidden]="!moreOptionsComments || comentario.id_comment != idMoreOptionsComments"-->
+<!--class="optionsMore">-->
+<!--<ul>-->
+<!--<li (click)="onModifyComment(comentario.id_comment)">Alterar Comentario</li>-->
+<!--<li (click)="dragDropService.delCommentTask(comentario.id_comment)">Excluir Comentario</li>-->
+<!--</ul>-->
+<!--</div>-->
+<!--</li>-->
+<!--</ul>-->
+<!--</div>-->
 <!--</div>-->
 <!--<div class="checklist">-->
 <!--<div style="position: relative; margin-top: 10px; width: 90%; margin-left: 5%; float: left">-->
@@ -93,14 +93,21 @@
 <!--</div>-->
 <!--<div class="membros">-->
 <!--<section class="search">-->
-<!--<input type="text" class="textFields" (focus)="showSearchMembros()" (blur)="hideSearchMembros()" [(ngModel)]="search" #HTMLSearch>-->
+<!--<input type="text" class="textFields" (focus)="showSearchMembros()" (blur)="hideSearchMembros()"-->
+<!--[(ngModel)]="search" #HTMLSearch>-->
 <!--<label class="labelText">Nome</label>-->
 <!--<div class="border"></div>-->
 <!--</section>-->
 <!--<section class="chipsFocus" *ngIf="searchMembros">-->
-<!--<article class="chipFocus" *ngFor="let membro of projectService?.project?.team | pesquisaDeMembrosDoProjeto: search: dragDropService?.infoOptionTask?.team" (mousedown)="dragDropService.addMemberTask(membro.id_user)">-->
-<!--<section class="img" *ngIf="membro.profile_img == '/imgsUser/default.png'">{{ membro.name.charAt(0) | uppercase }}</section>-->
-<!--<section *ngIf="membro.profile_img != '/imgsUser/default.png'" [style.background-image]="'url('+ 'http://' + core.ipDaApi + membro.profile_img +')'" class="img"></section>-->
+<!--<article class="chipFocus"-->
+<!--*ngFor="let membro of projectService?.project?.team | pesquisaDeMembrosDoProjeto: search: dragDropService?.infoOptionTask?.team"-->
+<!--(mousedown)="dragDropService.addMemberTask(membro.id_user)">-->
+<!--<section class="img" *ngIf="membro.profile_img == '/imgsUser/default.png'">{{ membro.name.charAt(0) | uppercase-->
+<!--}}-->
+<!--</section>-->
+<!--<section *ngIf="membro.profile_img != '/imgsUser/default.png'"-->
+<!--[style.background-image]="'url('+ 'http://' + core.ipDaApi + membro.profile_img +')'"-->
+<!--class="img"></section>-->
 <!--<section class="hgroup">-->
 <!--<h1 class="name">{{ membro.name }}</h1>-->
 <!--<h2 class="email">{{ membro.email }}</h2>-->
@@ -110,14 +117,19 @@
 <!--</section>-->
 <!--<section class="chips">-->
 <!--<article class="chip" *ngFor="let membro of dragDropService?.infoOptionTask?.team">-->
-<!--<section class="img" *ngIf="membro.profile_img == '/imgsUser/default.png'">{{ membro.name.charAt(0) | uppercase }}</section>-->
-<!--<section *ngIf="membro.profile_img != '/imgsUser/default.png'" [style.background-image]="'url('+ 'http://' + core.ipDaApi + membro.profile_img +')'" class="img"></section>-->
+<!--<section class="img" *ngIf="membro.profile_img == '/imgsUser/default.png'">{{ membro.name.charAt(0) | uppercase-->
+<!--}}-->
+<!--</section>-->
+<!--<section *ngIf="membro.profile_img != '/imgsUser/default.png'"-->
+<!--[style.background-image]="'url('+ 'http://' + core.ipDaApi + membro.profile_img +')'"-->
+<!--class="img"></section>-->
 <!--<h1 class="name">{{ membro.name }}</h1>-->
 <!--<section class="delete" (click)="dragDropService.delMemberTask(membro.id_team_task)"></section>-->
 <!--</article>-->
 <!--</section>-->
-
 <!--</div>-->
+
+
 <!--<div class="anexos">-->
 <!--<div class="scrollAnexos">-->
 <!--<ul>-->
@@ -167,6 +179,9 @@
   </section>
   <section #conteudoNav class="pages">
     <section class="page basicas">
+      <header>
+        <h1>Basicas</h1>
+      </header>
       <div class="nome">
         <div>
           <input type="text" class="textFields" #HTMLNameTask [(ngModel)]="nome"
@@ -191,39 +206,173 @@
           <div class="border"></div>
         </div>
       </div>
+      <section class="delete">
+        <i class="material-icons" (click)="dragDropService.delTask()">delete</i>
+      </section>
     </section>
     <section class="page comentarios">
+      <header>
+        <h1>Comentarios</h1>
+      </header>
       <section class="lista">
-        <section class="comentario" *ngFor="let comentario of dragDropService?.infoOptionTask?.comments">
-          <textarea spellcheck="false" (keyup)="dragDropService.autoHeight($event.target)" rows="1" [(ngModel)]="comentario.comment"
+        <div class="scroll">
+          <section class="comentario" *ngFor="let comentario of dragDropService?.infoOptionTask?.comments">
+          <textarea spellcheck="false" (keyup)="dragDropService.autoHeight($event.target)" rows="1"
+                    [(ngModel)]="comentario.comment"
                     (blur)="dragDropService.changeCommentTask(comentario.comment, comentario.id_comment)">
-
+a
           </textarea>
-          <i class="material-icons" (click)="dragDropService.delCommentTask(comentario.id_comment)">clear</i>
-        </section>
-        <section class="comentario">
-          <section class="addComentario">
-            <div>
+            <i class="material-icons" (click)="dragDropService.delCommentTask(comentario.id_comment)">clear</i>
+          </section>
+          <section class="comentario">
+            <section class="addComentario">
+              <div>
               <textarea (keyup)="dragDropService.autoHeight($event.target)" rows="1" class="textFieldsMult"
                         [(ngModel)]="dragDropService.addComment" (keyup.enter)="dragDropService.newCommentTask()">
 
               </textarea>
-              <label class="labelTextMult">Adicionar Comentario</label>
-              <div class="border"></div>
-            </div>
+                <label class="labelTextMult">Adicionar Comentario</label>
+                <div class="border"></div>
+              </div>
+            </section>
           </section>
-        </section>
+        </div>
       </section>
     </section>
     <section class="page checklist">
+      <header>
+        <h1>Checklist</h1>
+      </header>
+      <section class="scroll">
+        <ul>
+          <li *ngFor="let checklist of dragDropService?.infoOptionTask?.checklists">
+            <input type="checkbox" [id]="'check' + checklist.id_checklist" [checked]="checklist.checked">
+            <label [for]="'check' + checklist.id_checklist">
+              <div class="img"></div>
+            </label>
+            <input type="text" class="fieldCheckbox" [(ngModel)]="checklist.name_checklist"
+                   (blur)="dragDropService.changeChecklistTask(checklist.name_checklist, checklist.id_checklist)">
+            <i class="material-icons" (click)="dragDropService.delChecklist(checklist.id_checklist)">clear</i>
+          </li>
 
+          <li class="addCheckbox">
+            <div>
+              <input type="text" class="textFields" [(ngModel)]="dragDropService.addNewChecklist"
+                     (keyup.enter)="dragDropService.newChecklist(dragDropService.addNewChecklist)">
+              <label class="labelText"
+                     (click)="dragDropService.changeSituationCheckbox(checklist.id_checklist)">
+                Adicionar Checkbox
+              </label>
+              <div class="border"></div>
+            </div>
+          </li>
+        </ul>
+      </section>
     </section>
     <section class="page anexos">
+      <header>
+        <h1>Anexos</h1>
+      </header>
 
+      <section class="lista">
+        <section class="anexo" *ngFor="let anexo of dragDropService?.infoOptionTask?.attachment">
+          <div class="img">
+
+            <a [href]="'http://'  + core.ipDaApi +  anexo.path" target="_blank">
+              <div class="icon"
+                   *ngIf="anexo.path.split('.')[1] == 'zip' || anexo.path.split('.')[1] == 'rar' || anexo.path.split('.')[1] == '7z'"
+                   [style.background-image]="'url( ../../../assets/icons/zip.svg)'"
+              ></div>
+              <div class="icon" *ngIf="anexo.path.split('.')[1] == 'psd'"
+                   [style.background-image]="'url( ../../../assets/icons/photoshop.svg)'"
+              ></div>
+              <div class="icon" *ngIf="anexo.path.split('.')[1] == 'pdf'"
+                   [style.background-image]="'url( ../../../assets/icons/pdf.svg)'"
+              ></div>
+              <div class="icon" *ngIf="anexo.path.split('.')[1] == 'mp3'"
+                   [style.background-image]="'url( ../../../assets/icons/mp3.svg)'"
+              ></div>
+              <div class="icon" *ngIf="anexo.path.split('.')[1] == 'pptx'"
+                   [style.background-image]="'url( ../../../assets/icons/ppt.svg)'"
+              ></div>
+              <div class="icon" *ngIf="anexo.path.split('.')[1] == 'svg'"
+                   [style.background-image]="'url( ../../../assets/icons/svg.svg)'"
+              ></div>
+              <div class="icon" *ngIf="anexo.path.split('.')[1] == 'txt'"
+                   [style.background-image]="'url( ../../../assets/icons/txt.svg)'"
+              ></div>
+              <div class="icon" *ngIf="anexo.path.split('.')[1] == 'doc' || anexo.path.split('.')[1] == 'docx'"
+                   [style.background-image]="'url( ../../../assets/icons/doc.svg)'"
+              ></div>
+              <div class="image" *ngIf="anexo.path.split('.')[1] == 'png' || anexo.path.split('.')[1] == 'jpg' || anexo.path.split('.') == 'jpeg'
+                                || anexo.path.split('.') == 'gif'"
+                   [style.background-image]="'url(http://' + core.ipDaApi +  anexo.path + ')'"
+              ></div>
+            </a>
+
+          </div>
+          <h1 *ngIf="anexo.path.split('.')[1] != 'png' && anexo.path.split('.')[1] != 'jpg'">{{ anexo.file_name }}</h1>
+          <i class="material-icons delete" (click)="dragDropService.delAttachment(anexo.id_attachment)">delete</i>
+        </section>
+
+
+        <section class="anexo">
+          <input type="file" id="addAnexo" (change)="getFile($event.target)">
+          <i class="material-icons" (click)="openFileAnexo()">add</i>
+        </section>
+
+      </section>
     </section>
     <section class="page time">
+      <header>
+        <h1>Time</h1>
+      </header>
+
+      <div class="membros">
+        <section class="search">
+          <input type="text" class="textFields" (focus)="showSearchMembros()" (blur)="hideSearchMembros()"
+                 [(ngModel)]="search" #HTMLSearch>
+          <label class="labelText">Nome</label>
+          <div class="border"></div>
+        </section>
+        <section class="chipsFocus" *ngIf="searchMembros">
+          <article class="chipFocus"
+                   *ngFor="let membro of projectService?.project?.team | pesquisaDeMembrosDoProjeto: search: dragDropService?.infoOptionTask?.team"
+                   (mousedown)="dragDropService.addMemberTask(membro.id_user)">
+            <section class="img" *ngIf="membro.profile_img == '/imgsUser/default.png'">{{ membro.name.charAt(0) |
+              uppercase
+              }}
+            </section>
+            <section *ngIf="membro.profile_img != '/imgsUser/default.png'"
+                     [style.background-image]="'url('+ 'http://' + core.ipDaApi + membro.profile_img +')'"
+                     class="img"></section>
+            <section class="hgroup">
+              <h1 class="name">{{ membro.name }}</h1>
+              <h2 class="email">{{ membro.email }}</h2>
+            </section>
+
+          </article>
+        </section>
+        <section class="chips">
+          <article class="chip" *ngFor="let membro of dragDropService?.infoOptionTask?.team">
+            <section class="img" *ngIf="membro.profile_img == '/imgsUser/default.png'">{{ membro.name.charAt(0) |
+              uppercase
+              }}
+            </section>
+            <section *ngIf="membro.profile_img != '/imgsUser/default.png'"
+                     [style.background-image]="'url('+ 'http://' + core.ipDaApi + membro.profile_img +')'"
+                     class="img"></section>
+            <h1 class="name">{{ membro.name }}</h1>
+            <section class="delete" (click)="dragDropService.delMemberTask(membro.id_team_task)"></section>
+          </article>
+        </section>
+      </div>
+
 
     </section>
   </section>
 </section>
+<div class="background">
+
+</div>
 

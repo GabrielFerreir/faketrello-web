@@ -37,14 +37,11 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
   @ViewChild('HTMLSearch') HTMLSearch: ElementRef;
 
 
-
   constructor(private dragDropService: DragDropService,
               private projectService: ProjectsServiceService,
               private core: CoreService) {
     this.search = '';
   }
-
-
 
 
   ngOnInit() {
@@ -54,6 +51,10 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
       this.offModifyComment(e);
       this.offModifyChecklist(e);
     });
+
+    document.addEventListener('mousedown', (e) => {
+      this.fechaAlterarTarefa(e);
+    })
 
 
   }
@@ -98,6 +99,7 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
   navChecklist() {
     this.conteudoNav.nativeElement.style = 'transform: translateY(-200%);';
   }
+
   navAnexos() {
     this.conteudoNav.nativeElement.style = 'transform: translateY(-300%);';
   }
@@ -105,7 +107,6 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
   navMembros() {
     this.conteudoNav.nativeElement.style = 'transform: translateY(-400%);';
   }
-
 
 
   verificaInputs() {
@@ -123,8 +124,6 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
     }
 
   }
-
-
 
   alteraDadosBasicos() {
     console.log('blur');
@@ -165,9 +164,6 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
   }
 
   getFile(file) {
-
-
-
     // const fSExt = new Array('Bytes', 'KB', 'MB', 'GB');
     // let fSize = file.files[0].size;
     // let i = 0;
@@ -187,12 +183,12 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
       const size = file.files[0].size;
       const extensao = file.files[0].name.split('.')[1];
       const base64 = reader.result;
-      if(name && size && extensao && base64) {
+      if (name && size && extensao && base64) {
+        console.log(base64)
         this.dragDropService.newAttachment(base64, name, size, extensao);
       }
     }
   }
-
 
   onMoreOptionsComments(id) {
     this.moreOptionsComments = true;
@@ -245,6 +241,12 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
 
   hideSearchMembros() {
     this.searchMembros = false;
+  }
+
+  fechaAlterarTarefa(event) {
+    if(event.target.className == 'background') {
+      this.dragDropService.offOptionsTasks();
+    }
   }
 }
 
