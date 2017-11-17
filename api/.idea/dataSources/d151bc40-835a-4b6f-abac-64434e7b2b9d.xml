@@ -14,7 +14,7 @@
     </database>
     <schema id="4" parent="2" name="public">
       <ObjectId>2200</ObjectId>
-      <IntrospectionTimestamp>2017-11-16.10:01:08.104</IntrospectionTimestamp>
+      <IntrospectionTimestamp>2017-11-17.15:53:29.905</IntrospectionTimestamp>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -35,8 +35,8 @@
     </schema>
     <schema id="10" parent="3" name="public">
       <ObjectId>2200</ObjectId>
-      <IntrospectionTimestamp>2017-11-16.10:01:07.154</IntrospectionTimestamp>
-      <IntrospectionStateNumber>9046</IntrospectionStateNumber>
+      <IntrospectionTimestamp>2017-11-17.15:53:29.388</IntrospectionTimestamp>
+      <IntrospectionStateNumber>9451</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -332,7 +332,7 @@
     </routine>
     <routine id="55" parent="10" name="deleteattachment">
       <ObjectId>33137</ObjectId>
-      <StateNumber>6200</StateNumber>
+      <StateNumber>9451</StateNumber>
       <VolatilityKind>volatile</VolatilityKind>
       <ArgumentsDefinition>pidattachment integer, piduser integer</ArgumentsDefinition>
       <ResultsDefinition>TABLE(path character varying)</ResultsDefinition>

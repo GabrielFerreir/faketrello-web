@@ -157,21 +157,17 @@ function buildAttachment (req) {
   return new Promise(async function (resolve, reject) {
     const fs = require('fs')
     let file = req.body.file
-    let matches = file.match(/^data:([A-Za-z-+./]+);base64,(.+)$/)
+    let matches = file.split(',', 2)
     let response = {}
     let extensions = ['jpg', 'jpeg', 'png', 'gif', 'rar', 'zip', '7z', '3gp', 'm4a', 'mp3', 'ogg', 'wma', 'wmv', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'mp4', 'avi', 'mkv', 'mov', 'flv', 'mpg', 'mpeg', 'xd', 'psd', 'ai', 'txt', 'html', 'css']
 
-    if (matches.length !== 3) {
-      return new Error('Invalid input string')
-    }
-    response.type = matches[1]
     if (extensions.indexOf(req.body.fileType) !== -1) {
       let d = new Date()
       let dateT = d.getTime()
 
       let string = req.body.fileName + req.body.fileType + dateT
       let encode = md5(string)
-      response.data = new Buffer(matches[2], 'base64')
+      response.data = new Buffer(matches[1], 'base64')
       let caminhoBd = `./files/attachment/${encode}.${req.body.fileType}`
 
       let caminho = caminhoBd.replace('./files', '')
@@ -282,7 +278,7 @@ exports.deleteComment = function (req, res) {
 
 //Deleta o attachment
 exports.deleteAttachment = function (req, res) {
-  db.any('SELECT * FROM deleteAttachment($1)', [req.params.id])
+  db.any('SELECT * FROM deleteAttachment($1,$2)', [req.params.id, req.dataToken.id])
     .then(data => {
       if (!data || !data[0]) {
         res.status(404).json({error: 'Erro ao remover'})

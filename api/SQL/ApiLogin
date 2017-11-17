@@ -1539,6 +1539,8 @@ BEGIN
     FROM tb_attachment l
     WHERE id_attachment = pIdAttachment;
 
+    DELETE FROM tb_notifications WHERE id_attachment = pIdAttachment;
+
     DELETE FROM tb_attachment
     WHERE id_attachment = pIdAttachment;
 
