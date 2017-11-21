@@ -4,8 +4,8 @@ import {CoreService} from '../Services/core.service';
 import {DadosDeUsuarioService} from '../Services/dados-de-usuario.service';
 import {Socket} from 'ng-socket-io';
 import {ProjectsServiceService} from '../projects/projects-service.service';
-import {SnackbarsService} from "../components/snackbars/snackbars.service";
-import {NotificationService} from "../notification/notification.service";
+import {SnackbarsService} from '../components/snackbars/snackbars.service';
+import {NotificationService} from '../notification/notification.service';
 
 
 @Injectable()
@@ -30,12 +30,23 @@ export class DragDropService {
   cxDestino;
   larguraDaCaixa: number;
   bloco;
-  posInicialX: number
-  posInicialY: number;
+
+  posInicial: object;
+  started: boolean;
+
+  //
   posicaoBlocoX: number;
   posicaoBlocoY: number;
+  //
+  posicaoBloco: object;
+
+  //
   diferencaX: number;
   diferencaY: number;
+  //
+  diferenca: object;
+  currentPosition: object;
+
   posFinalX: number;
   posFinalY: number;
   sombra;
@@ -43,6 +54,7 @@ export class DragDropService {
   mouseStart: boolean;
   intervalPrev;
   intervalNext;
+  longClickInterval;
 
 
   addElemento;
@@ -66,6 +78,8 @@ export class DragDropService {
 
   addComment: string;
   addNewChecklist: string;
+
+  // INICIO DRAGDROP
 
   listenerInit() {
     setTimeout(() => {
@@ -105,71 +119,79 @@ export class DragDropService {
 
   setTamanhos() {
     this.larguraDaCaixa = document.querySelectorAll('.caixa')[0].clientWidth;
-    this.larguraDaCaixa = this.larguraDaCaixa - (this.larguraDaCaixa * 0.1);
-
+    this.larguraDaCaixa = this.larguraDaCaixa;
     this.tamanhoDaTela = document.querySelector('#dragDrop').clientWidth;
   }
 
   getPosInicial(event) {
-    if (!this.isMobile) {
-      this.posInicialX = event.clientX + this.getScroll();
-      this.posInicialY = event.clientY;
-    }
-    if (this.isMobile) {
-      this.posInicialX = event.changedTouches['0'].clientX + this.getScroll();
-      this.posInicialY = event.changedTouches['0'].clientY;
-    }
-
-    if (event.target.className == 'elemento') {
+    if (event.target.className === 'elemento') {
       this.bloco = event.target;
       this.caixa = event.target.parentNode;
-    } else if (event.target.parentNode.className == 'elemento') {
+    } else if (event.target.parentNode.className === 'elemento') {
       this.bloco = event.target.parentNode;
       this.caixa = event.target.parentNode.parentNode;
     } else {
       this.reset();
-      this.recriaListener();
     }
-    // console.log(this.bloco);
 
+    this.longClickInterval = setTimeout(() => {
+      this.started = true;
 
-    if (this.bloco) {
-      this.posicaoBlocoX = this.bloco.getBoundingClientRect().left;
-      this.posicaoBlocoY = this.bloco.getBoundingClientRect().top;
-      this.sombra = document.createElement('article');
-      this.sombra.className = 'sombra';
-      this.sombra.setAttribute('_ngcontent-c4', '');
+      this.posInicial = {
+        X: (event.clientX || event.changedTouches['0'].clientX) + this.getScrollX(),
+        Y: (event.clientY || event.changedTouches['0'].clientY) + this.getScrollY()
+      }
+      console.log('Inicial');
+      console.log(this.posInicial);
 
-      this.sombra.setAttribute('style', 'height:' + this.bloco.offsetHeight + 'px');
-    }
+      if (this.bloco) {
+        this.posicaoBloco = {
+          X: this.bloco.getBoundingClientRect().left + this.getScrollX(),
+          Y: this.bloco.getBoundingClientRect().top + this.getScrollY()
+        }
+
+        // GERANDO A SOMBRA
+        this.sombra = document.createElement('article');
+        this.sombra.className = 'sombra';
+        this.sombra.setAttribute('_ngcontent-c4', '');
+        this.sombra.setAttribute('style', 'height:' + this.bloco.offsetHeight + 'px');
+      }
+    }, 500);
 
   }
 
   getMouseMove(event) {
-    if (this.posInicialX) {
+    if (this.started) {
       event.preventDefault();
-      this.fazScroll(event);
-      if (!this.isMobile) {
-        this.diferencaX = (event.clientX + this.getScroll()) - this.posInicialX;
-        this.diferencaY = (event.clientY) - this.posInicialY;
+      this.currentPosition = {
+        X: event.clientX || event.changedTouches['0'].clientX + this.getScrollX(),
+        Y: event.clientY || event.changedTouches['0'].clientY + this.getScrollY()
       }
-      if (this.isMobile) {
-        this.diferencaX = (event.changedTouches['0'].clientX + this.getScroll()) - this.posInicialX;
-        this.diferencaY = (event.changedTouches['0'].clientY) - this.posInicialY;
-      }
-      if (this.isMobile) {
-        this.bloco.style.transform = 'translate(' + (event.changedTouches['0'].clientX - this.posInicialX) + 'px, ' + this.diferencaY + 'px) rotate(7deg)';
+      this.fazScroll();
 
-      } else {
-        this.bloco.style.transform = 'translate(' + (event.clientX - this.posInicialX) + 'px, ' + this.diferencaY + 'px) rotate(7deg)';
+
+      this.diferenca = {
+        X: (this.currentPosition['X'] - this.posInicial['X']),
+        Y: (this.currentPosition['Y'] - this.posInicial['Y'])
       }
+
+
+      console.log('Atual');
+      console.log(this.currentPosition)
+      console.log('Diferença');
+      console.log(this.diferenca);
+
+
       this.bloco.style.opacity = '0.7';
       this.bloco.style.position = 'fixed';
       this.bloco.style.zIndex = '24';
-      this.bloco.style.width = (this.larguraDaCaixa) + 'px';
+      this.bloco.style.width = (this.larguraDaCaixa * 0.9) + 'px';
+      this.bloco.style.margin = 0;
+      this.bloco.style.left = this.posicaoBloco['X'] + 'px';
+      this.bloco.style.top = this.posicaoBloco['Y'] + 'px';
+      this.bloco.style.transform = 'translate(' + (this.diferenca['X']) + 'px, ' + (this.diferenca['Y']) + 'px) rotate(7deg)';
 
       if (this.pegaLocalNaOrdem(event)) {
-        // console.log(this.pegaLocalNaOrdem(event));
         this.caixaDestino().insertBefore(this.sombra, this.pegaLocalNaOrdem(event));
       } else {
         this.caixaDestino().insertBefore(this.sombra, this.caixaDestino().querySelector('.addElemento'));
@@ -179,6 +201,12 @@ export class DragDropService {
   }
 
   getPosFinal(event) {
+    clearTimeout(this.longClickInterval);
+    if (!this.posicaoBloco['X'] && this.bloco) {
+      console.log(this.bloco.id);
+      this.onOptionsTasks(this.bloco.id);
+    }
+
     if (this.mouseStart) {
       this.caixaDestino().removeChild(this.sombra);
       this.caixa.removeChild(this.bloco);
@@ -199,8 +227,6 @@ export class DragDropService {
       for (let i = 0; i < this.caixaDestino().querySelectorAll('.elemento').length; i++) {
         current.push(parseInt(this.caixaDestino().querySelectorAll('.elemento')[i].id));
       }
-      console.log(this.bloco.id)
-      console.log(this.caixaDestino().parentNode.id);
 
 
       this.changePositions(previous, current, this.bloco.id, this.caixaDestino().parentNode.id);
@@ -209,71 +235,74 @@ export class DragDropService {
     clearInterval(this.intervalPrev);
     clearInterval(this.intervalNext);
     this.reset();
-    this.recriaListener();
   }
 
-  getScroll() {
-    let scroll = document.querySelector('#dragDrop').scrollLeft;
+  getScrollX() {
+    const scroll = document.querySelector('#dragDrop').scrollLeft;
+    console.log('ScrollX: ' + scroll);
     return scroll;
   }
 
-  fazScroll(mouse) {
+  getScrollY() {
+    const scroll = document.querySelector('#dragDrop').scrollTop;
+    console.log('ScrollY: ' + scroll);
+    return scroll;
+  }
+
+  fazScroll() {
     clearInterval(this.intervalNext);
     clearInterval(this.intervalPrev);
 
-    if (this.posInicialX) {
+    if (this.started) {
       this.areaDeScroll = this.tamanhoDaTela * 0.2;
-      if (!this.isMobile) {
-        if (mouse.clientX > this.tamanhoDaTela - this.areaDeScroll) {
+        if (this.currentPosition['X'] > this.tamanhoDaTela - this.areaDeScroll) {
           document.querySelector('#dragDrop').scrollBy(5, 0);
           clearInterval(this.intervalPrev);
           this.intervalNext = setInterval(() => {
             document.querySelector('#dragDrop').scrollBy(5, 0);
-            if (this.getScroll() >= document.querySelector('#dragDrop').clientWidth - 48) {
+            if (this.getScrollX() >= document.querySelector('#dragDrop').clientWidth - 48) {
               clearInterval(this.intervalNext);
             }
           }, 35);
-        } else if (this.areaDeScroll > mouse.clientX) {
+        } else if (this.areaDeScroll > this.currentPosition['X']) {
           document.querySelector('#dragDrop').scrollBy(-5, 0);
           clearInterval(this.intervalNext);
           this.intervalPrev = setInterval(() => {
             document.querySelector('#dragDrop').scrollBy(-5, 0);
-            if (this.getScroll() <= 0) {
+            if (this.getScrollX() <= 0) {
               clearInterval(this.intervalPrev);
             }
           }, 35);
         }
-      }
 
 
-      if (this.isMobile) {
-        if (mouse.changedTouches['0'].clientX > this.tamanhoDaTela - this.areaDeScroll) {
-          document.querySelector('#dragDrop').scrollBy(5, 0);
-          clearInterval(this.intervalPrev);
-          this.intervalNext = setInterval(() => {
-            document.querySelector('#dragDrop').scrollBy(5, 0);
-            if (this.getScroll() >= document.querySelector('#dragDrop').scrollWidth) {
-              clearInterval(this.intervalNext);
-            }
-          }, 35);
-        }
-        else if (this.areaDeScroll > mouse.changedTouches['0'].clientX) {
-          document.querySelector('#dragDrop').scrollBy(-5, 0);
-          clearInterval(this.intervalNext);
-          this.intervalPrev = setInterval(() => {
-            document.querySelector('#dragDrop').scrollBy(-5, 0);
-            if (this.getScroll() <= 0) {
-              clearInterval(this.intervalPrev);
-            }
-          }, 35);
-        }
-      }
+      // if (this.isMobile) {
+      //   if (mouse.changedTouches['0'].clientX > this.tamanhoDaTela - this.areaDeScroll) {
+      //     document.querySelector('#dragDrop').scrollBy(5, 0);
+      //     clearInterval(this.intervalPrev);
+      //     this.intervalNext = setInterval(() => {
+      //       document.querySelector('#dragDrop').scrollBy(5, 0);
+      //       if (this.getScrollX() >= document.querySelector('#dragDrop').scrollWidth) {
+      //         clearInterval(this.intervalNext);
+      //       }
+      //     }, 35);
+      //   }
+      //   else if (this.areaDeScroll > mouse.changedTouches['0'].clientX) {
+      //     document.querySelector('#dragDrop').scrollBy(-5, 0);
+      //     clearInterval(this.intervalNext);
+      //     this.intervalPrev = setInterval(() => {
+      //       document.querySelector('#dragDrop').scrollBy(-5, 0);
+      //       if (this.getScrollX() <= 0) {
+      //         clearInterval(this.intervalPrev);
+      //       }
+      //     }, 35);
+      //   }
+      // }
     }
   }
 
   pegaLocalNaOrdem(event) {
     let els = this.caixaDestino().querySelectorAll('.elemento');
-    // console.log(els);
     let verificacao = false;
     let local = null;
     for (let i = 0; i < els.length; i++) {
@@ -298,16 +327,14 @@ export class DragDropService {
   }
 
   caixaDestino() {
-    if (this.diferencaX && this.diferencaX > this.larguraDaCaixa) {
-      const quantidadeDeIrmaos = Math.floor(this.diferencaX / this.larguraDaCaixa);
-      // console.log('qtd:' + quantidadeDeIrmaos);
+    if (this.diferenca['X'] && this.diferenca['X'] > this.larguraDaCaixa) {
+      const quantidadeDeIrmaos = Math.floor(this.diferenca['X'] / this.larguraDaCaixa);
       this.cxDestino = this.caixa.parentNode.nextElementSibling.querySelector('.body');
-      // console.log(this.cxDestino);
       for (let i = 1; i < quantidadeDeIrmaos; i++) {
         this.cxDestino = this.cxDestino.parentNode.nextElementSibling.querySelector('.body');
       }
-    } else if (this.diferencaX && this.diferencaX < -this.larguraDaCaixa) {
-      const quantidadeDeIrmaos = Math.floor(this.diferencaX / -this.larguraDaCaixa);
+    } else if (this.diferenca['X'] && this.diferenca['X'] < -this.larguraDaCaixa) {
+      const quantidadeDeIrmaos = Math.floor(this.diferenca['X'] / -this.larguraDaCaixa);
       this.cxDestino = this.caixa.parentNode.previousElementSibling.querySelector('.body');
       for (let i = 1; i < quantidadeDeIrmaos; i++) {
         this.cxDestino = this.cxDestino.parentNode.previousElementSibling.querySelector('.body');
@@ -319,11 +346,11 @@ export class DragDropService {
   }
 
   reset() {
-    this.posInicialX = 0;
-    this.posInicialY = 0;
+    this.posInicial['X'] = 0;
+    this.posInicial['Y'] = 0;
 
-    this.posicaoBlocoX = 0;
-    this.posicaoBlocoY = 0;
+    this.posicaoBloco['X'] = 0;
+    this.posicaoBloco['Y'] = 0;
 
     this.posFinalX = 0;
     this.posFinalY = 0;
@@ -333,6 +360,7 @@ export class DragDropService {
     this.diferencaY = 0;
     this.sombra = null;
     this.mouseStart = false;
+    this.started = false;
   }
 
   recriaListener() {
@@ -353,9 +381,11 @@ export class DragDropService {
     }
   }
 
+  // FIM DRAGDROP
+
+
   teste() {
     // alert('A');
-    console.log('A')
   }
 
   onAddElemento(event, idBlock) {
@@ -366,7 +396,6 @@ export class DragDropService {
       event.target.parentNode.querySelector('input').focus();
     }, 50)
 
-    console.log(event.target.parentNode.querySelector('input'));
   }
 
   offPopupAddElementos(event) {
@@ -385,9 +414,7 @@ export class DragDropService {
     }, 50);
 
     let drag = <any>document.querySelector('#dragDrop');
-    console.log('pageoffSet')
 
-    // console.log(drag.scrollWidth - drag.getBoundingClientRect().width);
     drag.scrollBy(drag.scrollWidth - drag.getBoundingClientRect().width, 0);
   }
 
@@ -448,7 +475,6 @@ export class DragDropService {
         newName: name,
       }
     );
-    console.log(json);
 
     const params = json;
     const headers = new Headers();
@@ -569,7 +595,6 @@ export class DragDropService {
   onOptionsTasks(idTasks) {
     this.optionsTasks = true;
     this.idTask = idTasks;
-    console.log(idTasks);
     this.getInfoOptionsTasks(idTasks)
       .subscribe((res) => {
         this.infoOptionTask = res;
@@ -582,7 +607,6 @@ export class DragDropService {
           const textarea = document.querySelectorAll('textarea');
           for (let i = 0; i < textarea.length; i++) {
             this.autoHeight(textarea[i])
-            console.log(textarea[i]);
           }
         }, 50);
       });
@@ -639,7 +663,6 @@ export class DragDropService {
           const textarea = document.querySelectorAll('textarea');
           for (let i = 0; i < textarea.length; i++) {
             this.autoHeight(textarea[i])
-            console.log(textarea[i]);
           }
         }, 50);
       });
@@ -681,7 +704,6 @@ export class DragDropService {
           const textarea = document.querySelectorAll('textarea');
           for (let i = 0; i < textarea.length; i++) {
             this.autoHeight(textarea[i])
-            console.log(textarea[i]);
           }
         }, 50);
       });
@@ -694,7 +716,6 @@ export class DragDropService {
         comment: comment,
       }
     );
-    console.log(json);
 
     const params = json;
     const headers = new Headers();
@@ -722,7 +743,6 @@ export class DragDropService {
         description: description
       }
     );
-    console.log(json);
 
     const params = json;
     const headers = new Headers();
@@ -829,7 +849,6 @@ export class DragDropService {
         name: checklist,
       }
     );
-    console.log(json);
 
     const params = json;
     const headers = new Headers();
@@ -855,7 +874,6 @@ export class DragDropService {
         fileType: fileType
       }
     );
-    console.log(json)
     const params = json;
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -870,8 +888,7 @@ export class DragDropService {
             this.notificationService.searchNotification();
 
           }, error => {
-          console.log('Deu ruim')
-          console.log(error);
+            console.log(error);
           });
       }, error => {
         console.log(error);
@@ -960,7 +977,6 @@ export class DragDropService {
         oldPositions: previous
       }
     );
-    console.log(json);
 
     const params = json;
     const headers = new Headers();
@@ -985,7 +1001,6 @@ export class DragDropService {
   onInitSocket() {
     this.socket.on('updateTask', (data) => {
       if (data.idProject === this.idProjeto) {
-        console.log('Pesquisa dnv');
         this.projects.searchBlocks(this.idProjeto)
           .subscribe((res) => {
             console.log(res);
@@ -1029,7 +1044,6 @@ export class DragDropService {
   }
 
   autoHeight(el) {
-    console.log('AUTOHEIGHT')
     el.style.height = 'auto';
     el.style.height = (el.scrollHeight) + 'px';
   }

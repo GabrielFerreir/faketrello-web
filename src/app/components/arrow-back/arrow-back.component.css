@@ -1,15 +1,13 @@
 div {
-  /*display: none;*/
+  display: none;
   width: 42px;
   height: 42px;
   position: fixed;
   top: 16px;
   left: 16px;
-  border-radius: 50%;
-  background-image: url("../../../assets/arrow_back.svg");
-  background-size: 24px;
-  background-position: center;
-  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 50;
   transition: all ease 180ms;
 
@@ -21,17 +19,5 @@ div:hover {
 @media screen and (max-width: 480px) {
   div {
     display: block;
-    width: 42px;
-    height: 42px;
-    position: fixed;
-    top: 16px;
-    left: 16px;
-    border-radius: 50%;
-    /*background-color: #009587;*/
-    background-image: url("../../../assets/arrow_back.svg");
-    background-size: 24px;
-    background-position: center;
-    background-repeat: no-repeat;
-    transition: all ease 180ms;
   }
 }
