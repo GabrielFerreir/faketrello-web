@@ -30,7 +30,7 @@ export class NotificationComponent implements OnInit {
   }
 
   hiddenNotification(event) {
-    if (event.target.className != 'notificacao' && event.target.parentNode.className != 'notificacao') {
+    if (event.target.className != 'notificacao' && event.target.parentNode.className != 'notificacao' && this.service.visibility === true) {
       this.service.visibility = false;
       this.service.hiddenVisibility();
     }

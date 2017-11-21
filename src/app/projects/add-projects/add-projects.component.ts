@@ -2,6 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ProjectsServiceService} from '../projects-service.service';
 import { SnackbarsService } from '../../components/snackbars/snackbars.service';
 import { Router } from '@angular/router';
+import {DragDropService} from "../../drag-drop/drag-drop.service";
 
 
 @Component({
@@ -20,9 +21,13 @@ export class AddProjectsComponent implements OnInit {
 
   constructor(private router: Router,
               private projects: ProjectsServiceService,
-              private snackbar: SnackbarsService) { }
+              private snackbar: SnackbarsService,
+              private  dragDropService: DragDropService) { }
 
   ngOnInit() {
+    document.addEventListener('mousedown', (e) => {
+      this.projects.fechaAddProjets(e);
+    });
 
   }
 
@@ -58,7 +63,7 @@ export class AddProjectsComponent implements OnInit {
     this.projects.criaProject(this.nome, this.descricao, this.img64)
       .subscribe((res) => {
         console.log(res)
-        this.projects.fechaAddProjets();
+        this.projects.fechaAddProjets(null);
         this.snackbar.inserirSnackbar('Projeto Criado Com Sucesso!');
         // console.log('Cadastrou');
         this.projects.searchProjects();

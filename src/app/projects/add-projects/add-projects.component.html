@@ -1,39 +1,43 @@
-<section>
+<section class="container">
+    <section class="image">
+      <input type="file" (change)="previewFile($event.target)" id="file" style="display: none;">
 
-  <input type="file" (change)="previewFile($event.target)" id="file" style="display: none;">
+      <div *ngIf="img64" class="imageUser" id="preview" [style.background-image]="'url('+ img64 +')'"></div>
+      <div *ngIf="!img64" class="imageUser" style="background-size: 80px;"></div>
 
-  <div *ngIf="img64" class="imageUser" id="preview" [style.background-image]="'url('+ img64 +')'"></div>
-  <div *ngIf="!img64" class="imageUser" style="background-size: 80px;"></div>
-
-  <div class="addImageUser" (click)="chamaFile()">+</div>
-<div class="campos">
-  <div class="nome">
-    <input class="textFields" [(ngModel)]="nome" value="{{ nome }}" (blur)="inputs()"  type="text" id="nome"  #HTMLNome/>
-    <label class="labelText" for="nome">Nome</label>
-    <div class="border"></div>
-    <label class="helperText"></label>
-  </div>
-
-  <div class="descricao">
-    <textarea [(ngModel)]="descricao" #HTMLDescricao class="textFieldsMult" id="descricao" (blur)="inputs()"></textarea>
-    <label class="labelTextMult" for="descricao">Descrição</label>
-  </div>
-</div>
+      <div class="addImageUser" (click)="chamaFile()">+</div>
+    </section>
 
 
-  <button
-    class="denseButton cancelar"
-    (click)="projects.fechaAddProjets()"
-    #HTMLCancelar>
-    CANCELAR
-  </button>
+    <div class="campos">
+      <div class="nome">
+        <div class="relative">
+          <input class="textFields" [(ngModel)]="nome" value="{{ nome }}" (blur)="inputs()" type="text" id="nome"
+                 #HTMLNome/>
+          <label class="labelText" for="nome">Nome</label>
+          <div class="border"></div>
+        </div>
+      </div>
 
-  <button
-    class="denseButton cadastrar"
-    (click)="criarProject()"
-    #HTMLCadastrar>
-    CADASTRAR
-  </button>
+      <div class="descricao">
+        <div class="relative">
+          <textarea [(ngModel)]="descricao" #HTMLDescricao class="textFieldsMult" id="descricao"
+                    (blur)="inputs()"
+                    (keyup)="dragDropService.autoHeight($event.target)" rows="1"
+          ></textarea>
+          <label class="labelTextMult" for="descricao">Descrição</label>
+        </div>
+      </div>
+    </div>
+  </section>
 
+<section class="background"></section>
+
+
+<section class="floatingButton" (click)="criarProject()">
+  <i class="material-icons">save</i>
 </section>
+
+<app-arrow-back (click)="projects.fechaAddProjets(null)"></app-arrow-back>
+
 

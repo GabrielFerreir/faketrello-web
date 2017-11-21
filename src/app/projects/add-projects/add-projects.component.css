@@ -1,26 +1,39 @@
-section {
-  width: 300px;
+app-arrow-back {
+  display: none;
+}
+
+.container {
+  width: 400px;
   height: 350px;
   background-color: #FAFAFA;
   position: fixed;
   top: calc(50vh - 175px);
-  left: calc(50vw - 150px);
+  left: calc(50vw - 200px);
   user-select: none;
   overflow: hidden;
-  box-shadow: 0px 24px 38px rgba(0,0,0,.14),
-              0px 9px 46px rgba(0,0,0,.12),
-              0px 11px 15px rgba(0,0,0,.20);
+  box-shadow: 0px 24px 38px rgba(0, 0, 0, .14),
+  0px 9px 46px rgba(0, 0, 0, .12),
+  0px 11px 15px rgba(0, 0, 0, .20);
   z-index: 24;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
 }
-.imageUser {
-  float: left;
+
+.container .image {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+  padding: 8px;
+}
+
+.container .image .imageUser {
   width: 140px;
   height: 140px;
-  margin-left: 25%;
-  margin-top: 10px;
-  border: 5px solid #f4f4f4;
-  /*background-color: rgba(255,255,255, 0.6);*/
-  background-color: #CCC;
+  background-color: #006064;
   color: #FFF;
   border-radius: 50%;
   line-height: 140px;
@@ -35,107 +48,123 @@ section {
   background-size: cover;
   background-position: center;
 }
-.addImageUser {
+
+.container .image .addImageUser {
   width: 45px;
   height: 45px;
-  background-color: #EC407A;
-  color: #FFF;
+  background-color: #FAFAFA;
+  color: #006064;
   border-radius: 50%;
   position: absolute;
-  top: 110px;
-  left: 165px;
+  top: 115px;
+  left: 210px;
   line-height: 45px;
   text-align: center;
   font-size: 30px;
   cursor: pointer;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, .14), 0px 3px 4px rgba(0, 0, 0, .12), 0px 1px 5px rgba(0, 0, 0, .20);
 }
-.campos .nome {
-  position: relative;
-  width: 200px;
-  float:left;
-  margin-left: 50px;
+
+.container .campos {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  width: 100%;
+  height: 100px;
+  padding: 8px;
 }
-.campos .descricao {
-  position: relative;
-  width: 200px;
-  float: left;
-  margin-left: 50px;
-  margin-top: 60px;
+
+.container .campos .nome {
+  width: 100%;
+  height: 45px;
 }
-.cancelar {
-  float:left;
-  width:100px;
-  margin:70px 15px 0px 35px;
-  background-color: transparent;
-  color: #444;
-  font-weight: 600;
+
+.container .campos .descricao {
+  width: 100%;
+  height: 45px;
+  margin-top: 10px;
 }
-.cadastrar {
-  float:left;
-  width:100px;
-  margin:70px 35px 0px 15px;
-  background-color: transparent;
-  color: #000;
-  font-weight: 600
+
+.background {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  background-color: rgba(0, 0, 0, .7);
+  z-index: 23;
+  top: 0;
+  left: 0;
+}
+
+.floatingButton {
+  z-index: 24;
 }
 
 @media screen and (max-width: 480px) {
-  section {
+  app-arrow-back {
+    display: block;
+  }
+
+  .container {
     left: 0;
     top: 0;
-    width: 100vw;
-    min-height: 100vh;
-  }
-  .imageUser {
     width: 100%;
-    height: 35vh;
+    height: 100vh;
+  }
+
+  .container {
+    width: 100%;
+    height: 100vh;
+  }
+
+  .container .image {
+    height: 30vh;
+    padding: 0;
+  }
+
+  .container .image .imageUser {
+    width: 100%;
+    height: 100%;
     line-height: 35vh;
     border-radius: 0;
     margin-left: 0;
     margin: 0;
     border: none;
   }
-  .addImageUser {
+
+  .container .image .addImageUser {
     width: 60px;
     height: 60px;
-    top: calc(35vh - 30px);
+    top: 8px;
     line-height: 60px;
     left: auto;
-    right: 20px;
+    right: 8px;
+    color: #FAFAFA;
+    background-color: transparent;
+    box-shadow: none;
   }
-  .campos {
+
+  .container .campos {
     float: left;
-    margin-top: 50px;
+    margin: 10px 0 20px 0;
     width: 100%;
-    height: 50vh;
+    height: 70vh;
     z-index: 24;
+    align-content: flex-start;
+    overflow-y: auto;
   }
-  .campos .nome {
+
+  .container .campos .nome {
     width: 80%;
     margin-left: 10%;
   }
-  .campos .descricao {
+
+  .container .campos .descricao {
     width: 80%;
     margin-left: 10%;
   }
-  .campos textarea {
-    min-width: 100%;
-    min-height: 100px;
-    max-height: 150px;
-  }
-  .cancelar {
-    position: relative;
-    margin: 0;
-    bottom: 20px;
-    right: -150px;
-    z-index: 24;
-  }
-  .cadastrar {
-    position: relative;
-    bottom: 20px;
-    right: -140px;
-    margin: 0;
-    z-index: 24;
+
+  .container .campos .descricao div textarea {
+    max-height: 50px;
   }
 
 }

@@ -29,15 +29,22 @@ export class ProjectsServiceService {
 
 
   ativaAddProjets() {
-    if (this.situacaoAddProjects == false) {
-      this.situacaoAddProjects = !this.situacaoAddProjects;
-    }
+      this.situacaoAddProjects = true;
   }
 
-  fechaAddProjets() {
-    if (this.situacaoAddProjects == true) {
-      this.situacaoAddProjects = !this.situacaoAddProjects;
+  fechaAddProjets(event) {
+    if (event) {
+      if (event.target.className == 'background') {
+        if (this.situacaoAddProjects == true) {
+          this.situacaoAddProjects = !this.situacaoAddProjects;
+        }
+      }
+    } else if (event === null) {
+      if (this.situacaoAddProjects == true) {
+        this.situacaoAddProjects = !this.situacaoAddProjects;
+      }
     }
+
   }
 
   criaProject(nome, descricao, img64) {
@@ -136,11 +143,11 @@ export class ProjectsServiceService {
   fechaDetailProject() {
     this.situacaoDetailProject = false;
     this.router.navigate(['main']);
-    try{
+    try {
       const page = document.querySelector('.container[_ngcontent-c6]');
       page.classList.add('overflowAuto');
       page.classList.remove('overflowHidden');
-    }catch (e) {
+    } catch (e) {
 
     }
 

@@ -33,6 +33,7 @@ export class NotificationService {
       try{
         document.querySelector('.container[_ngcontent-c1]').classList.remove('overflowHidden');
         document.querySelector('.container[_ngcontent-c1]').classList.add('overflowAuto');
+        console.log('TNC')
       } catch (e) {
 
       }
