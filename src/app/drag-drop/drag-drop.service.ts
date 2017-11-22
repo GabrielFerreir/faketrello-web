@@ -103,7 +103,6 @@ export class DragDropService {
       document.addEventListener('mouseup', this.Up);
       document.addEventListener('touchmove', this.Move);
       document.addEventListener('touchend', this.Up);
-      
     }, 100);
   }
 
@@ -384,22 +383,15 @@ export class DragDropService {
     this.sombra = null;
     this.mouseStart = false;
     this.started = false;
-    this.deleteEvents();
-    setTimeout(() => {
-      this.newEvents();
-    }, 50);
+    this.newListener();
   }
 
-  deleteEvents() {
+  newListener() {
     const elemento = document.querySelectorAll('.elemento');
     for (let i = 0; i < elemento.length; i++) {
       elemento[i].removeEventListener('mousedown', this.Down, false);
       elemento[i].removeEventListener('touchstart', this.Down, false);
     }
-  }
-  newEvents() {
-    const elemento = document.querySelectorAll('.elemento');
-    console.log(this.Down);
     for (let i = 0; i < elemento.length; i++) {
       elemento[i].addEventListener('mousedown', this.Down);
       elemento[i].addEventListener('touchstart', this.Down);
@@ -559,6 +551,8 @@ export class DragDropService {
             });
           }, error => {
             console.error(error);
+          }, () => {
+          this.newListener();
           });
 
       }, error => {
