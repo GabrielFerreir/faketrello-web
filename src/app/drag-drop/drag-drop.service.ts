@@ -6,8 +6,6 @@ import {Socket} from 'ng-socket-io';
 import {ProjectsServiceService} from '../projects/projects-service.service';
 import {SnackbarsService} from '../components/snackbars/snackbars.service';
 import {NotificationService} from '../notification/notification.service';
-
-
 @Injectable()
 export class DragDropService {
 
@@ -19,6 +17,10 @@ export class DragDropService {
               private snackbar: SnackbarsService,
               private notificationService: NotificationService) {
   }
+
+  Down;
+  Move;
+  Up;
 
   container;
   dragDrop: ElementRef;
@@ -82,34 +84,26 @@ export class DragDropService {
   listenerInit() {
     setTimeout(() => {
       this.setTamanhos();
-
+      const self = this;
+      this.Down = function(e) {
+        self.getPosInicial(e);
+      }
+      this.Move = function (e) {
+        self.getMouseMove(e);
+      }
+      this.Up = function (e) {
+        self.getPosFinal(e);
+      }
       const elemento = document.querySelectorAll('.elemento');
       for (let i = 0; i < elemento.length; i++) {
-        elemento[i].addEventListener('mousedown', (e) => {
-          this.getPosInicial(e);
-        });
+        elemento[i].addEventListener('mousedown', this.Down);
+        elemento[i].addEventListener('touchstart', this.Down);
       }
-
-      document.addEventListener('mousemove', (e) => {
-        this.getMouseMove(e);
-      });
-      document.addEventListener('mouseup', (e) => {
-        this.getPosFinal(e);
-      });
-      /* TOUCH */
-      for (let i = 0; i < elemento.length; i++) {
-        elemento[i].addEventListener('touchstart', (e) => {
-          this.isMobile = true;
-          this.getPosInicial(e);
-        });
-      }
-      document.addEventListener('touchmove', (e) => {
-        this.getMouseMove(e);
-      });
-      document.addEventListener('touchend', (e) => {
-        this.getPosFinal(e);
-      });
-      /* TOUCH */
+      document.addEventListener('mousemove', this.Move);
+      document.addEventListener('mouseup', this.Up);
+      document.addEventListener('touchmove', this.Move);
+      document.addEventListener('touchend', this.Up);
+      
     }, 100);
   }
 
@@ -125,7 +119,9 @@ export class DragDropService {
 
   getPosInicial(event) {
     // console.log(event);
+    console.log('GetPosInicial')
     if (event.button === 0 || event.touches) {
+      console.log('GetPosInicial2');
       if (event.target.className === 'elemento') {
         this.bloco = event.target;
         this.caixa = event.target.parentNode;
@@ -162,13 +158,13 @@ export class DragDropService {
           this.sombra.setAttribute('_ngcontent-c4', '');
           this.sombra.setAttribute('style', 'height:' + this.bloco.offsetHeight + 'px');
         }
-      }, 200);
+      }, 300);
     }
 
   }
 
   getMouseMove(event) {
-    if (this.started && this.bloco) {
+    if (this.started) {
       event.preventDefault();
       this.currentPosition = {
         XS: (event.clientX || event.changedTouches['0'].clientX) + this.getScrollX(),
@@ -185,8 +181,8 @@ export class DragDropService {
         Y: (this.currentPosition['YS'] - this.posInicial['Y'])
       }
       this.positionBlocoMove = {
-        X: this.bloco.getBoundingClientRect().left || 0,
-        Y: this.bloco.getBoundingClientRect().top || 0
+        X: this.bloco.getBoundingClientRect().left,
+        Y: this.bloco.getBoundingClientRect().top
       }
       this.bloco.style.opacity = '0.7';
       this.bloco.style.position = 'fixed';
@@ -363,7 +359,7 @@ export class DragDropService {
         this.cxDestino = this.cxDestino.parentNode.previousElementSibling.querySelector('.body');
       }
       if(!this.cxDestino) {
-        this.cxDestino = this.dragDrop.nativeElement.querySelectorAll('.body')[0];
+        this.cxDestino = this.dragDrop.nativeElement.querySelectorAll('.body')[this.dragDrop.nativeElement.querySelectorAll('.body').length - 1];
       }
     } else {
       this.cxDestino = this.caixa;
@@ -373,9 +369,11 @@ export class DragDropService {
   }
 
   reset() {
-    this.posInicial = null;
+    this.posInicial['X'] = 0;
+    this.posInicial['Y'] = 0;
 
-    this.posicaoBloco = null;
+    this.posicaoBloco['X'] = 0;
+    this.posicaoBloco['Y'] = 0;
 
     this.posFinalX = 0;
     this.posFinalY = 0;
@@ -386,23 +384,25 @@ export class DragDropService {
     this.sombra = null;
     this.mouseStart = false;
     this.started = false;
+    this.deleteEvents();
+    setTimeout(() => {
+      this.newEvents();
+    }, 50);
   }
 
-  recriaListener() {
+  deleteEvents() {
     const elemento = document.querySelectorAll('.elemento');
     for (let i = 0; i < elemento.length; i++) {
-      if (!this.isMobile) {
-        elemento[i].addEventListener('mousedown', (e) => {
-          this.getPosInicial(e);
-        });
-      }
-      /* TOUCH */
-      if (this.isMobile) {
-        elemento[i].addEventListener('touchstart', (e) => {
-          this.getPosInicial(e);
-        });
-      }
-      /* FIM TOUCH */
+      elemento[i].removeEventListener('mousedown', this.Down, false);
+      elemento[i].removeEventListener('touchstart', this.Down, false);
+    }
+  }
+  newEvents() {
+    const elemento = document.querySelectorAll('.elemento');
+    console.log(this.Down);
+    for (let i = 0; i < elemento.length; i++) {
+      elemento[i].addEventListener('mousedown', this.Down);
+      elemento[i].addEventListener('touchstart', this.Down);
     }
   }
 
