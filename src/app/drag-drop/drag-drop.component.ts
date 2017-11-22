@@ -14,6 +14,8 @@ import {CoreService} from "../Services/core.service";
 export class DragDropComponent implements OnInit {
   @ViewChild('container') container: ElementRef;
   @ViewChild('nomeBloco') nomeBloco: ElementRef;
+  @ViewChild('dragDrop') dragDrop: ElementRef;
+
 
   constructor(private projects: ProjectsServiceService,
               private route: ActivatedRoute,
@@ -39,6 +41,7 @@ export class DragDropComponent implements OnInit {
       }, () => {
       this.dragDropService.container = this.container;
       this.dragDropService.inputNomeBloco = this.nomeBloco;
+      this.dragDropService.dragDrop = this.dragDrop;
       this.dragDropService.listenerInit();
 
         /* ADD BLOCOS */

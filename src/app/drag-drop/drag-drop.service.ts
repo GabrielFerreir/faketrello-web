@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {ElementRef, Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import {CoreService} from '../Services/core.service';
 import {DadosDeUsuarioService} from '../Services/dados-de-usuario.service';
@@ -21,24 +21,21 @@ export class DragDropService {
   }
 
   container;
+  dragDrop: ElementRef;
+  sizes: object;
   idProjeto: number;
   idBlock: number;
   blocks;
   isMobile: boolean;
-  tamanhoDaTela: number;
   areaDeScroll: number;
   cxDestino;
-  larguraDaCaixa: number;
   bloco;
 
   posInicial: object;
   started: boolean;
 
-  //
-  posicaoBlocoX: number;
-  posicaoBlocoY: number;
-  //
   posicaoBloco: object;
+  scrollMove: object;
 
   //
   diferencaX: number;
@@ -46,6 +43,7 @@ export class DragDropService {
   //
   diferenca: object;
   currentPosition: object;
+  positionBlocoMove: object;
 
   posFinalX: number;
   posFinalY: number;
@@ -91,10 +89,11 @@ export class DragDropService {
           this.getPosInicial(e);
         });
       }
-      this.container.nativeElement.addEventListener('mousemove', (e) => {
+
+      document.addEventListener('mousemove', (e) => {
         this.getMouseMove(e);
       });
-      this.container.nativeElement.addEventListener('mouseup', (e) => {
+      document.addEventListener('mouseup', (e) => {
         this.getPosFinal(e);
       });
       /* TOUCH */
@@ -102,255 +101,281 @@ export class DragDropService {
         elemento[i].addEventListener('touchstart', (e) => {
           this.isMobile = true;
           this.getPosInicial(e);
-          console.log('touch');
         });
       }
-      this.container.nativeElement.addEventListener('touchmove', (e) => {
+      document.addEventListener('touchmove', (e) => {
         this.getMouseMove(e);
-        // console.log('touchmove');
       });
-      this.container.nativeElement.addEventListener('touchend', (e) => {
+      document.addEventListener('touchend', (e) => {
         this.getPosFinal(e);
-        console.log('touchEnd');
       });
       /* TOUCH */
     }, 100);
   }
 
   setTamanhos() {
-    this.larguraDaCaixa = document.querySelectorAll('.caixa')[0].clientWidth;
-    this.larguraDaCaixa = this.larguraDaCaixa;
-    this.tamanhoDaTela = document.querySelector('#dragDrop').clientWidth;
+
+    this.sizes = {
+      widthCaixa: document.querySelectorAll('.caixa')[0].clientWidth,
+      widthDragdrop: document.querySelector('#dragDrop').clientWidth,
+      heightDragdrop: document.querySelector('#dragDrop').clientHeight
+    }
+
   }
 
   getPosInicial(event) {
-    if (event.target.className === 'elemento') {
-      this.bloco = event.target;
-      this.caixa = event.target.parentNode;
-    } else if (event.target.parentNode.className === 'elemento') {
-      this.bloco = event.target.parentNode;
-      this.caixa = event.target.parentNode.parentNode;
-    } else {
-      this.reset();
-    }
-
-    this.longClickInterval = setTimeout(() => {
-      this.started = true;
-
-      this.posInicial = {
-        X: (event.clientX || event.changedTouches['0'].clientX) + this.getScrollX(),
-        Y: (event.clientY || event.changedTouches['0'].clientY) + this.getScrollY()
+    // console.log(event);
+    if (event.button === 0 || event.touches) {
+      if (event.target.className === 'elemento') {
+        this.bloco = event.target;
+        this.caixa = event.target.parentNode;
+      } else if (event.target.parentNode.className === 'elemento') {
+        this.bloco = event.target.parentNode;
+        this.caixa = event.target.parentNode.parentNode;
+      } else {
+        this.reset();
       }
-      console.log('Inicial');
-      console.log(this.posInicial);
 
-      if (this.bloco) {
-        this.posicaoBloco = {
-          X: this.bloco.getBoundingClientRect().left + this.getScrollX(),
-          Y: this.bloco.getBoundingClientRect().top + this.getScrollY()
+      this.scrollMove = {
+        X: 0,
+        Y: 0
+      }
+
+      this.longClickInterval = setTimeout(() => {
+        this.started = true;
+
+        this.posInicial = {
+          X: (event.clientX || event.changedTouches['0'].clientX) + this.getScrollX(),
+          Y: (event.clientY || event.changedTouches['0'].clientY) + this.getScrollY()
         }
 
-        // GERANDO A SOMBRA
-        this.sombra = document.createElement('article');
-        this.sombra.className = 'sombra';
-        this.sombra.setAttribute('_ngcontent-c4', '');
-        this.sombra.setAttribute('style', 'height:' + this.bloco.offsetHeight + 'px');
-      }
-    }, 500);
+        if (this.bloco) {
+          this.posicaoBloco = {
+            X: this.bloco.getBoundingClientRect().left,
+            Y: this.bloco.getBoundingClientRect().top
+          }
+
+
+          // GERANDO A SOMBRA
+          this.sombra = document.createElement('article');
+          this.sombra.className = 'sombra';
+          this.sombra.setAttribute('_ngcontent-c4', '');
+          this.sombra.setAttribute('style', 'height:' + this.bloco.offsetHeight + 'px');
+        }
+      }, 200);
+    }
 
   }
 
   getMouseMove(event) {
-    if (this.started) {
+    if (this.started && this.bloco) {
       event.preventDefault();
       this.currentPosition = {
-        X: event.clientX || event.changedTouches['0'].clientX + this.getScrollX(),
-        Y: event.clientY || event.changedTouches['0'].clientY + this.getScrollY()
+        XS: (event.clientX || event.changedTouches['0'].clientX) + this.getScrollX(),
+        YS: (event.clientY || event.changedTouches['0'].clientY) + this.getScrollY(),
+        X: (event.clientX || event.changedTouches['0'].clientX),
+        Y: (event.clientY || event.changedTouches['0'].clientY)
       }
-      this.fazScroll();
-
-
+      this.doScroll(false);
+      this.doScroll(true);
       this.diferenca = {
-        X: (this.currentPosition['X'] - this.posInicial['X']),
-        Y: (this.currentPosition['Y'] - this.posInicial['Y'])
+        XSM: (this.currentPosition['XS'] - this.posInicial['X']) - this.scrollMove['X'],
+        YSM: (this.currentPosition['YS'] - this.posInicial['Y']) - this.scrollMove['Y'],
+        X: (this.currentPosition['XS'] - this.posInicial['X']),
+        Y: (this.currentPosition['YS'] - this.posInicial['Y'])
       }
-
-
-      console.log('Atual');
-      console.log(this.currentPosition)
-      console.log('Diferença');
-      console.log(this.diferenca);
-
-
+      this.positionBlocoMove = {
+        X: this.bloco.getBoundingClientRect().left || 0,
+        Y: this.bloco.getBoundingClientRect().top || 0
+      }
       this.bloco.style.opacity = '0.7';
       this.bloco.style.position = 'fixed';
       this.bloco.style.zIndex = '24';
-      this.bloco.style.width = (this.larguraDaCaixa * 0.9) + 'px';
+      this.bloco.style.width = (this.sizes['widthCaixa'] * 0.9) + 'px';
       this.bloco.style.margin = 0;
       this.bloco.style.left = this.posicaoBloco['X'] + 'px';
       this.bloco.style.top = this.posicaoBloco['Y'] + 'px';
-      this.bloco.style.transform = 'translate(' + (this.diferenca['X']) + 'px, ' + (this.diferenca['Y']) + 'px) rotate(7deg)';
+      this.bloco.style.transform = 'translate(' + (this.diferenca['XSM']) + 'px, ' + (this.diferenca['Y']) + 'px) rotate(7deg)';
 
-      if (this.pegaLocalNaOrdem(event)) {
-        this.caixaDestino().insertBefore(this.sombra, this.pegaLocalNaOrdem(event));
-      } else {
-        this.caixaDestino().insertBefore(this.sombra, this.caixaDestino().querySelector('.addElemento'));
+      if (this.caixaDestino()) {
+        if (this.pegaLocalNaOrdem(event)) {
+          this.caixaDestino().insertBefore(this.sombra, this.pegaLocalNaOrdem(event));
+        } else {
+          this.caixaDestino().insertBefore(this.sombra, this.caixaDestino().querySelector('.addElemento'));
+        }
       }
+
       this.mouseStart = true;
     }
   }
 
   getPosFinal(event) {
-    clearTimeout(this.longClickInterval);
-    if (!this.posicaoBloco['X'] && this.bloco) {
-      console.log(this.bloco.id);
-      this.onOptionsTasks(this.bloco.id);
+    if (event.button === 0 || event.touches) {
+      clearTimeout(this.longClickInterval);
+      if (!this.started && this.bloco) {
+        this.onOptionsTasks(this.bloco.id);
+        console.log('A');
+      }
+
+      if (this.mouseStart) {
+        this.caixa.removeChild(this.bloco);
+        if (this.pegaLocalNaOrdem(event)) {
+          this.caixaDestino().insertBefore(this.bloco, this.pegaLocalNaOrdem(event));
+        } else {
+          this.caixaDestino().insertBefore(this.bloco, this.caixaDestino().querySelector('.addElemento'));
+        }
+        this.caixaDestino().removeChild(this.sombra);
+        this.bloco.style = '';
+
+        const previous = [];
+        const current = [];
+
+        for (let i = 0; i < this.caixa.querySelectorAll('.elemento').length; i++) {
+          previous.push(parseInt(this.caixa.querySelectorAll('.elemento')[i].id));
+
+        }
+        for (let i = 0; i < this.caixaDestino().querySelectorAll('.elemento').length; i++) {
+          current.push(parseInt(this.caixaDestino().querySelectorAll('.elemento')[i].id));
+        }
+
+
+        this.changePositions(previous, current, this.bloco.id, this.caixaDestino().parentNode.id);
+      }
+
+      clearInterval(this.intervalPrev);
+      clearInterval(this.intervalNext);
+      this.reset();
     }
-
-    if (this.mouseStart) {
-      this.caixaDestino().removeChild(this.sombra);
-      this.caixa.removeChild(this.bloco);
-      if (this.pegaLocalNaOrdem(event)) {
-        this.caixaDestino().insertBefore(this.bloco, this.pegaLocalNaOrdem(event));
-      } else {
-        this.caixaDestino().insertBefore(this.bloco, this.caixaDestino().querySelector('.addElemento'));
-      }
-      this.bloco.style = '';
-
-      const previous = [];
-      const current = [];
-
-      for (let i = 0; i < this.caixa.querySelectorAll('.elemento').length; i++) {
-        previous.push(parseInt(this.caixa.querySelectorAll('.elemento')[i].id));
-
-      }
-      for (let i = 0; i < this.caixaDestino().querySelectorAll('.elemento').length; i++) {
-        current.push(parseInt(this.caixaDestino().querySelectorAll('.elemento')[i].id));
-      }
-
-
-      this.changePositions(previous, current, this.bloco.id, this.caixaDestino().parentNode.id);
-    }
-
-    clearInterval(this.intervalPrev);
-    clearInterval(this.intervalNext);
-    this.reset();
   }
 
   getScrollX() {
     const scroll = document.querySelector('#dragDrop').scrollLeft;
-    console.log('ScrollX: ' + scroll);
     return scroll;
   }
 
   getScrollY() {
     const scroll = document.querySelector('#dragDrop').scrollTop;
-    console.log('ScrollY: ' + scroll);
     return scroll;
   }
 
-  fazScroll() {
+  doScroll(parm) {
+    // TRUE is vertical || FALSE is horizontal
     clearInterval(this.intervalNext);
     clearInterval(this.intervalPrev);
-
     if (this.started) {
-      this.areaDeScroll = this.tamanhoDaTela * 0.2;
-        if (this.currentPosition['X'] > this.tamanhoDaTela - this.areaDeScroll) {
-          document.querySelector('#dragDrop').scrollBy(5, 0);
+      if (parm) {
+        const areaDeScroll = this.sizes['heightDragdrop'] * 0.1;
+        if (this.currentPosition['Y'] > this.sizes['heightDragdrop'] - areaDeScroll &&
+          this.caixaDestino().scrollTop < this.caixaDestino().scrollHeight - this.caixaDestino().clientHeight) {
+          this.caixaDestino().scrollBy(0, 5);
+          this.scrollMove['Y'] += 5;
           clearInterval(this.intervalPrev);
           this.intervalNext = setInterval(() => {
-            document.querySelector('#dragDrop').scrollBy(5, 0);
-            if (this.getScrollX() >= document.querySelector('#dragDrop').clientWidth - 48) {
+            this.caixaDestino().scrollBy(0, 5);
+            this.scrollMove['Y'] += 5;
+            if (this.caixaDestino().scrollTop >= this.caixaDestino().scrollHeight - this.caixaDestino().clientHeight) {
               clearInterval(this.intervalNext);
             }
           }, 35);
-        } else if (this.areaDeScroll > this.currentPosition['X']) {
-          document.querySelector('#dragDrop').scrollBy(-5, 0);
+        } else if (this.areaDeScroll > this.currentPosition['Y'] && this.caixaDestino().scrollTop > 5) {
+          this.caixaDestino().scrollBy(0, -5);
+          this.scrollMove['Y'] -= 5;
           clearInterval(this.intervalNext);
           this.intervalPrev = setInterval(() => {
-            document.querySelector('#dragDrop').scrollBy(-5, 0);
+            this.caixaDestino().scrollBy(0, -5);
+            this.scrollMove['Y'] -= 5;
             if (this.getScrollX() <= 0) {
               clearInterval(this.intervalPrev);
             }
           }, 35);
         }
 
-
-      // if (this.isMobile) {
-      //   if (mouse.changedTouches['0'].clientX > this.tamanhoDaTela - this.areaDeScroll) {
-      //     document.querySelector('#dragDrop').scrollBy(5, 0);
-      //     clearInterval(this.intervalPrev);
-      //     this.intervalNext = setInterval(() => {
-      //       document.querySelector('#dragDrop').scrollBy(5, 0);
-      //       if (this.getScrollX() >= document.querySelector('#dragDrop').scrollWidth) {
-      //         clearInterval(this.intervalNext);
-      //       }
-      //     }, 35);
-      //   }
-      //   else if (this.areaDeScroll > mouse.changedTouches['0'].clientX) {
-      //     document.querySelector('#dragDrop').scrollBy(-5, 0);
-      //     clearInterval(this.intervalNext);
-      //     this.intervalPrev = setInterval(() => {
-      //       document.querySelector('#dragDrop').scrollBy(-5, 0);
-      //       if (this.getScrollX() <= 0) {
-      //         clearInterval(this.intervalPrev);
-      //       }
-      //     }, 35);
-      //   }
-      // }
+      } else {
+        this.areaDeScroll = this.sizes['widthDragdrop'] * 0.1;
+        const dragdrop = <any>this.dragDrop.nativeElement;
+        if (this.currentPosition['X'] > this.sizes['widthDragdrop'] - this.areaDeScroll &&
+          this.getScrollX() < dragdrop.scrollWidth - dragdrop.clientWidth) {
+          dragdrop.scrollBy(5, 0);
+          this.scrollMove['X'] += 5;
+          clearInterval(this.intervalPrev);
+          this.intervalNext = setInterval(() => {
+            dragdrop.scrollBy(5, 0);
+            this.scrollMove['X'] += 5;
+            if (this.getScrollX() >= dragdrop.scrollWidth - dragdrop.clientWidth) {
+              clearInterval(this.intervalNext);
+            }
+          }, 35);
+        } else if (this.areaDeScroll > this.currentPosition['X'] && this.getScrollX() > 5) {
+          dragdrop.scrollBy(-5, 0);
+          this.scrollMove['X'] -= 5;
+          clearInterval(this.intervalNext);
+          this.intervalPrev = setInterval(() => {
+            dragdrop.scrollBy(-5, 0);
+            this.scrollMove['X'] -= 5;
+            if (this.getScrollX() <= 0) {
+              clearInterval(this.intervalPrev);
+            }
+          }, 35);
+        }
+      }
     }
   }
 
   pegaLocalNaOrdem(event) {
-    let els = this.caixaDestino().querySelectorAll('.elemento');
-    let verificacao = false;
-    let local = null;
-    for (let i = 0; i < els.length; i++) {
-      const PosicaoY = els[i].getBoundingClientRect().top;
-      this.posFinalY = event.clientY - els[i].offsetHeight;
-
-
-      if (this.isMobile) {
-        this.posFinalY = event.changedTouches['0'].clientY - els[i].offsetHeight;
-      }
-      if (this.posFinalY < PosicaoY && this.bloco !== els[i]) {
-        if (verificacao == false) {
-          verificacao = true;
-          local = els[i];
+    if (this.caixaDestino()) {
+      const els = this.caixaDestino().querySelectorAll('.elemento');
+      let verificacao = false;
+      let local = null;
+      for (let i = 0; i < els.length; i++) {
+        const posicaoEl = els[i].getBoundingClientRect().top;
+        console.log(i + ')');
+        console.log(this.positionBlocoMove['Y'])
+        console.log(posicaoEl);
+        if (this.positionBlocoMove['Y'] < posicaoEl && this.bloco !== els[i]) {
+          if (verificacao === false) {
+            verificacao = true;
+            local = els[i];
+          }
         }
       }
+      console.log('------------------')
+      if (els && els.length === 0) {
+        local = null;
+      }
+      return local;
     }
-    if (els && els.length == 0) {
-      local = null;
-    }
-    return local;
   }
 
   caixaDestino() {
-    if (this.diferenca['X'] && this.diferenca['X'] > this.larguraDaCaixa) {
-      const quantidadeDeIrmaos = Math.floor(this.diferenca['X'] / this.larguraDaCaixa);
+    if (this.diferenca['X'] && this.diferenca['X'] > this.sizes['widthCaixa']) {
+      const quantidadeDeIrmaos = Math.floor(this.diferenca['X'] / this.sizes['widthCaixa']);
       this.cxDestino = this.caixa.parentNode.nextElementSibling.querySelector('.body');
       for (let i = 1; i < quantidadeDeIrmaos; i++) {
         this.cxDestino = this.cxDestino.parentNode.nextElementSibling.querySelector('.body');
       }
-    } else if (this.diferenca['X'] && this.diferenca['X'] < -this.larguraDaCaixa) {
-      const quantidadeDeIrmaos = Math.floor(this.diferenca['X'] / -this.larguraDaCaixa);
+      if(!this.cxDestino) {
+        this.cxDestino = this.dragDrop.nativeElement.querySelectorAll('.body')[this.dragDrop.nativeElement.querySelectorAll('.body').length - 1];
+      }
+    } else if (this.diferenca['X'] && this.diferenca['X'] < -this.sizes['widthCaixa']) {
+      const quantidadeDeIrmaos = Math.floor(this.diferenca['X'] / -this.sizes['widthCaixa']);
       this.cxDestino = this.caixa.parentNode.previousElementSibling.querySelector('.body');
       for (let i = 1; i < quantidadeDeIrmaos; i++) {
         this.cxDestino = this.cxDestino.parentNode.previousElementSibling.querySelector('.body');
       }
+      if(!this.cxDestino) {
+        this.cxDestino = this.dragDrop.nativeElement.querySelectorAll('.body')[0];
+      }
     } else {
       this.cxDestino = this.caixa;
     }
+    console.log(this.cxDestino)
     return this.cxDestino;
   }
 
   reset() {
-    this.posInicial['X'] = 0;
-    this.posInicial['Y'] = 0;
+    this.posInicial = null;
 
-    this.posicaoBloco['X'] = 0;
-    this.posicaoBloco['Y'] = 0;
+    this.posicaoBloco = null;
 
     this.posFinalX = 0;
     this.posFinalY = 0;
@@ -382,7 +407,6 @@ export class DragDropService {
   }
 
   // FIM DRAGDROP
-
 
   teste() {
     // alert('A');
