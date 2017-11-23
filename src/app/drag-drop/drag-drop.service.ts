@@ -165,12 +165,17 @@ export class DragDropService {
   getMouseMove(event) {
     if (this.started) {
       event.preventDefault();
-      this.currentPosition = {
-        XS: (event.clientX || event.changedTouches['0'].clientX) + this.getScrollX(),
-        YS: (event.clientY || event.changedTouches['0'].clientY) + this.getScrollY(),
-        X: (event.clientX || event.changedTouches['0'].clientX),
-        Y: (event.clientY || event.changedTouches['0'].clientY)
+      try{
+        this.currentPosition = {
+          XS: (event.clientX || event.changedTouches['0']) && (event.clientX || event.changedTouches['0'].clientX) + this.getScrollX(),
+          YS: (event.clientY || event.changedTouches['0']) && (event.clientY || event.changedTouches['0'].clientY) + this.getScrollY(),
+          X: (event.clientX || event.changedTouches['0'].clientX),
+          Y: (event.clientY || event.changedTouches['0'].clientY)
+        }
+      } catch (e) {
+        // throw 'DEU RUIM';
       }
+
       this.doScroll(false);
       this.doScroll(true);
       this.diferenca = {
@@ -346,7 +351,9 @@ export class DragDropService {
       const quantidadeDeIrmaos = Math.floor(this.diferenca['X'] / this.sizes['widthCaixa']);
       this.cxDestino = this.caixa.parentNode.nextElementSibling.querySelector('.body');
       for (let i = 1; i < quantidadeDeIrmaos; i++) {
-        this.cxDestino = this.cxDestino.parentNode.nextElementSibling.querySelector('.body');
+        if(this.cxDestino) {
+          this.cxDestino = this.cxDestino.parentNode.nextElementSibling.querySelector('.body');
+        }
       }
       if(!this.cxDestino) {
         this.cxDestino = this.dragDrop.nativeElement.querySelectorAll('.body')[this.dragDrop.nativeElement.querySelectorAll('.body').length - 1];
