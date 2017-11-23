@@ -5,15 +5,15 @@
       <header>
         <input type="text" class="nome" [value]="caixas.nameblock" (blur)="dragDropService.changeBlock($event)">
         <!--<div class="more_horiz" (click)="dragDropService.ativaMenuBloco(caixas.idblock)"></div>-->
-        <div class="delete"><i class="material-icons">delete</i></div>
+        <div class="delete" (mousedown)="dragDropService.deletarBloco(caixas.idblock)"><i class="material-icons">delete</i></div>
 
-        <div [hidden]="!dragDropService.menuBloco || caixas.idblock != dragDropService.referenciaMenuBloco "
-             class="menuBloco">
-          <ul>
-            <li (click)="dragDropService.teste()">Alterar Bloco</li>
-            <li (mousedown)="dragDropService.deletarBloco(caixas.idblock)">Excluir Bloco</li>
-          </ul>
-        </div>
+        <!--<div [hidden]="!dragDropService.menuBloco || caixas.idblock != dragDropService.referenciaMenuBloco "-->
+             <!--class="menuBloco">-->
+          <!--<ul>-->
+            <!--<li (click)="dragDropService.teste()">Alterar Bloco</li>-->
+            <!--<li ">Excluir Bloco</li>-->
+          <!--</ul>-->
+        <!--</div>-->
       </header>
       <section class="body">
         <article class="elemento" *ngFor="let elementos of dragDropService.blocks[i].tasks; let e = index" data-id="{{elementos.id_task}}">
