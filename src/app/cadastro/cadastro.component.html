@@ -1,59 +1,139 @@
 <div class="container">
   <div class="login">
-    <input type="file" (change)="previewFile($event.target)" id="file" style="display: none;">
-    <img *ngIf="img64" [style.background-image]="'url('+ img64 +')'" [style.background-size]="'cover'" class="imageUser" id="preview"/>
-    <div *ngIf="!img64" class="imageUser"></div>
-    <div class="addImageUser" (click)="chamaFile()">+</div>
-      <div style="width:300px; height: 100%; padding-top:10px; overflow-x: hidden;">
-        <div style="position: relative; width: 200px; float:left; margin-left: 50px;">
-          <input #HTMLNome [(ngModel)]="nome"  value="{{ nome }}"  (blur)="geraUserName(nome); chama(); verificaNome(nome); habilitaBotao()" type="text" id="nome" class="textFields"/>
-          <label class="labelText" for="nome">Nome</label>
-          <div class="border"></div>
-          <label class="helperText"
-                 [style.color]="codeSatusNome == '400' ? '#F44336' : ''"
-                 [style.display]="codeSatusNome == '400' ? 'block' : 'none'"
+    <input type="file" (change)="previewFile($event.target)" id="file">
+
+    <section class="image">
+      <i class="material-icons arrow_back" routerLink="/home">arrow_back</i>
+      <img *ngIf="img64" [style.background-image]="'url('+ img64 +')'" [style.background-size]="'cover'"
+           class="imageUser"
+           id="preview"/>
+      <div *ngIf="!img64" class="imageUser"></div>
+      <div class="addImageUser" (click)="chamaFile()">+</div>
+    </section>
+
+    <section class="forms">
+      <section class="campo">
+        <section class="relative">
+          <input #formNome="ngModel" [(ngModel)]="nome" #HTMLNome
+                 (blur)="geraUserName(nome); chama();"
+                 (input)="verificaNome(nome); habilitaBotao()"
+                 type="text" id="nome"
+                 class="textFields"/>
+          <label class="labelText" for="nome"
+                 [style.color]="codeSatusNome == '400' || formNome.touched && !this.nome ? '#F44336' : ''"
+          >Nome*</label>
+          <div class="border"
+               [style.background-color]="codeSatusNome == '400' || formNome.touched && !this.nome ? '#F44336' : ''"
+
+          ></div>
+          <label *ngIf="!formNome.touched || this.nome"
+                  class="helperText"
+                 [style.color]="codeSatusNome == '400' || formNome.touched && !this.nome ? '#F44336' : ''"
+                 [style.display]="codeSatusNome == '400' || formNome.touched && !this.nome ? 'block' : 'none'"
           >{{ errorNome }}</label>
-        </div>
-       <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
-          <input #HTMLEmail autocomplete="off" [(ngModel)]="email"  (blur)="chama(); verificaEmail();" (blur)="habilitaBotao()" type="text" id="email" class="textFields"/>
-          <label class="labelText" for="email">Email</label>
-          <div class="border"></div>
-         <label class="helperText"
-                [style.color]="codeSatusEmail == '400' ? '#F44336' : '409' ? '#F44336' : ''"
-                [style.display]="codeSatusEmail == '400' ? 'block' : '409' ? 'block' : 'none'"
-         >{{ errorEmail }}</label>
-        </div>
-        <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
-          <input #HTMLSenha [(ngModel)]="senha"  (blur)="verificaSenha(); senhasConferem()" (blur)="chama()" (blur)="habilitaBotao()" type="password" id="senha" class="textFields"/>
-          <label class="labelText" for="senha">Senha</label>
-          <div class="border"></div>
+            <label class="helperText" *ngIf="formNome.touched && !this.nome"
+                   [style.color]="'#F44336'">
+              Campo necessario
+            </label>
+        </section>
+      </section>
+
+      <section class="campo">
+        <section class="relative">
+          <input #HTMLEmail #formEmail="ngModel" autocomplete="off" spellcheck="false" [(ngModel)]="email"
+                 type="text" id="email" class="textFields"
+                 (blur)="chama();"
+                 (input)="verificaEmail(); habilitaBotao()"
+          />
+          <label class="labelText"
+                 for="email"
+                 [style.color]="codeSatusEmail == '400' || formEmail.touched && !this.email ? '#F44336' : ''"
+          >Email*</label>
+          <div class="border"
+               [style.background-color]="codeSatusEmail == '400' || formEmail.touched && !this.email ? '#F44336' : ''"
+          ></div>
           <label class="helperText"
-                 [style.color]="codeSatusSenha == '400' ? '#F44336' : ''"
-                 [style.display]="codeSatusSenha == '400' ? 'block' : 'none'"
+                 [style.color]="codeSatusEmail == '400' || formEmail.touched && !this.email ? '#F44336' : '409' ? '#F44336' : ''"
+                 [style.display]="codeSatusEmail == '400' || formEmail.touched && !this.email ? 'block' : '409' ? 'block' : 'none'"
+          >{{ errorEmail }}</label>
+
+          <label class="helperText"
+                 *ngIf="formEmail.touched && !this.email"
+                 [style.color]="'#F44336'">
+            Campo necessario
+          </label>
+
+        </section>
+      </section>
+
+      <section class="campo">
+        <section class="relative">
+          <input #HTMLSenha #formSenha="ngModel" [(ngModel)]="senha"
+                 type="password" id="senha" class="textFields"
+                 (blur)=" senhasConferem(); chama()"
+                 (input)="habilitaBotao(); verificaSenha();"
+          />
+          <label class="labelText" for="senha"
+                 [style.color]="codeSatusSenha == '400' || formSenha.touched && !this.senha ? '#F44336' : ''"
+          >Senha*</label>
+          <div class="border"
+               [style.background-color]="codeSatusSenha == '400' || formSenha.touched && !this.senha ? '#F44336' : ''"
+          ></div>
+          <label class="helperText"
+                 [style.color]="codeSatusSenha == '400' || formSenha.touched && !this.senha ? '#F44336' : ''"
+                 [style.display]="codeSatusSenha == '400' || formSenha.touched && !this.senha ? 'block' : 'none'"
           >{{ errorSenha }}</label>
-        </div>
-          <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top: 60px;">
-            <input #HTMLConfirmaSenha [(ngModel)]="confirmaSenha"
-                   (keyup.enter)="criaUsuario()"
-                   (blur)="senhasConferem(); chama(); habilitaBotao()"
-                   (keyup)="senhasConferem(); habilitaBotao()"
-                   type="password" id="confirmaSenha" class="textFields"/>
-            <label class="labelText" for="confirmaSenha">Confirme sua senha</label>
-            <div class="border"></div>
-            <label class="helperText"
-                   [style.color]="codeSatusConfirmaSenha == '400' ? '#F44336' : ''"
-                   [style.display]="codeSatusConfirmaSenha == '400' ? 'block' : 'none'"
-            >{{ errorConfirmaSenha }}</label>
-          </div>
-          <button
-            (click)="criaUsuario()"
-            class="denseButton disabledButton"
-            style="float:left; width:200px; margin-top:60px; margin-left:50px;"
-            #HTMLCadastrar>
-              CADASTRAR
-          </button>
-      </div>
+          <label class="helperText"
+                 *ngIf="formSenha.touched && !this.senha"
+                 [style.color]="'#F44336'">
+            Campo necessario
+          </label>
+        </section>
+      </section>
+
+      <section class="campo">
+        <section class="relative">
+          <input #HTMLConfirmaSenha #formConfirmaSenha="ngModel" [(ngModel)]="confirmaSenha"
+                 (keyup.enter)="criaUsuario()"
+                 (blur)=" chama(); "
+                 (input)=" habilitaBotao(); verificaConfirmaSenha(); senhasConferem(); habilitaBotao()"
+                 type="password" id="confirmaSenha" class="textFields" autocomplete="off"/>
+          <label class="labelText" for="confirmaSenha"
+                 [style.color]="codeSatusConfirmaSenha == '400' || formConfirmaSenha.touched && !this.confirmaSenha ? '#F44336' : ''"
+          >Confirme sua senha*</label>
+          <div class="border"
+               [style.background-color]="codeSatusConfirmaSenha == '400' || formConfirmaSenha.touched && !this.confirmaSenha ? '#F44336' : ''"
+          ></div>
+          <label class="helperText"
+                 [style.color]="codeSatusConfirmaSenha == '400' || formConfirmaSenha.touched && !this.confirmaSenha ? '#F44336' : ''"
+                 [style.display]="codeSatusConfirmaSenha == '400' || formConfirmaSenha.touched && !this.confirmaSenha ? 'block' : 'none'"
+          >{{ errorConfirmaSenha }}</label>
+          <label class="helperText"
+                 *ngIf="formConfirmaSenha.touched && !this.confirmaSenha"
+                 [style.color]="'#F44336'">
+            Campo necessario
+          </label>
+        </section>
+
+      </section>
+
+      <section class="buttons">
+        <button
+          (click)="criaUsuario()"
+          class="denseButton disabledButton fullwidth"
+          #HTMLCadastrar>
+          CADASTRAR
+        </button>
+      </section>
+    </section>
+
+
+    <!--<section>-->
+      <!--<input id="teste" name="teste" class="form-control"-->
+             <!--required [(ngModel)]="teste" #teste1="ngModel">-->
+      <!--<div *ngIf="!teste1.valid && teste1.touched">Invalido</div>-->
+    <!--</section>-->
+
   </div>
 </div>
 
-<app-arrow-back routerLink="/home"> </app-arrow-back>
