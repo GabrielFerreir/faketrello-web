@@ -96,7 +96,6 @@ export class DragDropService {
       }
       this.Move = function (e) {
         self.getMouseMove(e);
-
       }
       this.Up = function (e) {
         self.getPosFinal(e);
