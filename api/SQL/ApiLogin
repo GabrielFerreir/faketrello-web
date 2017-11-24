@@ -1096,11 +1096,23 @@ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION deleteBlock(pIdBlock INTEGER, pIdUser INTEGER)
   RETURNS BOOLEAN AS $$
+DECLARE
+  vIdTasks INTEGER [];
 BEGIN
   IF EXISTS(SELECT *
             FROM tb_blocks
             WHERE id_blocks = pIdBlock)
   THEN
+
+    vIdTasks := ARRAY (SELECT id_task FROM tb_tasks WHERE id_block = pIdBlock);
+
+    DELETE FROM tb_attachment WHERE id_task = ANY (vIdTasks);
+    DELETE FROM tb_comments WHERE id_task = ANY (vIdTasks);
+    DELETE FROM tb_checklist_tasks WHERE id_task = ANY (vIdTasks);
+    DELETE FROM tb_team_tasks WHERE id_task = ANY (vIdTasks);
+
+    DELETE FROM tb_notifications WHERE id_block = pIdBlock;
+
     DELETE FROM tb_tasks
     WHERE id_block = pIdBlock;
 
@@ -1539,11 +1551,6 @@ BEGIN
     FROM tb_attachment l
     WHERE id_attachment = pIdAttachment;
 
-    DELETE FROM tb_notifications WHERE id_attachment = pIdAttachment;
-
-    DELETE FROM tb_attachment
-    WHERE id_attachment = pIdAttachment;
-
     INSERT INTO tb_notifications (id_task, target_type, id_user, old_name, type, id_block, id_project)
     VALUES ((SELECT id_task
              FROM tb_attachment
@@ -1575,6 +1582,12 @@ BEGIN
                                                             FROM tb_attachment
                                                             WHERE id_attachment = pIdAttachment))) AND
           id_user <> pIdUser;
+
+    DELETE FROM tb_notifications WHERE id_attachment = pIdAttachment;
+
+    DELETE FROM tb_attachment
+    WHERE id_attachment = pIdAttachment;
+
 
     RETURN QUERY
     SELECT vPath;
