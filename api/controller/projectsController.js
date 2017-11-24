@@ -50,7 +50,7 @@ exports.newProject = async function (req, res) {
         }
       })
   } else {
-    res.status(406).json({error: 'Nome da checklist muito longo ou muito curto'})
+    res.status(406).json({error: 'Nome do projeto muito longo ou muito curto'})
   }
 }
 
@@ -138,7 +138,7 @@ exports.changeProject = async function (req, res) {
         }
       })
   } else {
-    res.status(406).json({error: 'Nome da checklist muito longo ou muito curto'})
+    res.status(406).json({error: 'Nome do projeto muito longo ou muito curto'})
   }
 }
 
