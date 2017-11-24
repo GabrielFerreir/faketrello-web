@@ -4,6 +4,8 @@ const md5 = require('md5')
 const fs = require('fs')
 let token
 let PASSWORD = md5('senhaParaAuth')
+const api = '192.168.52.75:8080'
+const web = '192.168.52.3:4200'
 
 //Primeira verificação
 exports.userAuth = function (req, res) {
@@ -183,6 +185,8 @@ exports.newUser = async function (req, res) {
         res.status(201).json({result: 'Usuário cadastrado com sucesso'})
         req.idNewUser = data[0].idnewuser
         req.called = 2
+
+        exports.verifyEmail(req, res)
       }
     })
   if (req.body.imgBase64) {
@@ -290,7 +294,7 @@ exports.email = async function (req, res) {
     html: `<table align="center" border="0" cellspacing="0" style='width:600px'>
   <tr>
     <td align="center" valign="top">
-      <img src='http://192.168.52.105:8080/assets/asset1.png'/>
+      <img src='http://${api}/assets/asset1.png'/>
     </td>
   </tr>
 
@@ -302,13 +306,13 @@ exports.email = async function (req, res) {
 
   <tr height="150">
     <td align="center" valign="middle">
-      <a href="http://192.168.52.3:4200/authentication/${tokenEmail}"><img id="buttonClick" src='http://192.168.52.105:8080/assets/Asset3.png' style='cursor: pointer;'/></a>
+      <a href="http://${web}/authentication/${tokenEmail}"><img id="buttonClick" src='http://${api}/assets/Asset3.png' style='cursor: pointer;'/></a>
     </td>
   </tr>
 
   <tr>
     <td align="center" valign="top">
-      <img src='http://192.168.52.105:8080/assets/Asset4.png'/>
+      <img src='http://${api}/assets/Asset4.png'/>
     </td>
   </tr>
 </table>`
