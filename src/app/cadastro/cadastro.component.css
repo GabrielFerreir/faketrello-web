@@ -1,28 +1,54 @@
 .container {
   width: 100%;
   height: 100vh;
-  /*background-image: url("./../../assets/background.jpg");*/
-  background-color: #0097A7;
-  /*background-image: url("./../../assets/pexels.jpg");*/
+  background-color: #006064;
   background-size: 100% 100vh;
-  overflow:hidden;
+  overflow: hidden;
+  display: flex;
+  align-content: center;
+  justify-content: center;
 }
+
 .login {
-    margin: auto;
-    margin-top: calc(50vh - 200px);
-    width: 300px;
-    height: 400px;
-    background-color: rgba(255,255,255, .5);
-    position: relative;
+  margin: auto;
+  width: 480px;
+  background-color: rgba(255, 255, 255, .5);
+  background-color: #FAFAFA;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .15), 0 2px 6px rgba(0, 0, 0, .2);
+  display: block;
+  flex-wrap: wrap;
+  padding: 16px;
+  box-sizing: border-box;
 }
+
+#file {
+  display: none;
+}
+
+.forms {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+
+}
+
+.campo {
+  height: 60px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.image {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+}
+
 .imageUser {
-  float: left;
   width: 140px;
   height: 140px;
-  margin-left: 25%;
-  margin-top: -70px;
-  /*border: 5px solid #f4f4f4;*/
-  /*background-color: rgba(255,255,255, 0.6);*/
   background-color: #CCC;
   color: #FFF;
   border-radius: 50%;
@@ -35,19 +61,65 @@
   background-size: 80px 80px;
   background-position: center;
 }
+
 .addImageUser {
   width: 45px;
   height: 45px;
-  background-color: #EC407A;
+  background-color: #006064;
   color: #FFF;
   border-radius: 50%;
   position: absolute;
-  top: 40px;
-  left: 160px;
+  top: 115px;
+  left: 235px;
   line-height: 45px;
   text-align: center;
   font-size: 30px;
   cursor: pointer;
+}
+
+.buttons {
+  width: 100%;
+  display: flex;
+  /*flex-direction: row-reverse;*/
+  justify-content: center;
+}
+
+.arrow_back {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 480px) {
+  .login {
+    width: 100%;
+    height: 100vh;
+    padding: 0;
+  }
+  .image {
+    padding: 0;
+  }
+  .imageUser {
+    border-radius: 0;
+    width: 100%;
+    height: 180px;
+  }
+  .addImageUser {
+    background-color: transparent;
+    top: 8px;
+    right: 8px;
+    left: auto;
+    color: #000;
+    height: 24px;
+    width: 24px;
+    overflow: hidden;
+    line-height: 24px;
+  }
+  .forms {
+    padding: 8px;
+    box-sizing: border-box;
+  }
 }
 
 
