@@ -30,8 +30,9 @@ BEGIN
             WHERE email ILIKE pEmail)
   THEN
     RETURN TRUE;
+  ELSE
+    RETURN FALSE;
   END IF;
-  RETURN FALSE;
 END;
 $$
 LANGUAGE plpgsql;
@@ -1104,14 +1105,21 @@ BEGIN
             WHERE id_blocks = pIdBlock)
   THEN
 
-    vIdTasks := ARRAY (SELECT id_task FROM tb_tasks WHERE id_block = pIdBlock);
+    vIdTasks := ARRAY(SELECT id_task
+                      FROM tb_tasks
+                      WHERE id_block = pIdBlock);
 
-    DELETE FROM tb_attachment WHERE id_task = ANY (vIdTasks);
-    DELETE FROM tb_comments WHERE id_task = ANY (vIdTasks);
-    DELETE FROM tb_checklist_tasks WHERE id_task = ANY (vIdTasks);
-    DELETE FROM tb_team_tasks WHERE id_task = ANY (vIdTasks);
+    DELETE FROM tb_notifications
+    WHERE id_block = pIdBlock;
+    DELETE FROM tb_attachment
+    WHERE id_task = ANY (vIdTasks);
+    DELETE FROM tb_comments
+    WHERE id_task = ANY (vIdTasks);
+    DELETE FROM tb_checklist_tasks
+    WHERE id_task = ANY (vIdTasks);
+    DELETE FROM tb_team_tasks
+    WHERE id_task = ANY (vIdTasks);
 
-    DELETE FROM tb_notifications WHERE id_block = pIdBlock;
 
     DELETE FROM tb_tasks
     WHERE id_block = pIdBlock;
@@ -1583,7 +1591,8 @@ BEGIN
                                                             WHERE id_attachment = pIdAttachment))) AND
           id_user <> pIdUser;
 
-    DELETE FROM tb_notifications WHERE id_attachment = pIdAttachment;
+    DELETE FROM tb_notifications
+    WHERE id_attachment = pIdAttachment;
 
     DELETE FROM tb_attachment
     WHERE id_attachment = pIdAttachment;
@@ -2359,7 +2368,8 @@ BEGIN
   FROM tb_notifications tn
   WHERE (id_project = ANY (vArrayProjects)) AND ((SELECT active
                                                   FROM tb_projects
-                                                  WHERE tn.id_project = tb_projects.id_project) = TRUE) AND id_user <> pIdUser
+                                                  WHERE tn.id_project = tb_projects.id_project) = TRUE) AND
+        id_user <> pIdUser
   ORDER BY date DESC
   LIMIT 5;
 END;

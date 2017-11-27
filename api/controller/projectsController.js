@@ -61,11 +61,7 @@ exports.infoProject = async function (req, res) {
 
   db.any('SELECT * FROM getproject($1);', [info.id_user])
     .then(data => {
-      if (!data || !data[0]) {
-        res.status(404).json({error: 'Esse usuario nao possui projetos'})
-      } else {
-        res.status(200).json(data)
-      }
+      res.status(200).json(data)
     })
 }
 
@@ -106,7 +102,7 @@ exports.changeProject = async function (req, res) {
 
   db.any('SELECT * FROM getPathImg($1)', [id])
     .then(data => {
-      if(data[0].path)
+      if (data[0].path)
         imgPath = data[0].path
     })
 
@@ -266,7 +262,7 @@ exports.getNotifications = function (req, res) {
     .then(data => {
       let cleanObject = []
       if (!data || !data[0]) {
-        res.status(404).json({result: 'Esse projeto nao possui notificações'})
+        res.status(200).json(data)
       } else {
         data.forEach((item) => {
           cleanObject.push(clearObject(item))
@@ -276,7 +272,7 @@ exports.getNotifications = function (req, res) {
             if (!data)
               res.status(404).json({result: 'Usuario nao encontrado'})
             else
-              res.status(200).json({newNotifications: data[0].newnotifications,notifications: cleanObject})
+              res.status(200).json({newNotifications: data[0].newnotifications, notifications: cleanObject})
           })
       }
     })
