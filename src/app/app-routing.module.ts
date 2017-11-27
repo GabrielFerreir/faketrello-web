@@ -11,7 +11,6 @@ import { EsqueciMinhaSenhaComponent } from './esqueci-minha-senha/esqueci-minha-
 import { EsqueceuSuaSenhaComponent } from './esqueci-minha-senha/esqueceu-sua-senha/esqueceu-sua-senha.component';
 import { EsqueceuSeuSenhaAlterarComponent } from './esqueci-minha-senha/esqueceu-seu-senha-alterar/esqueceu-seu-senha-alterar.component';
 import { AutenticaComponent } from './autentica/autentica.component';
-import { DadosDeUsuarioResolve } from './dadosDeUsuario.resolve';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AlterarSenhaDeUsuarioComponent} from './alterar-senha-de-usuario/alterar-senha-de-usuario.component';
 import { AlterarProjectsComponent } from './projects/alterar-projects/alterar-projects.component';
@@ -49,15 +48,15 @@ const APP_ROUTES: Routes = [
 
           {path: 'alterarDados',
           component: AlterarDadosDeUsuarioComponent,
-          resolve: {
-              alterar: DadosDeUsuarioResolve
-            }
+          // resolve: {
+          //     alterar: DadosDeUsuarioResolve
+          //   }
           },
         {path: 'alterarSenha',
         component: AlterarSenhaDeUsuarioComponent,
-          resolve: {
-            alterar: DadosDeUsuarioResolve
-          }
+          // resolve: {
+          //   alterar: DadosDeUsuarioResolve
+          // }
         },
       {path: 'project/:id', component: DragDropComponent},
 

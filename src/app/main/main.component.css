@@ -143,7 +143,7 @@ nav ul .titulo {
   margin-top: 5px;
   margin-right: 16px;
   overflow: hidden;
-  min-width: 100px;
+  /*min-width: 100px;*/
   cursor: pointer;
   user-select: none;
   border-radius: 50px;
@@ -225,7 +225,7 @@ header .checkNav:checked ~ nav {
 }
 .container {
   width: 100vw;
-  height: calc(100vh - 56px);
+  height: calc(100vh - 48px);
   background-color: #EEE;
   position: absolute;
   /*z-index: 0;*/

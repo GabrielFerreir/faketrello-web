@@ -16,7 +16,6 @@ export class PaginaInicialComponent implements OnInit {
                 private core: CoreService) { }
 
   ngOnInit() {
-    console.log('Pesquisa')
     this.projects.searchProjects();
 
 

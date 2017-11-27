@@ -305,4 +305,12 @@ a {
   width: 100%;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
+.center {
+  text-align: center;
+}
+
 

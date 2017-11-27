@@ -65,7 +65,6 @@ export class AlterarSenhaDeUsuarioComponent implements OnInit {
   validaConfirmaNovaSenha() {
 
    if (this.confirmaNovaSenha == '' || this.novaSenha == '' && this.confirmaNovaSenha == '') {
-      console.log('AAAAAAAAAA');
       this.codeConfirmNovaSenha = '400';
       this.errorConfirmaNovaSenha = 'Esse campo é necessario';
     } else if(this.novaSenha == this.confirmaNovaSenha) {
@@ -96,10 +95,8 @@ export class AlterarSenhaDeUsuarioComponent implements OnInit {
         .subscribe(
           data => {
             this.snackbarService.inserirSnackbar('Senha modificada com sucesso!')
-            console.log('Alterou');
           },
           error => {
-            console.log(error.status);
             this.codeSenhaAtual = error.status;
             if(error.status == 401) {
               this.errorSenhaAtual = 'Senha incorreta';

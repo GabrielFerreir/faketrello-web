@@ -23,21 +23,14 @@ export class MenuDirective implements ngAfterViewInit {
     });
 
     this.close();
-    // console.log(this.menu);
-    // console.log(this.elementRef);
-    // console.log(this.viewContainerRef);
-
     this.elementRef.nativeElement.addEventListener('click', event => {
-      // console.log(event);
       let pos = this.elementRef.nativeElement;
       pos = pos.getBoundingClientRect();
-      // console.log(pos);
 
-      let position = {
+      const position = {
         'x': pos.left,
         'y': pos.top,
       }
-      // console.log(position);
       this.render(position);
     });
 
@@ -74,14 +67,12 @@ export class MenuDirective implements ngAfterViewInit {
       document.body.appendChild(rootNode);
 
       if (rootNode.clientWidth) {
-        // console.log(rootNode);
       }
     });
   }
 
   close() {
     if(this.viewContainerRef.length) {
-      // console.log('Deveria apagar');
       const viewRef = this.viewRef;
 
       viewRef.rootNodes.forEach(rootNode => {

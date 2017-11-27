@@ -42,7 +42,6 @@ export class EsqueceuSuaSenhaComponent implements OnInit {
         .map(res => res.json())
         .subscribe((res) => {
             this.codeStatusUsuario = '200';
-            // console.log(res)
             this.mensagemUsuario = res;
 
           }, error => {
@@ -50,7 +49,6 @@ export class EsqueceuSuaSenhaComponent implements OnInit {
               this.emailInvalido();
           },
           () => {
-            console.log('Entrou Aqui')
             this.emailValido();
           });
     } else {
@@ -66,7 +64,6 @@ export class EsqueceuSuaSenhaComponent implements OnInit {
   }
 
   emailValido() {
-      console.log('A')
       this.snackbarsService.inserirSnackbar('Aguarde');
 
     var url = 'http://' + this.core.ipDaApi + '/newpass';
@@ -84,14 +81,10 @@ export class EsqueceuSuaSenhaComponent implements OnInit {
       .subscribe(
         data => {
           this.snackbarsService.inserirSnackbar('Email Enviado');
-          console.log(JSON.stringify(data));
-          console.log('Sucesso')
         }),
       error => {
-        console.log(error);
       },
       () => {
-        console.log('Entrou');
       }
 
   }

@@ -126,7 +126,6 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
   }
 
   alteraDadosBasicos() {
-    console.log('blur');
     let data;
     if (this.data) {
       data = <any>this.data.split('/');
@@ -172,7 +171,6 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
     //   i++;
     // }
     // fSize = (Math.round(fSize * 100) / 100) + ' ' + fSExt[i];
-    // console.log(fSize);
     const reader = new FileReader();
     if (file) {
       reader.readAsDataURL(file.files[0]);
@@ -184,7 +182,6 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
       const extensao = file.files[0].name.split('.')[1];
       const base64 = reader.result;
       if (name && size && extensao && base64) {
-        console.log(base64)
         this.dragDropService.newAttachment(base64, name, size, extensao);
       }
     }
@@ -224,7 +221,6 @@ export class OptionsTasksComponent implements OnInit, AfterViewInit {
   }
 
   onModifyChecklist(id) {
-    console.log('a')
     this.modifyChecklist = true;
     this.idModifyChecklist = id;
   }

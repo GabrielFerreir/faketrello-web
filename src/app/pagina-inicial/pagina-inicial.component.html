@@ -8,19 +8,28 @@
       <img class="icon" (click)="projects.detailProject(projeto.id_project)" src="../../assets/settings.svg">
       <img class="icon" *ngIf="projeto.permission" (click)="popupConfirmacao.ativaPopUpConfirmacao('Alerta', 'Tem certeza que deseja Excluir?', projeto.id_project)" src="../../assets/delete.svg">
     </section>
+  </section>
 
+  <section class="emptyStates" *ngIf="projects.projects && projects.projects.length == 0">
+    <section>
+      <h1>Oops.</h1>
+      <p>Você ainda não tem projetos</p>
+    </section>
   </section>
 
 
 
-  <section class="project-card add-project" (click)="projects.ativaAddProjets()" title="Adicionar Projeto">
+  <!--<section class="project-card add-project" (click)="projects.ativaAddProjets()" title="Adicionar Projeto">-->
 
-    <i class="material-icons">add</i>
-  </section>
+    <!--<i class="material-icons">add</i>-->
+  <!--</section>-->
 </div>
 
 
 
 <app-popup-confirmacao *ngIf="popupConfirmacao.situacao"></app-popup-confirmacao>
 <app-add-projects *ngIf="projects.situacaoAddProjects"></app-add-projects>
+<button class="floatingButton" (click)="projects.ativaAddProjets()">
+  <i class="material-icons">add</i>
+</button>
 <router-outlet></router-outlet>

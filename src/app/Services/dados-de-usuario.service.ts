@@ -11,66 +11,76 @@ export class DadosDeUsuarioService {
               private http: Http,
               private core: CoreService) {
   }
+
+  dados;
+
   dadosDeUsuario;
+
   criarCookie(tokken) {
     var data = new Date();
     data.setTime(data.getTime() + (24 * 60 * 60 * 1000))
     // tokken = tokken.substring(1, tokken.length - 1);
     var tokkenCompleto = 'Bearer ' + tokken;
     document.cookie = 'tokken=Bearer ' + tokken + '; expires=' + data.toUTCString() + '; path=/';
-    console.log('Criou o cookie');
-    // console.log(this.getCookieTokken());
+    ('Criou o cookie');
+    // (this.getCookieTokken());
   }
+
   getCookieTokken() {
+    let cookie;
+    let tokkenCookie
     try {
-      var cookie = document.cookie.split('tokken=');
+      cookie = document.cookie.split('tokken=');
       cookie = cookie[1].split(';');
-      var tokkenCookie = cookie[0];
-      // console.log('Pegou o cookie')
-      // console.log(tokkenCookie);
+      tokkenCookie = cookie[0];
+
     } catch (e) {
-      // console.log('Efetue o login')
+      ('Efetue o login')
       // this.router.navigate(['/home']);
     }
     return tokkenCookie;
   }
 
- // LOGAR (USERINFO)
+  // LOGAR (USERINFO)
   verificaUsuarioLogin(usuario) {
     var url = 'http://' + this.core.ipDaApi + '/userinfo?user=' + usuario;
     return this.http.get(url)
       .map(res => res.json())
   }
+
   // ALTERAR USUARIO (USERINFO)
   verificaUsuarioExiste(usuario) {
     var url = 'http://' + this.core.ipDaApi + '/usernameInfo?user=' + usuario;
     const headers = new Headers();
-    headers.append('Authorization', 'Bearer ' + this.getCookieTokken());
+    headers.append('Authorization', this.getCookieTokken());
     return this.http.get(url, {headers: headers})
       .map(res => res.json())
   }
+
   gerarTokken(user, pass) {
     const url = 'http://' + this.core.ipDaApi + '/login';
     const json = JSON.stringify(
       {
-        user : user,
-        password : pass
+        user: user,
+        password: pass
       }
     );
-    const params =  json;
+    const params = json;
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(url, params, { headers: headers })
+    return this.http.post(url, params, {headers: headers})
       .map(res => res.json());
   }
+
   logar(): any {
-    var url = 'http://' + this.core.ipDaApi + '/session';
-    var headers = new Headers();
+    const url = 'http://' + this.core.ipDaApi + '/session';
+    const headers = new Headers();
     headers.append('Authorization', 'Bearer ' + this.getCookieTokken());
     return this.http.get(url, {headers: headers})
       .map(res => res.json());
   }
+
   verificaUsuarioAutenticado() {
     if (this.getCookieTokken()) {
       var url = 'http://' + this.core.ipDaApi + '/session';
@@ -79,31 +89,43 @@ export class DadosDeUsuarioService {
       return this.http.get(url, {headers: headers})
         .map(res => res.json())
         .subscribe((res) => {
-            console.log('Autenticado');
-            return true;
-          }, error => {
-            console.log('Fazendo logout');
-            // this.logout();
-            return false;
-          });
+          console.log('Autenticado');
+          return true;
+        }, error => {
+          // this.logout();
+          return false;
+        });
     } else {
       console.log('Fazendo logout');
       this.logout();
       return false;
     }
   }
+
   verificaEmailExiste(email) {
-    var url = 'http://' + this.core.ipDaApi + '/emailExists/?user=' + email;
+    const url = 'http://' + this.core.ipDaApi + '/emailExists/?user=' + email;
     const headers = new Headers();
     return this.http.get(url, {headers: headers})
       .map(res => res.json())
   }
+
   recuperarDadosDeUsuario() {
+
     const url = 'http://' + this.core.ipDaApi + '/user';
     const headers = new Headers();
     headers.append('Authorization', 'Bearer ' + this.getCookieTokken());
-    return this.http.get(url, {headers: headers}).toPromise();
+    return this.http.get(url, {headers: headers})
+      .map(res => res.json())
+      .subscribe((res) => {
+          this.dados = res;
+          console.log(this.dados);
+        }, error => {
+          console.log(error);
+        },
+        () => {
+        });
   }
+
   alterarDadosDeUsuario(name, username, img, email) {
     const url = 'http://' + this.core.ipDaApi + '/session/change';
 
@@ -116,14 +138,18 @@ export class DadosDeUsuarioService {
       }
     );
 
+    console.log(json)
+
     const params = json;
+
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this.getCookieTokken());
+    headers.append('Authorization', this.getCookieTokken());
 
     return this.http.put(url, params, {headers: headers})
       .map(res => res.json());
   }
+
   alterarSenhaDeUsuario(oldpass, newpass) {
     var url = 'http://' + this.core.ipDaApi + '/session/changepassword';
     var json = JSON.stringify(
@@ -140,6 +166,7 @@ export class DadosDeUsuarioService {
     return this.http.put(url, params, {headers: headers})
       .map(res => res.json())
   }
+
   autenticacao(tokken) {
     var url = 'http://' + this.core.ipDaApi + '/authentication';
     var headers = new Headers();
@@ -147,12 +174,11 @@ export class DadosDeUsuarioService {
     return this.http.get(url, {headers: headers})
       .map(res => res.json());
   }
+
   logout() {
     document.cookie = 'tokken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     this.router.navigate(['/home']);
   }
-
-
 
 
 }

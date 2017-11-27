@@ -60,10 +60,16 @@ export class CadastroComponent implements OnInit {
   }
 
   chama() {
-    this.nome.length > 0 ? this.HTMLNome.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLNome.nativeElement.classList.remove('textFieldsPreenchido');
+    // this.nome.length > 0 ? this.HTMLNome.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLNome.nativeElement.classList.remove('textFieldsPreenchido');
     this.email.length > 0 ? this.HTMLEmail.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLEmail.nativeElement.classList.remove('textFieldsPreenchido');
     this.senha.length > 0 ? this.HTMLSenha.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLSenha.nativeElement.classList.remove('textFieldsPreenchido');
     this.confirmaSenha.length > 0 ? this.HTMLConfirmaSenha.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLConfirmaSenha.nativeElement.classList.remove('textFieldsPreenchido');
+  }
+
+  chamaTeste(conteudo, el) {
+    console.log(conteudo);
+    console.log(el);
+    conteudo > 0 ? el.classList.add('textFieldsPreenchido') : el.classList.remove('textFieldsPreenchido');
   }
 
   geraUserName(nome) {
@@ -114,13 +120,13 @@ export class CadastroComponent implements OnInit {
     } else if (filtro.test(this.email)) {
       this.dadosDoUsuario.verificaEmailExiste(this.email)
         .subscribe((res) => {
-          // console.log(res)
+          console.log(res)
           this.codeSatusEmail = '200';
           this.errorEmail = '';
         }, error => {
           this.codeSatusEmail = '409';
           this.errorEmail = 'Esse email já está sendo usado';
-          // console.log(error);
+          console.log(error);
         });
 
     } else {
