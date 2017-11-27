@@ -449,7 +449,6 @@ export class DragDropService {
       }
       return this.cxDestino;
     }
-
   }
 
   reset() {
@@ -666,7 +665,7 @@ export class DragDropService {
     var params = json;
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
+    headers.append('Authorization', this.usuarioService.getCookieTokken());
 
     return this.http.post(url, params, {headers: headers})
       .subscribe((res) => {

@@ -47,12 +47,6 @@ export class AlterarProjectsComponent implements OnInit {
     this.projects.detailProject(this.id);
 
     this.dadossDeUsuario.recuperarDadosDeUsuario()
-      .then(res => {
-        this.idUser = res.json();
-        this.idUser = this.idUser.id_user;
-      })
-      .catch();
-
     setTimeout(() => {
       this.name = this.projects.project.namep;
       this.descri = this.projects.project.descrip;

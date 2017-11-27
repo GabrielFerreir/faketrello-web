@@ -1,59 +1,137 @@
-<div class="login">
+<!--<div class="login" *ngIf="dadosDoUsuario?.dados?.name">-->
 
-  <div style="width:300px; height: 100%; padding-top:10px;">
-    <input type="file" (change)="previewFile($event.target)" id="file" style="display: none;">
-    <!--<img *ngIf="alterar.img == '/default.png'" src="{{ img }}" class="imageUser" id="preview">-->
-    <!--<img *ngIf="img64" src="{{ img64 }}" class="imageUser" id="preview"/>-->
-    <div *ngIf="img64" class="imageUser" id="preview" [style.background-image]="'url('+ img64 +')'"></div>
-    <div *ngIf="alterar.img == '/imgsUser/default.png' && img64 == ''" class="imageUser">{{ alterar.name.charAt(0) | uppercase }}</div>
-    <div *ngIf="alterar.img != '/imgsUser/default.png' && img64 == ''" id="preview" class="imageUser" [style.background-image]="'url('+ 'http://'+ core.ipDaApi + '/' + alterar.img +')'"></div>
+<!--<div style="width:300px; height: 100%; padding-top:10px;">-->
+<!--<input type="file" (change)="previewFile($event.target)" id="file" style="display: none;">-->
+<!--<div *ngIf="img64" class="imageUser" id="preview" [style.background-image]="'url('+ img64 +')'"></div>-->
+<!--<div *ngIf="dadosDoUsuario?.dados?.img == '/imgsUser/default.png' && img64 == ''" class="imageUser">{{-->
+<!--dadosDoUsuario?.dados.name.charAt(0) | uppercase }}-->
+<!--</div>-->
+<!--<div *ngIf="dadosDoUsuario?.dados?.img != '/imgsUser/default.png' && img64 == ''" id="preview" class="imageUser"-->
+<!--[style.background-image]="'url('+ 'http://'+ core.ipDaApi + '/' + dadosDoUsuario?.dados?.img +')'"></div>-->
+<!--<div class="addImageUser" (click)="chamaFile()">+</div>-->
 
-    <div class="addImageUser" (click)="chamaFile()">+</div>
+<!--<div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-right: 50px;">-->
+<!--<input #HTMLNome [(ngModel)]="dadosDoUsuario.dados.name" (blur)="chama()" (blur)="vericaNome()" type="text"-->
+<!--id="nome"-->
+<!--class="textFields"/>-->
+<!--<label class="labelText" for="nome">Nome</label>-->
+<!--<div class="border"></div>-->
+<!--<label class="helperText"-->
+<!--[style.color]="codeSatusNome == '400' ? '#F44336' : ''"-->
+<!--[style.display]="codeSatusNome == '400' ? 'block' : 'none'"-->
+<!--&gt;{{ errorNome }}</label>-->
+<!--</div>-->
 
-    <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-right: 50px;">
-      <input #HTMLNome [(ngModel)]="alterar.name" (blur)="chama()" (blur)="vericaNome()" type="text" name="nome" class="textFields"/>
-      <label class="labelText" for="nome">Nome</label>
-      <div class="border"></div>
-      <label class="helperText"
-             [style.color]="codeSatusNome == '400' ? '#F44336' : ''"
-             [style.display]="codeSatusNome == '400' ? 'block' : 'none'"
-      >{{ errorNome }}</label>
-    </div>
-
-    <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
-      <input #HTMLUsername [(ngModel)]="alterar.username" (blur)="chama()" (blur)="verificaUsername()" type="text" name="username" class="textFields"/>
-      <label class="labelText" for="username">Username</label>
-      <div class="border"></div>
-      <label class="helperText"
-             [style.color]="codeSatusUsername == '409' ? '#F44336' : ''"
-             [style.display]="codeSatusUsername == '409' ? 'block' : 'none'"
-      >{{ errorUsername }}</label>
-    </div>
-
-
-    <div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">
-      <input #HTMLEmail autocomplete="off" [(ngModel)]="alterar.email" (blur)="chama()" (blur)="verificaEmail()" type="text" name="email" class="textFields"/>
-      <label class="labelText" for="email">Email</label>
-      <div class="border"></div>
-      <label class="helperText"
-             [style.color]="codeSatusEmail == '400' || '409' ? '#F44336' : ''"
-             [style.display]="codeSatusEmail == '400' || '409' ? 'block' : 'none'"
-      > {{ errorEmail }} </label>
-    </div>
+<!--<div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">-->
+<!--<input #HTMLUsername [(ngModel)]="dadosDoUsuario?.dados.username" (blur)="chama()" (blur)="verificaUsername()"-->
+<!--type="text"-->
+<!--id="username" class="textFields"/>-->
+<!--<label class="labelText" for="username">Username</label>-->
+<!--<div class="border"></div>-->
+<!--<label class="helperText"-->
+<!--[style.color]="codeSatusUsername == '409' ? '#F44336' : ''"-->
+<!--[style.display]="codeSatusUsername == '409' ? 'block' : 'none'"-->
+<!--&gt;{{ errorUsername }}</label>-->
+<!--</div>-->
 
 
-    <button
-      (click)="altera()"
-      class="denseButton"
-      style="float:left; width:200px; margin-top:60px; margin-left:50px;"
-      #HTMLCadastrar>
-      ALTERAR
-    </button>
+<!--<div style="position: relative; width: 200px; float:left; margin-left: 50px; margin-top:60px;">-->
+<!--<input #HTMLEmail autocomplete="off" [(ngModel)]="dadosDoUsuario.dados.email" (blur)="chama()"-->
+<!--(blur)="verificaEmail()"-->
+<!--type="text" id="email" class="textFields"/>-->
+<!--<label class="labelText" for="email">Email</label>-->
+<!--<div class="border"></div>-->
+<!--<label class="helperText"-->
+<!--[style.color]="codeSatusEmail == '400' || '409' ? '#F44336' : ''"-->
+<!--[style.display]="codeSatusEmail == '400' || '409' ? 'block' : 'none'"-->
+<!--&gt; {{ errorEmail }} </label>-->
+<!--</div>-->
 
-  </div>
 
-</div>
+<!--<button-->
+<!--(click)="altera()"-->
+<!--class="denseButton"-->
+<!--style="float:left; width:200px; margin-top:60px; margin-left:50px;"-->
+<!--#HTMLCadastrar>-->
+<!--ALTERAR-->
+<!--</button>-->
 
-<!--<app-snackbars></app-snackbars>-->
+<!--</div>-->
 
+<!--</div>-->
+
+<section class="fullLogin" *ngIf="dadosDoUsuario?.dados?.name">
+  <section class="login">
+    <section class="image">
+      <input type="file" (change)="previewFile($event.target)" id="file">
+
+      <div *ngIf="img64" class="imageUser" id="preview" [style.background-image]="'url('+ img64 +')'"></div>
+
+      <div *ngIf="dadosDoUsuario?.dados?.img == '/imgsUser/default.png' && !img64" class="imageUser">
+        {{ dadosDoUsuario?.dados.name.charAt(0) | uppercase }}
+      </div>
+
+      <div *ngIf="dadosDoUsuario?.dados?.img != '/imgsUser/default.png' && !img64" id="preview" class="imageUser"
+           [style.background-image]="'url('+ 'http://'+ core.ipDaApi + '/' + dadosDoUsuario?.dados?.img +')'"></div>
+
+      <div class="addImageUser" (click)="chamaFile()">+</div>
+    </section>
+    <section class="forms">
+      <section class="campo">
+        <section class="relative">
+          <input #HTMLNome [(ngModel)]="dadosDoUsuario.dados.name"
+                 (blur)="chama; vericaNome()" type="text"
+                 id="nome"
+                 class="textFields"/>
+          <label class="labelText" for="nome">Nome</label>
+          <div class="border"></div>
+          <label class="helperText"
+                 [style.color]="codeSatusNome == '400' ? '#F44336' : ''"
+                 [style.display]="codeSatusNome == '400' ? 'block' : 'none'"
+          >{{ errorNome }}</label>
+        </section>
+      </section>
+
+      <section class="campo">
+        <section class="relative">
+          <input #HTMLUsername [(ngModel)]="dadosDoUsuario?.dados.username"
+                 (blur)="chama; verificaUsername()"
+                 type="text"
+                 id="username" class="textFields"/>
+          <label class="labelText" for="username">Username</label>
+          <div class="border"></div>
+          <label class="helperText"
+                 [style.color]="codeSatusUsername == '409' ? '#F44336' : ''"
+                 [style.display]="codeSatusUsername == '409' ? 'block' : 'none'"
+          >{{ errorUsername }}</label>
+        </section>
+      </section>
+
+      <section class="campo">
+        <section class="relative">
+          <input #HTMLEmail autocomplete="off" [(ngModel)]="dadosDoUsuario.dados.email"
+                 (blur)="chama(); verificaEmail()"
+                 type="text" id="email" class="textFields"/>
+          <label class="labelText" for="email">Email</label>
+          <div class="border"></div>
+          <label class="helperText"
+                 [style.color]="codeSatusEmail == '400' || '409' ? '#F44336' : ''"
+                 [style.display]="codeSatusEmail == '400' || '409' ? 'block' : 'none'"
+          > {{ errorEmail }} </label>
+        </section>
+      </section>
+
+      <section class="buttons">
+        <button
+          (click)="altera()"
+          class="denseButton fullwidth"
+          #HTMLCadastrar>
+          CADASTRAR
+        </button>
+      </section>
+
+
+    </section>
+  </section>
+</section>
 

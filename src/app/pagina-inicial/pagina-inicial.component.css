@@ -115,6 +115,37 @@ a {
 
 }
 
+.emptyStates {
+  width: 100%;
+  height: calc(100vh - 56px - 80px);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  justify-items: center;
+  align-items: center;
+}
+
+.emptyStates section {
+  height: 80px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.emptyStates h1 {
+  width: 100%;
+  user-select: none;
+  font-family: 'Roboto';
+  font-size: 24px;
+  text-align: center;
+}
+.emptyStates p {
+  width: 100%;
+  user-select: none;
+  font-family: 'Roboto';
+  font-size: 16px;
+  text-align: center;
+}
+
 @media screen and (max-width: 1024px) {
   .project-card {
     width: 25%;

@@ -19,7 +19,7 @@ export class AutenticaComponent implements OnInit {
     this.dadosDeUsuarioService.autenticacao(this.id)
       .subscribe(
         data => {
-          this.mensagem = "Usuario Autenticado";
+          this.mensagem = 'Usuario Autenticado';
           setTimeout(() => {
             this.router.navigate(['/main']);
           }, 5000);

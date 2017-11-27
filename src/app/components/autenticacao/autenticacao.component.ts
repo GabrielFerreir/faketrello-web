@@ -1,11 +1,11 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
-import { Router } from '@angular/router';
+import {Http, Headers, Response} from '@angular/http';
+import {Router} from '@angular/router';
 import 'rxjs/add/operator/map';
 
-import { DadosDeUsuarioService } from '../../Services/dados-de-usuario.service';
-import { CoreService } from '../../Services/core.service';
-import { SnackbarsService } from '../snackbars/snackbars.service';
+import {DadosDeUsuarioService} from '../../Services/dados-de-usuario.service';
+import {CoreService} from '../../Services/core.service';
+import {SnackbarsService} from '../snackbars/snackbars.service';
 
 
 @Component({
@@ -21,14 +21,19 @@ export class AutenticacaoComponent implements OnInit {
               private http: Http,
               private dadosDoUsuario: DadosDeUsuarioService,
               private core: CoreService,
-              private snackbarService: SnackbarsService) { }
+              private snackbarService: SnackbarsService) {
+  }
 
   ngOnInit() {
-    this.dadosDoUsuario.recuperarDadosDeUsuario()
-      .then(res => {
-        this.dados = res.json()
-      })
-      .catch();
+  //   this.dadosDoUsuario.recuperarDadosDeUsuario()
+  //     .subscribe((res) => {
+  //         this.dadosDoUsuario.dados = res;
+  //         console.log(this.dadosDoUsuario.dados);
+  //       }, error => {
+  //         console.log(error);
+  //       },
+  //       () => {
+  //       });
   }
 
   fecha() {

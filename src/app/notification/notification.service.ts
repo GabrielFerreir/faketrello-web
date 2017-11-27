@@ -12,14 +12,16 @@ export class NotificationService {
 
   constructor(private http: Http,
               private dados: DadosDeUsuarioService,
-              private core: CoreService) { }
+              private core: CoreService) {
+  }
 
   changeVisibility() {
     this.visibility = !this.visibility;
     this.hiddenVisibility();
   }
+
   hiddenVisibility() {
-    if(this.visibility) {
+    if (this.visibility) {
       this.notification.nativeElement.className = 'notificacoes visibility';
       try {
         document.querySelector('.container[_ngcontent-c1]').classList.add('overflowHidden');
@@ -30,7 +32,7 @@ export class NotificationService {
 
     } else {
       this.notification.nativeElement.className = 'notificacoes';
-      try{
+      try {
         document.querySelector('.container[_ngcontent-c1]').classList.remove('overflowHidden');
         document.querySelector('.container[_ngcontent-c1]').classList.add('overflowAuto');
       } catch (e) {
@@ -39,6 +41,7 @@ export class NotificationService {
 
     }
   }
+
   searchNotification() {
     var url = 'http://' + this.core.ipDaApi + '/user/notifications';
     var headers = new Headers();
@@ -52,11 +55,12 @@ export class NotificationService {
         console.log(error);
       });
   }
+
   changeBooleanNotification() {
     const url = 'http://' + this.core.ipDaApi + '/user/notifications';
     const headers = new Headers();
     headers.append('Authorization', 'Bearer ' + this.dados.getCookieTokken());
-    return this.http.put(url,null, {headers: headers})
+    return this.http.put(url, null, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
         console.log(res);

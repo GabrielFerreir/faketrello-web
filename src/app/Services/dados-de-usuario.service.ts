@@ -12,6 +12,8 @@ export class DadosDeUsuarioService {
               private core: CoreService) {
   }
 
+  dados;
+
   dadosDeUsuario;
 
   criarCookie(tokken) {
@@ -25,14 +27,15 @@ export class DadosDeUsuarioService {
   }
 
   getCookieTokken() {
+    let cookie;
+    let tokkenCookie
     try {
-      var cookie = document.cookie.split('tokken=');
+      cookie = document.cookie.split('tokken=');
       cookie = cookie[1].split(';');
-      var tokkenCookie = cookie[0];
-      // ('Pegou o cookie')
-      // (tokkenCookie);
+      tokkenCookie = cookie[0];
+
     } catch (e) {
-      // ('Efetue o login')
+      ('Efetue o login')
       // this.router.navigate(['/home']);
     }
     return tokkenCookie;
@@ -49,7 +52,7 @@ export class DadosDeUsuarioService {
   verificaUsuarioExiste(usuario) {
     var url = 'http://' + this.core.ipDaApi + '/usernameInfo?user=' + usuario;
     const headers = new Headers();
-    headers.append('Authorization', 'Bearer ' + this.getCookieTokken());
+    headers.append('Authorization', this.getCookieTokken());
     return this.http.get(url, {headers: headers})
       .map(res => res.json())
   }
@@ -71,8 +74,8 @@ export class DadosDeUsuarioService {
   }
 
   logar(): any {
-    var url = 'http://' + this.core.ipDaApi + '/session';
-    var headers = new Headers();
+    const url = 'http://' + this.core.ipDaApi + '/session';
+    const headers = new Headers();
     headers.append('Authorization', 'Bearer ' + this.getCookieTokken());
     return this.http.get(url, {headers: headers})
       .map(res => res.json());
@@ -86,32 +89,41 @@ export class DadosDeUsuarioService {
       return this.http.get(url, {headers: headers})
         .map(res => res.json())
         .subscribe((res) => {
-          ('Autenticado');
+          console.log('Autenticado');
           return true;
         }, error => {
-          ('Fazendo logout');
           // this.logout();
           return false;
         });
     } else {
-      ('Fazendo logout');
+      console.log('Fazendo logout');
       this.logout();
       return false;
     }
   }
 
   verificaEmailExiste(email) {
-    var url = 'http://' + this.core.ipDaApi + '/emailExists/?user=' + email;
+    const url = 'http://' + this.core.ipDaApi + '/emailExists/?user=' + email;
     const headers = new Headers();
     return this.http.get(url, {headers: headers})
       .map(res => res.json())
   }
 
   recuperarDadosDeUsuario() {
+
     const url = 'http://' + this.core.ipDaApi + '/user';
     const headers = new Headers();
     headers.append('Authorization', 'Bearer ' + this.getCookieTokken());
-    return this.http.get(url, {headers: headers}).toPromise();
+    return this.http.get(url, {headers: headers})
+      .map(res => res.json())
+      .subscribe((res) => {
+          this.dados = res;
+          console.log(this.dados);
+        }, error => {
+          console.log(error);
+        },
+        () => {
+        });
   }
 
   alterarDadosDeUsuario(name, username, img, email) {
@@ -126,10 +138,13 @@ export class DadosDeUsuarioService {
       }
     );
 
+    console.log(json)
+
     const params = json;
+
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this.getCookieTokken());
+    headers.append('Authorization', this.getCookieTokken());
 
     return this.http.put(url, params, {headers: headers})
       .map(res => res.json());

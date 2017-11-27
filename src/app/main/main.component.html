@@ -1,8 +1,6 @@
 <header>
   <label for="check">
-    <!--<div class="hamburger">-->
-      <!--<img src="../../assets/hamburger.svg"/>-->
-    <!--</div>-->
+
   </label>
   <input class="checkNav" type="checkbox" id="check" style="display:none"/>
 
@@ -32,15 +30,17 @@
 
 <div style="position: relative; z-index: 1;">
   <!--<label for="perfil">-->
+
+
     <div class="perfil" [menuInfoUser]="menuInfoUser">
 
-      <div style="float: right" *ngIf="dados?.img != '/imgsUser/default.png'">
-        <img class="img" src="{{'http://' + core.ipDaApi + dados?.img}}"/>
+      <div style="float: right" *ngIf="dadosDoUsuario?.dados?.img != '/imgsUser/default.png'">
+        <img class="img" src="{{'http://' + core.ipDaApi + dadosDoUsuario?.dados?.img}}"/>
       </div>
 
-      <div *ngIf="dados?.img == '/imgsUser/default.png'" class="img">{{dados?.name.charAt(0)}}</div>
+      <div *ngIf="dadosDoUsuario.dados?.img == '/imgsUser/default.png'" class="img">{{dadosDoUsuario.dados?.name.charAt(0)}}</div>
 
-      <span>{{dados?.name}}</span>
+      <span>{{dadosDoUsuario.dados?.name}}</span>
 
     </div>
 
@@ -50,7 +50,7 @@
     <img src="../../assets/notificacoes.svg">
     <div class="qtdNotificacoes" *ngIf="notificacao?.userNotification?.newNotifications"></div>
   </div>
-  <app-autenticacao *ngIf="!dados?.statusauth"></app-autenticacao>
+  <app-autenticacao *ngIf="!dadosDoUsuario?.dados?.statusauth"></app-autenticacao>
 </header>
 
 <div class="container">

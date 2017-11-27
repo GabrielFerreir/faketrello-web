@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
-import { Router, ActivatedRoute } from '@angular/router';
+import {Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter} from '@angular/core';
+import {Http, Headers, Response} from '@angular/http';
+import {Router, ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/map';
-import { AfterViewInit } from '@angular/core';
-import { DadosDeUsuarioService } from '../Services/dados-de-usuario.service';
+import {AfterViewInit} from '@angular/core';
+import {DadosDeUsuarioService} from '../Services/dados-de-usuario.service';
 import {SnackbarsService} from '../components/snackbars/snackbars.service';
-import { CoreService } from '../Services/core.service';
+import {CoreService} from '../Services/core.service';
 
 @Component({
   selector: 'app-alterar-dados-de-usuario',
@@ -21,14 +21,11 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
               private dadosDoUsuario: DadosDeUsuarioService,
               private snackbarService: SnackbarsService) {
   }
-
-  alterar;
-
   nome = '';
   userName;
   email = '';
   senha = '';
-  tokken;
+
   img64 = '';
 
   codeSatusNome = '';
@@ -39,23 +36,25 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
 
   codeSatusEmail = '';
   errorEmail = '';
+
   CondVerificaEmail = false;
-
-
 
 
   ngOnInit() {
     this.dadosDoUsuario.verificaUsuarioAutenticado();
-    try{
-      this.alterar = this.activatedRoute.snapshot.data['alterar'];
-      this.email = this.alterar.email;
-      this.userName = this.alterar.username;
+    this.dadosDoUsuario.recuperarDadosDeUsuario();
+
+    setTimeout(() => {
+      this.email = this.dadosDoUsuario.dados.email;
+      this.userName = this.dadosDoUsuario.dados.username;
       this.chama();
-    } catch (e){
-    }
+    }, 200);
+
+
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+  }
 
   @ViewChild('login') login: ElementRef;
   @ViewChild('tela1') tela1: ElementRef;
@@ -68,31 +67,30 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
   @ViewChild('HTMLConfirmaSenha') HTMLConfirmaSenha: ElementRef;
   @ViewChild('HTMLCadastrar') HTMLCadastrar: ElementRef;
 
-  chamaFile() {
-    let el = document.getElementById('file');
-    el.click();
-  }
+  chamaFile() { document.getElementById('file').click(); }
+
   chama() {
-    this.alterar.name.length > 0 ? this.HTMLNome.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLNome.nativeElement.classList.remove('textFieldsPreenchido');
-    this.alterar.username.length > 0 ? this.HTMLUsername.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLUsername.nativeElement.classList.remove('textFieldsPreenchido');
-    this.alterar.email.length > 0 ? this.HTMLEmail.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLEmail.nativeElement.classList.remove('textFieldsPreenchido');
+    this.dadosDoUsuario.dados.name.length > 0 ? this.HTMLNome.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLNome.nativeElement.classList.remove('textFieldsPreenchido');
+    this.dadosDoUsuario.dados.username.length > 0 ? this.HTMLUsername.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLUsername.nativeElement.classList.remove('textFieldsPreenchido');
+    this.dadosDoUsuario.dados.email.length > 0 ? this.HTMLEmail.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLEmail.nativeElement.classList.remove('textFieldsPreenchido');
   }
+
   vericaNome() {
     const filtro = /^[A-Za-z ]+$/;
 
-    if(filtro.test(this.alterar.name) || this.alterar.name == '') {
+    if (filtro.test(this.dadosDoUsuario.dados.name) || this.dadosDoUsuario.dados.name == '') {
 
-      if(this.alterar.name.length > 2 && this.alterar.name.length < 20) {
+      if (this.dadosDoUsuario.dados.name.length > 2 && this.dadosDoUsuario.dados.name.length < 80) {
         this.codeSatusNome = '200';
         this.errorNome = '';
         return true;
-      } else if(this.alterar.name == '') {
+      } else if (this.dadosDoUsuario.dados.name == '') {
         this.codeSatusNome = '400';
         this.errorNome = 'Campo necessario';
         return false;
       } else {
         this.codeSatusNome = '400';
-        this.errorNome = 'Deve conter entre 3 á 20 caracteres!';
+        this.errorNome = 'Deve conter entre 3 á 80 caracteres!';
         return false;
       }
 
@@ -102,71 +100,83 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
       return false;
     }
   }
-  verificaUsername(){
-    if(this.alterar.username != this.userName) {
-      this.dadosDoUsuario.verificaUsuarioExiste(this.alterar.username)
+
+  verificaUsername() {
+    console.log(this.dadosDoUsuario.dados.username);
+    console.log(this.userName);
+
+    if (this.dadosDoUsuario.dados.username != this.userName) {
+      this.dadosDoUsuario.verificaUsuarioExiste(this.dadosDoUsuario.dados.username)
         .subscribe((res) => {
-          this.codeSatusUsername = '409';
-          this.errorUsername = 'Esse usuario já está sendo usado';
-          return false;
-        }, error => {
+          console.log(res);
           this.codeSatusUsername = '200';
           this.errorUsername = '';
           return true;
+        }, error => {
+          console.log('DEU RUIM')
+          console.log(error)
+          this.codeSatusUsername = '409';
+          this.errorUsername = 'Esse usuario já está sendo usado';
+          return false;
         });
     } else {
       this.codeSatusUsername = '200';
       this.errorUsername = '';
       return true;
     }
-
-
   }
-  verificaEmail() {
-    var filtro = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 
-    if(this.alterar.email == '') {
+  verificaEmail() {
+    const filtro = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+
+    if (this.dadosDoUsuario.dados.email == '') {
       this.codeSatusEmail = '400';
       this.errorEmail = 'Campo necessario';
       this.CondVerificaEmail = false;
-
-    }else if(filtro.test(this.alterar.email)) {
-
-        if(this.alterar.email != this.email) {
-          this.dadosDoUsuario.verificaUsuarioExiste(this.alterar.email)
-            .subscribe((res) => {
-              this.codeSatusEmail = '409';
-              this.errorEmail = 'Esse email já está sendo usado';
-              this.CondVerificaEmail = false;
-            }, error => {
-              this.codeSatusEmail = '200';
-              this.errorEmail = '';
-              this.CondVerificaEmail = true;
-            });
-        } else {
-          this.codeSatusEmail = '200';
-          this.errorEmail = '';
-          this.CondVerificaEmail = true;
-        }
-
-
-    }else {
+    } else if (filtro.test(this.dadosDoUsuario.dados.email)) {
+      if (this.dadosDoUsuario.dados.email != this.email) {
+        this.dadosDoUsuario.verificaUsuarioExiste(this.dadosDoUsuario.dados.email)
+          .subscribe((res) => {
+            this.codeSatusEmail = '200';
+            this.errorEmail = '';
+            this.CondVerificaEmail = true;
+          }, error => {
+            this.codeSatusEmail = '409';
+            this.errorEmail = 'Esse email já está sendo usado';
+            this.CondVerificaEmail = false;
+          });
+      } else {
+        this.codeSatusEmail = '200';
+        this.errorEmail = '';
+        this.CondVerificaEmail = true;
+      }
+    } else {
       this.codeSatusEmail = '400';
       this.errorEmail = 'Email Invalido';
       this.CondVerificaEmail = false;
     }
+    return this.CondVerificaEmail;
   }
+
   altera() {
-    this.verificaEmail();
-    if(this.CondVerificaEmail && this.vericaNome() && this.verificaUsername()) {
-      this.dadosDoUsuario.alterarDadosDeUsuario(this.alterar.name, this.alterar.username, this.img64, this.alterar.email)
+    console.log('A')
+    console.log(this.verificaEmail())
+    console.log(this.vericaNome())
+    console.log(this.verificaUsername());
+
+    if (this.verificaEmail() && this.vericaNome() && this.verificaUsername()) {
+      console.log('entrou')
+      this.dadosDoUsuario.alterarDadosDeUsuario(this.dadosDoUsuario.dados.name, this.dadosDoUsuario.dados.username, this.img64, this.dadosDoUsuario.dados.email)
         .subscribe(
           data => {
+            console.log(data);
             this.snackbarService.inserirSnackbar('Dados modificados com sucesso!');
-            this.dadosDoUsuario.criarCookie(data.token);
-            this.dadosDoUsuario.logar();
+            // this.dadosDoUsuario.criarCookie(data.token);
+            // this.dadosDoUsuario.logar();
+            // this.dadosDoUsuario.recuperarDadosDeUsuario()
           },
           error => {
+            console.log(error);
           }
         );
     } else {
@@ -174,8 +184,9 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
 
 
   }
+
   previewFile(el) {
-    const reader  = new FileReader();
+    const reader = new FileReader();
     reader.onloadend = (e) => {
       this.img64 = reader.result;
     }

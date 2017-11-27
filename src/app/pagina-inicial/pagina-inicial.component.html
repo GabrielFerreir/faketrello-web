@@ -8,7 +8,13 @@
       <img class="icon" (click)="projects.detailProject(projeto.id_project)" src="../../assets/settings.svg">
       <img class="icon" *ngIf="projeto.permission" (click)="popupConfirmacao.ativaPopUpConfirmacao('Alerta', 'Tem certeza que deseja Excluir?', projeto.id_project)" src="../../assets/delete.svg">
     </section>
+  </section>
 
+  <section class="emptyStates" *ngIf="projects.projects && projects.projects.length == 0">
+    <section>
+      <h1>Oops.</h1>
+      <p>Você ainda não tem projetos</p>
+    </section>
   </section>
 
 

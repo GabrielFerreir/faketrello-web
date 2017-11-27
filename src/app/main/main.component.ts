@@ -16,7 +16,6 @@ import {NotificationService} from "../notification/notification.service";
 export class MainComponent implements OnInit {
 
   campoDePesquisa = '';
-  dados;
 
   @ViewChild('HTMLCampoDePesquisa') HTMLCampoDePesquisa: ElementRef;
 
@@ -29,21 +28,15 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.getCookieTokken();
     this.logar();
-
-    this.dadosDoUsuario.recuperarDadosDeUsuario()
-      .then(res => {
-        this.dados = res.json();
-      })
-      .catch();
+    this.dadosDoUsuario.recuperarDadosDeUsuario();
   }
 
   chama() {
     if (this.campoDePesquisa.length > 0) {
-      this.HTMLCampoDePesquisa.nativeElement.style = "visibility: hidden;";
+      this.HTMLCampoDePesquisa.nativeElement.style = 'visibility: hidden;';
     } else {
-      this.HTMLCampoDePesquisa.nativeElement.style = "visibility: visible;";
+      this.HTMLCampoDePesquisa.nativeElement.style = 'visibility: visible;';
     }
   }
 

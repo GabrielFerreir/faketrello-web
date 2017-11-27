@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    //FAZ O LOGIN QUANDO O USUARIO JÁ ESTÁ AUTENTICADO
+    // FAZ O LOGIN QUANDO O USUARIO JÁ ESTÁ AUTENTICADO
     if(this.dadosService.getCookieTokken()) {
       this.dadosService.logar()
         .subscribe((res) => {

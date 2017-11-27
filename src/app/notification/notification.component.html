@@ -7,7 +7,7 @@
   </header>
 
   <section class="notificacao"
-           *ngFor="let notification of (service.userNotification ? service.userNotification.notifications.slice(0,5): []); let i=index">
+           *ngFor="let notification of (service.userNotification && service.userNotification.notifications > 4 ? service.userNotification.notifications.slice(0,5): []); let i=index">
     <section class="img" *ngIf="notification.imguser == '/imgsUser/default.png'">{{ notification.nameuser.charAt(0) |
       uppercase }}
     </section>
