@@ -13,14 +13,17 @@
 
 
 
-  <section class="project-card add-project" (click)="projects.ativaAddProjets()" title="Adicionar Projeto">
+  <!--<section class="project-card add-project" (click)="projects.ativaAddProjets()" title="Adicionar Projeto">-->
 
-    <i class="material-icons">add</i>
-  </section>
+    <!--<i class="material-icons">add</i>-->
+  <!--</section>-->
 </div>
 
 
 
 <app-popup-confirmacao *ngIf="popupConfirmacao.situacao"></app-popup-confirmacao>
 <app-add-projects *ngIf="projects.situacaoAddProjects"></app-add-projects>
+<button class="floatingButton" (click)="projects.ativaAddProjets()">
+  <i class="material-icons">add</i>
+</button>
 <router-outlet></router-outlet>

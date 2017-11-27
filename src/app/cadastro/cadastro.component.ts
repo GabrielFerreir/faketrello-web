@@ -114,13 +114,13 @@ export class CadastroComponent implements OnInit {
     } else if (filtro.test(this.email)) {
       this.dadosDoUsuario.verificaEmailExiste(this.email)
         .subscribe((res) => {
-          // console.log(res)
+          console.log(res)
           this.codeSatusEmail = '200';
           this.errorEmail = '';
         }, error => {
           this.codeSatusEmail = '409';
           this.errorEmail = 'Esse email já está sendo usado';
-          // console.log(error);
+          console.log(error);
         });
 
     } else {
