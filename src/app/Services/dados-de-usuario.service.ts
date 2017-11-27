@@ -11,7 +11,9 @@ export class DadosDeUsuarioService {
               private http: Http,
               private core: CoreService) {
   }
+
   dadosDeUsuario;
+
   criarCookie(tokken) {
     var data = new Date();
     data.setTime(data.getTime() + (24 * 60 * 60 * 1000))
@@ -21,6 +23,7 @@ export class DadosDeUsuarioService {
     ('Criou o cookie');
     // (this.getCookieTokken());
   }
+
   getCookieTokken() {
     try {
       var cookie = document.cookie.split('tokken=');
@@ -35,12 +38,13 @@ export class DadosDeUsuarioService {
     return tokkenCookie;
   }
 
- // LOGAR (USERINFO)
+  // LOGAR (USERINFO)
   verificaUsuarioLogin(usuario) {
     var url = 'http://' + this.core.ipDaApi + '/userinfo?user=' + usuario;
     return this.http.get(url)
       .map(res => res.json())
   }
+
   // ALTERAR USUARIO (USERINFO)
   verificaUsuarioExiste(usuario) {
     var url = 'http://' + this.core.ipDaApi + '/usernameInfo?user=' + usuario;
@@ -49,21 +53,23 @@ export class DadosDeUsuarioService {
     return this.http.get(url, {headers: headers})
       .map(res => res.json())
   }
+
   gerarTokken(user, pass) {
     const url = 'http://' + this.core.ipDaApi + '/login';
     const json = JSON.stringify(
       {
-        user : user,
-        password : pass
+        user: user,
+        password: pass
       }
     );
-    const params =  json;
+    const params = json;
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.post(url, params, { headers: headers })
+    return this.http.post(url, params, {headers: headers})
       .map(res => res.json());
   }
+
   logar(): any {
     var url = 'http://' + this.core.ipDaApi + '/session';
     var headers = new Headers();
@@ -71,6 +77,7 @@ export class DadosDeUsuarioService {
     return this.http.get(url, {headers: headers})
       .map(res => res.json());
   }
+
   verificaUsuarioAutenticado() {
     if (this.getCookieTokken()) {
       var url = 'http://' + this.core.ipDaApi + '/session';
@@ -79,31 +86,34 @@ export class DadosDeUsuarioService {
       return this.http.get(url, {headers: headers})
         .map(res => res.json())
         .subscribe((res) => {
-            ('Autenticado');
-            return true;
-          }, error => {
-            ('Fazendo logout');
-            // this.logout();
-            return false;
-          });
+          ('Autenticado');
+          return true;
+        }, error => {
+          ('Fazendo logout');
+          // this.logout();
+          return false;
+        });
     } else {
       ('Fazendo logout');
       this.logout();
       return false;
     }
   }
+
   verificaEmailExiste(email) {
     var url = 'http://' + this.core.ipDaApi + '/emailExists/?user=' + email;
     const headers = new Headers();
     return this.http.get(url, {headers: headers})
       .map(res => res.json())
   }
+
   recuperarDadosDeUsuario() {
     const url = 'http://' + this.core.ipDaApi + '/user';
     const headers = new Headers();
     headers.append('Authorization', 'Bearer ' + this.getCookieTokken());
     return this.http.get(url, {headers: headers}).toPromise();
   }
+
   alterarDadosDeUsuario(name, username, img, email) {
     const url = 'http://' + this.core.ipDaApi + '/session/change';
 
@@ -124,6 +134,7 @@ export class DadosDeUsuarioService {
     return this.http.put(url, params, {headers: headers})
       .map(res => res.json());
   }
+
   alterarSenhaDeUsuario(oldpass, newpass) {
     var url = 'http://' + this.core.ipDaApi + '/session/changepassword';
     var json = JSON.stringify(
@@ -140,6 +151,7 @@ export class DadosDeUsuarioService {
     return this.http.put(url, params, {headers: headers})
       .map(res => res.json())
   }
+
   autenticacao(tokken) {
     var url = 'http://' + this.core.ipDaApi + '/authentication';
     var headers = new Headers();
@@ -147,12 +159,11 @@ export class DadosDeUsuarioService {
     return this.http.get(url, {headers: headers})
       .map(res => res.json());
   }
+
   logout() {
     document.cookie = 'tokken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     this.router.navigate(['/home']);
   }
-
-
 
 
 }
