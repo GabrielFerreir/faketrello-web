@@ -14,8 +14,6 @@ export class PopupConfirmacaoService {
       this.titulo = titulo;
       this.mensagem = mensagem;
       this.id = id;
-      console.log("ID:");
-      console.log(id);
     }
   }
   fechaPopUpConfirmacao() {

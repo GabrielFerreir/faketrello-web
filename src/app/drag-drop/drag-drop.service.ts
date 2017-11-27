@@ -123,7 +123,6 @@ export class DragDropService {
   }
 
   getPosInicial(event) {
-    // console.log(event);
     if (event.button === 0 || event.touches) {
       if (event.target.className === 'elemento') {
         this.bloco = event.target;
@@ -219,8 +218,6 @@ export class DragDropService {
     if (event.button === 0 || event.touches) {
       clearTimeout(this.longClickInterval);
       if (!this.started && this.bloco) {
-        console.log(this.bloco);
-        console.log('Abre')
         this.onOptionsTasks(this.bloco.id);
       }
 
@@ -308,7 +305,6 @@ getScrollY()
 //         this.scrollMove['X'] += 5;
 //         clearInterval(this.intervalPrev);
 //         this.intervalNext = setInterval(() => {
-//           console.log('Entrou interval');
 //           dragdrop.scrollBy(5, 0);
 //           this.scrollMove['X'] += 5;
 //           if (this.getScrollX() >= dragdrop.scrollWidth - dragdrop.clientWidth) {
@@ -382,7 +378,6 @@ doScroll(parm) {
         if (!this.roll) {
           this.roll = true;
           this.intervalScroll = setInterval(() => {
-            console.log(this.caixaDestino());
             this.caixaDestino().scrollBy(0, -5);
             this.scrollMove['Y'] -= 5;
             if (this.currentPosition['Y'] < top || this.currentPosition['Y'] > top + sizeScrollY) {
@@ -606,11 +601,9 @@ addBloco()
   return this.http.post(url, params, {headers: headers})
     .map(res => res.json())
     .subscribe((res) => {
-      console.log(res);
       // BUSCA OS BLOCOS NOVAMENTE
       this.projects.searchBlocks(this.idProjeto)
         .subscribe((res) => {
-          console.log(res);
           this.blocks = res;
           this.situacaoAddBloco = false;
           this.nomeAddBloco = '';
@@ -623,7 +616,6 @@ addBloco()
           console.error(error);
         });
     }, error => {
-      console.log(error);
     });
 }
 
@@ -644,14 +636,12 @@ changeBlock(event)
   headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
   return this.http.put(url, params, {headers: headers})
     .subscribe((res) => {
-      console.log(res);
       this.socket.emit('changeTask', {
         idProject: this.idProjeto
       });
       this.snackbar.inserirSnackbar('Bloco alterado com sucesso!');
       this.notificationService.searchNotification();
     }, error => {
-      console.log(error);
     });
 }
 
@@ -682,12 +672,10 @@ addTarefa()
 
   return this.http.post(url, params, {headers: headers})
     .subscribe((res) => {
-      console.log(res);
       this.addElemento = false;
       // BUSCA OS BLOCOS NOVAMENTE
       this.projects.searchBlocks(this.idProjeto)
         .subscribe((res) => {
-          console.log(res);
           this.blocks = res;
           this.nomeTarefa = '';
           this.dataTarefa = '';
@@ -738,10 +726,8 @@ deletarBloco(idblock)
   return this.http.delete(url, {headers: headers})
     .map(res => res.json())
     .subscribe((res) => {
-      console.log(res);
       this.projects.searchBlocks(this.idProjeto)
         .subscribe((res) => {
-          console.log(res);
           this.blocks = res;
           this.socket.emit('changeTask', {
             idProject: this.idProjeto
@@ -749,10 +735,8 @@ deletarBloco(idblock)
           this.snackbar.inserirSnackbar('Bloco deletado com sucesso!');
           this.notificationService.searchNotification();
         }, error => {
-          console.log(error);
         });
     }, error => {
-      console.log(error);
     });
 }
 
@@ -768,10 +752,8 @@ onOptionsTasks(idTasks)
   this.getInfoOptionsTasks(idTasks)
     .subscribe((res) => {
       this.infoOptionTask = res;
-      console.log(res);
 
     }, error => {
-      console.log(error);
     }, () => {
       setTimeout(() => {
         const textarea = document.querySelectorAll('textarea');
@@ -815,12 +797,10 @@ newCommentTask()
           this.infoOptionTask = res;
           this.projects.searchBlocks(this.idProjeto)
             .subscribe((res) => {
-              console.log(res);
               this.blocks = res;
               this.snackbar.inserirSnackbar('Comentario adicionado com sucesso!');
               this.notificationService.searchNotification();
             }, error => {
-              console.log(error);
             })
           this.socket.emit('changeTask', {
             idProject: this.idProjeto
@@ -828,7 +808,6 @@ newCommentTask()
         }, error => {
         });
     }, error => {
-      console.log(error);
     }, () => {
       this.addComment = '';
       setTimeout(() => {
@@ -851,19 +830,16 @@ delCommentTask(idComment)
   return this.http.delete(url, {headers: headers})
     .map(res => res.json())
     .subscribe((res) => {
-      console.log(res);
       this.addComment = '';
       this.getInfoOptionsTasks(this.idTask)
         .subscribe((res) => {
           this.infoOptionTask = res;
           this.projects.searchBlocks(this.idProjeto)
             .subscribe((res) => {
-              console.log(res);
               this.blocks = res;
               this.snackbar.inserirSnackbar('Comentario deletado com sucesso!');
               this.notificationService.searchNotification();
             }, error => {
-              console.log(error);
             })
           this.socket.emit('changeTask', {
             idProject: this.idProjeto
@@ -871,7 +847,6 @@ delCommentTask(idComment)
         }, error => {
         });
     }, error => {
-      console.log(error);
     }, () => {
       setTimeout(() => {
         const textarea = document.querySelectorAll('textarea');
@@ -897,14 +872,12 @@ changeCommentTask(comment, idComent)
   headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
   return this.http.put(url, params, {headers: headers})
     .subscribe((res) => {
-      console.log(res);
       this.socket.emit('changeTask', {
         idProject: this.idProjeto
       });
       this.snackbar.inserirSnackbar('Comentario alterado com sucesso!');
       this.notificationService.searchNotification();
     }, error => {
-      console.log(error);
     });
 }
 
@@ -1220,11 +1193,9 @@ delTask()
             idProject: this.idProjeto
           });
         }, error => {
-          console.log(error);
         });
 
     }, error => {
-      console.log(error);
     });
 }
 
@@ -1245,17 +1216,14 @@ delAttachment(id)
   return this.http.delete(url, {headers: headers})
     .map(res => res.json())
     .subscribe((res) => {
-      console.log(res);
       this.getInfoOptionsTasks(this.idTask)
         .subscribe((res) => {
           this.infoOptionTask = res;
           this.snackbar.inserirSnackbar('Anexo deletado com sucesso!');
           this.notificationService.searchNotification();
         }, error => {
-          console.log(error);
         });
     }, error => {
-      console.log(error);
     });
 }
 

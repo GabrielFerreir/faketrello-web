@@ -19,22 +19,19 @@ export class AutenticaComponent implements OnInit {
     this.dadosDeUsuarioService.autenticacao(this.id)
       .subscribe(
         data => {
-          console.log('Autenticado');
           this.mensagem = "Usuario Autenticado";
           setTimeout(() => {
             this.router.navigate(['/main']);
           }, 5000);
         },
         error => {
-          // console.log(error);
-          this.mensagem = "Erro ao Autenticar Usuario";
+          this.mensagem = 'Erro ao Autenticar Usuario';
         },
       );
 
   }
 
   ngOnInit() {
-    console.log(this.id);
 
   }
 

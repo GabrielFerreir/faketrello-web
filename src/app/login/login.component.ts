@@ -97,7 +97,6 @@ export class LoginComponent implements OnInit {
       .subscribe(
         data => {
           this.tokken = data;
-          // console.log(this.tokken.token);
 
           this.codeStatusSenha = '200';
           this.dadosService.criarCookie(this.tokken.token);
@@ -108,7 +107,6 @@ export class LoginComponent implements OnInit {
             .subscribe((res) => {
                 this.mensagemUsuario = res;
               }, error => {
-                // console.log(error),
               },
               () => {
                 this.router.navigate(['/main']);

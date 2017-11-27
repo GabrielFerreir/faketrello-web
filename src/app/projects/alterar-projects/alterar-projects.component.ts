@@ -49,7 +49,6 @@ export class AlterarProjectsComponent implements OnInit {
     this.dadossDeUsuario.recuperarDadosDeUsuario()
       .then(res => {
         this.idUser = res.json();
-        console.log(this.idUser)
         this.idUser = this.idUser.id_user;
       })
       .catch();
@@ -57,8 +56,6 @@ export class AlterarProjectsComponent implements OnInit {
     setTimeout(() => {
       this.name = this.projects.project.namep;
       this.descri = this.projects.project.descrip;
-      console.log(this.name)
-      console.log(this.descri)
     }, 100);
 
     document.addEventListener('mousedown', (e) => {
@@ -67,7 +64,6 @@ export class AlterarProjectsComponent implements OnInit {
 
     window.addEventListener('resize', (e) => {
       this.closeMenuUser();
-      console.log('resize')
     });
   }
 
@@ -79,11 +75,9 @@ export class AlterarProjectsComponent implements OnInit {
   }
 
   previewFile(el) {
-    console.log(el)
     const reader = new FileReader();
     reader.onloadend = (e) => {
       this.img64 = reader.result;
-      console.log(this.img64);
     }
     if (el) {
       reader.readAsDataURL(el.files[0]);
@@ -98,12 +92,7 @@ export class AlterarProjectsComponent implements OnInit {
     elem.focus();
     const pai = document.querySelector('.all');
     const posEl = elem.getBoundingClientRect().y + pai.scrollTop;
-    console.log(elem.getBoundingClientRect().y);
-    console.log(pai.scrollTop);
     pai.scrollTo(0, posEl);
-
-    // console.log(header);
-    // console.log(posEl);
   }
 
   input() {
@@ -115,10 +104,8 @@ export class AlterarProjectsComponent implements OnInit {
   //   const membros = document.querySelector('.membros');
   //   const resSearch = document.querySelector('#resSearch');
   // if (value.length > 0) {
-  //   //   console.log(offResSearch);
   //     resSearch.setAttribute('style', 'display: block');
   //     membros.setAttribute('style', 'display: none');
-  //     console.log(resSearch);
   //
   // } else {
   //   resSearch.setAttribute('style', 'display: none');
@@ -149,7 +136,6 @@ export class AlterarProjectsComponent implements OnInit {
   }
 
   teste() {
-    console.log('TESTE');
   }
 
 }

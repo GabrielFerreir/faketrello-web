@@ -103,16 +103,13 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
     }
   }
   verificaUsername(){
-    console.log('Tá chamando');
     if(this.alterar.username != this.userName) {
       this.dadosDoUsuario.verificaUsuarioExiste(this.alterar.username)
         .subscribe((res) => {
-          console.log(res);
           this.codeSatusUsername = '409';
           this.errorUsername = 'Esse usuario já está sendo usado';
           return false;
         }, error => {
-        console.log('Usuario não está em uso')
           this.codeSatusUsername = '200';
           this.errorUsername = '';
           return true;
@@ -166,17 +163,13 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
         .subscribe(
           data => {
             this.snackbarService.inserirSnackbar('Dados modificados com sucesso!');
-            console.log('Faça o login novamente');
-            console.log(data.token);
             this.dadosDoUsuario.criarCookie(data.token);
             this.dadosDoUsuario.logar();
           },
           error => {
-            console.log(error);
           }
         );
     } else {
-        console.log(this.CondVerificaEmail && this.vericaNome() && this.verificaUsername());
     }
 
 

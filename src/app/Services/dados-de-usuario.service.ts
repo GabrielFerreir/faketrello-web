@@ -18,18 +18,18 @@ export class DadosDeUsuarioService {
     // tokken = tokken.substring(1, tokken.length - 1);
     var tokkenCompleto = 'Bearer ' + tokken;
     document.cookie = 'tokken=Bearer ' + tokken + '; expires=' + data.toUTCString() + '; path=/';
-    console.log('Criou o cookie');
-    // console.log(this.getCookieTokken());
+    ('Criou o cookie');
+    // (this.getCookieTokken());
   }
   getCookieTokken() {
     try {
       var cookie = document.cookie.split('tokken=');
       cookie = cookie[1].split(';');
       var tokkenCookie = cookie[0];
-      // console.log('Pegou o cookie')
-      // console.log(tokkenCookie);
+      // ('Pegou o cookie')
+      // (tokkenCookie);
     } catch (e) {
-      // console.log('Efetue o login')
+      // ('Efetue o login')
       // this.router.navigate(['/home']);
     }
     return tokkenCookie;
@@ -79,15 +79,15 @@ export class DadosDeUsuarioService {
       return this.http.get(url, {headers: headers})
         .map(res => res.json())
         .subscribe((res) => {
-            console.log('Autenticado');
+            ('Autenticado');
             return true;
           }, error => {
-            console.log('Fazendo logout');
+            ('Fazendo logout');
             // this.logout();
             return false;
           });
     } else {
-      console.log('Fazendo logout');
+      ('Fazendo logout');
       this.logout();
       return false;
     }

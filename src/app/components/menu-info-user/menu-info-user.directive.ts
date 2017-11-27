@@ -69,7 +69,6 @@ export class MenuInfoUserDirective implements ngAfterViewInit{
         }
 
         if (rootNode.clientWidth && rootNode.classList != 'opPerfil on') {
-          // console.log(rootNode);
           rootNode.classList = 'opPerfil on';
 
         }
@@ -77,11 +76,7 @@ export class MenuInfoUserDirective implements ngAfterViewInit{
     }
 
     close(e) {
-    // console.log(this.elementRef.nativeElement);
-    // console.log(e);
-
       if (this.viewContainerRef.length) {
-        console.log('Sumiu');
         const viewRef = this.viewRef;
 
         viewRef.rootNodes.forEach(rootNode => {

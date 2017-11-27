@@ -55,24 +55,18 @@ export class MainComponent implements OnInit {
       return this.http.get(url, {headers: headers})
         .map(res => res.json())
         .subscribe((res) => {
-          // console.log(res)
           }, error => {
-            // console.log(error),
-            // console.log('Tokken incorreto!')
             this.router.navigate(['/']);
           },
           () => {
-            // console.log('Logado')
           })
     }
   }
 
   logout() {
-    // console.log('Entrou')
     document.cookie = "tokken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     this.router.navigate(['/']);
   }
   clicou() {
-    console.log('Clicou');
   }
 }

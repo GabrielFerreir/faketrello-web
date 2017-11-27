@@ -32,7 +32,6 @@ export class AutenticacaoComponent implements OnInit {
   }
 
   fecha() {
-    console.log('fecha');
     this.autenticacao.nativeElement.style = 'display: none';
   }
 
@@ -58,7 +57,6 @@ export class AutenticacaoComponent implements OnInit {
           this.snackbarService.inserirSnackbar('Email enviado com sucesso!');
         },
         error => {
-          console.log(error);
         });
 
   }
