@@ -132,12 +132,12 @@ app-arrow-back {
   }
 
   .container .image .addImageUser {
-    width: 60px;
-    height: 60px;
-    top: 8px;
-    line-height: 60px;
+    width: 24px;
+    height: 24px;
+    top: 16px;
+    line-height: 24px;
     left: auto;
-    right: 8px;
+    right: 16px;
     color: #FAFAFA;
     background-color: transparent;
     box-shadow: none;
