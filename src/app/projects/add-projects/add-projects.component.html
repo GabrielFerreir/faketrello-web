@@ -23,20 +23,21 @@
         <div class="relative">
           <textarea [(ngModel)]="descricao" #HTMLDescricao class="textFieldsMult" id="descricao"
                     (blur)="inputs()"
-                    (keyup)="dragDropService.autoHeight($event.target)" rows="1"
+                    rows="1"
           ></textarea>
           <label class="labelTextMult" for="descricao">Descrição</label>
         </div>
       </div>
+
+      <section class="button">
+        <button class="denseButton fullwidth" (click)="criarProject()">CADASTRAR</button>
+      </section>
+
     </div>
   </section>
 
 <section class="background"></section>
 
-
-<section class="floatingButton" (click)="criarProject()">
-  <i class="material-icons">save</i>
-</section>
 
 <app-arrow-back (click)="projects.fechaAddProjets(null)"></app-arrow-back>
 
