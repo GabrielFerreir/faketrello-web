@@ -254,7 +254,7 @@ header .checkNav:checked ~ nav {
 
 .container {
   width: 100vw;
-  height: calc(100vh - 48px);
+  min-height: calc(100vh - 48px);
   background-color: #EEE;
   position: absolute;
   /*z-index: 0;*/
