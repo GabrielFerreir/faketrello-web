@@ -115,7 +115,7 @@ export class DragDropService {
   setTamanhos() {
 
     this.sizes = {
-      widthCaixa: document.querySelectorAll('.caixa')[0].clientWidth,
+      widthCaixa: document.querySelectorAll('.caixa') && document.querySelectorAll('.caixa').length > 0 ? document.querySelectorAll('.caixa')[0].clientWidth : 0,
       widthDragdrop: document.querySelector('#dragDrop').clientWidth,
       heightDragdrop: document.querySelector('#dragDrop').clientHeight
     }
