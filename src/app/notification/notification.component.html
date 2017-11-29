@@ -63,7 +63,7 @@
     <section class="text" *ngIf="notification.type == 3 && notification.targettype == 4">{{ notification.nameuser }}
       deletou uma lista na <b>{{ notification.nametask}}</b> no bloco <b>{{ notification.nameblock}}</b> em <b>{{
         notification.nameproject}}</b></section>
-    <section class="text" *ngIf="notification.type == 3 && notification.targettype == 4">{{ notification.nameuser }}
+    <section class="text" *ngIf="notification.type == 3 && notification.targettype == 5">{{ notification.nameuser }}
       deletou um anexo na <b>{{ notification.nametask}}</b> no bloco <b>{{ notification.nameblock}}</b> em <b>{{
         notification.nameproject}}</b></section>
 
@@ -93,7 +93,6 @@
       }}</b> saiu do projeto
     </section>
 
-
     <section class="text" *ngIf="notification.type == 9 && notification.targettype == 6"><b>{{ notification.nameuser
       }}</b> promoveu <b>{{ notification.namenewuser }}</b> em <b>{{ notification.nameproject}}</b></section>
 
@@ -116,7 +115,7 @@
   </section>
 
 
-  <section class="vejaMais" *ngIf="!service?.userNotification || service?.userNotification?.length != 0">
+  <section routerLink="/notification" class="vejaMais" *ngIf="!service?.userNotification || service?.userNotification?.length != 0">
     Ver todas
   </section>
 

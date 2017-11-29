@@ -1,9 +1,11 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {DadosDeUsuarioService} from "../Services/dados-de-usuario.service";
-import {CoreService} from "../Services/core.service";
-import {Http, Headers} from "@angular/http";
-import {NotificationService} from "./notification.service";
+import {DadosDeUsuarioService} from '../Services/dados-de-usuario.service';
+import {CoreService} from '../Services/core.service';
+import {Http, Headers} from '@angular/http';
+import {NotificationService} from './notification.service';
 import { DatePipe } from '@angular/common';
+import {Router} from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-notification',
@@ -15,6 +17,7 @@ export class NotificationComponent implements OnInit {
   @ViewChild('arrowBack') arrowBack: ElementRef;
 
   constructor(private http: Http,
+              router: Router,
               private dados: DadosDeUsuarioService,
               private core: CoreService,
               private service: NotificationService) {
@@ -26,11 +29,14 @@ export class NotificationComponent implements OnInit {
     document.addEventListener('mousedown', (event) => {
       this.hiddenNotification(event);
     });
-    this.service.searchNotification();
+    this.service.searchNotification(false);
   }
 
   hiddenNotification(event) {
-    if (event.target.className != 'notificacao' && event.target.parentNode.className != 'notificacao' && this.service.visibility === true) {
+    console.log(event.target.className)
+    console.log(event.target.className != 'notificacao' && event.target.parentNode.className != 'notificacao' && event.target.parentNode.className != 'vejaMais'  && this.service.visibility === true)
+
+    if (event.target.className != 'vejaMais' && this.service.visibility === true) {
       this.service.visibility = false;
       this.service.hiddenVisibility();
     }

@@ -8,6 +8,7 @@ export class NotificationService {
   visibility: boolean;
   notification: ElementRef;
   userNotification;
+  userNotificationAll;
   arrowBack: ElementRef
 
   constructor(private http: Http,
@@ -43,14 +44,28 @@ export class NotificationService {
   }
 
   searchNotification() {
-    var url = 'http://' + this.core.ipDaApi + '/user/notifications';
-    var headers = new Headers();
+    const url = 'http://' + this.core.ipDaApi + '/user/notifications?all=false';
+    const headers = new Headers();
     headers.append('Authorization', 'Bearer ' + this.dados.getCookieTokken());
     return this.http.get(url, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
         console.log(res);
         this.userNotification = res;
+      }, error => {
+        console.log(error);
+      });
+  }
+
+  searchNotificationAll() {
+    const url = 'http://' + this.core.ipDaApi + '/user/notifications?all=true';
+    const headers = new Headers();
+    headers.append('Authorization', 'Bearer ' + this.dados.getCookieTokken());
+    return this.http.get(url, {headers: headers})
+      .map(res => res.json())
+      .subscribe((res) => {
+        console.log(res);
+        this.userNotificationAll = res;
       }, error => {
         console.log(error);
       });

@@ -15,6 +15,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AlterarSenhaDeUsuarioComponent} from './alterar-senha-de-usuario/alterar-senha-de-usuario.component';
 import { AlterarProjectsComponent } from './projects/alterar-projects/alterar-projects.component';
 import {DragDropComponent} from './drag-drop/drag-drop.component';
+import { AllNotificationComponent } from "./notification/all-notification/all-notification.component";
 
 
 const APP_ROUTES: Routes = [
@@ -59,6 +60,7 @@ const APP_ROUTES: Routes = [
           // }
         },
       {path: 'project/:id', component: DragDropComponent},
+      {path: 'notification', component: AllNotificationComponent}
 
     ]},
    {path: 'home', component: HomeComponent},
