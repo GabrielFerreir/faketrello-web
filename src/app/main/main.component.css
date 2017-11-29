@@ -1,22 +1,31 @@
 @keyframes notificacao {
-    0% {transform: rotate(0deg);}
-    25% {transform: rotate(5deg);}
-    50% {transform: rotate(0deg);}
-    100% {transform: rotate(-5deg);}
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-5deg);
+  }
 }
 
 header {
   width: 100vw;
   height: 56px;
   background-color: #006064;
-  box-shadow: 0px 0px 4px rgba(0,0,0,.14),
-              0px 3px 4px rgba(0,0,0,.12),
-              0px 1px 5px rgba(0,0,0,.20);
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, .14),
+  0px 3px 4px rgba(0, 0, 0, .12),
+  0px 1px 5px rgba(0, 0, 0, .20);
   user-select: none;
   box-sizing: border-box;
   position: absolute;
   z-index: 24;
 }
+
 .hamburger, .inverseHamburger {
   float: left;
   width: 48px;
@@ -26,16 +35,19 @@ header {
   border-radius: 50%;
   text-align: center;
 }
+
 .hamburger:hover {
-  background-color: rgba(255,255,255,0.14)
+  background-color: rgba(255, 255, 255, 0.14)
 }
 
 .inverseHamburger:hover {
-  background-color: rgba(0,0,0,0.14);
+  background-color: rgba(0, 0, 0, 0.14);
 }
+
 .hamburger img, .inverseHamburger img {
   margin-top: 12px;
 }
+
 .campoDePesquisa {
   position: absolute;
   background-image: url("../../assets/search.svg");
@@ -44,14 +56,16 @@ header {
   padding-left: 35px;
   font-size: 18px;
   color: #f4f4f4;
-   height:24px;
-   background-color: transparent;
-   outline:none; min-width:150px;
-   max-width:30%;
-   margin-left:5px;
-   margin-top:17px;
-   border:none
+  height: 24px;
+  background-color: transparent;
+  outline: none;
+  min-width: 150px;
+  max-width: 30%;
+  margin-left: 5px;
+  margin-top: 17px;
+  border: none
 }
+
 .campoDePesquisa ~ label {
   position: absolute;
   font-size: 16px;
@@ -59,6 +73,7 @@ header {
   left: 110px;
   color: #f4f4f4;
 }
+
 nav {
   display: block;
   position: absolute;
@@ -66,16 +81,18 @@ nav {
   left: -320px;
   min-height: 100vh;
   background-color: #F5F5F5;
-  box-shadow: 8px 0px 10px rgba(0,0,0,.14),
-              3px 0px 14px rgba(0,0,0,.12),
-              4px 0px 15px rgba(0,0,0,.20);
+  box-shadow: 8px 0px 10px rgba(0, 0, 0, .14),
+  3px 0px 14px rgba(0, 0, 0, .12),
+  4px 0px 15px rgba(0, 0, 0, .20);
   transition: All 480ms ease-in;
   z-index: 24;
 }
+
 nav ul {
   list-style: none;
   margin-top: 50px;
 }
+
 nav li {
   width: calc(90%);
   height: 40px;
@@ -87,20 +104,23 @@ nav li {
   margin: 5px 5%;
   display: flex;
   overflow: hidden;
-  box-shadow: 0px 0px 4px rgba(0,0,0,.14),
-              0px 3px 4px rgba(0,0,0,.12),
-              0px 1px 5px rgba(0,0,0,.20);
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, .14),
+  0px 3px 4px rgba(0, 0, 0, .12),
+  0px 1px 5px rgba(0, 0, 0, .20);
 }
+
 nav li:hover {
-  background-color: rgba(255,255,255,0.14);
+  background-color: rgba(255, 255, 255, 0.14);
   transition: All 280ms ease-in
 }
+
 nav li span {
   float: left;
   width: 80%;
   text-align: center;
 
 }
+
 nav li .img {
   float: left;
   width: 20%;
@@ -114,6 +134,7 @@ nav li .img {
 nav li .img img {
   width: 100%;
 }
+
 nav ul .titulo {
   background-color: transparent;
   color: #757575;
@@ -127,6 +148,7 @@ nav ul .titulo {
   text-transform: uppercase;
   box-shadow: none;
 }
+
 /*nav li:last-child {
   width: calc(100% - 50px);
   position: absolute;
@@ -149,9 +171,11 @@ nav ul .titulo {
   border-radius: 50px;
   text-transform: capitalize;
 }
+
 .perfil:hover {
-  background-color: rgba(255,255,255,0.14);
+  background-color: rgba(255, 255, 255, 0.14);
 }
+
 .perfil .img {
   width: 36px;
   height: 36px;
@@ -163,6 +187,7 @@ nav ul .titulo {
   line-height: 36px;
   float: right;
 }
+
 .perfil span {
   float: left;
   /*min-width: 100px;*/
@@ -172,11 +197,11 @@ nav ul .titulo {
   color: #FFF;
 }
 
-
 header .checkPerfil:checked ~ .opPerfil {
-    transform: scale(1);
-    transition: All 480ms ease-out;
+  transform: scale(1);
+  transition: All 480ms ease-out;
 }
+
 header .checkNav:checked ~ nav {
   display: block;
   position: absolute;
@@ -196,8 +221,9 @@ header .checkNav:checked ~ nav {
   cursor: pointer;
   position: relative;
 }
+
 .notificacoes:hover {
-  background-color: rgba(255,255,255,.14);
+  background-color: rgba(255, 255, 255, .14);
 }
 
 .notificacoes img {
@@ -209,11 +235,13 @@ header .checkNav:checked ~ nav {
   cursor: pointer;
   transition: All 100ms ease-out;
 }
+
 .notificacoes img:hover {
   animation-name: notificacao;
   animation-duration: 300ms;
   animation-iteration-count: infinite;
 }
+
 .notificacoes .qtdNotificacoes {
   width: 8px;
   height: 8px;
@@ -223,6 +251,7 @@ header .checkNav:checked ~ nav {
   top: 8px;
   right: 8px;
 }
+
 .container {
   width: 100vw;
   height: calc(100vh - 48px);
@@ -236,6 +265,7 @@ header .checkNav:checked ~ nav {
   .perfil span {
     display: none;
   }
+
   .perfil {
     min-width: auto;
   }
