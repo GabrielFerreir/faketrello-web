@@ -173,7 +173,7 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
             this.snackbarService.inserirSnackbar('Dados modificados com sucesso!');
             // this.dadosDoUsuario.criarCookie(data.token);
             // this.dadosDoUsuario.logar();
-            // this.dadosDoUsuario.recuperarDadosDeUsuario()
+            this.dadosDoUsuario.recuperarDadosDeUsuario();
           },
           error => {
             console.log(error);
