@@ -54,6 +54,7 @@ export class AlterarProjectsComponent implements OnInit {
 
     document.addEventListener('mousedown', (e) => {
       this.closeMenuUser();
+      this.closeChangeProjects(e);
     });
 
     window.addEventListener('resize', (e) => {
@@ -129,7 +130,10 @@ export class AlterarProjectsComponent implements OnInit {
     }
   }
 
-  teste() {
+  closeChangeProjects(event) {
+    if(event.target.className == 'background') {
+      this.projects.fechaDetailProject();
+    }
   }
 
 }

@@ -1,127 +1,3 @@
-<!--<section class="all">-->
-<!--<section class="left">-->
-<!--<input type="file" (change)="previewFile($event.target)" id="file" style="display: none;">-->
-
-<!--<div *ngIf="img64" class="imageUser" id="preview" [style.background-image]="'url('+ img64 +')'"></div>-->
-<!--<div *ngIf="projects?.project?.img != '/imgsProjects/default.png' && !img64" id="preview" class="imageUser"-->
-<!--[style.background-image]="'url('+ 'http://' + core.ipDaApi + projects?.project?.img +')'"></div>-->
-<!--<div *ngIf="projects?.project?.img == '/imgsProjects/default.png' && !img64" class="imageUser">-->
-<!--{{projects?.project?.namep.charAt(0) | uppercase }}-->
-<!--</div>-->
-<!--<div class="addImageUser" (click)="chamaFile()">+</div>-->
-
-<!--<div class="nome">-->
-<!--<input class="textFields" type="text" id="nome" value="{{ projects?.project?.namep }}"/>-->
-<!--&lt;!&ndash;<label class="labelText" for="nome" >{{ projects?.project?.namep }}</label>&ndash;&gt;-->
-<!--<div class="border"></div>-->
-<!--<label class="helperText"></label>-->
-<!--</div>-->
-
-<!--<div class="descricao">-->
-<!--<textarea class="textFieldsMult" id="descricao">{{ projects?.project?.descrip }}</textarea>-->
-<!--&lt;!&ndash;<label class="labelTextMult" for="descricao">{{ projects?.project?.descrip }}</label>&ndash;&gt;-->
-<!--</div>-->
-
-<!--</section>-->
-
-
-<!--<section class="right">-->
-
-
-<!--<span>Membros</span>-->
-<!--<div style="clear: both"></div>-->
-<!--<div class="pesquisa" style="position: relative; margin-bottom: 10px;">-->
-<!--<input type="checkbox" id="pesquisa">-->
-
-<!--<div class="div-campoDePesquisa" style="position: relative;">-->
-<!--<input type="text" id="campoPesquisa" class="textFields" (keyup)="projects.pesquisarMembros(id)"-->
-<!--(keyup)="OnResSearch()" (focus)="focus($event)" placeholder="Pesquisar"-->
-<!--[(ngModel)]="projects.campoDePesquisa"/>-->
-<!--<div class="border" style="width: 100%;"></div>-->
-<!--&lt;!&ndash;<label class="helperText"></label>&ndash;&gt;-->
-<!--</div>-->
-
-<!--<label for="pesquisa" class="fecharPesquisa" style="float: right; position: absolute; top: 0; right: 0;">-->
-<!--<img src="../../../assets/close.svg"/>-->
-<!--</label>-->
-
-<!--<label for="pesquisa" class="abrirPesquisa" style="float: right; position: absolute; top: 0; right: 0;">-->
-<!--<img src="../../../assets/search.svg"/>-->
-<!--</label>-->
-<!--</div>-->
-
-<!--<div id="resSearch" class="resSearch">-->
-<!--<div *ngFor="let membro of projects?.pesquisaMembros">-->
-
-<!--<div class="dado">-->
-<!--<div *ngIf="membro.imguser == '/imgsUser/default.png'" class="img">{{ membro.nameuser.charAt(0) | uppercase-->
-<!--}}-->
-<!--</div>-->
-<!--<div *ngIf="membro.imguser != '/imgsUser/default.png'"-->
-<!--[style.background-image]="'url('+ 'http://' + core.ipDaApi + membro.imguser +')'" class="img"></div>-->
-<!--<h1>{{ membro.nameuser }}</h1>-->
-<!--<h2>{{ membro.username }}</h2>-->
-<!--<div class="add" (click)="projects.addMembrosProject(membro.iduser, id)"></div>-->
-<!--</div>-->
-
-
-<!--</div>-->
-<!--</div>-->
-
-<!--<section class="membros">-->
-<!--<section class="scroll">-->
-<!--<div *ngFor="let membro of projects?.project?.team" style="position: relative">-->
-<!--<article class="membro">-->
-<!--<div *ngIf="membro.profile_img == '/imgsUser/default.png'" class="img">{{ membro.name.charAt(0) | uppercase-->
-<!--}}-->
-<!--</div>-->
-<!--<div *ngIf="membro.profile_img != '/imgsUser/default.png'"-->
-<!--[style.background-image]="'url('+ 'http://' + core.ipDaApi + membro.profile_img +')'"-->
-<!--class="img"></div>-->
-<!--<h1>{{ membro.name }}</h1>-->
-<!--<h2 *ngIf="membro.permissions">{{ membro.username + '(Administrador)' }}</h2>-->
-<!--<h2 *ngIf="!membro.permissions">{{ membro.username + '(Membro)' }}</h2>-->
-<!--&lt;!&ndash;<div *ngIf="!projects.project.loggeduserpermission && membro.id_user == idUser" class="more"></div>&ndash;&gt;-->
-<!--<div *ngIf="projects.project.loggeduserpermission || membro.id_user == idUser" class="more"></div>-->
-<!--<div class="opMoreOff">-->
-<!--<span *ngIf="membro.permissions && membro.id_user != idUser && projects?.project?.loggeduserpermission"-->
-<!--(click)="projects.permissaoUserProject(id, membro.id_user)">Rebaixar Membro</span>-->
-<!--<span *ngIf="!membro.permissions && membro.id_user != idUser && projects?.project?.loggeduserpermission"-->
-<!--(click)="projects.permissaoUserProject(id, membro.id_user)">Promover Membro</span>-->
-
-<!--<span *ngIf="membro.id_user == idUser" (click)="projects.sairUserProject(id)">Sair</span>-->
-<!--<span *ngIf="membro.id_user != idUser && projects?.project?.loggeduserpermission"-->
-<!--(click)="projects.delUserProject(id, membro.id_user)">Deletar Membro</span>-->
-<!--</div>-->
-
-<!--</article>-->
-<!--</div>-->
-
-
-<!--</section>-->
-<!--</section>-->
-
-<!--</section>-->
-
-
-<!--<div class="botoes">-->
-
-<!--<button-->
-<!--(click)="projects.fechaDetailProject()"-->
-<!--class="denseButton btnAlterar"-->
-<!--#HTMLAlterar>-->
-<!--ALTERAR-->
-<!--</button>-->
-<!--<button-->
-<!--(click)="projects.fechaDetailProject()"-->
-<!--class="denseButton btnVoltar"-->
-<!--#HTMLVoltar>-->
-<!--VOLTAR-->
-<!--</button>-->
-<!--</div>-->
-
-<!--</section>-->
-
 <section class="container">
   <section class="images">
     <input type="file" (change)="previewFile($event.target)" id="file" style="display: none;">
@@ -198,11 +74,11 @@
   </section>
 
   <section class="buttons">
-    <button class="denseButton buttonTransparent" (click)="projects.changeProject(id, name, descri, img64)">SALVAR</button>
-    <button class="denseButton buttonTransparent" (click)="projects.fechaDetailProject()">CANCELAR</button>
+    <button class="denseButton fullwidth" (click)="projects.changeProject(id, name, descri, img64)">SALVAR</button>
   </section>
 
 </section>
+<section class="background"></section>
 <app-arrow-back (click)="projects.fechaDetailProject()"></app-arrow-back>
 
 
