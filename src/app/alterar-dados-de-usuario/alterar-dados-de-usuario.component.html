@@ -80,7 +80,7 @@
       <section class="campo">
         <section class="relative">
           <input #HTMLNome [(ngModel)]="dadosDoUsuario.dados.name"
-                 (blur)="chama; vericaNome()" type="text"
+                 (blur)="chama(); vericaNome()" type="text"
                  id="nome"
                  class="textFields"/>
           <label class="labelText" for="nome">Nome</label>
@@ -95,7 +95,7 @@
       <section class="campo">
         <section class="relative">
           <input #HTMLUsername [(ngModel)]="dadosDoUsuario?.dados.username"
-                 (blur)="chama; verificaUsername()"
+                 (blur)="chama(); verificaUsername()"
                  type="text"
                  id="username" class="textFields"/>
           <label class="labelText" for="username">Username</label>
