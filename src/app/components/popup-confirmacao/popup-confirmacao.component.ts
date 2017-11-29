@@ -13,9 +13,19 @@ export class PopupConfirmacaoComponent implements OnInit {
               private project: ProjectsServiceService) { }
 
   ngOnInit() {
+
+
+    document.addEventListener('mousedown', (e) => {
+      this.closeChangeProjects(e);
+    });
+
   }
 
-
+  closeChangeProjects(event) {
+    if(event.target.className == 'background') {
+      this.service.fechaPopUpConfirmacao();
+    }
+  }
 
 
 
