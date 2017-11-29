@@ -14,8 +14,6 @@ export class DadosDeUsuarioService {
 
   dados;
 
-  dadosDeUsuario;
-
   criarCookie(tokken) {
     var data = new Date();
     data.setTime(data.getTime() + (24 * 60 * 60 * 1000))
@@ -89,14 +87,14 @@ export class DadosDeUsuarioService {
       return this.http.get(url, {headers: headers})
         .map(res => res.json())
         .subscribe((res) => {
-          console.log('Autenticado');
+          // console.log('Autenticado');
           return true;
         }, error => {
           // this.logout();
           return false;
         });
     } else {
-      console.log('Fazendo logout');
+      // console.log('Fazendo logout');
       this.logout();
       return false;
     }
@@ -118,9 +116,9 @@ export class DadosDeUsuarioService {
       .map(res => res.json())
       .subscribe((res) => {
           this.dados = res;
-          console.log(this.dados);
+          // console.log(this.dados);
         }, error => {
-          console.log(error);
+          // console.log(error);
         },
         () => {
         });
@@ -138,7 +136,7 @@ export class DadosDeUsuarioService {
       }
     );
 
-    console.log(json)
+    // console.log(json)
 
     const params = json;
 

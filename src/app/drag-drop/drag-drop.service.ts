@@ -885,21 +885,21 @@ export class DragDropService {
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
     return this.http.put(url, params, {headers: headers})
       .subscribe((res) => {
-        console.log(res);
+        // console.log(res);
         this.projects.searchBlocks(this.idProjeto)
           .subscribe((res) => {
-            console.log(res);
+            // console.log(res);
             this.blocks = res;
             this.snackbar.inserirSnackbar('Tarefa alterada com sucesso!');
             this.notificationService.searchNotification();
           }, error => {
-            console.log(error);
+            // console.log(error);
           })
         this.socket.emit('changeTask', {
           idProject: this.idProjeto
         });
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -910,11 +910,11 @@ export class DragDropService {
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
     return this.http.put(url, null, {headers: headers})
       .subscribe((res) => {
-        console.log(res.json());
+        // console.log(res.json());
         this.snackbar.inserirSnackbar('Checklist foi ' + res.json().result + ' com sucesso!');
         this.notificationService.searchNotification();
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -937,10 +937,10 @@ export class DragDropService {
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
     return this.http.post(url, params, {headers: headers})
       .subscribe((res) => {
-        console.log(res);
+        // console.log(res);
         this.getInfoOptionsTasks(this.idTask)
           .subscribe((res) => {
-            console.log(res);
+            // console.log(res);
             this.infoOptionTask = res;
             this.snackbar.inserirSnackbar('Checklist criada com sucesso!');
             this.notificationService.searchNotification();
@@ -949,7 +949,7 @@ export class DragDropService {
             this.addNewChecklist = '';
           });
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -963,7 +963,7 @@ export class DragDropService {
     return this.http.delete(url, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
-        console.log(res);
+        // console.log(res);
         this.addComment = '';
         this.getInfoOptionsTasks(this.idTask)
           .subscribe((res) => {
@@ -973,7 +973,7 @@ export class DragDropService {
           }, error => {
           });
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -991,11 +991,11 @@ export class DragDropService {
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
     return this.http.put(url, params, {headers: headers})
       .subscribe((res) => {
-        console.log(res);
+        // console.log(res);
         this.snackbar.inserirSnackbar('Checklist alterada com sucesso!');
         this.notificationService.searchNotification();
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -1015,7 +1015,7 @@ export class DragDropService {
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
     return this.http.post(url, params, {headers: headers})
       .subscribe((res) => {
-        console.log(res);
+        // console.log(res);
         this.getInfoOptionsTasks(this.idTask)
           .subscribe((res) => {
             this.infoOptionTask = res;
@@ -1023,10 +1023,10 @@ export class DragDropService {
             this.notificationService.searchNotification();
 
           }, error => {
-            console.log(error);
+            // console.log(error);
           });
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -1040,19 +1040,19 @@ export class DragDropService {
     return this.http.delete(url, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
-        console.log(res);
+        // console.log(res);
         this.getInfoOptionsTasks(this.idTask)
           .subscribe((res) => {
             this.infoOptionTask = res;
             this.projects.searchBlocks(this.idProjeto)
               .subscribe((res) => {
-                console.log(res);
+                // console.log(res);
                 this.blocks = res;
                 this.snackbar.inserirSnackbar('Membro deletado com sucesso!');
                 this.notificationService.searchNotification();
 
               }, error => {
-                console.log(error);
+                // console.log(error);
               })
             this.socket.emit('changeTask', {
               idProject: this.idProjeto
@@ -1060,7 +1060,7 @@ export class DragDropService {
           }, error => {
           });
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -1077,19 +1077,19 @@ export class DragDropService {
     headers.append('Authorization', 'Bearer ' + this.usuarioService.getCookieTokken());
     return this.http.post(url, params, {headers: headers})
       .subscribe((res) => {
-        console.log(res);
+        // console.log(res);
         this.getInfoOptionsTasks(this.idTask)
           .subscribe((res) => {
             this.infoOptionTask = res;
             this.projects.searchBlocks(this.idProjeto)
               .subscribe((res) => {
-                console.log(res);
+                // console.log(res);
                 this.blocks = res;
                 this.snackbar.inserirSnackbar('Membro adicionado com sucesso!');
                 this.notificationService.searchNotification();
 
               }, error => {
-                console.log(error);
+                // console.log(error);
               })
             this.socket.emit('changeTask', {
               idProject: this.idProjeto
@@ -1099,7 +1099,7 @@ export class DragDropService {
             this.addNewChecklist = '';
           });
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -1121,7 +1121,7 @@ export class DragDropService {
 
 
       .subscribe((res) => {
-        console.log(res);
+        // console.log(res);
         this.socket.emit('changeTask', {
           idProject: this.idProjeto
         });
@@ -1129,7 +1129,7 @@ export class DragDropService {
         this.notificationService.searchNotification();
 
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -1138,10 +1138,10 @@ export class DragDropService {
       if (data.idProject === this.idProjeto) {
         this.projects.searchBlocks(this.idProjeto)
           .subscribe((res) => {
-            console.log(res);
+            // console.log(res);
             this.blocks = res;
           }, error => {
-            console.log(error);
+            // console.log(error);
           });
         this.notificationService.searchNotification();
       }
@@ -1158,10 +1158,10 @@ export class DragDropService {
     return this.http.delete(url, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
-        console.log(res);
+        // console.log(res);
         this.projects.searchBlocks(this.idProjeto)
           .subscribe((res) => {
-            console.log(res);
+            // console.log(res);
             this.blocks = res;
             this.offOptionsTasks();
             this.snackbar.inserirSnackbar('Tarefa deletada com sucesso!');

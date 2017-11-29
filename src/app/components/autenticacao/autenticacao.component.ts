@@ -25,15 +25,7 @@ export class AutenticacaoComponent implements OnInit {
   }
 
   ngOnInit() {
-  //   this.dadosDoUsuario.recuperarDadosDeUsuario()
-  //     .subscribe((res) => {
-  //         this.dadosDoUsuario.dados = res;
-  //         console.log(this.dadosDoUsuario.dados);
-  //       }, error => {
-  //         console.log(error);
-  //       },
-  //       () => {
-  //       });
+
   }
 
   fecha() {

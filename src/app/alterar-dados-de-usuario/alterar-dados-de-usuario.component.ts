@@ -28,28 +28,34 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
 
   img64 = '';
 
-  codeSatusNome = '';
+  codeSatusNome = '200';
   errorNome = '';
 
-  codeSatusUsername = '';
+  codeSatusUsername = '200';
   errorUsername = '';
 
-  codeSatusEmail = '';
+  codeSatusEmail = '200';
   errorEmail = '';
 
   CondVerificaEmail = false;
 
 
-  ngOnInit() {
+ngOnInit() {
     this.dadosDoUsuario.verificaUsuarioAutenticado();
     this.dadosDoUsuario.recuperarDadosDeUsuario();
 
-    setTimeout(() => {
-      this.email = this.dadosDoUsuario.dados.email;
-      this.userName = this.dadosDoUsuario.dados.username;
-      this.chama();
-    }, 200);
 
+
+     setTimeout(() => {
+       console.log(this.dadosDoUsuario.dados);
+       this.userName = this.dadosDoUsuario.dados.username;
+       this.nome = this.dadosDoUsuario.dados.name;
+       this.email = this.dadosDoUsuario.dados.email;
+       this.vericaNome();
+       this.verificaUsername();
+       this.verificaEmail();
+       this.chama();
+     }, 400);
 
   }
 
@@ -102,27 +108,18 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
   }
 
   verificaUsername() {
-    console.log(this.dadosDoUsuario.dados.username);
-    console.log(this.userName);
-
     if (this.dadosDoUsuario.dados.username != this.userName) {
       this.dadosDoUsuario.verificaUsuarioExiste(this.dadosDoUsuario.dados.username)
         .subscribe((res) => {
-          console.log(res);
           this.codeSatusUsername = '200';
           this.errorUsername = '';
-          return true;
         }, error => {
-          console.log('DEU RUIM')
-          console.log(error)
           this.codeSatusUsername = '409';
           this.errorUsername = 'Esse usuario já está sendo usado';
-          return false;
         });
     } else {
       this.codeSatusUsername = '200';
       this.errorUsername = '';
-      return true;
     }
   }
 
@@ -159,24 +156,28 @@ export class AlterarDadosDeUsuarioComponent implements OnInit, AfterViewInit {
   }
 
   altera() {
-    console.log('A')
     console.log(this.verificaEmail())
     console.log(this.vericaNome())
-    console.log(this.verificaUsername());
-
-    if (this.verificaEmail() && this.vericaNome() && this.verificaUsername()) {
-      console.log('entrou')
+    console.log(this.codeSatusUsername)
+    if (this.verificaEmail() && this.vericaNome() && this.codeSatusUsername) {
       this.dadosDoUsuario.alterarDadosDeUsuario(this.dadosDoUsuario.dados.name, this.dadosDoUsuario.dados.username, this.img64, this.dadosDoUsuario.dados.email)
         .subscribe(
           data => {
-            console.log(data);
+            // console.log(data);
             this.snackbarService.inserirSnackbar('Dados modificados com sucesso!');
             // this.dadosDoUsuario.criarCookie(data.token);
             // this.dadosDoUsuario.logar();
             this.dadosDoUsuario.recuperarDadosDeUsuario();
+
+            //
+                setTimeout(() => {
+                  window.location.reload();
+                }, 480);
+            //
+
           },
           error => {
-            console.log(error);
+            // console.log(error);
           }
         );
     } else {

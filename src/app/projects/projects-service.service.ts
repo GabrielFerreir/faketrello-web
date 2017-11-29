@@ -74,7 +74,7 @@ export class ProjectsServiceService {
         .map(res => res.json())
         .subscribe((res) => {
           this.projects = res;
-          console.log(res);
+          // console.log(res);
         }, error => {
           console.log(error);
         });
@@ -99,9 +99,9 @@ export class ProjectsServiceService {
         .map(res => res.json())
         .subscribe((res) => {
           this.project = res;
-          console.log(res);
+          // console.log(res);
         }, error => {
-          console.log(error);
+          // console.log(error);
         });
     }
   }
@@ -115,9 +115,9 @@ export class ProjectsServiceService {
         .map(res => res.json())
         .subscribe((res) => {
           this.project = res;
-          console.log(res);
+          // console.log(res);
         }, error => {
-          console.log(error);
+          // console.log(error);
         });
     }
   }
@@ -133,9 +133,9 @@ export class ProjectsServiceService {
           this.popupConfirmacao.fechaPopUpConfirmacao();
           this.searchProjects();
           this.snackbar.inserirSnackbar('Excluido com sucesso!')
-          console.log(res);
+          // console.log(res);
         }, error => {
-          console.log(error);
+          // console.log(error);
         });
     }
   }
@@ -166,10 +166,10 @@ export class ProjectsServiceService {
           .map(res => res.json())
           .subscribe((res) => {
             this.pesquisaMembros = res;
-            console.log(res);
+            // console.log(res);
           }, error => {
             this.pesquisaMembros = null;
-            console.log(error);
+            // console.log(error);
           });
       }
     } else {
@@ -193,12 +193,12 @@ export class ProjectsServiceService {
     return this.http.post(url, params, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
-        console.log(res)
+        // console.log(res)
         this.snackbar.inserirSnackbar('Usuario Adicionado Com Sucesso!');
         this.campoDePesquisa = '';
         this.detailProject(idProject);
       }, error => {
-        console.log(error);
+        // console.log(error);
         this.pesquisaMembros = '';
       });
   }
@@ -222,10 +222,10 @@ export class ProjectsServiceService {
       return this.http.delete(url, options)
         .map(res => res.json())
         .subscribe((res) => {
-          console.log(res);
+          // console.log(res);
           this.detailProject(idProject);
         }, error => {
-          console.log(error);
+          // console.log(error);
         });
     }
   }
@@ -246,9 +246,9 @@ export class ProjectsServiceService {
       .map(res => res.json())
       .subscribe((res) => {
         this.detailProject(idProject)
-        console.log(res)
+        // console.log(res)
       }, error => {
-        console.log(error);
+        // console.log(error);
 
       });
   }
@@ -266,11 +266,11 @@ export class ProjectsServiceService {
       return this.http.delete(url, options)
         .map(res => res.json())
         .subscribe((res) => {
-          console.log(res);
+          // console.log(res);
           this.router.navigate(['/main']);
           this.searchProjects()
         }, error => {
-          console.log(error);
+          // console.log(error);
         });
     }
   }
@@ -294,7 +294,7 @@ export class ProjectsServiceService {
         imgBase64: base64
       }
     );
-    console.log(json);
+    // console.log(json);
 
     const params = json;
     const headers = new Headers();
@@ -306,7 +306,7 @@ export class ProjectsServiceService {
         this.snackbar.inserirSnackbar('Projeto alterado com sucesso!');
         this.notificationService.searchNotification();
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 

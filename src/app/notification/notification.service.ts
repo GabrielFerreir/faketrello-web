@@ -50,10 +50,10 @@ export class NotificationService {
     return this.http.get(url, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
-        console.log(res);
+        // console.log(res);
         this.userNotification = res;
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -64,10 +64,10 @@ export class NotificationService {
     return this.http.get(url, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
-        console.log(res);
+        // console.log(res);
         this.userNotificationAll = res;
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -78,10 +78,10 @@ export class NotificationService {
     return this.http.put(url, null, {headers: headers})
       .map(res => res.json())
       .subscribe((res) => {
-        console.log(res);
+        // console.log(res);
         this.searchNotification();
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 

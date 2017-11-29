@@ -34,10 +34,10 @@ export class DragDropComponent implements OnInit {
     this.projects.viewDetailProject(this.dragDropService.idProjeto);
     this.projects.searchBlocks(this.dragDropService.idProjeto)
       .subscribe((res) => {
-        console.log(res);
+        // console.log(res);
         this.dragDropService.blocks = res;
       }, error => {
-        console.log(error);
+        // console.log(error);
       }, () => {
       this.dragDropService.container = this.container;
       this.dragDropService.inputNomeBloco = this.nomeBloco;

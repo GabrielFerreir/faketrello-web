@@ -65,18 +65,10 @@ export class CadastroComponent implements OnInit {
     this.senha.length > 0 ? this.HTMLSenha.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLSenha.nativeElement.classList.remove('textFieldsPreenchido');
     this.confirmaSenha.length > 0 ? this.HTMLConfirmaSenha.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLConfirmaSenha.nativeElement.classList.remove('textFieldsPreenchido');
   }
-
-  chamaTeste(conteudo, el) {
-    console.log(conteudo);
-    console.log(el);
-    conteudo > 0 ? el.classList.add('textFieldsPreenchido') : el.classList.remove('textFieldsPreenchido');
-  }
-
   geraUserName(nome) {
     if (nome) {
       let userName = nome + Math.floor(Math.random() * 10000);
       userName = userName.replace(' ', '');
-      console.log(userName);
       this.userName = userName;
     }
   }
@@ -87,7 +79,6 @@ export class CadastroComponent implements OnInit {
     if (filtro.test(nome) || nome == '') {
 
       if (nome.length > 2 && nome.length < 80) {
-        // console.log('Nome Valido!')
         this.codeSatusNome = '200';
         this.errorNome = '';
         return true;
@@ -96,14 +87,12 @@ export class CadastroComponent implements OnInit {
         this.errorNome = 'Campo necessario';
         return false;
       } else {
-        // console.log('O nome deve conter entre 3 á 12 caracteres!')
         this.codeSatusNome = '400';
         this.errorNome = 'Deve conter entre 3 á 80 caracteres!';
         return false;
       }
 
     } else {
-      // console.log('Nome invalido!')
       this.codeSatusNome = '400';
       this.errorNome = 'Nome invalido'
       return false;
@@ -112,7 +101,6 @@ export class CadastroComponent implements OnInit {
 
   verificaEmail() {
     const filtro = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-    console.log(this.email);
     if (this.email == '') {
       this.codeSatusEmail = '400';
       this.errorEmail = 'Campo necessario';
@@ -120,20 +108,18 @@ export class CadastroComponent implements OnInit {
     } else if (filtro.test(this.email)) {
       this.dadosDoUsuario.verificaEmailExiste(this.email)
         .subscribe((res) => {
-          console.log(res)
+          // console.log(res)
           this.codeSatusEmail = '200';
           this.errorEmail = '';
         }, error => {
           this.codeSatusEmail = '409';
           this.errorEmail = 'Esse email já está sendo usado';
-          console.log(error);
+          // console.log(error);
         });
 
     } else {
       this.codeSatusEmail = '400';
       this.errorEmail = 'Email Invalido';
-      console.log('Caiu aqui fdp')
-      // console.log(false)
     }
   }
 
@@ -144,12 +130,10 @@ export class CadastroComponent implements OnInit {
       return false;
 
     } else if (this.senha.length >= 6 && this.senha.length <= 16) {
-      console.log('Senha Permitida');
       this.codeSatusSenha = '200';
       this.errorSenha = '';
       return true;
     } else {
-      console.log('Senha não permitida');
       this.codeSatusSenha = '400';
       this.errorSenha = 'Deve conter entre 6 á 16 caracteres';
       return true;
@@ -179,14 +163,8 @@ export class CadastroComponent implements OnInit {
   }
 
   habilitaBotao() {
-    console.log(this.codeSatusNome)
-    console.log(this.codeSatusEmail)
-    console.log(this.codeSatusSenha)
-    console.log(this.codeSatusConfirmaSenha);
-
     setTimeout(() => {
       if (this.codeSatusNome == '200' && this.codeSatusEmail == '200' && this.codeSatusSenha == '200' && this.codeSatusConfirmaSenha == '200') {
-        console.log('Habilita botão')
         this.podeCriarUsuario = true;
         this.HTMLCadastrar.nativeElement.classList.remove('disabledButton');
       } else {
@@ -217,32 +195,29 @@ export class CadastroComponent implements OnInit {
         .map(res => res.json())
         .subscribe(
           data => {
-            console.log(data);
+            // console.log(data);
           },
           error => {
-            console.log(error);
+            // console.log(error);
           },
           () => {
             this.fazerLogin();
           }
         )
     } else {
-      console.log('Insira todos os dados');
     }
   }
 
   fazerLogin() {
-    console.log('1')
     if (this.senha) {
       this.dadosDoUsuario.gerarTokken(this.userName, this.senha)
         .subscribe(
           data => {
-            this.tokken = data.token, console.log(this.tokken)
+            this.tokken = data.token;
           },
           error => {
           },
           () => {
-            console.log('Chamou a funcao logar');
             this.dadosDoUsuario.criarCookie(this.tokken);
             // Limpa a variavel tokken
             this.tokken = '';
@@ -259,7 +234,6 @@ export class CadastroComponent implements OnInit {
   }
 
   previewFile(el) {
-    console.log(el.files[0].size);
     const fSExt = new Array('Bytes', 'KB', 'MB', 'GB');
     let fSize = el.files[0].size;
     let i = 0;
@@ -268,8 +242,7 @@ export class CadastroComponent implements OnInit {
       i++;
     }
     fSize = (Math.round(fSize * 100) / 100) + ' ' + fSExt[i];
-    console.log(fSize);
-    var reader = new FileReader();
+    const reader = new FileReader();
     if (el) {
       reader.readAsDataURL(el.files[0]);
     }

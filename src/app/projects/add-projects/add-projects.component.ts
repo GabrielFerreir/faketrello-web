@@ -33,7 +33,7 @@ export class AddProjectsComponent implements OnInit {
 
 
   inputs(){
-    console.log(this.HTMLNome);
+    // console.log(this.HTMLNome);
     this.nome.length > 0 ? this.HTMLNome.nativeElement.classList.add('textFieldsPreenchido') : this.HTMLNome.nativeElement.classList.remove('textFieldsPreenchido');
     this.descricao.length > 0 ? this.HTMLDescricao.nativeElement.classList.add('textFieldsMultPreenchido') : this.HTMLDescricao.nativeElement.classList.remove('textFieldsMultPreenchido');
   }
@@ -62,10 +62,8 @@ export class AddProjectsComponent implements OnInit {
   criarProject() {
     this.projects.criaProject(this.nome, this.descricao, this.img64)
       .subscribe((res) => {
-        console.log(res)
         this.projects.fechaAddProjets(null);
         this.snackbar.inserirSnackbar('Projeto Criado Com Sucesso!');
-        // console.log('Cadastrou');
         this.projects.searchProjects();
 
       }, error => {

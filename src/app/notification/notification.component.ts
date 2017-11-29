@@ -29,13 +29,10 @@ export class NotificationComponent implements OnInit {
     document.addEventListener('mousedown', (event) => {
       this.hiddenNotification(event);
     });
-    this.service.searchNotification(false);
+    this.service.searchNotification();
   }
 
   hiddenNotification(event) {
-    console.log(event.target.className)
-    console.log(event.target.className != 'notificacao' && event.target.parentNode.className != 'notificacao' && event.target.parentNode.className != 'vejaMais'  && this.service.visibility === true)
-
     if (event.target.className != 'vejaMais' && this.service.visibility === true) {
       this.service.visibility = false;
       this.service.hiddenVisibility();
