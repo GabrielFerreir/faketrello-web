@@ -101,6 +101,29 @@
   font-size: 12px;
 }
 
+.emptyStates {
+  width: 100%;;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  justify-items: center;
+  align-items: center;
+}
+
+.emptyStates section {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.emptyStates p {
+  width: 100%;
+  user-select: none;
+  font-family: 'Roboto';
+  font-size: 14px;
+  text-align: center;
+  padding: 8px;
+}
+
 @media screen and (max-width: 480px) {
   .notificacoes {
     width: 100%;

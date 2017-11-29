@@ -109,15 +109,14 @@
 
   </section>
 
-  <section class="emptyStates" *ngIf="service?.userNotification?.notifications && service?.userNotification?.notifications.length == 0">
+  <section class="emptyStates" *ngIf="service?.userNotification && service?.userNotification?.length == 0">
     <section>
-      <h1>Oops.</h1>
-      <p>Você ainda não tem projetos</p>
+      <p>Você não tem nenhuma notificação</p>
     </section>
   </section>
 
 
-  <section class="vejaMais">
+  <section class="vejaMais" *ngIf="!service?.userNotification || service?.userNotification?.length != 0">
     Ver todas
   </section>
 
