@@ -29,9 +29,9 @@ exports.usernameAuth = function (req, res) {
     db.any('SELECT * FROM loginU($1,$2);', [req.query.user, null])
       .then(data => {
         if (!data[0] || !data[0].email) {
-          res.status(404).json('Usuário Incorreto')
+          res.status(200).json('Usuário nao encontrado')
         } else {
-          res.status(200).json('Usuario Encontrado')
+          res.status(409).json('Usuario encontrado')
         }
       })
   } catch (error) {
@@ -41,9 +41,9 @@ exports.usernameAuth = function (req, res) {
 
 //Verifica se o email nao existe
 exports.emailExists = function (req, res) {
-  db.any('SELECT * FROM emailnewuser($1)', [req.query.email])
+  db.any('SELECT * FROM emailnewuser($1)', [req.query.user])
     .then(data => {
-      if (!data) {
+      if (data[0].emailnewuser) {
         res.status(409).json({error: 'Email existe'})
       } else {
         res.status(200).json({result: 'Email nao existe'})
@@ -125,24 +125,24 @@ exports.change = async function (req, res) {
         }
       })
     res.status(200).json({result: 'Alterado'})
-    // if (req.body.imgBase64) {
-    //   let caminho
-    //   try {
-    //     caminho = await exports.imgs(req, res)
-    //   } catch (e) {
-    //     console.log(e)
-    //   }
-    //   if (caminho !== 'Tipo de arquivo errado') {
-    //     db.any('SELECT * from verify_img($2,$1);', [req.body.username, caminho])
-    //       .then(data => {
-    //         if (!data[0].verify_img) {
-    //           res.json({error: 'Usuario nao encontrado'})
-    //         }
-    //       })
-    //   } else {
-    //     res.status(415).json(caminho)
-    //   }
-    // }
+    if (req.body.imgBase64) {
+      let caminho
+      try {
+        caminho = await exports.imgs(req, res)
+      } catch (e) {
+        console.log(e)
+      }
+      if (caminho !== 'Tipo de arquivo errado') {
+        db.any('SELECT * from verify_img($2,$1);', [req.body.username, caminho])
+          .then(data => {
+            if (!data[0].verify_img) {
+              res.json({error: 'Usuario nao encontrado'})
+            }
+          })
+      } else {
+        res.status(415).json(caminho)
+      }
+    }
   } catch (error) {
     console.log(error)
   }
