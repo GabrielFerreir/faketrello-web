@@ -6,8 +6,8 @@
     <i></i>
   </header>
 
-  <section class="notificacao"
-           *ngFor="let notification of (service.userNotification && service.userNotification.notifications > 4 ? service.userNotification.notifications.slice(0,5): []); let i=index">
+  <section class="notificacao" *ngFor="let notification of service?.userNotification?.notifications; let i=index">
+
     <section class="img" *ngIf="notification.imguser == '/imgsUser/default.png'">{{ notification.nameuser.charAt(0) |
       uppercase }}
     </section>
@@ -107,6 +107,13 @@
     <section class="data">{{ notification.date | date: 'dd/MM/yyyy' }} ás {{ notification.date | date: 'HH:mm:ss'}}
     </section>
 
+  </section>
+
+  <section class="emptyStates" *ngIf="service?.userNotification?.notifications && service?.userNotification?.notifications.length == 0">
+    <section>
+      <h1>Oops.</h1>
+      <p>Você ainda não tem projetos</p>
+    </section>
   </section>
 
 
