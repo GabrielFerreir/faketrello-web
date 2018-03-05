@@ -35,8 +35,8 @@ var CoreService = (function () {
     // ipDaSocket: string = '192.168.52.3:3000';
     function CoreService() {
         // JOAO
-        this.ipDaApi = '192.168.52.75:8080';
-        this.ipDaSocket = '192.168.52.75:3000';
+        this.ipDaApi = '54.146.129.70:1000';
+        this.ipDaSocket = '54.146.129.70:3000';
     }
     return CoreService;
 }());
