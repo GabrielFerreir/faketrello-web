@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 export class CoreService {
 
   // JOAO
-   ipDaApi: string = '192.168.52.75:8080';
-   ipDaSocket: string = '192.168.52.75:3000';
+   ipDaApi: string = '54.146.129.70:1000';
+   ipDaSocket: string = '54.146.129.70:3000';
 
   // LOCALHOST
   // ipDaApi: string = '192.168.52.3:8080';
