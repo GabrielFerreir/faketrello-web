@@ -5825,7 +5825,7 @@ module.exports = __webpack_require__.p + "watch_later.6f36f5d57831be91cd65.svg";
 // The file contents for the current environment will overwrite these during build.
 var environment = {
     production: false,
-    ipSocket: '192.168.52.3:3000'
+    ipSocket: '54.146.129.70:3000'
 };
 //# sourceMappingURL=environment.js.map
 

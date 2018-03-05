@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  ipSocket: '192.168.52.3:3000'
+  ipSocket: '54.146.129.70:3000'
 };
